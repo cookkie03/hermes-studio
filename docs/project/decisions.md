@@ -37,7 +37,7 @@ Consolidato 2026-10-04. Questo file registra le decisioni utente; [MEMORY](MEMOR
 | D34 | Chat Studio presenta componenti Hermes/TUI (streaming, thinking, tool, codice/output, changes, approvals/validation/settings); Settings dedicati distinti in Hermes e Hermes Studio | F2/F3/F5/F15 presentazione/semantica; F4 sezione Settings; F8 copertura native; F11 estensioni. Specifiche aggiornate, implementazione futura per feature |
 | D35 | Ogni scheda feature allegata a una chat deve guidare implementazione e verifica del codice della singola feature | Sezione operativa specifica in F0–F18, dipendenze/fonti/skill/gate, GUI e Hermes unico backend; F0 manutenzione e F18 futura preservate |
 | D36 | Sub-agent temporanei in pannello laterale della chat padre; Dots persistenti nella propria conversazione, messaggi tra Bots visibili e indicatori di attività confermati dal runtime | F2/F4/F7/F14; contesto Space/host/modello/effort e @ file preservati; queued non significa Working |
-| D37 | Studio mostra i Docs dei runtime Hermes e delle sessioni con origine e associazioni verificate; originali autoritativi, niente import automatico o archivio backend parallelo | F5/F6/F2; contratto raccolta Docs per sessione da verificare, omonimi/offline/revisioni e scope nei gate |
+| D37 | Ogni runtime Hermes collegato porta i propri Bots in Studio come Dots, tramite roster nativo e identità scoped al runtime; nessuna ricreazione manuale | F1/F7/F2/F4/F14; chat canonica, omonimi/offline/reconnect; precedente interpretazione Docs errata e rimossa |
 
 ## Decisioni storiche superate
 

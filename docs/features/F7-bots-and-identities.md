@@ -11,7 +11,7 @@ Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifi
 
 **Backend e confine:** Avatar è metadata UI; Bot, conversazione canonica e profilo sono runtime Hermes, distinti da delegati temporanei. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
 
-**Contesto e interazioni pertinenti:** Applicare anche D36 qui sotto: pannello laterale per figli temporanei; Dots persistenti nella propria chat, messaggi attribuiti e attività confermata dal runtime. Create/Edit Dot include picker quattro avatar OpenDots; header mostra Bot/Space/host/modello/effort senza attribuire default globale al singolo bot. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Contesto e interazioni pertinenti:** D37: ogni runtime collegato presenta i propri Bots come Dots tramite roster nativo, senza ricreazione manuale; ownership F7. Applicare anche D36 qui sotto: pannello laterale per figli temporanei; Dots persistenti nella propria chat, messaggi attribuiti e attività confermata dal runtime. Create/Edit Dot include picker quattro avatar OpenDots; header mostra Bot/Space/host/modello/effort senza attribuire default globale al singolo bot. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
 
 **Dipendenze e letture aggiuntive:** A avatar locale indipendente; B binding richiede F1 e roster verificato. F6/F2 possiedono contesto Space/sessione, non derivarlo dal nome Dot. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
 
@@ -108,6 +108,18 @@ Ogni Dot persistente mostra attività nella sidebar e nel proprio header quando 
 Quando un altro Bot gli manda un messaggio, il destinatario conserva la sua conversazione canonica: selezionando quel Dot si vede il messaggio ricevuto, attribuito al mittente, e il lavoro del destinatario. Il badge non letto segnala il messaggio effettivamente disponibile e resta indipendente dall’attività. Identità scoped a connessione/profilo/sessione, non al nome dell’avatar. Non trasformare un figlio delegate_task in Dot persistente e non mostrare Dots nel pannello sub-agent.
 
 Gate: A manda a B, B riceve e lavora; passando a B messaggio e stato sono corretti, senza eventi di A o di un Bot omonimo su altro host. Se la ricezione o l’esecuzione non sono confermate, mostrare il limite; un Dot attivo non viene marcato letto solo perché ha iniziato a lavorare.
+
+## D37 — Ogni runtime porta i propri Bots in Studio
+
+Quando si collega un runtime Hermes, Studio ne scopre e presenta tutti i Bots autorizzati come Dots, conservando l’identità nativa. Non richiedere di ricreare manualmente ogni Bot o di creare un Dot locale prima di poterlo vedere. La scoperta usa il roster nativo verificato (vedi contratti e fonti in [F7](F7-bots-and-identities.md)), non una lista inventata dal frontend. Un profilo non confermato come Bot non viene automaticamente promosso a Bot.
+
+Identità scoped a connessione/runtime, installazione e profilo: Bots omonimi su host diversi restano distinti, con host/origine riconoscibili. Selezionare un Dot apre la Bot Chat canonica di quel runtime secondo F7/F2, preservando sessione e continuità native; non crea una chat sostitutiva né invia prompt introduttivi. Space, modello ed effort mostrano il contesto effettivo disponibile, senza associazioni dedotte dal nome.
+
+Discovery del roster non importa tutte le conversazioni, non clona Bots, credenziali o memorie e non avvia lavoro. Metadata/avatar locali restano presentazione. Riconnessione aggiorna il roster senza duplicati; backend offline mostra Bots già noti come offline/stale, senza nasconderne l’origine o attribuire attività. Aggiunte/rimozioni seguono i dati confermati dal runtime; scollegare Studio non cancella Bots o lavoro backend. Figli temporanei delegate_task restano nel pannello sub-agent D36, non nel roster persistente.
+
+**Ownership:** F1 fornisce connessione e identità del runtime; F7 scopre/mappa/presenta roster e risolve Bot Chat; F2 presenta conversazione ed eventi; F4 rende navigabili Dots e host; F14 collega messaggi e attività native. Verificare capability/schema nel runtime collegato; assenza di contratto è un limite visibile, non autorizza backend alternativo.
+
+**Gate:** collegare due runtime sintetici con Bots omonimi e roster differenti; tutti i Bots autorizzati compaiono senza creazione manuale, identità e chat canonica corrette. Refresh/reconnect non duplicano righe; aggiunta/rimozione, profilo non-Bot, scope negato, offline e cambio host durante discovery non contaminano il roster. Nessun prompt, clonazione o import globale di cronologia per la sola connessione. Contratti sorgente sono evidenza documentale, non prova live.
 
 ## Prompt pronto per una nuova chat Codex
 

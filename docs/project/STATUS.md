@@ -80,6 +80,6 @@ Package finale arm64/firma ad hoc, smoke offline e smoke connessioni con attach 
 
 Commit codice locale `71a5d6a` creato: 37 file, solo incremento F1 e persistenza propria. Index controllato: diff-check, 69 link locali e scan pattern credenziali PASS. Modifiche concorrenti D35/D36 escluse dal commit e preservate nel workspace. Nessun push ritentato dopo il precedente rifiuto auto-review della pubblicazione esterna.
 
-## D37 — Docs dei runtime e delle sessioni (2026-10-04)
+## D37 — Bots dei runtime collegati (2026-10-04)
 
-Aggiornate F5/F6/F2 e requisiti GUI: documenti provenienti dai runtime Hermes consultabili in Studio con connessione/host/profilo, associazioni sessione/Space verificate, originali autoritativi e aggiornamenti secondo contratti reali. Nessun import automatico o raccolta Docs nativa per sessione presunta; contratto da verificare. Richiesta solo documentale, nessuna implementazione. Utente richiede commit della documentazione pendente D36/D37, separata dal codice F1 già committato.
+Correzione esplicita dell’utente: intendeva Bots, non Docs. Ogni runtime Hermes collegato porta in Studio il proprio roster autorizzato, presentato come Dots senza ricreazione manuale, con identità runtime/installazione/profilo e Bot Chat canonica preservate. Riconnessione senza duplicati, host/origine visibili, offline/stale distinti; nessun import globale di chat, clonazione o avvio implicito. Aggiornate F1/F7/F2/F4 e requisiti GUI; rimossa dalle F5/F6 la specifica Docs introdotta per errore nel commit 17f39a3. Requisiti documentali, non implementazione o prova live. Commit correttivo separato, storia preservata.
