@@ -1,0 +1,157 @@
+Window: "Unsloth", App: Unsloth.
+0 standard window Unsloth, Secondary Actions: Raise
+	1 scroll area
+		2 HTML content Description: Chat - Unsloth, URL: tauri://localhost/chat
+			3 button Dismiss app update notification
+			4 text New Unsloth version
+			5 text v0.1.900-beta → v0.1.902-beta
+			6 text A new app update is available
+			7 button (collapsed) Show release notes, Secondary Actions: Expand
+			8 button Remind me later
+			9 button Update
+			10 toolbar Sidebar and page navigation
+				11 button Collapse sidebar
+				12 button Go back
+				13 button Go forward
+			14 link Unsloth home, Value: tauri://localhost/chat
+			15 button Search
+			16 button New chat
+			17 container
+				18 button Model hub
+				19 button Library
+				20 button Images
+				21 button (collapsed) Show workflows, Secondary Actions: Expand
+				22 button Video
+				23 button Audio
+				24 pop up button More
+			25 button (expanded) Projects, Secondary Actions: Collapse
+			26 button New project
+			27 pop up button Organize projects
+			28 container No projects
+			29 button (expanded) Recents, Secondary Actions: Collapse
+			30 button New chat
+			31 pop up button Organize chats
+			32 container
+				33 button ciao
+				34 button Pin chat
+				35 pop up button Chat options
+			36 container
+				37 pop up button Unsloth account menu
+				38 button Settings
+			39 splitter Resize or collapse sidebar, Value: 280
+			40 heading Command Palette, Value: 2
+				41 text Command Palette
+			42 text Search for a command to run...
+			43 container
+				44 pop up button Select model
+				45 toggle button Turn on temporary chat, Value: off
+				46 button Open run settings
+				47 heading Up late with an idea?, Value: 1
+					48 text Up late with an idea?
+				49 pop up button Tools and attachments
+				50 pop up button Permission level for tool calls, Help: Approve for me: Run tool calls, but ask before high-risk actions like credential access, privilege escalation, or destructive commands
+				51 button Disable web search
+				52 button Disable code execution
+				53 text entry area (settable) Message input, Value: [text entry area: Message input], Placeholder: Ask anything, Secondary Actions: Show Writing Tools
+					54 text Ask anything
+				55 button Dictate
+				56 button (disabled) Send message
+				57 splitter 100
+				58 text Run settings
+				59 button Close run settings
+				60 button Preset
+				61 button More info
+				62 button Collapse Preset
+				63 container Open preset list
+					64 container
+						65 text field (settable) Inference preset name, Value: Default, Placeholder: Preset name
+				66 button System Prompt
+				67 button Edit system prompt
+				68 button Collapse System Prompt
+				69 text entry area (settable) System prompt, Placeholder: Example: You are a helpful assistant..., Secondary Actions: Show Writing Tools
+					70 text Example: You are a helpful assistant...
+				71 button Sampling
+				72 text Temperature
+				73 button More info
+				74 text field (settable) Temperature, Value: 0.6
+				75 slider (settable, float) 0.6
+				76 text Top P
+				77 button More info
+				78 text field (settable) Top P, Value: 0.95
+				79 slider (settable, float) 0.95
+				80 text Top K
+				81 button More info
+				82 text field (settable) Top K, Value: 20
+				83 slider (settable, float) 20
+				84 text Min P
+				85 button More info
+				86 text field (settable) Min P, Value: 0
+				87 slider (settable, float) 0
+				88 text Repetition Penalty
+				89 button More info
+				90 text field (settable) Repetition Penalty, Value: Off
+				91 slider (settable, float) 1
+				92 text Presence Penalty
+				93 button More info
+				94 text field (settable) Presence Penalty, Value: 1.5
+				95 slider (settable, float) 1.5
+				96 text Max Tokens
+				97 button More info
+				98 text field (settable) Max Tokens, Value: Max
+				99 slider (settable, float) 8192
+				100 button Tools
+				101 text Auto-Healing Tool Calls
+				102 button More info
+				103 text Nudge Tool Calls
+				104 button More info
+				105 text Confirm tool calls
+				106 button More info
+				107 text Tool permissions
+				108 button More info
+				109 text Max Tool Calls Per Message
+				110 button More info
+				111 text field (settable) Max Tool Calls Per Message, Value: 25
+				112 slider (settable, float) 25
+				113 text Max Tool Call Duration
+				114 button More info
+				115 text field (settable) Max Tool Call Duration, Value: 5 minutes
+				116 slider (settable, float) 5
+				117 button Retrieval
+				118 text Search mode
+				119 combo box (collapsed, settable) Search mode, Secondary Actions: Expand
+					120 text Hybrid
+				121 text Passages (top K) 5
+				122 container Number of passages to retrieve
+					123 slider (settable, float) Number of passages to retrieve, Value: 5
+				124 text Auto-retrieve documents
+				125 button More info
+				126 text Search attached documents before answering.
+				127 container Auto-retrieve documents
+					128 radio button Auto, Value: 1
+					129 radio button On, Value: 0
+					130 radio button Off, Value: 0
+				131 text Auto-retrieve threshold 0.70
+				132 container Auto-retrieve threshold
+					133 slider (settable, float) Auto-retrieve threshold, Value: 0.7
+				134 text OCR scanned pages
+				135 button More info
+				136 text Transcribe image-only PDF pages when attaching. Describe figures & charts
+				137 button More info
+				138 text Optional vision pass; can take several minutes.
+			139 container Notifications alt+T
+				140 container
+					141 button Close toast
+					142 text Disk space is running low
+					143 text 15.4 GB free of 245 GB. Clearing caches can free space.
+					144 button Review caches
+	145 close button
+	146 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	147 minimize button
+148 menu bar
+	149 Unsloth
+	150 File
+	151 Edit
+	152 View
+	153 Go
+	154 Window
+	155 Help

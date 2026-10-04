@@ -1,0 +1,66 @@
+{
+  "checked_at": "2026-10-04T03:56:53.485499+02:00",
+  "status": "passed",
+  "authored_markdown_files": 26,
+  "local_links_checked": 27,
+  "project_skills": 21,
+  "draft_tickets": 8,
+  "ticket_dependencies": {
+    "01": [],
+    "02": [
+      "01"
+    ],
+    "03": [
+      "02"
+    ],
+    "04": [
+      "03"
+    ],
+    "05": [
+      "03",
+      "04"
+    ],
+    "06": [
+      "05"
+    ],
+    "07": [
+      "05"
+    ],
+    "08": [
+      "06",
+      "07"
+    ]
+  },
+  "images": {
+    "docs/ux-extracts/unsloth/screenshots/001-chat-empty.png": [
+      1440,
+      904
+    ],
+    "docs/ux-extracts/unsloth/screenshots/002-image-reference.png": [
+      1440,
+      904
+    ],
+    "docs/ux-extracts/unsloth/screenshots/003-chat-default.png": [
+      1440,
+      904
+    ],
+    "docs/ux-extracts/unsloth/screenshots/004-run-settings.png": [
+      1440,
+      904
+    ],
+    "docs/ux-extracts/unsloth/screenshots/005-model-picker.png": [
+      1440,
+      904
+    ],
+    "docs/ux-extracts/unsloth/screenshots/006-tools-menu.png": [
+      1440,
+      904
+    ],
+    "docs/design/desktop-wireframe.png": [
+      1440,
+      940
+    ]
+  },
+  "errors": [],
+  "scope": "document links, installed skill files/symlinks, ticket graph, SVG/PNG format; no product/runtime tests"
+}

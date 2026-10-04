@@ -1,0 +1,108 @@
+The following is a diff from the previous accessibility tree for Window: "Unsloth" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 21-27, 50-99
+~		2 HTML content Description: Chat - Unsloth, URL: tauri://localhost/chat?new=a4b38538-1394-4b14-8518-d2a92ba8a59d
++				112 button (collapsed) Show workflows, Secondary Actions: Expand
++				113 pop up button Select model
++				114 toggle button Turn on temporary chat, Value: off
++				115 button Open run settings
++				116 heading Up late with an idea?, Value: 1
++					117 text Up late with an idea?
++				118 pop up button Tools and attachments
++				119 pop up button Permission level for tool calls, Help: Approve for me: Run tool calls, but ask before high-risk actions like credential access, privilege escalation, or destructive commands
++				120 button Disable web search
++				121 button Disable code execution
++				122 text entry area (settable) Message input, Value: [text entry area: Message input], Placeholder: Ask anything, Secondary Actions: Show Writing Tools
++					123 text Ask anything
++				124 button Dictate
++				125 button (disabled) Send message
++				126 splitter 100
++				127 text Run settings
++				128 button Close run settings
++				129 button Preset
++				130 button More info
++				131 button Collapse Preset
++				132 container Open preset list
++					133 container
++						134 text field (settable) Inference preset name, Value: Default, Placeholder: Preset name
++				135 button (disabled) No unsaved changes
++				136 button (disabled) Delete, Help: No saved override to delete
++				137 button System Prompt
++				138 button Edit system prompt
++				139 button Collapse System Prompt
++				140 text entry area (settable) System prompt, Placeholder: Example: You are a helpful assistant..., Secondary Actions: Show Writing Tools
++					141 text Example: You are a helpful assistant...
++				142 button Sampling
++				143 text Temperature
++				144 button More info
++				145 text field (settable) Temperature, Value: 0.6
++				146 slider (settable, float) 0.6
++				147 text Top P
++				148 button More info
++				149 text field (settable) Top P, Value: 0.95
++				150 slider (settable, float) 0.95
++				151 text Top K
++				152 button More info
++				153 text field (settable) Top K, Value: 20
++				154 slider (settable, float) 20
++				155 text Min P
++				156 button More info
++				157 text field (settable) Min P, Value: 0
++				158 slider (settable, float) 0
++				159 text Repetition Penalty
++				160 button More info
++				161 text field (settable) Repetition Penalty, Value: Off
++				162 slider (settable, float) 1
++				163 text Presence Penalty
++				164 button More info
++				165 text field (settable) Presence Penalty, Value: 1.5
++				166 slider (settable, float) 1.5
++				167 text Max Tokens
++				168 button More info
++				169 text field (settable) Max Tokens, Value: Max
++				170 slider (settable, float) 8192
++				171 button Tools
++				172 text Auto-Healing Tool Calls
++				173 button More info
++				174 switch (settable, boolean) on
++				175 text Nudge Tool Calls
++				176 button More info
++				177 switch (settable, boolean) on
++				178 text Confirm tool calls
++				179 button More info
++				180 switch (settable, boolean) off
++				181 text Tool permissions
++				182 button More info
++				183 pop up button Permission level for tool calls
++				184 text Max Tool Calls Per Message
++				185 button More info
++				186 text field (settable) Max Tool Calls Per Message, Value: 25
++				187 slider (settable, float) 25
++				188 text Max Tool Call Duration
++				189 button More info
++				190 text field (settable) Max Tool Call Duration, Value: 5 minutes
++				191 slider (settable, float) 5
++				192 button Retrieval
++				193 text Search mode
++				194 combo box (collapsed, settable) Search mode, Secondary Actions: Expand
++					195 text Hybrid
++				196 text Passages (top K) 5
++				197 container Number of passages to retrieve
++					198 slider (settable, float) Number of passages to retrieve, Value: 5
++				199 text Auto-retrieve documents
++				200 button More info
++				201 text Search attached documents before answering.
++				202 container Auto-retrieve documents
++					203 radio button Auto, Value: 1
++					204 radio button On, Value: 0
++					205 radio button Off, Value: 0
++				206 text Auto-retrieve threshold 0.70
++				207 container Auto-retrieve threshold
++					208 slider (settable, float) Auto-retrieve threshold, Value: 0.7
++				209 text OCR scanned pages
++				210 button More info
++				211 text Transcribe image-only PDF pages when attaching.
++				212 switch (settable, boolean) OCR scanned pages, Value: on
++				213 text Describe figures & charts
++				214 button More info
++				215 text Optional vision pass; can take several minutes.
++				216 switch (settable, boolean) Describe figures and charts, Value: on

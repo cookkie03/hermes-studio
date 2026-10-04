@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="940" viewBox="0 0 1440 940" role="img" aria-labelledby="title desc">
+<title id="title">Hermes Desktop — proposta di composizione</title>
+<desc id="desc">Wireframe con dati sintetici: sidebar di progetti, conversazione centrale, composer e pannello dell'incarico. Nessuna attività reale in esecuzione.</desc>
+<defs>
+  <style>
+    text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;fill:#252a32}
+    .muted{fill:#616975}.tiny{font-size:12px}.small{font-size:14px}.body{font-size:16px}.label{font-size:13px;font-weight:600;fill:#616975}.heading{font-size:19px;font-weight:600}.strong{font-weight:600}
+  </style>
+</defs>
+<rect width="1440" height="940" fill="#edf0f4"/>
+<text x="24" y="26" class="label">HERMES DESKTOP · PROPOSTA DI DESIGN · DATI SINTETICI · NESSUN RUNTIME COLLEGATO</text>
+<rect x="12" y="44" width="1416" height="882" rx="18" fill="#ffffff" stroke="#c9ced5"/>
+<path d="M30 44 H276 V926 H30 Q12 926 12 908 V62 Q12 44 30 44" fill="#f1f3f6"/>
+<rect x="276" y="45" width="1150" height="64" fill="#fafbfc"/>
+<line x1="276" y1="109" x2="1428" y2="109" stroke="#e1e5ea"/>
+<line x1="276" y1="44" x2="276" y2="926" stroke="#dce1e7"/>
+<circle cx="36" cy="73" r="6" fill="#ff625b"/><circle cx="57" cy="73" r="6" fill="#ffbd44"/><circle cx="78" cy="73" r="6" fill="#00c84b"/>
+<text x="32" y="132" font-size="25" font-weight="650">Hermes</text>
+<text x="244" y="131" class="body">⌕</text>
+<rect x="28" y="158" width="232" height="42" rx="10" fill="#ffffff" stroke="#d7dde5"/>
+<text x="44" y="185" class="body">＋  Nuova chat</text>
+<text x="42" y="235" class="body">Da rivedere</text>
+<rect x="218" y="216" width="25" height="24" rx="12" fill="#dbe7fb"/><text x="227" y="233" class="small strong" fill="#245daa">1</text>
+<text x="42" y="277" class="body">Incarichi</text>
+<text x="32" y="334" class="label">PROGETTI</text>
+<rect x="28" y="349" width="232" height="48" rx="10" fill="#dfe8f6"/>
+<text x="43" y="379" class="body strong">La mia settimana</text>
+<text x="43" y="423" class="body">Università</text>
+<text x="43" y="467" class="body">Casa</text>
+<text x="32" y="527" class="label">RECENTI</text>
+<text x="43" y="569" class="small">Organizzare la settimana</text>
+<text x="43" y="609" class="small muted">Idee per il progetto</text>
+<line x1="30" y1="832" x2="258" y2="832" stroke="#d8dee6"/>
+<circle cx="45" cy="861" r="5" fill="#48745b"/><text x="59" y="866" class="small">Host · esempio di stato</text>
+<text x="42" y="904" class="small muted">Connessioni e impostazioni</text>
+<text x="310" y="73" class="heading">Organizzare la settimana</text>
+<text x="310" y="95" class="tiny muted">La mia settimana · Hermes responsabile</text>
+<rect x="874" y="61" width="113" height="31" rx="15" fill="#e7edf5"/>
+<circle cx="890" cy="77" r="4" fill="#386197"/><text x="902" y="82" class="small">In corso</text>
+<rect x="997" y="61" width="98" height="31" rx="8" fill="#ffffff" stroke="#d5dce5"/><text x="1014" y="82" class="small">Attività ›</text>
+<line x1="1118" y1="109" x2="1118" y2="926" stroke="#dde3ea"/>
+<rect x="1119" y="110" width="307" height="798" fill="#fafbfc"/>
+<text x="1140" y="77" class="heading">Attività</text><text x="1386" y="78" class="body muted">×</text>
+<rect x="541" y="153" width="510" height="86" rx="17" fill="#f0f3f7"/>
+<text x="564" y="184" class="body">Raccogli le informazioni del progetto e</text>
+<text x="564" y="210" class="body">prepara un riepilogo per organizzare la settimana.</text>
+<circle cx="332" cy="291" r="16" fill="#e0e9f7"/><text x="326" y="297" class="small strong" fill="#255ca4">H</text>
+<text x="359" y="296" class="body strong">Hermes</text><text x="428" y="296" class="small muted">Responsabile</text>
+<text x="359" y="338" class="body">Sto raccogliendo le informazioni e preparando</text>
+<text x="359" y="365" class="body">una sintesi. Trovi il piano e le deleghe in Attività.</text>
+<rect x="358" y="401" width="630" height="53" rx="10" fill="#f7f9fc" stroke="#e0e6ef"/>
+<circle cx="379" cy="426" r="5" fill="#386197"/>
+<text x="395" y="423" class="small strong">Raccolta delle informazioni</text>
+<text x="395" y="443" class="tiny muted">Ricercatore · dettagli nel pannello attività</text>
+<rect x="358" y="481" width="630" height="107" rx="12" fill="#ffffff" stroke="#d7dfe9"/>
+<rect x="377" y="501" width="42" height="48" rx="6" fill="#edf2fa"/>
+<text x="388" y="531" class="small strong">MD</text>
+<text x="435" y="520" class="body strong">Riepilogo della settimana.md</text>
+<text x="435" y="544" class="small muted">Bozza parziale · risultato dell'incarico</text>
+<text x="435" y="568" class="small" fill="#255ca4">Apri anteprima →</text>
+<text x="359" y="630" class="small muted">L'incarico resta visibile anche tornando alla chat più tardi.</text>
+<rect x="316" y="740" width="762" height="123" rx="17" fill="#fafbfc" stroke="#cfd8e4"/>
+<text x="337" y="774" class="body muted">Scrivi a Hermes…</text>
+<text x="337" y="835" class="body muted">＋</text><text x="371" y="835" class="small muted">Strumenti autorizzati</text>
+<rect x="910" y="808" width="112" height="35" rx="9" fill="#ffffff" stroke="#d4dce7"/><text x="927" y="831" class="small">Interrompi</text>
+<circle cx="1049" cy="825" r="17" fill="#dce5f2"/><text x="1043" y="831" class="body" fill="#255ca4">↑</text>
+<text x="335" y="890" class="tiny muted">Enter per inviare · Shift+Enter per andare a capo</text>
+<text x="1140" y="150" class="label">INCARICO</text>
+<text x="1140" y="180" class="body strong">Organizzare la settimana</text>
+<text x="1140" y="208" class="small muted">Obiettivo, ambito e risultati</text>
+<line x1="1140" y1="233" x2="1403" y2="233" stroke="#e0e5eb"/>
+<text x="1140" y="266" class="label">PIANO</text>
+<circle cx="1150" cy="296" r="9" fill="#e3eee7"/><text x="1145" y="301" class="tiny" fill="#335f42">✓</text>
+<text x="1170" y="301" class="small">Definire l'obiettivo</text>
+<circle cx="1150" cy="333" r="9" fill="#dce7f7"/><text x="1146" y="338" class="tiny" fill="#255ca4">2</text>
+<text x="1170" y="338" class="small strong">Raccogliere e sintetizzare</text>
+<circle cx="1150" cy="370" r="9" fill="#eef1f5"/><text x="1146" y="375" class="tiny muted">3</text>
+<text x="1170" y="375" class="small muted">Rivedere la proposta</text>
+<line x1="1140" y1="402" x2="1403" y2="402" stroke="#e0e5eb"/>
+<text x="1140" y="435" class="label">TEAM</text>
+<circle cx="1158" cy="469" r="15" fill="#e0e9f7"/><text x="1152" y="474" class="tiny strong">H</text>
+<text x="1183" y="465" class="small strong">Hermes</text><text x="1183" y="487" class="tiny muted">Responsabile</text>
+<circle cx="1158" cy="525" r="15" fill="#e8edf3"/><text x="1153" y="530" class="tiny strong">R</text>
+<text x="1183" y="521" class="small strong">Ricercatore</text><text x="1183" y="543" class="tiny muted">Raccolta · in corso</text>
+<circle cx="1158" cy="581" r="15" fill="#e8edf3"/><text x="1153" y="586" class="tiny strong">P</text>
+<text x="1183" y="577" class="small strong">Pianificatore</text><text x="1183" y="599" class="tiny muted">Sintesi · in attesa</text>
+<line x1="1140" y1="631" x2="1403" y2="631" stroke="#e0e5eb"/>
+<text x="1140" y="663" class="label">LIMITI DELL'INCARICO</text>
+<text x="1140" y="694" class="small">Fonti selezionate per il progetto</text>
+<text x="1140" y="718" class="small">Preparazione del risultato</text>
+<text x="1140" y="742" class="small muted">Invio esterno da approvare</text>
+<rect x="1139" y="794" width="264" height="83" rx="10" fill="#edf2f9"/>
+<text x="1153" y="819" class="small strong">Dettagli quando servono</text>
+<text x="1153" y="842" class="tiny muted">La conversazione resta il centro.</text>
+<text x="1153" y="861" class="tiny muted">Piano, team e limiti sono a un clic.</text>
+</svg>

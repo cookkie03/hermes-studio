@@ -1,0 +1,104 @@
+# Memoria del progetto Hermes
+
+Aggiornata: 2026-10-04. Documento canonico di continuità richiesto da Luca. Leggere questo file e STATUS prima di ogni sessione. Decisioni confermate qui prevalgono sulle proposte precedenti; WORKLOG conserva la cronologia e i documenti di ricerca le prove.
+
+## Prodotto che stiamo costruendo
+
+Client macOS nativo per Hermes: assistente personale e progetti, con agenti collaborativi, responsabilità persistenti e continuità tra conversazioni. Esperienza ispirata alle interazioni Dots/Spaces descritte dall'utente, alle superfici operative Codex e a Unsloth. Non basta una chat con skin diversa.
+
+Il lavoro 24/7 richiede un runtime indipendente dal client su host disponibile. Chiusura della finestra non deve essere presentata come stop del lavoro. Non dichiarare il requisito soddisfatto fino a prova reale di 24 ore.
+
+## Decisioni confermate dall'utente
+
+| ID | Decisione | Origine e conseguenza |
+|---|---|---|
+| D01 | Prima versione: assistente personale e progetti | Priorità accettata all'inizio; non limitare Hermes al coding |
+| D02 | Persistenza continua su file | Richiesta ripetuta; aggiornare memoria, stato e registro dopo blocchi significativi |
+| D03 | Client macOS e applicazione delle skill native | Richiesta di installare tutte e iniziare sviluppo; analisi deve orientare codice |
+| D04 | Carattere espressivo, agenti caratterizzati | Risposta Q1; supera la precedente raccomandazione di app solo calma |
+| D05 | Vista team principale, chat secondaria | Risposta Q2; supera il wireframe iniziale centrato sulla conversazione |
+| D06 | Avatar illustrati, movimento mirato | Risposta Q4; identità leggibile anche da fermi; motion spiega eventi |
+| D07 | Spazio con collaborazione e strumenti integrati | Risposta libera Q3: Dots/Spaces + browser, file, universal editor, Markdown editor, browser use e computer use |
+| D08 | Primo percorso: ricerca e scrittura | Risposta Q5: agente, browser, fonti, file e documento; non promette subito tutti gli strumenti |
+| D09 | Workspace ordinato con team e strumenti | Risposta Q6 confermata: team/incarico principale, conversazione apribile e browser/editor affiancati |
+
+D07 descrive la visione. La gerarchia precisa resta da scegliere: non interpretarla come richiesta di una stanza 3D, una chat di gruppo o un canvas infinito.
+
+## Composizione confermata
+
+Q6 risolta: workspace ordinato con team e strumenti. La stanza visiva non è stata scelta. Primo incremento ricerca/scrittura con team, brief locale, browser e editor Markdown. Nessuna ulteriore intervista necessaria per questo incremento.
+
+## Tecnica scelta e limiti
+
+Swift 6, SwiftUI, Observation; macOS 14+ come target, Liquid Glass gated macOS 26. Nessuna dipendenza prodotto esterna. SwiftPM e packaging .app locale ad hoc. ADR client accettato in seguito a richiesta esplicita di avvio nativo. Riferimento Electron upstream utile per protocollo e feature.
+
+Toolchain verificata: Swift 6.4 CLT, Mac macOS 27.0.1. SDK 27 fallisce per plugin SwiftUIMacros assente nei CLT. Build riuscita selezionando SDK 26.5 nello script, senza modificare xcode-select. Supporto macOS 14/26 non testato dal vivo. Xcode completo e XCTest non disponibili nell'attuale selezione.
+
+## Stato reale del codice
+
+- Prima shell compilata, firmata ad hoc e avviata: build/Hermes.app.
+- Sources/HermesCore: modello versionato e persistenza atomica; ID stabili e validazione selezione.
+- Sources/HermesDesktop: sidebar, toolbar, nuova conversazione, composer bozza, inspector e Settings.
+- Archivio locale dedicato: Application Support/HermesDesktop-Development/workspace.json; distinto dal profilo Hermes personale.
+- Invio disabilitato, stato non collegato esplicito. Nessun messaggio remoto o runtime simulato.
+- Quattro verifiche Foundation passate: riapertura bozze/selezione; selezione invalida preserva archivio; schema futuro preserva bytes; corruzione preserva bytes.
+- swift test fallisce per XCTest assente: non dichiararlo passato. Runner alternativo in Verification/PersistenceChecks.swift e scripts/check-persistence.sh.
+- UI osservata via CUA: prima apertura e bozza preparata da suggerimento. Altre interazioni, riavvio UI e accessibilità completa non ancora collaudati.
+
+La shell chat è il primo incremento tecnico. Non rappresenta ancora la nuova composizione team principale. Runtime, streaming, vera delega, progetti, editor, browser, pianificazione e computer use non sono implementati.
+
+## Skill e gusto
+
+25 skill locali verificate. Ultime quattro installate e lette: axiom-macos, liquid-glass OpenAI, swiftui-expert-skill AvdLee, swiftui-liquid-glass Dimillian. OpenAI richiede il percorso annidato esatto, registrato nel workflow. Axiom Design/SwiftUI/Accessibility erano già presenti.
+
+Ricerca gusto con find-skills: prima raccomandazione interface-design; complemento impeccable per critique/polish. Raccomandate, non installate. Principi web adattati al prodotto; convenzioni macOS, San Francisco e Liquid Glass restano governate da Axiom. Non copiare un linguaggio da landing page in un'app operativa. Confronto e comandi in docs/research/design-taste-skills.md.
+
+## Reference Hermes esistente
+
+com.nousresearch.hermes.setup non in esecuzione: apertura scaduta. Individuata app attiva com.nousresearch.hermes, UI v0.21.5+6453. Osservate funzioni esposte: sessions/progetti/pinned, Bots, Capabilities, Messaging, Artifacts, Scheduled jobs, profili/gateway, stati background/unread/approval, contesto/modello/effort/voce, terminal/file tree/review. Presenza UI non prova API o comportamento. Bots non aperta con successo; finestra diventata indisponibile. Mappatura senza transcript privati in docs/research/hermes-live-features.md.
+
+Allegato riletto. Continuità, 24/7, collaborazione e UX Unsloth/ChatGPT sono intenzioni dell'utente; affermazioni di terze parti nell'allegato non diventano fatti verificati.
+
+## Ripartenza
+
+1. Applicare D09 senza rifare l’intervista da zero.
+2. Aggiornare spec/design/roadmap verso ricerca e scrittura in spazio team.
+3. Completare smoke UI della shell, poi realizzare incremento coerente con composizione scelta.
+4. Verificare runtime Hermes su profilo isolato e versione fissata; nessuna modifica al runtime personale.
+5. Collegare capacità reali prima di rendere attivi invio, delega, browser/computer use e pianificazione.
+
+## Repository GitHub
+
+2026-10-04: repository personale pubblica `cookkie03/hermes-studio`, nome prodotto Hermes Studio. L'utente conferma di volerla mantenere pubblica e caricare il progetto. `.gitignore` esclude credenziali, configurazioni Hermes locali, archivi/database personali e artefatti macOS/Swift, preservando codice, documentazione, skill e backlog.
+
+## Direzione futura: Codex per agenti specialisti
+
+2026-10-04. L'utente conferma come direzione futura che gli agenti specialisti Hermes possano richiamare Codex, consultarne il lavoro e usarlo per proseguire gli incarichi Hermes, con un'esperienza simile all'utilizzo di Codex Desktop. L'architettura corrente basata su team e specialisti resta il riferimento. Per ora è solo documentazione: nessuna implementazione, sincronizzazione generale o accesso ai thread Codex è assunto. I dettagli tecnici e la possibilità di riprendere lo stesso thread vanno verificati in futuro. Vedi [proposta Codex specialisti](../future/codex-specialists.md).
+
+## Preferenza di ripresa delle idee future
+
+Quando un task sta finendo o si avvicina alla chiusura, ricordare periodicamente all'utente le idee future documentate e chiedere se vuole riprenderne una. Non interrompere un task in corso per farlo.
+
+## Mappa dei documenti
+
+STATUS: situazione corrente. WORKLOG: cronologia. native-reorientation: applicazione delle quattro skill. design-taste-skills: ricerca gusto. hermes-live-features: reference app. ADR: scelte tecniche. Spec e desktop-design: baseline iniziale da rivedere con D04–D08 e D09. Wireframe iniziale: storico, non nuova composizione confermata.
+
+## Aggiornamento operativo — 2026-10-04
+
+D10: autorizzato collegamento diretto al runtime Hermes esistente, con dati sintetici nelle prove e preservazione dei dati personali. Discovery e contratto JSON-RPC WebSocket in studio sul sorgente locale; non ancora dichiarare connessione riuscita.
+
+D11: frontend-design esplicitamente richiesta per direzione artistica; adattare al Mac senza sovrascrivere convenzioni native e motion accessibile. Agente dedicato implementa atelier editoriale con avatar illustrato.
+
+D12: utente autorizza ruolo di orchestratore durante lo sviluppo. Agenti separati per contratto/runtime e direzione artistica; integrazione e verifica restano responsabilità del coordinatore.
+
+D13: commit e push periodici richiesti. Git inizializzato su master senza commit e senza remote al controllo corrente. Procedura in git-workflow.md; nessuna pubblicazione dichiarata.
+
+Workspace team e strumenti ora implementati: brief locale, editor Markdown/anteprima/esportazione, browser WebKit manuale su macOS26. Sei verifiche Foundation passate; riapertura UI e ripristino bozza osservati. Ultima build con correzioni selezione sidebar/avatar/anteprima compilata e firmata; tali correzioni richiedono ancora controllo nella nuova istanza UI. Nessuna automazione browser/computer o runtime collegato al momento.
+
+## Piano notturno e stato agenti
+
+Utente richiede piano completo e lavoro continuato, con agenti e ruolo PM. Piano canonico esecuzione: docs/superpowers/plans/2026-10-04-overnight-hermes.md. Audit skill distinto da installazione in skill-audit.md. Goal attivo; heartbeat Hermes — sviluppo e verifica attivato ogni30min per riprendere senza notifiche inutili. Trasporto actor implementato/strict concurrency passato e otto check sintetici passati; handshake e chat live non ancora provati. File workspace e art direction consegnati dagli agenti, integrazione/build/UI pendenti. Non dichiarare esaurite tutte le skill o tutto il prodotto.
+
+## Evidenze successive
+
+Handshake live al backend già avviato PASS (health, root token in memoria, gateway.ready, capabilities(false), gateway.ping, disconnect). Nessuna sessione o prompt né lettura cronologia personale. Non equivale a chat funzionante. Build con art direction e File tab PASS SDK26.5; ultimo corretto pairing security scope richiede rebuild. Sei test filesystem sintetici PASS riferiti dal verificatore; runner scripts/check-research-files.sh. Prossimo gate integrazione RuntimeConnection/UI e transcript persistente.

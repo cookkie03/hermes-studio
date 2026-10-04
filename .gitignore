@@ -1,0 +1,44 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Icon?
+
+# Xcode e SwiftPM
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.build/
+.swiftpm/xcode/package.xcworkspace/xcuserdata/
+
+# Build e distribuzione locale
+build/
+dist/
+*.app/
+*.dSYM/
+
+# Dipendenze
+node_modules/
+
+# Credenziali e configurazione locale
+.env
+.env.*
+!.env.example
+*.log
+.claude/
+.hermes/
+
+# Archivi e database locali, potenzialmente personali
+*.sqlite
+*.sqlite-*
+*.db
+
+# Chiavi e certificati privati
+*.pem
+*.key
+*.p12
+*.p8
+*.mobileprovision
+
+# Il tracker Markdown in .scratch e le skill locali in .agents fanno parte del progetto.
