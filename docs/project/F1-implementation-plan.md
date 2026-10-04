@@ -1,6 +1,6 @@
 # F1 Runtime Connections Implementation Plan
 
-> Per agenti: seguire `docs/agents/feature-workflow.md`; esecuzione native nella chat con `.agents/skills/implement/SKILL.md`, task verticali e review Standards/Spec. Questo layout di progetto sostituisce i percorsi superpowers. Piano tecnico draft: nessun passo prodotto eseguito prima della review della spec, come richiesto da brainstorming.
+> Per agenti: seguire `docs/agents/feature-workflow.md`; esecuzione native nella chat con `.agents/skills/implement/SKILL.md`, task verticali e review Standards/Spec. Questo layout di progetto sostituisce i percorsi superpowers. Piano attuato su incarico esplicito dell’utente di realizzare F1; ricevuta e limiti nella review finale.
 
 **Goal:** connessioni locale/SSH in-app, conversazioni per host e backend Hermes indipendente da Studio.
 
@@ -8,7 +8,7 @@
 
 **Tech Stack:** Electron/Node24+, ESM, React/TypeScript, OpenSSH, Hermes alla SHA fissata; service manager Linux/macOS.
 
-**Spec:** [F1-connection-design.md](F1-connection-design.md). Base Studio `de9dc39f313acf83790e26cff18202b7eb0782d8`. ADR0008 proposto. Registrazione dei servizi mancanti da approvare nella spec.
+**Spec:** [F1-connection-design.md](F1-connection-design.md). Base Studio `de9dc39f313acf83790e26cff18202b7eb0782d8`. ADR0008 attuato. Riuso/avvio D32 mediante comandi nativi e supervisor OS, senza nuovo backend Studio.
 
 ## Global Constraints
 
@@ -96,6 +96,8 @@
 - [ ] Consegna distingue shipped/fixture/live handshake/autonomia servizi/F2-turn/F10-routine/24h non provata. Non marcare F1 complete se manca gate necessario SSH/service.
 - [ ] Diff/index/scan segreti, commit/push solo origin confermato; nessuna release/DMG F13.
 
-## Gate di review del piano
+## Esito del piano
 
-Approcci SSH e strategia servizi sono scritti nella spec. L'utente ha approvato scelte di prodotto/intervista e chiesto il piano; il ramo architectural brainstorming richiede review della spec scritta prima del codice. Piano preparato come draft per rendere concreta la review, senza installare dipendenze o modificare runtime. Dopo approvazione, native/implement nella stessa chat come percorso progetto; review parallela soltanto quando richiesta dalla skill code-review.
+L’utente ha richiesto esplicitamente implementazione e verifica dopo Q8; nessuna nuova approvazione della spec è pendente. Task1–5 realizzati nel codice. Task6: suite, review e primo packaged/live PASS; ricevuta finale in [F1 review](../architecture/f1-review-2026-10-04.md). Checklist sopra conserva il piano originario, non certifica singoli commit o prove live Linux non eseguite. Registro mantiene gli host disconnessi e i loro binding: nessuna eliminazione/migrazione implicita. Non implementati Space multi-host, chat parity o settings runtime completi, che appartengono ad altre feature.
+
+OpenSSH usa config/agent/chiavi già presenti ma forza AddKeysToAgent=no e, sul Mac, UseKeychain=no: non ricorda le credenziali nuove tramite meccanismi esterni. Rimangono non provati Minisforum/systemd reali, logout Linux e durata 24h; non impediscono la consegna del connector verificato, non diventano claim di autonomia.

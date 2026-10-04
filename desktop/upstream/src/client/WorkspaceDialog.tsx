@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
-import { api } from './api';
+import { RuntimeConnections } from './RuntimeConnections';
 import type { Dot, Memory, State, WorkspaceState } from '../shared/types';
 export type Dialog =
   | { type: 'space' }
@@ -55,8 +55,6 @@ export function WorkspaceDialog({
     dialog.type === 'dot' ? (dialog.dot?.skillDeliveryEnabled ?? false) : false,
   );
   const [busy, setBusy] = useState(false);
-  const [endpoint, setEndpoint] = useState('');
-  const [connectionNote, setConnectionNote] = useState('');
   const [error, setError] = useState('');
   const container = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -258,6 +256,7 @@ export function WorkspaceDialog({
               </select>
             </fieldset>
           )}
+          {dialog.type === 'settings' && <h3>Hermes Studio preferences</h3>}
           {(dialog.type === 'dot' || dialog.type === 'settings') && (
             <>
               <label className="permission-row">
@@ -310,20 +309,7 @@ export function WorkspaceDialog({
               </p>
             </>
           )}
-          {dialog.type === 'settings' && <div className="config-note">
-            <strong>Hermes runtime</strong>
-            <p>Connect to your local Hermes gateway. Studio does not require a separate OpenAI or CopilotKit key.</p>
-            <label className="field-label" htmlFor="hermes-endpoint">Gateway address (optional)</label>
-            <input id="hermes-endpoint" value={endpoint} placeholder="Automatic local discovery" onChange={(event) => setEndpoint(event.target.value)} />
-            <button type="button" disabled={busy} onClick={async () => {
-              setBusy(true); setConnectionNote('');
-              try { await api('/hermes/connect', 'POST', endpoint.trim() ? { endpoint: endpoint.trim() } : {}); setConnectionNote('Gateway connected. Open a conversation to use Hermes.'); }
-              catch (cause) { setConnectionNote(cause instanceof Error ? cause.message : 'Could not connect.'); }
-              finally { setBusy(false); }
-            }}>Connect Hermes</button>
-            {connectionNote && <p role="status">{connectionNote}</p>}
-            <p>Calls, Slack, scheduling and live computer takeover are future integrations.</p>
-          </div>}
+          {dialog.type === 'settings' && <RuntimeConnections />}
           {dialog.type === 'memory' && (
             <p className="muted">
               Memories are explicit preferences, not automatic learning. Avoid

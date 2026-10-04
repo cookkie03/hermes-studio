@@ -4100,3 +4100,17 @@ h3 {
 @media (max-width: 1000px) {
   .hermes-client.template-app .chat-workspace.split > .result-pane { width: 320px; flex-basis: 320px; }
 }
+
+/* Runtime connections reuse OpenDots surfaces and actions. */
+.runtime-connections { margin: 24px 0; }
+.runtime-connections > p, .runtime-connection-control > p { font-size: 13px; line-height: 1.5; }
+.runtime-connection { border: 1px solid var(--border, #dde5e2); border-radius: 12px; padding: 16px; margin: 12px 0; }
+.runtime-connection > small, .runtime-connection-control small { display: block; color: var(--muted, #596a64); margin: 6px 0; line-height: 1.5; }
+.runtime-connection-control button, .runtime-add-host button { margin: 4px 8px 4px 0; }
+.runtime-add-host { border: 1px solid var(--border, #dde5e2); padding: 16px; border-radius: 12px; }
+.connection-challenge { margin: 12px 0; padding: 12px; background: var(--surface, #f4f7f5); border-radius: 8px; }
+.connection-challenge pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
+.conversation-host { flex: 0 0 auto; padding: 8px 20px; border-bottom: 1px solid var(--border, #dde5e2); font-size: 12px; }
+.conversation-host > label { margin-right: 10px; }
+.conversation-host > select { max-width: 100%; padding: 4px 8px; }
+.conversation-host > small { display: block; margin-top: 4px; color: var(--muted, #596a64); }

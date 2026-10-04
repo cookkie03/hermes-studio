@@ -4,7 +4,7 @@ const fs = require('node:fs/promises'); const path = require('node:path');
 (async () => {
  const data = await fs.mkdtemp('/private/tmp/hermes-studio-flow-'), root=path.resolve(__dirname,'..'); let app;
  try {
-  app=await _electron.launch({executablePath:path.join(root,'release/mac-arm64/Hermes Studio.app/Contents/MacOS/Hermes Studio'),args:[`--user-data-dir=${data}`],timeout:45000});
+  app=await _electron.launch({executablePath:path.join(root,'release/mac-arm64/Hermes Studio.app/Contents/MacOS/Hermes Studio'),args:[`--user-data-dir=${data}`],env:{...process.env,HERMES_STUDIO_DISABLE_AUTOCONNECT:'1'},timeout:45000});
   let page=await app.firstWindow({timeout:50000}); const errors=[];
   const watch = current => { current.on('pageerror',e=>errors.push(e.message)); current.on('console',m=>{if(m.type()==='error' && !/status of (409|503)/.test(m.text()))errors.push(m.text())}); };
   watch(page);
@@ -68,7 +68,7 @@ const fs = require('node:fs/promises'); const path = require('node:path');
   await page.getByRole('button',{name:'Load latest',exact:true}).click();
   await page.getByText('All changes saved',{exact:true}).waitFor();
   await app.close(); app=undefined;
-  app=await _electron.launch({executablePath:path.join(root,'release/mac-arm64/Hermes Studio.app/Contents/MacOS/Hermes Studio'),args:[`--user-data-dir=${data}`],timeout:45000});
+  app=await _electron.launch({executablePath:path.join(root,'release/mac-arm64/Hermes Studio.app/Contents/MacOS/Hermes Studio'),args:[`--user-data-dir=${data}`],env:{...process.env,HERMES_STUDIO_DISABLE_AUTOCONNECT:'1'},timeout:45000});
   page=await app.firstWindow({timeout:50000}); watch(page);
   await page.getByRole('button',{name:'Memory',exact:false}).click();
   await page.getByText('Synthetic QA preference: write concise notes.',{exact:true}).waitFor();

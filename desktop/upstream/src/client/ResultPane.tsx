@@ -18,9 +18,11 @@ export function ResultPane({
   onClose,
   dots,
   defaultDotId,
+  threadId,
 }: {
   dots: Dot[];
   defaultDotId: string;
+  threadId?: string;
   latest?: Result | null;
   status?: Status;
   dotState: string;
@@ -75,7 +77,7 @@ export function ResultPane({
             </select>
           </label>
           {computerDot ? (
-            <ComputerPanel key={computerDot.id} dot={computerDot} />
+            <ComputerPanel key={computerDot.id} dot={computerDot} threadId={computerDot.id === defaultDotId ? threadId : undefined} />
           ) : (
             <p className="computer-panel">
               Create a Dot to give it a computer.

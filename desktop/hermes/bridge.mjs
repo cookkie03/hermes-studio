@@ -7,7 +7,7 @@ import { HermesGateway, candidates } from './gateway.mjs';
 export class HermesBridge extends EventEmitter {
   constructor({ gateway = new HermesGateway(), bindingPath, requireThread = () => {}, prepareText = (_threadId, text) => text } = {}) {
     super(); this.gateway = gateway; this.bindingPath = bindingPath; this.requireThread = requireThread;
-    this.prepareText = prepareText; this.sessionJobs = new Map(); this.earlyRequests = [];
+    this.transportGeneration = 0; this.prepareText = prepareText; this.sessionJobs = new Map(); this.earlyRequests = [];
     this.handlers = new Map(); this.capabilityQueue = Promise.resolve(); this.approvalEnabled = false;
     this.handlerExpiry = setInterval(() => {
       let expired = false; for (const [id, lease] of this.handlers) if (lease.expiresAt < Date.now()) { this.handlers.delete(id); expired = true; }
@@ -17,7 +17,7 @@ export class HermesBridge extends EventEmitter {
     gateway.on('event', event => this.runtimeEvent(event));
     gateway.on('request', frame => this.serverRequest(frame));
     gateway.on('notification', frame => { if (frame.method === 'request.cancel') this.cancelRequest(frame.params); });
-    gateway.on('disconnected', info => { this.approvalEnabled = false; this.lastError = info.message; this.requests.clear(); this.earlyRequests = []; this.emit('update', { type: 'connection', connected: false, ...info }); });
+    gateway.on('disconnected', info => this.transportLost(info));
   }
   async initialize() {
     if (!this.bindingPath) return;
@@ -36,7 +36,7 @@ export class HermesBridge extends EventEmitter {
   async connect({ endpoint, serverRequests = false } = {}) {
     const endpoints = endpoint ? [endpoint] : await candidates();
     if (!endpoints.length) throw new Error('No local Hermes backend found. Start Hermes, then connect.');
-    this.sessions.clear(); this.requests.clear(); this.earlyRequests = [];
+    ++this.transportGeneration; this.sessionJobs.clear(); this.sessions.clear(); this.requests.clear(); this.earlyRequests = [];
     for (const value of endpoints) {
       try { const status = await this.gateway.connect(value, { serverRequests: false }); await this.updateCapabilities(); this.lastError = null; this.emit('update', { type: 'connection', ...status, approvalEnabled: this.approvalEnabled }); return status; }
       catch (error) { this.lastError = error.message; }
@@ -58,7 +58,9 @@ export class HermesBridge extends EventEmitter {
       return { serverRequests: enabled };
     }); this.capabilityQueue = job.catch(() => {}); return job;
   }
-  close() { clearInterval(this.handlerExpiry); this.gateway.disconnect(); }
+  transportLost(info) { ++this.transportGeneration; this.sessionJobs.clear(); this.approvalEnabled = false; this.lastError = info.message; this.requests.clear(); this.earlyRequests = []; this.sessions.clear(); this.emit('update', { type: 'connection', connected: false, ...info }); }
+  disconnect() { this.gateway.disconnect(); this.transportLost({ message: 'Disconnected. Hermes may still be working on its host.' }); }
+  close() { clearInterval(this.handlerExpiry); this.disconnect(); }
   validateSession(result) {
     const storedId = result?.stored_session_id ?? result?.session_key;
     if (!result?.session_id || typeof result.session_id !== 'string' || !storedId || typeof storedId !== 'string') throw new Error('Hermes returned incomplete session identity.');
@@ -71,15 +73,23 @@ export class HermesBridge extends EventEmitter {
     if (profile !== undefined && profile !== binding?.profile) throw new Error('Importing another Hermes profile is not supported.');
     if (this.sessions.has(threadId)) return this.sessions.get(threadId);
     if (this.sessionJobs.has(threadId)) return this.sessionJobs.get(threadId);
-    const job = this.loadSession(threadId, profile, storedId).finally(() => { this.sessionJobs.delete(threadId); this.drainRequests(); }); this.sessionJobs.set(threadId, job); return job;
+    return this.loadSessionJob(threadId, profile, storedId);
+  }
+  loadSessionJob(threadId, profile, storedId) {
+    const job = this.loadSession(threadId, profile, storedId).finally(() => { if (this.sessionJobs.get(threadId) === job) this.sessionJobs.delete(threadId); this.drainRequests(); });
+    this.sessionJobs.set(threadId, job); return job;
   }
   async loadSession(threadId, profile, storedId) {
+    const generation = this.transportGeneration;
+    const check = () => { if (generation !== this.transportGeneration || !this.gateway.connected) throw new Error('Hermes connection changed while loading the session. Reconnect to inspect its owned binding.'); };
     const saved = storedId ?? this.bindings.get(threadId)?.storedId;
     profile ??= this.bindings.get(threadId)?.profile;
-    const params = saved ? { session_id: saved } : { source: 'desktop', idempotency_key: threadId };
+    const params = saved ? { session_id: saved, close_on_disconnect: false } : { source: 'desktop', idempotency_key: threadId, close_on_disconnect: false };
     if (profile) params.profile = profile;
     const result = this.validateSession(await this.gateway.request(saved ? 'session.resume' : 'session.create', params, saved ? 120000 : 30000));
+    check();
     this.bindings.set(threadId, { ...this.bindings.get(threadId), storedId: result.storedId, ...(profile ? { profile } : {}) }); await this.persistBindings();
+    check();
     result.messages = this.projectHistory(threadId, result.messages); this.sessions.set(threadId, result);
     this.drainRequests();
     for (const request of result.openRequests) this.serverRequest(request);
@@ -106,7 +116,7 @@ export class HermesBridge extends EventEmitter {
     if (refresh && this.bindings.has(threadId) && this.gateway.connected) {
       if (!this.sessionJobs.has(threadId)) {
         const binding = this.bindings.get(threadId);
-        const job = this.loadSession(threadId, binding.profile, binding.storedId).finally(() => { this.sessionJobs.delete(threadId); this.drainRequests(); }); this.sessionJobs.set(threadId, job);
+        this.loadSessionJob(threadId, binding.profile, binding.storedId);
       }
       session = await this.sessionJobs.get(threadId);
     } else if (!session && this.bindings.has(threadId) && this.gateway.connected) session = await this.session(threadId, this.bindings.get(threadId));

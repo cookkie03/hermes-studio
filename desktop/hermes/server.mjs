@@ -9,15 +9,15 @@ import { Store } from '../upstream/dist/server/server/store.js';
 import { WorkspaceStore } from '../upstream/dist/server/server/workspace.js';
 import { createApp } from '../upstream/dist/server/server/app.js';
 import { workspaceRoutes } from '../upstream/dist/server/server/workspace-routes.js';
-import { HermesBridge } from './bridge.mjs';
+import { RuntimeConnections } from './connections.mjs';
 import { DraftStore } from './drafts.mjs';
 
 const unavailable = () => { throw new Error('This capability is not connected to Hermes yet.'); };
-export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway } = {}) {
+export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway, connectorFactory, gatewayFactory } = {}) {
   if (!dataDir || !ownerToken || ownerToken.length < 24) throw new Error('A private app data directory and owner token are required.');
   const database = join(dataDir, 'workspace.sqlite');
   const store = new Store(database), workspace = new WorkspaceStore(database, 'hermes-studio-owner');
-  const bridge = new HermesBridge({ gateway, bindingPath: join(dataDir, 'hermes-sessions.json'), requireThread: id => workspace.requireThread(id), prepareText: (id, text, pageReference) => {
+  const bridge = new RuntimeConnections({ dataDir, gateway, connectorFactory, gatewayFactory, requireThread: id => workspace.requireThread(id), prepareText: (id, text, pageReference) => {
     const thread = workspace.requireThread(id), dot = workspace.dot(thread.dotId);
     const page = workspace.pages.forThread(id);
     if (page && (!workspace.canAccessSpace(dot.id, page.spaceId) || !pageReference || pageReference.id !== page.id || pageReference.spaceId !== page.spaceId || pageReference.revision !== page.revision)) throw new Error('Save or resolve document changes, then refresh the page reference before sending.');
@@ -30,7 +30,7 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway 
   const drafts = new DraftStore(join(dataDir, 'drafts.json')); await drafts.initialize();
   const facade = {
     workspace,
-    setup: () => ({ intelligence: false, model: bridge.gateway.connected, browser: false, voice: false, slack: 'not_configured', missing: [] }),
+    setup: () => ({ intelligence: false, model: bridge.list().connections.some(connection => connection.connected), browser: false, voice: false, slack: 'not_configured', missing: [] }),
     createConversation: async (dotId, title) => { if (!workspace.dot(dotId)) throw new Error('Dot not found.'); return workspace.bindThread(randomUUID(), dotId, title); },
     handle: () => new Response(JSON.stringify({ error: 'Use the local Hermes connector.' }), { status: 501 }),
     pages: {
@@ -66,11 +66,19 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway 
     }
     await next();
   });
-  app.get('/api/hermes/status', c => c.json(bridge.status()));
+  app.get('/api/hermes/status', c => c.json(bridge.status(c.req.query('threadId'))));
+  app.get('/api/hermes/connections', c => c.json(bridge.list()));
+  app.post('/api/hermes/connections', async c => c.json(await bridge.saveConnection(await c.req.json())));
+  app.post('/api/hermes/connections/:id/connect', async c => c.json(await bridge.connect({ ...await c.req.json(), connectionId: c.req.param('id') })));
+  app.post('/api/hermes/connections/:id/disconnect', async c => c.json(await bridge.disconnect(c.req.param('id'))));
+  app.get('/api/hermes/connections/:id/challenges', c => c.json(bridge.challenges(c.req.param('id'))));
+  app.post('/api/hermes/connections/:id/challenges', async c => c.json(bridge.answerChallenge(c.req.param('id'), await c.req.json())));
+  app.get('/api/hermes/thread-host', c => c.json(bridge.threadHost(c.req.query('threadId'))));
+  app.put('/api/hermes/thread-host', async c => { const data = await c.req.json(); return c.json(await bridge.bindThread(data.threadId, data.connectionId)); });
   app.post('/api/hermes/connect', async c => c.json(await bridge.connect(await c.req.json())));
   app.post('/api/hermes/capabilities', async c => c.json(await bridge.registerHandler(await c.req.json())));
   app.get('/api/hermes/requests', c => c.json({ requests: [...bridge.requests.values()] }));
-  app.post('/api/hermes/disconnect', c => { bridge.gateway.disconnect(); bridge.requests.clear(); bridge.emit('update', { type: 'connection', connected: false }); return c.json({ connected: false }); });
+  app.post('/api/hermes/disconnect', async c => c.json(await bridge.disconnect((await c.req.json()).connectionId)));
   app.get('/api/hermes/history', async c => c.json(await bridge.history(c.req.query('threadId'), { refresh: c.req.query('refresh') === '1' })));
   app.post('/api/hermes/sessions', async c => { const data = await c.req.json(); return c.json(await bridge.session(data.threadId, data)); });
   app.post('/api/hermes/sessions/resume', async c => { const data = await c.req.json(); return c.json(await bridge.session(data.threadId, data)); });
@@ -79,7 +87,7 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway 
     const data = await c.req.json(); return c.json(await bridge.send(data.threadId, data.text, data.clientSubmissionId, data.pageReference), 202);
   });
   app.post('/api/hermes/interrupt', async c => { const data = await c.req.json(); return c.json(await bridge.interrupt(data.threadId)); });
-  app.post('/api/hermes/approval', async c => { const data = await c.req.json(); return c.json(bridge.approval(data.requestId, data.result)); });
+  app.post('/api/hermes/approval', async c => { const data = await c.req.json(); return c.json(bridge.approval(data)); });
   app.get('/api/conversations/:id/draft', c => { workspace.requireThread(c.req.param('id')); return c.json(drafts.get(c.req.param('id'))); });
   app.patch('/api/conversations/:id/draft', async c => { const id = c.req.param('id'); workspace.requireThread(id); const data = await c.req.json(); return c.json(await drafts.save(id, data.draft)); });
   app.get('/api/hermes/events', c => {
@@ -91,6 +99,7 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway 
     const stream = new ReadableStream({
       start(controller) {
         const push = event => {
+          if (threadId && event.connectionId && !event.threadId && event.connectionId !== bridge.threadHost(threadId).connectionId) return;
           if (threadId && event.threadId && event.threadId !== threadId && event.type !== 'approval-waiting') return;
           if (controller.desiredSize < -200) { cleanup?.(); controller.close(); return; }
           controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
@@ -102,7 +111,7 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway 
         cleanup = () => { if (closed) return; closed = true; clearInterval(heartbeat); bridge.off('update', push); if (streamHandler) void bridge.registerHandler({ handlerId: streamHandler, threadId, active: false }).catch(() => {}); };
         c.req.raw.signal.addEventListener('abort', cleanup, { once: true });
         renew();
-        push({ type: 'connection', ...bridge.status() });
+        push({ type: 'connection', ...bridge.status(threadId) });
         for (const item of bridge.requests.values()) push(item);
       }, cancel() { cleanup?.(); },
     });
@@ -124,6 +133,7 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway 
 
 export async function startStudio() {
   const service = await createStudioApp({ dataDir: process.env.HERMES_STUDIO_DATA_DIR, ownerToken: process.env.HERMES_STUDIO_OWNER_TOKEN, staticDir: process.env.HERMES_STUDIO_STATIC_DIR });
+  if (process.env.HERMES_STUDIO_DISABLE_AUTOCONNECT !== '1') service.bridge.startAutoConnect();
   const host = process.env.HERMES_STUDIO_HOST ?? '127.0.0.1'; if (host !== '127.0.0.1') throw new Error('Studio binds only to loopback.');
   const server = serve({ fetch: service.app.fetch, hostname: host, port: Number(process.env.HERMES_STUDIO_PORT ?? 0) }, info => {
     process.parentPort?.postMessage({ type: 'ready', port: info.port });

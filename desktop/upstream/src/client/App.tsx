@@ -642,6 +642,7 @@ export function App() {
             {pane && (
               <ResultPane
                 key={dot.id}
+                threadId={thread?.id}
                 dots={workspace.dots}
                 defaultDotId={dot.id}
                 latest={capture}

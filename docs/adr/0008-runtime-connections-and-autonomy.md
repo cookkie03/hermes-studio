@@ -1,14 +1,14 @@
 # ADR0008 — Connessioni per host e lifecycle Hermes indipendente
 
-Data:2026-10-04. Stato: proposed; D32/D33 prodotto confermate, strategia tecnica da revieware. Non implementata.
+Data:2026-10-04. Stato: accepted; D32/D33 attuate su incarico esplicito di implementare F1. Review codice Standards/Spec completata e findings corretti.
 
 ## Contesto
 
 Studio deve connettere più runtime, incluso Minisforum via SSH/Tailscale, e lasciare Hermes autonomo con client chiuso. Unico gateway globale e lifecycle SSH isolato upstream non soddisfano il requisito. `gateway start` richiede servizio esistente e `serve` è distinto dallo scheduler.
 
-## Proposta
+## Decisione
 
-Registro connessioni con identità stabili, bridge per host e binding conversazione immutabile dopo sessione. OpenSSH di sistema con auth volatile e trust host esplicito; servizi user-scoped Hermes indipendenti da SSH/UI. Riutilizzo prioritario, registrazione dei servizi assenti proposta nella spec e non ancora approvata. Nessuna duplicazione scheduler/tools/memoria Hermes.
+Registro connessioni con identità stabili, bridge per host e binding conversazione immutabile dopo sessione. OpenSSH di sistema con auth volatile e trust host esplicito; servizi user-scoped Hermes indipendenti da SSH/UI. Riutilizzo prioritario; il successivo incarico esplicito di realizzare F1 attua il riuso/avvio Q2. Il bootstrap registra solamente il comando nativo hermes serve nel supervisor utente, senza sovrascrivere servizi estranei; gateway install/start/status resta Hermes nativo. Nessun software Hermes installato o aggiornato dal client. Nessuna duplicazione scheduler/tools/memoria Hermes.
 
 ## Alternative
 

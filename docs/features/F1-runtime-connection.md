@@ -23,11 +23,11 @@ Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti c
 <!-- implementation-packet:end -->
 
 
-Stato: selezionata; attach locale parziale esistente. D32: attach locale senza login e collegamento remoto tramite SSH scelti; scelte di prodotto confermate, spec/piano tecnico proposti, nessuna nuova integrazione implementata.
+Stato: codice locale/SSH e GUI implementati secondo D32/D33; suite e attach live Mac PASS. Verifica packaged finale PASS; consegna locale verificata. [Prove e limiti](../architecture/f1-review-2026-10-04.md). Minisforum/systemd live e durata 24h non ancora provati.
 
 ## Direzione selezionata — D32
 
-L'utente vuole una zona dell'app per gestire le connessioni, partendo dall'attach locale senza login Hermes. Per un host remoto con Hermes già installato (caso Minisforum nella rete Tailscale), indirizzo IP e accesso SSH devono consentire il collegamento attraverso un tunnel, senza dipendere dalla dashboard o da altri servizi di collegamento. Autenticazione SSH distinta dal login Hermes. Scelte confermate: riusare il backend disponibile o avviarlo quando necessario; riconoscere automaticamente chiavi SSH già sul Mac e supportare utente/password senza salvarla nel Portachiavi; conversazioni assegnate al rispettivo host, con più host utilizzabili. Riconnessione automatica degli host già configurati confermata; password solo in memoria fino alla chiusura dell'app o alla disconnessione esplicita, mai su disco o nel Portachiavi. Una nuova apertura richiede la password se l'accesso tramite chiave non basta. Q7 confermata: il backend resta attivo quando Studio chiude o si disconnette; Hermes deve poter lavorare 24/7 indipendentemente dal client. Il contratto Space/progetti è documentato per F6. Non è stato autorizzato un intervento sul runtime personale dalla sola scelta di prodotto.
+L'utente vuole una zona dell'app per gestire le connessioni, partendo dall'attach locale senza login Hermes. Per un host remoto con Hermes già installato (caso Minisforum nella rete Tailscale), indirizzo IP e accesso SSH devono consentire il collegamento attraverso un tunnel, senza dipendere dalla dashboard o da altri servizi di collegamento. Autenticazione SSH distinta dal login Hermes. Scelte confermate: riusare il backend disponibile o avviarlo quando necessario; riconoscere automaticamente chiavi SSH già sul Mac e supportare utente/password senza salvarla nel Portachiavi; conversazioni assegnate al rispettivo host, con più host utilizzabili. Riconnessione automatica degli host già configurati confermata; password solo in memoria fino alla chiusura dell'app o alla disconnessione esplicita, mai su disco o nel Portachiavi. Una nuova apertura richiede la password se l'accesso tramite chiave non basta. Q7 confermata: il backend resta attivo quando Studio chiude o si disconnette; Hermes deve poter lavorare 24/7 indipendentemente dal client. Il contratto Space/progetti è documentato per F6. Successivamente l’utente ha autorizzato il collegamento diretto al runtime del MacBook: handshake/GUI eseguiti senza prompt, import di conversazioni o modifica servizi personali.
 
 ## Principio cardine — Hermes autonomo, Studio facilitatore (D33)
 
@@ -85,7 +85,7 @@ Persistenza: preferenza endpoint sicura con schema/versione; token nel deposito 
 
 ## Verifica e non-obiettivi
 
-Test readiness/timeout/redirect/login, discovery stale, cambio host senza invii al vecchio, caduta socket senza cancel/retry, resume ID e scope. Handshake live senza prompt poi sessione/prova sintetica isolata separata. Remote support richiede test auth reali isolati e indicatori host; se non scelto resta disabilitato. Non appartengono alla feature browser UI, plugin, routine, voce o installazione automatica.
+Test readiness/timeout/redirect/login, discovery stale, cambio host senza invii al vecchio, caduta socket senza cancel/retry, resume ID e scope. Handshake live senza prompt poi sessione/prova sintetica isolata separata. Supporto remoto scelto: OpenSSH reale contro server sintetico con key/password, trust e rifiuto changed key verificati; host sempre visibile. Il Minisforum reale richiede il suo indirizzo/accesso, non forniti in questa chat. Non appartengono alla feature browser UI, plugin, routine, voce o installazione automatica.
 
 ## D30 — Eventi oltre il turno e parità runtime
 

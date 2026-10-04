@@ -19,7 +19,8 @@
     "typecheck:metadata": "tsc --noEmit -p tsconfig.metadata.json",
     "build:metadata": "tsc -p tsconfig.metadata.json && node scripts/metadata-manifest.cjs",
     "test:external-links": "node scripts/test-external-links.cjs",
-    "test:packaged-ui": "node scripts/test-packaged-ui.cjs"
+    "test:packaged-ui": "node scripts/test-packaged-ui.cjs",
+    "test:packaged-connections": "node scripts/test-packaged-connections.cjs"
   },
   "keywords": [],
   "author": "Atai Barkai",
@@ -71,7 +72,8 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-markdown": "10.1.0",
-    "rxjs": "7.8.1"
+    "rxjs": "7.8.1",
+    "ssh2": "1.17.0"
   },
   "private": true,
   "engines": {

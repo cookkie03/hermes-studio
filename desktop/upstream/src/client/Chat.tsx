@@ -8,7 +8,8 @@ import { ChatTranscript } from './ChatTranscript';
 import { SaveToSpaceReview } from './SaveToSpaceReview';
 import { appendAssistant, delivery, pendingMessage, remainingDraft, mergeHistory, projectedText, afterDispatchResponse, removeApproval, restoreDraft, mergeToolEvent, type ToolActivity, type TurnPhase, type TextMessage } from './hermes-display';
 
-interface RuntimeStatus { connected: boolean; lastError?: string }
+import type { RuntimeStatus } from './runtime-connections';
+import { ConversationHost } from './ConversationHost';
 interface Approval { requestId: unknown; params: { command?: string; description?: string; choices?: string[] } }
 const textOf = (value: unknown) => typeof value === 'string' ? value : '';
 
@@ -27,7 +28,8 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   const [draft, setDraft] = useState(() => { try { return initialPrompt ?? localStorage.getItem(draftKey) ?? ''; } catch { return initialPrompt ?? ''; } });
   const [draftRemoteReady, setDraftRemoteReady] = useState(false);
   const [draftError, setDraftError] = useState('');
-  const [status, setStatus] = useState<RuntimeStatus>({ connected: false });
+  const [status, setStatus] = useState<Partial<RuntimeStatus> & { connected: boolean }>({ connected: false });
+  const [hostRevision, setHostRevision] = useState(0);
   const [running, setRunning] = useState(false);
   const [dispatching, setDispatching] = useState(false);
   const [waiting, setWaiting] = useState(false);
@@ -84,6 +86,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
       setRunning(history.session?.running === true);
       if (history.session?.running === false && !history.session.hydrating && !['resuming', 'hydrating'].includes(history.session.status ?? '')) setUncertain(false);
       else if (history.running && history.session?.running !== true) setUncertain(true);
+      else if (!history.running && !history.session) setUncertain(false);
       setApprovals((previous) => [...previous, ...(history.pendingRequests ?? []).filter((request) => !previous.some((p) => p.requestId === request.requestId))]);
     } catch (cause) { if (!signal?.aborted) setError(cause instanceof Error ? cause.message : 'Conversation unavailable.'); }
   }, [thread.id]);
@@ -91,10 +94,11 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   useEffect(() => {
     const controller = new AbortController();
     let timer: ReturnType<typeof setTimeout> | undefined;
+    let wasConnected = false;
     const load = async () => {
       try {
-        const next = await api<RuntimeStatus>('/hermes/status', 'GET', undefined, controller.signal);
-        if (!controller.signal.aborted) setStatus(next);
+        const next = await api<RuntimeStatus>(`/hermes/status?threadId=${encodeURIComponent(thread.id)}`, 'GET', undefined, controller.signal);
+        if (!controller.signal.aborted) { setStatus(next); if (next.connected && !wasConnected) await loadHistory(controller.signal); wasConnected = next.connected; }
       } catch (cause) { if (!controller.signal.aborted) setError(cause instanceof Error ? cause.message : 'Runtime unavailable.'); }
     };
     void load();
@@ -121,7 +125,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
           [...previous, { requestId: frame.requestId, params: (frame.params ?? {}) as Approval['params'] }]);
       }
       if (frame.type !== 'runtime') return;
-      window.dispatchEvent(new CustomEvent('hermes-runtime-event', { detail: { dotId: dot.id, event: frame.event } }));
+      window.dispatchEvent(new CustomEvent('hermes-runtime-event', { detail: { dotId: dot.id, threadId: thread.id, connectionId: frame.connectionId, event: frame.event } }));
       const event = frame.event as { type?: string; payload?: Record<string, unknown> } | undefined;
       const payload = event?.payload ?? {};
       if (['message.delta', 'message.interim', 'tool.start'].includes(event?.type ?? '')) {
@@ -171,7 +175,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
     };
     void stream();
     return () => { controller.abort(); clearInterval(poll); clearTimeout(timer); };
-  }, [thread.id, dot.id, loadHistory]);
+  }, [thread.id, dot.id, loadHistory, hostRevision]);
   useEffect(() => { timeline.current?.scrollTo({ top: timeline.current.scrollHeight }); }, [messages, tools, approvals]);
 
   const send = async () => {
@@ -203,13 +207,13 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
     finally { setDispatching(false); }
   };
   const connect = async () => {
-    try { await api('/hermes/connect', 'POST', { serverRequests: false }); setStatus(await api('/hermes/status')); await loadHistory(); setError(''); }
+    try { await api('/hermes/connect', 'POST', { connectionId: status.connectionId ?? 'local' }); setStatus(await api(`/hermes/status?threadId=${encodeURIComponent(thread.id)}`)); await loadHistory(); setError(''); }
     catch (cause) { setError(cause instanceof Error ? cause.message : 'Could not connect Hermes.'); }
   };
   const decide = async (approval: Approval, choice: string) => {
     setDecisionPending(true);
     try {
-      await api('/hermes/approval', 'POST', { requestId: approval.requestId, result: { choice } });
+      await api('/hermes/approval', 'POST', { threadId: thread.id, requestId: approval.requestId, result: { choice } });
       setApprovals((previous) => previous.filter((a) => a !== approval));
     } catch (cause) { setError(cause instanceof Error ? cause.message : 'Decision was not delivered.'); }
     finally { setDecisionPending(false); }
@@ -217,13 +221,14 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   return <div className="live-chat hermes-chat">
     <header className="chat-persona">
       <Mascot identity={dot.id} name={dot.name} small state={running ? 'working' : 'idle'} />
-      <div><strong>{dot.name}</strong><span>{paused ? 'Paused' : running ? 'Working' : uncertain ? 'Connection needs inspection' : waiting ? 'Waiting for Hermes' : dispatching ? 'Sending…' : status.connected && streamConnected ? 'Connected to Hermes' : 'Hermes disconnected'}</span></div>
+      <div><strong>{dot.name}</strong><span>{paused ? 'Paused' : running ? 'Working' : uncertain ? 'Connection needs inspection' : waiting ? 'Waiting for Hermes' : dispatching ? 'Sending…' : status.connected && streamConnected ? `Connected · ${status.name ?? 'Hermes'}` : `${status.name ?? 'Hermes'} disconnected`}</span></div>
       <div className="chat-persona-actions">
         <button className="icon-button" aria-label="Review response for Space" title="Review a response before saving" disabled={loading || preparing || running || waiting || dispatching || uncertain || !messages.some((message) => message.role === 'assistant' && message.content.trim())} onClick={() => setReviewContent([...messages].reverse().find((message) => message.role === 'assistant' && message.content.trim())?.content)}><FileText size={19} /></button>
         <button className="icon-button" disabled title="Calls are planned for a future version" aria-label="Calls unavailable"><Phone size={19} /></button>
         <button className="icon-button" aria-label="Show computer" onClick={onComputer}><Monitor size={21} /></button>
       </div>
     </header>
+    <ConversationHost threadId={thread.id} onChanged={() => setHostRevision(value => value + 1)} />
     <div className="hermes-timeline" ref={timeline} role="log" aria-label="Conversation">
       {(!status.connected || uncertain) && <div className="hermes-connection"><strong>Connect your Hermes runtime</strong><p>{uncertain ? 'Delivery or ongoing work needs inspection. Reconnecting does not resend your request or cancel the runtime.' : 'Your documents remain available. A connection enables real conversations and tool activity.'}</p><button onClick={() => void connect()}>Connect Hermes</button></div>}
       {backgroundApproval && <div className="hermes-connection" role="status"><strong>Another conversation needs your decision</strong>{onOpenConversation ? <button onClick={() => onOpenConversation(backgroundApproval)}>Open conversation</button> : <p>Open the waiting conversation from Chats to review the request.</p>}</div>}

@@ -185,3 +185,36 @@ test('owned tool provenance survives relaunch without importing unrelated sessio
     assert.doesNotMatch(await readFile(path, 'utf8'), /Must never persist/); reopened.close();
   } finally { bridge.close(); await rm(directory, { recursive: true, force: true }); }
 });
+
+test('disconnect during binding write cannot resurrect a stale live session or approval', async () => {
+  const gateway = new FixtureGateway(), bridge = new HermesBridge({ gateway });
+  let release, writing;
+  const started = new Promise(resolve => writing = resolve);
+  bridge.persistBindings = () => new Promise(resolve => { release = resolve; writing(); });
+  try {
+    const job = bridge.session('a'); const result = assert.rejects(job, /connection changed/);
+    await started; bridge.disconnect(); release(); await result;
+    assert.equal(bridge.sessions.size, 0); assert.equal(bridge.requests.size, 0); assert.equal(bridge.approvalEnabled, false);
+    assert.equal(bridge.bindings.get('a').storedId, 'saved-id');
+    assert.equal(bridge.sessionJobs.size, 0);
+  } finally { release?.(); bridge.close(); }
+});
+
+test('stale HTTP handshake cannot disconnect or overwrite a newer gateway connection', async () => {
+  let oldHealth;
+  const old = new Promise(resolve => oldHealth = resolve);
+  class Socket extends EventTarget {
+    constructor() { super(); queueMicrotask(() => this.dispatchEvent(new MessageEvent('message', { data: JSON.stringify({ method: 'event', params: { type: 'gateway.ready', payload: {} } }) }))); }
+    send(text) { const frame = JSON.parse(text); queueMicrotask(() => this.dispatchEvent(new MessageEvent('message', { data: JSON.stringify({ id: frame.id, result: {} }) }))); }
+    close() {}
+  }
+  const gateway = new HermesGateway({ Socket, fetcher: async url => {
+    if (url.port === '8401' && url.pathname === '/api/health') return old;
+    return new Response(url.pathname === '/api/health' ? JSON.stringify({ ok: true, auth_required: false, version: 'new' }) : 'window.__HERMES_SESSION_TOKEN__="synthetic";');
+  } });
+  try {
+    const first = gateway.connect('http://127.0.0.1:8401'); const rejected = assert.rejects(first, /cancelled/);
+    await gateway.connect('http://127.0.0.1:8402'); oldHealth(new Response(JSON.stringify({ ok: true, auth_required: false, version: 'old' }))); await rejected;
+    assert.equal(gateway.connected, true); assert.equal(gateway.version, 'new'); assert.equal(gateway.endpoint, 'http://127.0.0.1:8402');
+  } finally { gateway.disconnect(); }
+});

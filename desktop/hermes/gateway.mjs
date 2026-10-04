@@ -22,7 +22,7 @@ export class HermesGateway extends EventEmitter {
     super(); this.fetcher = fetcher; this.Socket = Socket; this.pending = new Map(); this.nextID = 0; this.generation = 0; this.connected = false;
   }
   async get(path, authenticated = false) {
-    const response = await this.fetcher(new URL(path, this.endpoint), { redirect: 'error', signal: AbortSignal.timeout(15000), headers: authenticated ? { 'X-Hermes-Session-Token': this.token } : {} });
+    const response = await this.fetcher(new URL(path, this.endpoint), { redirect: 'error', signal: this.controller ? AbortSignal.any([AbortSignal.timeout(15000), this.controller.signal]) : AbortSignal.timeout(15000), headers: authenticated ? { 'X-Hermes-Session-Token': this.token } : {} });
     if ([401, 403].includes(response.status)) throw new Error('Hermes requires login; gated backends are not supported by this local connector.');
     if (!response.ok) throw new Error(`Hermes returned HTTP ${response.status}.`);
     const text = await response.text();
@@ -30,11 +30,14 @@ export class HermesGateway extends EventEmitter {
     return text;
   }
   async connect(endpoint, { serverRequests = false } = {}) {
-    endpoint = localEndpoint(endpoint); this.disconnect(); this.endpoint = endpoint;
+    endpoint = localEndpoint(endpoint); this.disconnect(); this.endpoint = endpoint; this.controller = new AbortController();
     const generation = this.generation;
-    const health = JSON.parse(await this.get('/api/health'));
+    const check = () => { if (generation !== this.generation) throw new Error('Hermes connection cancelled.'); };
+    try {
+    const health = JSON.parse(await this.get('/api/health')); check();
     if (health.ok !== true || health.auth_required !== false) throw new Error('Hermes is unavailable or requires login.');
-    const html = await this.get('/');
+    this.version = health.version;
+    const html = await this.get('/'); check();
     const match = html.match(/window\.__HERMES_SESSION_TOKEN__\s*=\s*("(?:[^"\\]|\\.)*")/);
     const token = match && JSON.parse(match[1]);
     if (typeof token !== 'string' || !token || generation !== this.generation) throw new Error('Hermes handshake could not complete.');
@@ -47,10 +50,10 @@ export class HermesGateway extends EventEmitter {
       socket.addEventListener('message', event => { if (generation === this.generation) this.receive(String(event.data)); });
       socket.addEventListener('close', () => { if (generation === this.generation) this.lost(new Error('Hermes disconnected. Work may still be running.')); });
       socket.addEventListener('error', () => { if (generation === this.generation) this.lost(new Error('Hermes connection failed.')); });
-    }).catch(error => { this.disconnect(); throw error; });
-    try { await this.request('client.capabilities', { server_requests: serverRequests }); }
-    catch (error) { this.disconnect(); throw error; }
+    }); check();
+    await this.request('client.capabilities', { server_requests: serverRequests }); check();
     return { connected: true, endpoint, capabilities: this.capabilities, version: health.version };
+    } catch(error) { if(generation === this.generation) this.disconnect(); throw error; }
   }
   receive(text) {
     for (const line of text.split('\n').filter(Boolean)) {
@@ -83,7 +86,7 @@ export class HermesGateway extends EventEmitter {
   }
   lost(error) { this.emit('disconnected', { message: error.message }); this.disconnect(); }
   disconnect() {
-    this.generation++; this.connected = false; this.ready?.reject(new Error('Hermes disconnected.')); this.ready = null;
+    this.generation++; this.controller?.abort(); this.controller = null; this.connected = false; this.capabilities = null; this.ready?.reject(new Error('Hermes disconnected.')); this.ready = null;
     for (const waiter of this.pending.values()) { clearTimeout(waiter.timer); waiter.reject(new Error('Hermes disconnected. Work may still be running.')); }
     this.pending.clear(); this.socket?.close(); this.socket = null; this.token = null; this.endpoint = null;
   }

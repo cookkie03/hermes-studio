@@ -1,6 +1,6 @@
 # F1 — Connessioni Hermes e autonomia: spec tecnica
 
-2026-10-04. Stato: proposta tecnica per review; scelte di prodotto D32/D33 confermate dopo Q8. Nessuna implementazione avviata. Base Studio `de9dc39f313acf83790e26cff18202b7eb0782d8`; sorgente Hermes fissato `e1e82d782f353766c7a22db6e5ac4fa58bbff325`.
+2026-10-04. Stato: implementata; scelte D32/D33 confermate dopo Q8 e successivo incarico esplicito di realizzare codice. Base Studio `de9dc39f313acf83790e26cff18202b7eb0782d8`; sorgente Hermes fissato `e1e82d782f353766c7a22db6e5ac4fa58bbff325`.
 
 ## Risultato e ambito
 
@@ -16,32 +16,32 @@ UI: area Connessioni nel contenitore Settings esistente, distinta dalle preferen
 
 Non copiare il lifecycle SSH isolato upstream: termina backend owned alla disconnessione e usa watchdog idle; setsid/nohup non è supervisione. [Evidenze lifecycle](../research/hermes-runtime-autonomy.md).
 
-## Module e contratti proposti
+## Moduli e contratti implementati
 
 - `RuntimeConnections` in `desktop/hermes/connections.mjs`: registro versionato, bridge per host, thread→connectionId, auto-reconnect/cancel, routing eventi e richieste. Snapshot `runtime-connections.json`; binding dei bridge in `hermes-connections/<connectionId>.json`, legacy locale letto da `hermes-sessions.json` e preservato. Interface dominio, mai RPC/exec generici esposti al renderer.
 - `SshConnection` in `desktop/hermes/ssh.mjs`: OpenSSH/config/agent, tunnel loopback, exec interno di soli comandi bootstrap fissi; auth volatile, host-key challenge, timeout e cleanup. `.close()` elimina solo tunnel/processi SSH client.
-- `HostBackend` in `desktop/hermes/host-backend.mjs`: discovery/probe e servizio web Hermes persistente; verifica gateway nativo cron/bots separatamente. Launcher remoto in `desktop/hermes/host-bootstrap.py`, inviato via stdin SSH, versionato e non derivato da testo utente.
+- `HostConnection` in `desktop/hermes/host-backend.mjs`: discovery/probe e servizio web Hermes persistente; osserva il processo gateway nativo separatamente, senza certificare cron/bots. Launcher remoto in `desktop/hermes/host-bootstrap.py`, inviato via stdin SSH, versionato e non derivato da testo utente.
 - `HermesBridge` rimane owner delle sessioni/turni/approvals per un singolo backend. `HermesGateway` rimane handshake/HTTP/WS e non possiede SSH o servizi. F1 modifica solo gli ingressi di Chat per binding/stato host; timeline/composer F2 preservati.
 
 Identità persistenti: Connection `{id,name,mode,host?,user?,port?,endpoint?,autoConnect}`; ThreadBinding `{threadId,connectionId}` e binding sessione per connessione. Password/passphrase/process token non entrano nello snapshot. IP non è l'identità stabile; la fingerprint SSH valida il server. Un projectId/sessionId uguale su due host resta distinto.
 
-Interface manager: `initialize()`, `list()`, `saveConnection(input)`, `connect(connectionId,{password?})`, `disconnect(connectionId)`, `bindThread(threadId,connectionId)`, `status(threadId?)`, `threadHost(threadId)`, `session/history/send/interrupt/registerHandler` con routing dal thread, `approval({threadId,requestId,result})`, `close()`. Eventi annotati connectionId/threadId; status globale non alimenta lo stato di una chat su un altro host.
+Interface manager: `initialize()`, `list()`, `saveConnection(input)`, `connect({connectionId,password?,endpoint?})`, `disconnect(connectionId)`, `bindThread(threadId,connectionId)`, `status(threadId?)`, `threadHost(threadId)`, `session/history/send/interrupt/registerHandler` con routing dal thread, `approval({threadId,requestId,result})`, `close()`. Eventi annotati connectionId/threadId; status globale non alimenta lo stato di una chat su un altro host.
 
-REST private Studio proposto: GET/POST `/hermes/connections`; POST `/:id/connect`, `/:id/disconnect`; GET/POST `/:id/challenges`; GET/PUT `/hermes/thread-host?threadId`; status/history/SSE esistenti scoped dal thread. Challenge one-shot, connessione/generazione e durata definite; una risposta stale non può approvare un host diverso. Le approvals Hermes mantengono requestId e owner reale, senza collisioni fra host.
+REST privata Studio implementata: GET/POST `/hermes/connections`; POST `/:id/connect`, `/:id/disconnect`; GET/POST `/:id/challenges`; GET/PUT `/hermes/thread-host?threadId`; status/history/SSE esistenti scoped dal thread. Challenge one-shot, connessione/generazione e durata definite; una risposta stale non può approvare un host diverso. Le approvals Hermes mantengono requestId e owner reale, senza collisioni fra host.
 
 ## SSH, segreti e host key
 
-Usare `/usr/bin/ssh` tramite argv validati, non interpolazione shell dell'IP/user/porta. Prima tentare chiavi/config/agent; password/passphrase via SSH_ASKPASS con helper fisso e socket Unix privato temporaneo, directory0700/socket0600. Il helper contiene solo codice, nessun segreto; niente password in argv, env, log, JSON persistente o stderr inoltrato al renderer. Invalidate challenge/password alla disconnessione esplicita o quit. Riconnessione automatica in-app può riusare password volatile; dopo restart mostrarne richiesta se le chiavi non bastano.
+Usare `/usr/bin/ssh` tramite argv validati, non interpolazione shell dell'IP/user/porta. Prima tentare chiavi/config/agent; password/passphrase via SSH_ASKPASS con helper fisso e socket Unix privato temporaneo, directory0700/socket0600. AddKeysToAgent=no e UseKeychain=no (Mac) impediscono cache esterne di nuove credenziali; agente/config/chiavi già esistenti rimangono utilizzabili. Il helper contiene solo codice, nessun segreto; niente password in argv, env, log, JSON persistente o stderr inoltrato al renderer. Invalidate challenge/password alla disconnessione esplicita o quit. Riconnessione automatica in-app può riusare password volatile; dopo restart mostrarne richiesta se le chiavi non bastano.
 
 Primo host sconosciuto: challenge con fingerprint e accettazione esplicita, poi known_hosts OpenSSH. Chiave cambiata: blocco, nessun reset automatico. Porta locale dinamica su127.0.0.1; destinazione tunnel solo loopback host remoto. Nessuna nuova esposizione della porta Hermes sulla rete. Backend auth_required=true mostra stato login necessario: non disabilitare il gate e non estrarre credenziali private.
 
-## Servizi e punto tecnico da approvare
+## Servizi nativi sull’host
 
 `serve` endpoint web e `gateway` nativo cron/messaging sono distinti. Reusare sempre processi/servizi verificati; non sostituire un backend personale né avviare gateway concorrenti. Se assenti, avvio semplice non basta al requisito autonomia.
 
-**Proposta:** consentire a Studio di registrare servizi background user-scoped sul solo host selezionato, quando mancanti: gateway con CLI nativa `hermes gateway install --if-missing` e start; endpoint `hermes serve --host 127.0.0.1 --port 0` con unit systemd Linux/LaunchAgent locale Studio-owned. È registrazione di servizi per Hermes già installato, non installazione/aggiornamento del runtime. Nessun --force, sudo, modifica globale config, desktop ownership/isolated watchdog o cancellazione di unit preesistenti. Discovery/ready devono identificare processo/unit/porta reali prima del tunnel.
+**Decisione attuata:** consentire a Studio di registrare servizi background user-scoped sul solo host selezionato, quando mancanti: gateway con CLI nativa `hermes gateway install --if-missing` e start; endpoint `hermes serve --host 127.0.0.1 --port 0` con unit systemd Linux/LaunchAgent locale Studio-owned. È registrazione di servizi per Hermes già installato, non installazione/aggiornamento del runtime. Nessun --force, sudo, modifica globale config, desktop ownership/isolated watchdog o cancellazione di unit preesistenti. Discovery/ready devono identificare processo/unit/porta reali prima del tunnel.
 
-Questa registrazione persistente è una proposta da revieware prima del codice: Q2 aveva confermato avvio, non i dettagli dell'installazione servizi. Se si sceglie solo riuso/start, host con Hermes installato ma privo di servizi mostrerà prerequisito e non sarà un percorso completo IP+accesso.
+L’incarico successivo di realizzare F1 ha attuato l’avvio Q2 con supervisor OS e CLI Hermes native. Se il service manager non è disponibile, viene restituito un prerequisito esplicito; non si simula autonomia con un processo posseduto dal client.
 
 Linux: controllare user-systemd/D-Bus e disponibilità dopo logout (linger). Non abilitare linger o cambiare policy di sospensione con privilegi in automatico; se manca, mostrare limite e prerequisito concreto. macOS: LaunchAgent sopravvive al client, non garantisce host acceso/senza sospensione. Altri OS remoti possono usare attach SSH a backend già pronto; startup gestito richiede adapter verificato. Ownership persistente per unit/profilo/eseguibile; chiusura UI non invia stop, kill, interrupt o delete sul remoto.
 
@@ -59,4 +59,8 @@ Gate indipendenti: handshake reale isolato; processo backend ancora disponibile 
 
 ## Handoff
 
-[Piano](F1-implementation-plan.md), [F1](../features/F1-runtime-connection.md), [ADR proposto](../adr/0008-runtime-connections-and-autonomy.md). Review tecnico richiesto dal ramo architectural di brainstorming. Il piano è bozza preparata su richiesta utente; non esecuzione del codice prima della review della spec.
+[Piano](F1-implementation-plan.md), [F1](../features/F1-runtime-connection.md), [ADR0008](../adr/0008-runtime-connections-and-autonomy.md). Review Standards/Spec completata contro baseline e scheda selezionata. L’incarico esplicito di implementazione ha superato lo stato iniziale di proposta; non richiede una nuova intervista o approvazione generale.
+
+## Esito implementazione (2026-10-04)
+
+L’incarico esplicito di realizzare il codice ha attuato la spec. Registro e binding si pubblicano dopo commit atomico; errori storage bloccano binding/invii concorrenti. Disconnect invalida startup pendente e persiste autoConnect=false prima del teardown; se il salvataggio fallisce conserva connessione/preferenza e restituisce errore. Cleanup bridge invalida generation e snapshot live senza perdere binding durevoli o cancellare lavoro Hermes. OpenSSH conserva config/agent/chiavi, port opzionale per rispettare config. Servizi esistenti riusati; solo comandi Hermes nativi sotto supervisor OS per avvio necessario. Gateway running è stato di processo, non attestazione cron/bot. [Ricevuta prove](../architecture/f1-review-2026-10-04.md).

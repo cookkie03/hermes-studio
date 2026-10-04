@@ -5,20 +5,21 @@ import type { Dot } from '../shared/types';
 import { api } from './api';
 interface Status { connected: boolean; lastError?: string }
 interface Activity { id: string; name: string; result?: unknown; complete: boolean }
-export function ComputerPanel({ dot }: { dot: Dot }) {
+export function ComputerPanel({ dot, threadId }: { dot: Dot; threadId?: string }) {
   const [tab, setTab] = useState<'Browser' | 'Files' | 'Terminal'>('Browser');
   const [status, setStatus] = useState<Status>({ connected: false });
   const [error, setError] = useState('');
   const [activity, setActivity] = useState<Activity[]>([]);
   useEffect(() => {
     const controller = new AbortController();
-    const refresh = () => void api<Status>('/hermes/status', 'GET', undefined, controller.signal)
+    setActivity([]); setStatus({ connected: false });
+    const refresh = () => { if (!threadId) return; void api<Status>(`/hermes/status?threadId=${encodeURIComponent(threadId)}`, 'GET', undefined, controller.signal)
       .then((next) => { if (!controller.signal.aborted) { setStatus(next); setError(''); } })
-      .catch((cause) => { if (!controller.signal.aborted) setError(cause instanceof Error ? cause.message : 'Runtime unavailable.'); });
+      .catch((cause) => { if (!controller.signal.aborted) setError(cause instanceof Error ? cause.message : 'Runtime unavailable.'); }); };
     refresh(); const timer = setInterval(refresh, 3000);
     const receive = (raw: Event) => {
-      const { dotId, event } = (raw as CustomEvent).detail ?? {};
-      if (dotId !== dot.id || !event || !['tool.start', 'tool.complete'].includes(event.type)) return;
+      const { dotId, threadId: eventThreadId, event } = (raw as CustomEvent).detail ?? {};
+      if (!threadId || eventThreadId !== threadId || dotId !== dot.id || !event || !['tool.start', 'tool.complete'].includes(event.type)) return;
       const payload = event.payload ?? {}; const id = payload.tool_id ?? payload.id;
       if (typeof id !== 'string') return;
       setActivity((previous) => {
@@ -29,7 +30,7 @@ export function ComputerPanel({ dot }: { dot: Dot }) {
     };
     window.addEventListener('hermes-runtime-event', receive);
     return () => { controller.abort(); clearInterval(timer); window.removeEventListener('hermes-runtime-event', receive); };
-  }, [dot.id]);
+  }, [dot.id, threadId]);
   const rows = activity.filter((row) => tab === 'Files' ? /file|read|write|directory/i.test(row.name) : /terminal|shell|exec/i.test(row.name));
   return <section className="computer-panel hermes-computer" aria-label={`${dot.name}'s computer`}>
     <div className="computer-tool-tabs" role="tablist" aria-label="Computer tools">

@@ -1,6 +1,6 @@
 # Hermes Studio — stato corrente
 
-Consolidato 2026-10-04. **F0 completata; F1–F18 documentate o parziali, nessuna nuova implementazione selezionata.** Rinumerazione documentale D31, codice prodotto invariato. [Catalogo](../features/README.md), [piano](feature-development-plan.md), [decisioni](decisions.md).
+Consolidato 2026-10-04. **F0 completata; F1 incremento locale/SSH implementato e verificato; altre feature documentate o parziali.** Incremento selezionato D32/D33: attach locale/SSH e routing host; codice prodotto modificato. [Catalogo](../features/README.md), [piano](feature-development-plan.md), [decisioni](decisions.md).
 
 ## Baseline verificata
 
@@ -53,3 +53,15 @@ Q8 confermata; intervista conclusa. [Spec](F1-connection-design.md) e [piano F1]
 ## Requisiti GUI documentati
 
 Scheda trasversale nelle feature: contesto Space/progetto Hermes, host, modello/effort; @ file/range/testo e / skill/tool dal backend. Collegata a F4/F7/F6/F2, senza edit F0/F1 o implementation. Contratti sorgente progetti e commands.catalog letti; schema attachment/range/catalogo tool e prove UI/runtime ancora gate.
+
+## 2026-10-04 — F1 implementazione connessioni in corso
+
+Registro versionato host/thread, bridge separati, REST/SSE scoped e OpenSSH di sistema implementati. Credential/fingerprint challenge tramite socket Unix privato; password volatile, nessun secret nello snapshot. Bootstrap riusa discovery e comandi nativi Hermes gateway; service manager ospita esclusivamente hermes serve quando assente, senza executor/scheduler Studio. UI Settings aggiunge host SSH e controlli; chat seleziona host prima del binding, Computer segue thread. 17 test bridge/registry/server PASS, typecheck renderer PASS; ulteriori fixture/review/live attach ancora da completare. ssh2 1.17.0 installata soltanto devDependency per server sintetico. Il runtime personale non è ancora stato modificato o interrogato dalla nuova integrazione.
+
+## 2026-10-04 — F1 review, suite e attach reale PASS
+
+35 test Node e 55 metadata/display PASS, strict typechecks/bootstrap/link boundary PASS. Review parallela Standards/Spec completata: corretti races di binding/disconnect/storage e session snapshot stale, cleanup approvals e label Gateway; rilettura 0 findings aperti. OpenSSH key/password/fingerprint/changed key reale contro fixture PASS, LaunchAgent temporaneo restart/client-close PASS. Handshake diretto Hermes Mac 0.21.5 e GUI .app PASS, zero sessioni/prompt/import/servizi personali cambiati; backend sano dopo client/app close. UseKeychain=no/AddKeysToAgent=no imposti per nuove credenziali; ssh2 solo dev fixture. Package arm64 aggiornato/firma ad hoc PASS; smoke finale in corso. Prove/limiti: docs/architecture/f1-review-2026-10-04.md. Minisforum/systemd live e durata24h non provati; F2/F10 restano gate nativi separati.
+
+## 2026-10-04 — F1 consegna verificata
+
+Package finale arm64/firma ad hoc, smoke offline e smoke connessioni con attach Mac reale PASS; zero errori renderer. Verificati host per due chat, password/fingerprint UI, tastiera, 900/1360px, Reduced Motion, backend sano dopo quit. Suite finale 35 Node + 55 metadata PASS, review Standards/Spec 0 findings aperti. Ticket F1 done per incremento connector selezionato; Minisforum/Linux reale, 24h, turni F2 e routine F10 restano prove distinte non dichiarate. Ricevuta: docs/architecture/f1-review-2026-10-04.md. Commit locale in preparazione; nessun push ritentato dopo precedente rifiuto auto-review. Modifiche documentali D35/D36 concorrenti preservate.
