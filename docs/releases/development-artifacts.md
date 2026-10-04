@@ -19,3 +19,7 @@ Following that first smoke, the product runtime dependencies were reduced to fou
 ### Final local DMG verification
 
 Artifact: `desktop/release/Hermes Studio-0.1.0-arm64.dmg` (131,188,031 bytes). SHA-256: `8b91311058aa38500332074a14df5fc9a84228817c2e097dac211cad456d0c77`. Production build and package commands completed with exit 0. `hdiutil verify` reported a valid image; read-only mount showed Hermes Studio.app and the Applications shortcut. Mounted app passed `codesign --verify --deep --strict`. Actual signature: ad-hoc, identifier `com.cookkie03.hermes-studio`, sealed resources present, TeamIdentifier not set. No Apple Developer certificate, notarization or publishing occurred. Archive inspection confirmed MIT LICENSE/provenance, production assets/adapter, and absence of legacy executor modules and CopilotKit runtime packages. The image was detached; nothing was installed into Applications. Synthetic runtime chat/approval/tool/save acceptance is tracked by parent integration QA separately from these packaging checks.
+
+### Consolidamento F00 — 2026-10-04
+
+Nuova .app arm64 ricostruita con renderer e Metadata strict typecheck senza --noCheck; firma ad hoc e codesign deep strict PASS. Smoke finale con profilo temporaneo: offline, memoria/Space/Markdown, errore di scrittura, conflitto, navigazione annullata, riavvio,900px,focus visibile e Reduced Motion PASS; nessun renderer error. Review e comandi in ../architecture/f00-review-2026-10-04.md. DMG sopra è storico: non contiene necessariamente questo incremento, non rigenerato/pubblicato in F00.

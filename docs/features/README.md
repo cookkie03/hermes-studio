@@ -8,7 +8,7 @@ L'app resta una repository indipendente. Il codice MIT OpenDots già riusato con
 
 | ID | Scheda da scegliere | Dipendenze principali | Stato |
 |---|---|---|---|
-| F00 | [MVP e qualità della base](F00-mvp-foundation.md) | nessuna | baseline parziale; review documentata |
+| F00 | [MVP e qualità della base](F00-mvp-foundation.md) | nessuna | completata; baseline verificata, limiti dichiarati |
 | F01 | [Shell, sidebar e componenti](F01-workspace-shell.md) | F00 | documentata; UI esistente parziale |
 | F02 | [Conversazioni](F02-conversations.md) | F00, F11 | documentata; bridge parziale |
 | F03 | [Spaces e documenti](F03-spaces-documents-memory.md) | F00, F01 | documentata; metadata verificati parzialmente |
@@ -29,11 +29,15 @@ L'app resta una repository indipendente. Il codice MIT OpenDots già riusato con
 
 L'ordine numerico identifica le schede, non impone l'ordine di sviluppo. Percorso consigliato: F00 → F11/F01 → F02/F03 → F16 → una feature avanzata scelta dall'utente. F06 è importante ma non deve aggirare i prerequisiti su esecuzioni durevoli e autorizzazioni. F12 può distribuire il solo MVP, indicando onestamente le capacità incluse.
 
+## Letture e skill
+
+Ogni scheda include File e skill da leggere e usare e richiama il [workflow ask-matt comune](../agents/feature-workflow.md). Il [catalogo completo](../agents/skills-catalog.md) include tutte le skill trovate nel progetto e nelle radici globali, cache plugin e runtime Hermes; la sezione della feature seleziona quelle pertinenti. Leggere i SKILL.md prima dell’applicazione.
+
 ## Come aprire una chat dedicata
 
 Copia il prompt finale della scheda scelta, o usa questo schema:
 
-> Lavora soltanto sulla feature Fxx descritta in docs/features/<file>.md. Prima leggi AGENTS.md, docs/project/MEMORY.md, STATUS.md, GLOSSARY.md, ADR0006 e docs/architecture/principles.md. Verifica dipendenze e stato reale: non assumere che documentata significhi implementata. Proponi un incremento verticale delimitato, poi implementa solo questa feature con prove sintetiche e gate della scheda. Preserva dati/configurazioni/credenziali personali. Non sviluppare altre feature, non cambiare layout generale, non creare repository derivate. Aggiorna scheda, MEMORY/STATUS/WORKLOG e fai review prima del commit. Push soltanto al remote confermato; release/pubblicazione solo se richieste in quella chat.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill della scheda, leggendo i SKILL.md pertinenti. Lavora soltanto sulla feature Fxx descritta in docs/features/<file>.md. Prima leggi AGENTS.md, docs/project/MEMORY.md, STATUS.md, GLOSSARY.md, ADR0006 e docs/architecture/principles.md. Verifica dipendenze e stato reale: non assumere che documentata significhi implementata. Proponi un incremento verticale delimitato, poi implementa solo questa feature con prove sintetiche e gate della scheda. Preserva dati/configurazioni/credenziali personali. Non sviluppare altre feature, non cambiare layout generale, non creare repository derivate. Aggiorna scheda, MEMORY/STATUS/WORKLOG e fai review prima del commit. Push soltanto al remote confermato; release/pubblicazione solo se richieste in quella chat.
 
 Una chat possiede una scheda e i suoi file; se emerge un cambiamento in un modulo condiviso, registra prima contratto e ownership. Evitare due chat che modificano contemporaneamente Chat.tsx, server.mjs o workspace.sqlite. Nessuna nuova chat è stata creata automaticamente.
 

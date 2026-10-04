@@ -6,6 +6,7 @@ struct ToolsPanel: View {
     let store: WorkspaceStore
     var body: some View {
         TabView {
+            ResearchFilesView().tabItem { Label("File", systemImage: "folder") }
             ResearchDocumentView(store: store)
                 .tabItem { Label("Documento", systemImage: "doc.text") }
             Group {

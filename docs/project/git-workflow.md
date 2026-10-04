@@ -2,7 +2,7 @@
 
 Autorizzazione: Luca ha richiesto il 2026-10-04 di preparare commit e push periodici mentre inizializza Git.
 
-Il repository è inizializzato, branch master senza commit; nessun remote configurato al controllo corrente. Non inventare una destinazione e non modificare un remote esistente.
+Verifica 2026-10-04 F00: branch main; baseline HEAD 91f3644 prima del commit MVP; origin git@github.com:cookkie03/hermes-studio.git confermato. Conservare destinazione e storia. La richiesta F00 corrente include commit locale; pubblicazione release appartiene a F12.
 
 Per ogni incremento coerente: completare build e verifiche pertinenti, aggiornare memoria/stato/registro, controllare diff e file aggiunti per credenziali e dati personali, selezionare esplicitamente i file, controllare index e poi commit. Escludere bundle, cache, log, archivi del runtime e credenziali. Le skill e il tracker sono parte del progetto come indicato in .gitignore.
 

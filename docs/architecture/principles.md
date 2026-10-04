@@ -29,7 +29,7 @@ Ogni scheda nomina module responsabile, seam condivisa, file posseduti, input/ev
 
 Per ogni incremento: leggere la scheda e baseline; test di comportamento/red-green per rischi veri; typecheck del codice spedito; prove del failure mode rilevante; smoke packaged se cambiano shell/privilegi/integrazione; confronto UI e tastiera se cambia un componente. Review Standards e Spec restano assi separati.
 
-Il typecheck upstream completo attualmente fallisce nel vecchio executor inutilizzato; metadata sono transpiled con --noCheck. Non chiamare questo audit TypeScript completo. Candidato successivo: metadata module indipendente dai tipi del Platform CopilotKit, scelto e verificato in F00.
+F00 ha separato i contratti Metadata dal tipo Platform CopilotKit: il grafo spedito renderer/metadata passa strict typecheck e build senza --noCheck. Il typecheck upstream completo e alcune suite storiche restano incompatibili nel vecchio executor inutilizzato. Il gate npm test riguarda il prodotto spedito; non dichiararlo audit completo del template storico.
 
 Per Git: diff e index reali, scan segreti, nessun add indiscriminato di cache/DB/release/screenshot privati. Un commit verificato può essere un incremento parziale, ma la descrizione ne deve dichiarare limiti. Preservare history/remote. Test green, build e handshake non certificano feature non esercitate.
 

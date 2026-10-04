@@ -277,8 +277,8 @@ public actor HermesRuntimeClient {
                     eventContinuation.yield(RuntimeEvent(type: method, sessionID: params["session_id"]?.string, payload: params, requestID: id))
                 }
             } else if case .number(let number)? = frame["id"], number.rounded() == number,
-                      number >= 0, number < Double(Int.max), let waiter = pending.removeValue(forKey: Int(number)) {
-                deadlines.removeValue(forKey: Int(number))?.cancel()
+                      let responseID = Int(exactly: number), responseID >= 0, let waiter = pending.removeValue(forKey: responseID) {
+                deadlines.removeValue(forKey: responseID)?.cancel()
                 if let error = frame["error"] {
                     let code: Int
                     if case .number(let value)? = error["code"], value > Double(Int.min), value < Double(Int.max) { code = Int(value) } else { code = -32603 }

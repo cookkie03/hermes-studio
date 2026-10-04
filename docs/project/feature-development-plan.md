@@ -21,3 +21,7 @@ Un numero di scheda non è una priorità automatica. Una chat può dividere una 
 Tutte le schede sono raggiungibili dal [catalogo](../features/README.md); distinguono esistente, sorgente upstream e proposta. Nuove capacità richiedono test attraverso l'interface reale, fixture isolate e prova packaged proporzionata. Un handshake non prova chat; una bozza di release non prova installazione; il client chiuso non prova continuità per 24 ore.
 
 La review propone due candidati: ciclo Conversazione e Metadata locali. Nessuna scelta effettuata; la prossima chat interessata deve delimitare il candidato prima di implementarlo.
+
+## Incremento selezionato successivo: F00
+
+2026-10-04: Luca richiede esplicitamente review, build/test, correzioni essenziali e commit MVP. F00 completata con Metadata locali e correzioni essenziali di baseline; esiti in STATUS e scheda F00. Nessuna selezione automatica delle schede successive.

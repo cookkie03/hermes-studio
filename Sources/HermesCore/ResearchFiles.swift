@@ -104,7 +104,8 @@ public struct ResearchFiles: Sendable {
 
     private func checked(_ candidate: URL) throws -> URL {
         let url = candidate.standardizedFileURL
-        guard url.isFileURL, url.path == root.path || url.path.hasPrefix(root.path + "/") else {
+        let descendantPrefix = root.path.hasSuffix("/") ? root.path : root.path + "/"
+        guard url.isFileURL, url.path == root.path || url.path.hasPrefix(descendantPrefix) else {
             throw ResearchFileError.outsideFolder
         }
         guard url.resolvingSymlinksInPath().path == url.path,

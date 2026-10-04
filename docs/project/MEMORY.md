@@ -1,3 +1,7 @@
+## Ultimo incremento — F00 completata, 2026-10-04
+
+Utente seleziona review/build/test/correzioni essenziali/commit della baseline MVP. Esito e limiti nell'ultimo blocco F00 e in STATUS; D19–D23 continuano a vietare lo sviluppo automatico delle altre feature.
+
 ## Direzione attuale — 2026-10-04 aggiornamento utente
 
 D19: layout OpenDots, componenti/gerarchia/microinterazioni ispirati anche a Unsloth e Codex. Osservazioni live e screenshot distinte da token/durate proposte.
@@ -140,3 +144,15 @@ Ripresa: artefatto Electron arm64 avviato con dati sintetici. Gate UI aperto: ov
 Overlay repaired: packaged metadataUI smokePASS (Memory/Space/Markdown/autosave/reopen), errorsnone. FinalDMGheld forreview/saveUI +pagecontext +prunedruntimegraph verification. New bridge/server/network14synthetic testsPASS; no live prompt proof.
 
 Nuovo Nodebridge discovery livePASS Hermes0.21.5: scarta backendlogin e collega backendlocaleaccessibile, readiness+capabilityfalse soltanto. Chat/streaming/tools live non provati. Metadata persistenti dopo riavvioappPASS.
+
+Proposta di sequenza successiva, non ancora scelta da Luca: F00 salva e verifica prima la baseline di codice tuttora non committata; poi F01/F11/F02/F16/F03 e F12 alpha. Nessuna nuova implementazione autorizzata dalla sola domanda su come procedere.
+
+## F00 selezionata — 2026-10-04
+
+Luca richiede risultato della scheda F00: review del codice, build/test, correzioni essenziali e commit MVP. Incremento delimitato ai Metadata locali: contratti strutturali delle route separati dai tipi del vecchio executor, typecheck senza --noCheck; preservati store, API e dati. Review a due assi su HEAD 91f3644 e baseline WIP/untracked. Correzioni essenziali emerse: invio dopo cold resume di turno runtime attivo/incerto; stato offline nella schermata vuota e cancellazione della navigazione prima di cambiare selezione. Fixture di rete richiedono porte localhost fuori sandbox; rerun sintetico PASS (2 test). Build packaged e gate finali ancora in corso. Nessuna selezione di altre feature o pubblicazione release.
+
+## Consegna F00 — 2026-10-04
+
+MVP essenziale consolidato: contratti Metadata disaccoppiati da Platform, strict typecheck/build senza --noCheck; cold resume non invia su lavoro attivo/incerto; offline autentico e navigazione annullata preservata. Review Standards (1 finding corretto) e Spec (2 corretti), nessun blocco essenziale residuo. npm test PASS:18 fixture,55 test, typecheck e bootstrap/link. .app arm64 rifatta e smoke finale PASS, firma ad hoc/deep verification; storage failure/conflict/restart e focus/reduced motion/900px verificati con dati sintetici. Baseline SwiftUI storica build e 27 gruppi/check sintetici PASS. Template executor legacy incompatibile e non distribuito; nessun prompt personale, nuova feature o release. Evidenze: docs/architecture/f00-review-2026-10-04.md. Commit locale della baseline tramite index selezionato e scan credenziali, preservando MIT/provenienza.
+
+D24 — Richiesta utente: includere nelle schede skill e file da leggere per sviluppare ciascuna feature, usando ask-matt e includendo progetto/globali. Implementata documentazione: workflow comune docs/agents/feature-workflow.md, sezioni in F00–F17 e catalogo completo docs/agents/skills-catalog.md. Inventario: 39 percorsi progetto, 43 Agents globali, 32 Codex globali, 198 cache plugin e 255 runtime Hermes; 567 percorsi, 469 file risolti distinti. File/cache presenti non equivalgono a skill applicate o tool disponibili; caricare solo ciò che serve alla feature. Nessuna nuova feature o installazione autorizzata da questa richiesta documentale.

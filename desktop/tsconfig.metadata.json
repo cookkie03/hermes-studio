@@ -1,0 +1,10 @@
+{
+  "extends": "./upstream/tsconfig.server.json",
+  "include": [
+    "upstream/src/server/store.ts",
+    "upstream/src/server/workspace.ts",
+    "upstream/src/server/app.ts",
+    "upstream/src/server/workspace-routes.ts"
+  ],
+  "exclude": ["upstream/tests"]
+}

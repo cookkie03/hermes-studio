@@ -1,6 +1,6 @@
 # Hermes Studio — stato corrente
 
-Aggiornato 2026-10-04. **Ambito attuale: documentazione per feature, MVP parziale preservato; nessuna nuova feature da implementare automaticamente.** D19–D23 e ADR0006 prevalgono sul lavoro notturno. Piano: [feature-development-plan](feature-development-plan.md). Catalogo: [F00–F17](../features/README.md).
+Aggiornato 2026-10-04. **F00 completata: baseline MVP verificata e consolidata; nessuna nuova feature da implementare automaticamente.** D19–D23 e ADR0006 prevalgono sul lavoro notturno. Piano: [feature-development-plan](feature-development-plan.md). Catalogo: [F00–F17](../features/README.md).
 
 ## Consegna documentale
 
@@ -10,7 +10,7 @@ Riferimento visivo OpenDots autorevole; sistema componenti ispirato a Unsloth e 
 
 ## Baseline tecnica preservata
 
-Client Electron con servizio Node embedded e renderer OpenDots MIT adattato; codice SwiftUI storico conservato. App arm64 e DMG locali di sviluppo prodotti; firma ad hoc, non notarizzati né pubblicati. L'ultima ricostruzione della .app precede la sospensione dell'implementazione; il DMG non è stato rigenerato dopo l'ultimo ritocco layout. Non presentarlo come release finale. Evidenze: [development-artifacts](../releases/development-artifacts.md).
+Client Electron con servizio Node embedded e renderer OpenDots MIT adattato; codice SwiftUI storico conservato. App arm64 e DMG locali di sviluppo prodotti; firma ad hoc, non notarizzati né pubblicati. La .app è stata ricostruita e verificata in F00; il DMG storico non è stato rigenerato con questo incremento. Non presentarlo come release finale. Evidenze: [development-artifacts](../releases/development-artifacts.md).
 
 Prove precedenti: 27 test documenti upstream, 14 fixture renderer e typecheck dedicato; 13 bridge/server e 2 fixture di rete; bootstrap/link esterni verificati. App packaged: memoria, Space, Markdown/autosave e riapertura verificati con dati sintetici; test a 900 px senza overflow. Probe Node live health/ready su Hermes 0.21.5 senza prompt o cronologia.
 
@@ -18,7 +18,7 @@ Prove precedenti: 27 test documenti upstream, 14 fixture renderer e typecheck de
 
 - Chat reale con profilo isolato, streaming, interruzione e ripresa: F02/F11.
 - Review/salvataggio dalla chat end-to-end: prova non conclusa; F02/F03.
-- Typecheck completo metadata/upstream: conflitto legacy SDK; transpiling metadata usa --noCheck, da risolvere o delimitare in F00.
+- Typecheck metadata RISOLTO in F00: strict senza --noCheck. Template executor upstream completo e alcune suite storiche restano incompatibili con SDK legacy, escluso dal prodotto.
 - Confronto finale delle proporzioni della .app dopo ultimo fix, focus/VoiceOver e motion: F01.
 - Browser live, computer use, plugin, collaborazione e routine non dimostrati nel client: rispettive schede, non capacità disponibili.
 - Release GitHub, firma Apple/notarizzazione e installazione pulita: F12. Nessuna durata 24h verificata.
@@ -26,3 +26,15 @@ Prove precedenti: 27 test documenti upstream, 14 fixture renderer e typecheck de
 ## Continuità
 
 MEMORY e WORKLOG conservano decisioni e prove. Automazione riallineata al lavoro documentale e sospesa alla consegna (stato PAUSED confermato dal tool): nessuna ripresa automatica di nuove feature. Git origin verificato: git@github.com:cookkie03/hermes-studio.git. Modifiche del precedente incremento sono preservate; un commit documentale non equivale alla consegna di tutto il codice o di una release.
+
+Prossimo passo consigliato (non selezionato): F00, perché desktop/ e fixture del precedente incremento risultano ancora non versionati; prima review e commit della baseline verificata, poi chat feature dedicate.
+
+## F00 selezionata — 2026-10-04
+
+Luca richiede risultato della scheda F00: review del codice, build/test, correzioni essenziali e commit MVP. Incremento delimitato ai Metadata locali: contratti strutturali delle route separati dai tipi del vecchio executor, typecheck senza --noCheck; preservati store, API e dati. Review a due assi su HEAD 91f3644 e baseline WIP/untracked. Correzioni essenziali emerse: invio dopo cold resume di turno runtime attivo/incerto; stato offline nella schermata vuota e cancellazione della navigazione prima di cambiare selezione. Fixture di rete richiedono porte localhost fuori sandbox; rerun sintetico PASS (2 test). Build packaged e gate finali ancora in corso. Nessuna selezione di altre feature o pubblicazione release.
+
+## Consegna F00 — verificata 2026-10-04
+
+Review Standards/Spec conclusa: cold resume attivo/incerto, offline iniziale e navigazione annullata corretti. npm test PASS (18 fixture +55 test, due typecheck e bootstrap/link); package:dir e smoke .app PASS su userData sintetico, inclusi persistenza al riavvio, errore salvataggio, conflitto, focus visibile, 900px e Reduced Motion. Baseline SwiftUI conservata: build e runner sintetici PASS. [Review ed evidenze](../architecture/f00-review-2026-10-04.md). Commit locale della baseline; nessuna pubblicazione release. Le feature successive richiedono selezione utente.
+
+Aggiornamento D24: 18 schede corredate di skill principali/condizionali e file da leggere, workflow ask-matt comune e inventario completo delle raccolte. Inventario di percorsi leggibili, non certificazione dei tool attivi; implementazione ancora sospesa.

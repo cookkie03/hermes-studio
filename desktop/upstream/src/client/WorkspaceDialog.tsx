@@ -1,0 +1,345 @@
+import { useEffect, useRef, useState } from 'react';
+import { X } from 'lucide-react';
+import { api } from './api';
+import type { Dot, Memory, State, WorkspaceState } from '../shared/types';
+export type Dialog =
+  | { type: 'space' }
+  | { type: 'dot'; dot?: Dot; spaceId: string }
+  | { type: 'settings' }
+  | { type: 'memory'; memory?: Memory }
+  | { type: 'schedule'; threadId: string };
+export function WorkspaceDialog({
+  dialog,
+  state,
+  workspace,
+  onClose,
+  mutate,
+}: {
+  dialog: Dialog;
+  state: State;
+  workspace: WorkspaceState;
+  onClose: () => void;
+  mutate: (path: string, method: string, body?: unknown) => Promise<boolean>;
+}) {
+  const [name, setName] = useState(
+    dialog.type === 'dot' ? (dialog.dot?.name ?? '') : '',
+  );
+  const [text, setText] = useState(
+    dialog.type === 'dot'
+      ? (dialog.dot?.instructions ?? '')
+      : dialog.type === 'memory'
+        ? (dialog.memory?.text ?? '')
+        : '',
+  );
+  const [research, setResearch] = useState(
+    dialog.type === 'dot'
+      ? (dialog.dot?.researchAllowed ?? true)
+      : state.settings.researchAllowed,
+  );
+  const [memory, setMemory] = useState(
+    dialog.type === 'dot'
+      ? (dialog.dot?.memoryAllowed ?? true)
+      : state.settings.memoryAllowed,
+  );
+  const [spaceIds, setSpaceIds] = useState(
+    dialog.type === 'dot' ? (dialog.dot?.spaceIds ?? [dialog.spaceId]) : [],
+  );
+  const [defaultSpace, setDefaultSpace] = useState(
+    dialog.type === 'dot' ? (dialog.dot?.spaceId ?? dialog.spaceId) : '',
+  );
+  const [interval, setInterval] = useState('86400');
+  const [learningContainer, setLearningContainer] = useState(
+    dialog.type === 'dot' ? (dialog.dot?.learningContainerId ?? '') : '',
+  );
+  const [skillDelivery, setSkillDelivery] = useState(
+    dialog.type === 'dot' ? (dialog.dot?.skillDeliveryEnabled ?? false) : false,
+  );
+  const [busy, setBusy] = useState(false);
+  const [endpoint, setEndpoint] = useState('');
+  const [connectionNote, setConnectionNote] = useState('');
+  const [error, setError] = useState('');
+  const container = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const previous =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+    container.current
+      ?.querySelector<HTMLElement>('input,textarea,select')
+      ?.focus();
+    const key = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+      if (event.key === 'Tab') {
+        const items = [
+          ...(container.current?.querySelectorAll<HTMLElement>(
+            'button:not([disabled]),input,textarea,select,a[href]',
+          ) ?? []),
+        ];
+        if (event.shiftKey && document.activeElement === items[0]) {
+          event.preventDefault();
+          items.at(-1)?.focus();
+        } else if (!event.shiftKey && document.activeElement === items.at(-1)) {
+          event.preventDefault();
+          items[0]?.focus();
+        }
+      }
+    };
+    document.addEventListener('keydown', key);
+    return () => {
+      document.removeEventListener('keydown', key);
+      previous?.focus();
+    };
+  }, []);
+  const title =
+    dialog.type === 'space'
+      ? 'A space for something.'
+      : dialog.type === 'dot'
+        ? dialog.dot
+          ? 'Make this Dot yours.'
+          : 'Meet your next specialist.'
+        : dialog.type === 'settings'
+          ? 'Your workspace, your rules.'
+          : dialog.type === 'memory'
+            ? 'Something to remember.'
+            : 'Let your Dot keep time.';
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <section
+        className="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dialog-title"
+        ref={container}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          className="modal-close icon-button"
+          aria-label="Close dialog"
+          onClick={onClose}
+        >
+          <X size={18} />
+        </button>
+        <span className="eyebrow">HERMES STUDIO</span>
+        <h2 id="dialog-title">{title}</h2>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            setBusy(true);
+            setError('');
+            let path = '',
+              method = 'POST',
+              body: unknown;
+            if (dialog.type === 'space') {
+              path = '/spaces';
+              body = { name, description: text };
+            }
+            if (dialog.type === 'dot') {
+              path = dialog.dot ? `/dots/${dialog.dot.id}` : '/dots';
+              method = dialog.dot ? 'PUT' : 'POST';
+              body = {
+                spaceId: defaultSpace,
+                spaceIds,
+                name,
+                instructions: text,
+                researchAllowed: research,
+                memoryAllowed: memory,
+                learningContainerId: learningContainer.trim() || null,
+                skillDeliveryEnabled: skillDelivery,
+              };
+            }
+            if (dialog.type === 'settings') {
+              path = '/settings';
+              method = 'PATCH';
+              body = { researchAllowed: research, memoryAllowed: memory };
+            }
+            if (dialog.type === 'memory') {
+              path = dialog.memory
+                ? `/memories/${dialog.memory.id}`
+                : '/memories';
+              method = dialog.memory ? 'PUT' : 'POST';
+              body = { text };
+            }
+            if (dialog.type === 'schedule') {
+              path = '/tasks';
+              body = {
+                prompt: text,
+                threadId: dialog.threadId,
+                intervalSeconds: Number(interval),
+              };
+            }
+            if (await mutate(path, method, body)) onClose();
+            else
+              setError('Could not save. Review the workspace error and retry.');
+            setBusy(false);
+          }}
+        >
+          {(dialog.type === 'space' || dialog.type === 'dot') && (
+            <>
+              <label className="field-label" htmlFor="entity-name">
+                Name
+              </label>
+              <input
+                id="entity-name"
+                value={name}
+                maxLength={40}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </>
+          )}
+          {dialog.type !== 'settings' && (
+            <>
+              <label className="field-label" htmlFor="entity-text">
+                {dialog.type === 'dot'
+                  ? 'Role instructions'
+                  : dialog.type === 'space'
+                    ? 'What belongs here?'
+                    : dialog.type === 'memory'
+                      ? 'Preference or context'
+                      : 'Task to revisit'}
+              </label>
+              <textarea
+                id="entity-text"
+                rows={4}
+                maxLength={dialog.type === 'schedule' ? 4000 : 2000}
+                required={dialog.type !== 'space'}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder={
+                  dialog.type === 'dot'
+                    ? 'You are a thoughtful research partner. Compare evidence and be clear about uncertainty.'
+                    : ''
+                }
+              />
+            </>
+          )}
+          {dialog.type === 'dot' && (
+            <fieldset className="space-access-fields">
+              <legend>Space access</legend>
+              <p className="muted">
+                Choose where this Dot can read and edit pages.
+              </p>
+              {workspace.spaces.map((space) => (
+                <label className="permission-row" key={space.id}>
+                  <input
+                    type="checkbox"
+                    checked={spaceIds.includes(space.id)}
+                    onChange={(event) => {
+                      const next = event.target.checked
+                        ? [...spaceIds, space.id]
+                        : spaceIds.filter((id) => id !== space.id);
+                      setSpaceIds(next);
+                      if (!next.includes(defaultSpace))
+                        setDefaultSpace(next[0] ?? '');
+                    }}
+                  />
+                  <span>{space.name}</span>
+                </label>
+              ))}
+              <label className="field-label" htmlFor="default-space">
+                Default destination for saved pages
+              </label>
+              <select
+                id="default-space"
+                value={defaultSpace}
+                required
+                onChange={(event) => setDefaultSpace(event.target.value)}
+              >
+                <option value="" disabled>
+                  Choose a Space
+                </option>
+                {workspace.spaces
+                  .filter((space) => spaceIds.includes(space.id))
+                  .map((space) => (
+                    <option key={space.id} value={space.id}>
+                      {space.name}
+                    </option>
+                  ))}
+              </select>
+            </fieldset>
+          )}
+          {(dialog.type === 'dot' || dialog.type === 'settings') && (
+            <>
+              <label className="permission-row">
+                <input
+                  type="checkbox"
+                  checked={research}
+                  disabled
+                  onChange={(e) => setResearch(e.target.checked)}
+                />
+                <span>
+                  <strong>Hermes controls research tools</strong>
+                  <small>
+                    Tool access follows the Hermes runtime configuration. This control does not change runtime permissions.
+                  </small>
+                </span>
+              </label>
+              <label className="permission-row">
+                <input
+                  type="checkbox"
+                  checked={memory}
+                  onChange={(e) => setMemory(e.target.checked)}
+                />
+                <span>
+                  <strong>Include Studio memories in new messages</strong>
+                  <small>
+                    Include saved Studio preferences in subsequent messages. This does not change Hermes memory or stop active work.
+                  </small>
+                </span>
+              </label>
+            </>
+          )}
+          {dialog.type === 'dot' && <p className="muted">Automatic learning and published-skill delivery are future integrations. This Dot's role is included in new Hermes messages; changing it does not restart ongoing work.</p>}
+          {dialog.type === 'schedule' && (
+            <>
+              <label className="field-label" htmlFor="schedule-interval">
+                Repeat after each successful run
+              </label>
+              <select
+                id="schedule-interval"
+                value={interval}
+                onChange={(e) => setInterval(e.target.value)}
+              >
+                <option value="60">Every minute (testing)</option>
+                <option value="3600">Every hour</option>
+                <option value="86400">Every day</option>
+                <option value="604800">Every week</option>
+              </select>
+              <p className="muted">
+                Scheduling is not connected to Hermes in this version. No background job will be created from this form.
+              </p>
+            </>
+          )}
+          {dialog.type === 'settings' && <div className="config-note">
+            <strong>Hermes runtime</strong>
+            <p>Connect to your local Hermes gateway. Studio does not require a separate OpenAI or CopilotKit key.</p>
+            <label className="field-label" htmlFor="hermes-endpoint">Gateway address (optional)</label>
+            <input id="hermes-endpoint" value={endpoint} placeholder="Automatic local discovery" onChange={(event) => setEndpoint(event.target.value)} />
+            <button type="button" disabled={busy} onClick={async () => {
+              setBusy(true); setConnectionNote('');
+              try { await api('/hermes/connect', 'POST', endpoint.trim() ? { endpoint: endpoint.trim() } : {}); setConnectionNote('Gateway connected. Open a conversation to use Hermes.'); }
+              catch (cause) { setConnectionNote(cause instanceof Error ? cause.message : 'Could not connect.'); }
+              finally { setBusy(false); }
+            }}>Connect Hermes</button>
+            {connectionNote && <p role="status">{connectionNote}</p>}
+            <p>Calls, Slack, scheduling and live computer takeover are future integrations.</p>
+          </div>}
+          {dialog.type === 'memory' && (
+            <p className="muted">
+              Memories are explicit preferences, not automatic learning. Avoid
+              secrets; enabled memories go to your model provider.
+            </p>
+          )}
+          {error && (
+            <p className="chat-error" role="alert">
+              {error}
+            </p>
+          )}
+          <button className="primary full" disabled={busy || dialog.type === 'schedule'}>
+            {busy ? 'Saving…' : 'Save'}
+          </button>
+        </form>
+      </section>
+    </div>
+  );
+}

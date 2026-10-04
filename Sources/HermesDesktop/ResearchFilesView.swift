@@ -2,6 +2,17 @@ import AppKit
 import SwiftUI
 import HermesCore
 
+/// Owns only an immutable URL so scoped access is released outside actor-isolated model teardown.
+private final class SelectedFolderAccess: Sendable {
+    let url: URL
+    private let didStart: Bool
+    init(_ url: URL) {
+        self.url = url
+        didStart = url.startAccessingSecurityScopedResource()
+    }
+    deinit { if didStart { url.stopAccessingSecurityScopedResource() } }
+}
+
 @MainActor
 @Observable
 private final class ResearchFilesModel {
@@ -10,8 +21,7 @@ private final class ResearchFilesModel {
     var truncated = false
     var document: ResearchFileDocument?
     var error: String?
-    var busy = false
-    private var scopedRoot: URL?
+    private var folderAccess: SelectedFolderAccess?
     var isDirty: Bool { document.map { Data($0.text.utf8) != $0.originalData } ?? false }
 
     func selectFolder() {
@@ -20,14 +30,14 @@ private final class ResearchFilesModel {
         panel.allowsMultipleSelection = false
         panel.prompt = "Scegli cartella"
         guard panel.runModal() == .OK, let root = panel.url else { return }
+        let access = SelectedFolderAccess(root)
         do {
             let selected = try ResearchFiles(root: root)
             let listing = try selected.list(root)
-            scopedRoot?.stopAccessingSecurityScopedResource()
-            scopedRoot = root
+            folderAccess = access
             files = selected; entries = listing.entries; truncated = listing.isTruncated
             document = nil; error = nil
-        } catch { root.stopAccessingSecurityScopedResource(); self.error = error.localizedDescription }
+        } catch { self.error = error.localizedDescription }
     }
 
     func open(_ url: URL) {
@@ -43,7 +53,7 @@ private final class ResearchFilesModel {
     }
 
     func closeFolder() {
-        scopedRoot?.stopAccessingSecurityScopedResource(); scopedRoot = nil
+        folderAccess = nil
         files = nil; entries = []; document = nil
     }
 }
@@ -54,7 +64,7 @@ struct ResearchFilesView: View {
     @State private var pendingAction: FileAction?
     @State private var confirmDiscard = false
 
-    private enum FileAction { case folder, open(URL) }
+    private enum FileAction { case folder, open(URL), close }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -63,6 +73,7 @@ struct ResearchFilesView: View {
                     .font(.headline).lineLimit(1).help(model.files?.root.path ?? "Scegli una cartella")
                 Spacer()
                 Button("Scegli cartella…") { perform(.folder) }
+                if model.files != nil { Button("Chiudi", systemImage: "xmark") { perform(.close) } }
             }
             if let files = model.files {
                 ScrollView {
@@ -104,8 +115,6 @@ struct ResearchFilesView: View {
             Button("Scarta le modifiche", role: .destructive) { runPending() }
             Button("Annulla", role: .cancel) { pendingAction = nil }
         } message: { Text("Salva il documento prima di cambiare file o cartella per conservare le modifiche.") }
-        // Release the selected folder when the panel's lifetime ends. Changing tabs preserves it.
-        .onDisappear { }
     }
 
     private func perform(_ action: FileAction) {
@@ -116,7 +125,11 @@ struct ResearchFilesView: View {
     private func runPending() {
         guard let action = pendingAction else { return }
         pendingAction = nil
-        switch action { case .folder: model.selectFolder(); case .open(let url): model.open(url) }
+        switch action {
+        case .folder: model.selectFolder()
+        case .open(let url): model.open(url)
+        case .close: model.closeFolder()
+        }
     }
 }
 

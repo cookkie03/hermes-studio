@@ -1,0 +1,5 @@
+{
+  "extends": "./upstream/tsconfig.json",
+  "include": ["upstream/src/client", "upstream/src/shared", "upstream/vite.config.ts"],
+  "exclude": ["upstream/tests", "upstream/src/browser"]
+}
