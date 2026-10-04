@@ -16,7 +16,7 @@ Capacità e memoria native rimangono nel runtime: Studio deve presentarle con or
 |---|---|---|---|
 | F0 | [Baseline MVP e manutenzione](F0-mvp-foundation.md) | nessuna | completata; baseline verificata, limiti dichiarati |
 | F1 | [Connessioni e host del runtime Hermes](F1-runtime-connection.md) | F0 | implementata D32/D33; locale reale, SSH/lifecycle fixture e GUI PASS; limiti nella scheda |
-| F2 | [Chat e presentazione degli eventi Hermes](F2-conversations.md) | F0, F1 | documentata; bridge parziale |
+| F2 | [Chat e presentazione degli eventi Hermes](F2-conversations.md) | F0, F1 | parziale; incremento invio scoped/bozze e packaged sintetico PASS, gate live aperti |
 | F3 | [GUI delle approvazioni e dei permessi Hermes](F3-permissions-and-approvals.md) | F1 | contratto parziale; fixture disponibili |
 | F4 | [Shell, navigazione e componenti di Hermes Studio](F4-workspace-shell.md) | F0 | documentata; UI esistente parziale |
 | F5 | [File, riferimenti e artefatti nel workspace Hermes](F5-files-and-artifacts.md) | F0 per file locali; F1/F3 per tool agente | documentata; UI futura |

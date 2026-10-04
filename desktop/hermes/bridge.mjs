@@ -149,10 +149,12 @@ export class HermesBridge extends EventEmitter {
     this.emit('update', { type: 'turn', threadId, requestId, status: 'dispatching' });
     void this.gateway.request('prompt.submit', { session_id: session.runtimeId, text: preparedText }, 1800000).then(() => {
       userMessage.metadata.delivery = 'acknowledged';
-      this.emit('update', { type: 'admitted', threadId, requestId });
-      if (this.turns.has(threadId)) this.emit('update', { type: 'turn', threadId, requestId, status: 'accepted' });
+      const turn = this.turns.get(threadId);
+      if (turn?.requestId !== requestId) return;
+      this.emit('update', { type: 'admitted', threadId, requestId, clientSubmissionId: userMessage.id });
+      if (!turn.running) this.emit('update', { type: 'turn', threadId, requestId, status: 'accepted' });
     }).catch(error => {
-      if (!this.turns.has(threadId)) return;
+      if (this.turns.get(threadId)?.requestId !== requestId) return;
       // Preserve uncertain turn until explicit reconnection; never replay prompt automatically.
       userMessage.metadata.delivery = 'uncertain'; this.emit('update', { type: 'turn', threadId, requestId, status: 'error', uncertain: true, message: error.message });
     });
@@ -180,7 +182,10 @@ export class HermesBridge extends EventEmitter {
         void this.persistBindings().catch(error => this.emit('update', { type: 'persistence-error', threadId, message: error.message }));
       }
     }
-    if (threadId && this.turns.has(threadId) && ['message.delta', 'message.interim', 'tool.start'].includes(event.type)) this.emit('update', { type: 'turn', threadId, status: 'running' });
+    if (threadId && this.turns.has(threadId) && ['message.delta', 'message.interim', 'tool.start'].includes(event.type)) {
+      this.turns.get(threadId).running = true;
+      this.emit('update', { type: 'turn', threadId, status: 'running' });
+    }
     this.emit('update', { type: 'runtime', threadId, event });
     if (event?.type === 'message.complete' && threadId) {
       const session = this.sessions.get(threadId); session.messages.push({ id: randomUUID(), role: 'assistant', content: event.payload?.text ?? '' });

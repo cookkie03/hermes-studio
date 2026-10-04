@@ -72,6 +72,33 @@ class Handler(BaseHTTPRequestHandler):
             send({'jsonrpc': '2.0', 'method': 'event', 'params': {
                 'type': name, 'session_id': 'fixture-session', 'payload': payload}})
 
+        def snapshot(session_id):
+            state = self.server.sessions[session_id]
+            return {'session_id': session_id, 'stored_session_id': session_id,
+                    'running': state['running'], 'status': 'streaming' if state['running'] else 'idle',
+                    'messages': list(state['messages'])}
+
+        def prompt(request_id, params):
+            session_id = params['session_id']
+            state = self.server.sessions[session_id]
+            state['running'] = True
+            state['messages'].append({'role': 'user', 'content': params['text']})
+            def emit(name, payload):
+                send({'jsonrpc': '2.0', 'method': 'event', 'params': {
+                    'type': name, 'session_id': session_id, 'payload': payload}})
+            state['emit'] = emit
+            emit('message.delta', {'text': 'Synthetic streaming response'})
+            emit('tool.start', {'tool_id': 'synthetic-tool', 'name': 'synthetic_read', 'args': {'path': 'fixture.txt'}})
+            time.sleep(1.2)
+            if state['running']:
+                state['running'] = False
+                text = 'Synthetic confirmed response'
+                state['messages'].append({'role': 'assistant', 'content': text})
+                emit('message.complete', {'text': text, 'status': 'complete'})
+            emit('tool.complete', {'tool_id': 'synthetic-tool', 'name': 'synthetic_read', 'result_text': 'Late synthetic tool result'})
+            time.sleep(0.3)
+            result(request_id, {'admitted': True})
+
         def slow(request_id):
             time.sleep(0.15)
             result(request_id, {'tag': 'slow'})
@@ -104,7 +131,19 @@ class Handler(BaseHTTPRequestHandler):
                     continue
                 request = json.loads(payload)
                 method, request_id = request.get('method'), request.get('id')
-                if method == 'client.capabilities':
+                if self.server.conversations and method in ('session.create', 'session.resume'):
+                    params = request.get('params', {})
+                    session_id = params.get('session_id') or 'fixture-' + params['idempotency_key']
+                    self.server.sessions.setdefault(session_id, {'running': False, 'messages': []})
+                    result(request_id, snapshot(session_id))
+                elif self.server.conversations and method == 'prompt.submit':
+                    threading.Thread(target=prompt, args=(request_id, request.get('params', {})), daemon=True).start()
+                elif self.server.conversations and method == 'session.interrupt':
+                    state = self.server.sessions[request['params']['session_id']]
+                    state['running'] = False
+                    state['emit']('message.complete', {'text': 'Synthetic interrupted response', 'status': 'interrupted'})
+                    result(request_id, {'interrupted': True})
+                elif method == 'client.capabilities':
                     result(request_id, {'server_requests': [], 'declines_not_shown': True})
                 elif method == 'gateway.ping':
                     result(request_id, {'ok': True})
@@ -132,7 +171,10 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--port', type=int, default=0)
+    parser.add_argument('--conversations', action='store_true')
     args = parser.parse_args()
     server = ThreadingHTTPServer(('127.0.0.1', args.port), Handler)
+    server.conversations = args.conversations
+    server.sessions = {}
     print(server.server_address[1], flush=True)
     server.serve_forever()

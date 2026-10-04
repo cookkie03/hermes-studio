@@ -10,8 +10,17 @@ import { appendAssistant, delivery, pendingMessage, remainingDraft, mergeHistory
 
 import type { RuntimeStatus } from './runtime-connections';
 import { ConversationHost } from './ConversationHost';
+import { ConversationSubmission } from './conversation-submission';
 interface Approval { requestId: unknown; params: { command?: string; description?: string; choices?: string[] } }
 const textOf = (value: unknown) => typeof value === 'string' ? value : '';
+const draftWrites = new Map<string, Promise<unknown>>();
+function persistDraft(threadId: string, draft: string) {
+  const write = (draftWrites.get(threadId) ?? Promise.resolve()).catch(() => {}).then(() =>
+    api(`/conversations/${encodeURIComponent(threadId)}/draft`, 'PATCH', { draft }));
+  draftWrites.set(threadId, write);
+  void write.finally(() => { if (draftWrites.get(threadId) === write) draftWrites.delete(threadId); }).catch(() => {});
+  return write;
+}
 
 export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onComputer, onSaved, beforeSend, onOpenConversation }: {
   thread: Conversation; dot: Dot; initialPrompt?: string; onConsumed: () => void;
@@ -23,11 +32,18 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   const [messages, setMessages] = useState<TextMessage[]>([]);
   const [reviewContent, setReviewContent] = useState<string>();
   const [preparing, setPreparing] = useState(false);
-  const preparationPending = useRef(false);
+  const submission = useRef(new ConversationSubmission());
   const draftKey = `hermes-draft:${thread.id}`;
   const [draft, setDraft] = useState(() => { try { return initialPrompt ?? localStorage.getItem(draftKey) ?? ''; } catch { return initialPrompt ?? ''; } });
   const [draftRemoteReady, setDraftRemoteReady] = useState(false);
   const [draftError, setDraftError] = useState('');
+  const draftSnapshot = useRef({ draft, ready: draftRemoteReady });
+  draftSnapshot.current = { draft, ready: draftRemoteReady };
+  useEffect(() => () => {
+    const latest = draftSnapshot.current;
+    // Flush the final draft when navigation cancels the debounce. Same-thread writes stay ordered across remounts.
+    if (latest.ready) void persistDraft(thread.id, latest.draft).catch(() => {});
+  }, [thread.id]);
   const [status, setStatus] = useState<Partial<RuntimeStatus> & { connected: boolean }>({ connected: false });
   const [hostRevision, setHostRevision] = useState(0);
   const [running, setRunning] = useState(false);
@@ -66,7 +82,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   useEffect(() => {
     if (!draftRemoteReady) return;
     const timer = setTimeout(() => {
-      void api(`/conversations/${encodeURIComponent(thread.id)}/draft`, 'PATCH', { draft })
+      void persistDraft(thread.id, draft)
         .then(() => setDraftError('')).catch(() => setDraftError('The draft was not saved to disk. The local copy is retained.'));
     }, 400);
     return () => clearTimeout(timer);
@@ -106,9 +122,13 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
     void loadHistory(controller.signal).finally(() => { if (!controller.signal.aborted) setLoading(false); });
     const receive = (frame: Record<string, unknown>) => {
       if (controller.signal.aborted) return;
+      if (frame.type === 'connection' && frame.connected === false) {
+        sendAllowed.current = false; setUncertain(true); setStatus(previous => ({ ...previous, connected: false }));
+      }
       if (frame.type === 'approval-waiting' && typeof frame.threadId === 'string' && frame.threadId !== thread.id) setBackgroundApproval(frame.threadId);
       if (frame.type === 'turn') {
         if (['dispatching', 'accepted', 'running', 'completed', 'error', 'interrupted'].includes(String(frame.status))) turnPhase.current = frame.status as TurnPhase;
+        if (['dispatching', 'accepted', 'running'].includes(String(frame.status)) || frame.uncertain === true) sendAllowed.current = false;
         setDispatching(frame.status === 'dispatching'); setWaiting(frame.status === 'accepted');
         setRunning(frame.status === 'running');
         if (frame.uncertain === true) setUncertain(true);
@@ -117,7 +137,8 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
       }
       if (frame.type === 'admitted') {
         setUncertain(false);
-        if (submittedId.current) setMessages((previous) => delivery(previous, submittedId.current, 'acknowledged'));
+        const id = typeof frame.clientSubmissionId === 'string' ? frame.clientSubmissionId : submittedId.current;
+        if (id) setMessages((previous) => delivery(previous, id, 'acknowledged'));
       }
       if (frame.type === 'request-resolved' || frame.type === 'cancel') setApprovals((previous) => removeApproval(previous, frame.requestId));
       if (frame.type === 'request' && frame.method === 'approval') {
@@ -129,7 +150,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
       const event = frame.event as { type?: string; payload?: Record<string, unknown> } | undefined;
       const payload = event?.payload ?? {};
       if (['message.delta', 'message.interim', 'tool.start'].includes(event?.type ?? '')) {
-        turnPhase.current = 'running'; setRunning(true); setDispatching(false); setWaiting(false);
+        sendAllowed.current = false; turnPhase.current = 'running'; setRunning(true); setDispatching(false); setWaiting(false);
         if (submittedId.current) setMessages((previous) => delivery(previous, submittedId.current, 'acknowledged'));
       }
       if (event?.type === 'message.delta') {
@@ -168,9 +189,9 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
           if (buffer.length > 2_000_000) throw new Error('Hermes event exceeds the display limit.');
         }
       } catch (cause) {
-        if (!controller.signal.aborted) { setStreamConnected(false); setStatus((previous) => ({ ...previous, connected: false })); setUncertain(true); setError(cause instanceof Error ? cause.message : 'Connection interrupted. The runtime may still be working.'); }
+        if (!controller.signal.aborted) { sendAllowed.current = false; setStreamConnected(false); setStatus((previous) => ({ ...previous, connected: false })); setUncertain(true); setError(cause instanceof Error ? cause.message : 'Connection interrupted. The runtime may still be working.'); }
       }
-      if (!controller.signal.aborted) { setStreamConnected(false); setUncertain(true); }
+      if (!controller.signal.aborted) { sendAllowed.current = false; setStreamConnected(false); setUncertain(true); }
       if (!controller.signal.aborted) timer = setTimeout(() => void stream(), 3000);
     };
     void stream();
@@ -178,33 +199,57 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   }, [thread.id, dot.id, loadHistory, hostRevision]);
   useEffect(() => { timeline.current?.scrollTo({ top: timeline.current.scrollHeight }); }, [messages, tools, approvals]);
 
+  const sendAllowed = useRef(false);
+  sendAllowed.current = !loading && !running && !waiting && !dispatching && status.connected && streamConnected && !paused && !uncertain &&
+    !['dispatching', 'accepted', 'running'].includes(turnPhase.current);
+  useEffect(() => {
+    const owner = new ConversationSubmission();
+    submission.current = owner;
+    return () => owner.close();
+  }, [thread.id, hostRevision]);
+
   const send = async () => {
     const capturedDraft = draft;
     const text = capturedDraft.trim();
-    if (!text || preparationPending.current || ['dispatching', 'accepted', 'running'].includes(turnPhase.current) || running || waiting || dispatching || !status.connected || !streamConnected || paused || uncertain) return;
-    let pageReference: { id: string; spaceId: string; revision: number } | undefined;
-    preparationPending.current = true; setPreparing(true); setError('');
-    try { pageReference = await beforeSend?.(); }
-    catch (cause) { setError(cause instanceof Error ? cause.message : 'The page could not be saved. Your message was not sent.'); return; }
-    finally { preparationPending.current = false; setPreparing(false); }
-    const id = crypto.randomUUID(); submittedId.current = id;
-    setMessages((previous) => pendingMessage(previous, id, text));
-    turnPhase.current = 'dispatching'; setDispatching(true); setError('');
-    try {
-      await api('/hermes/send', 'POST', { threadId: thread.id, text, clientSubmissionId: id, ...(pageReference ? { pageReference } : {}) });
-      turnPhase.current = afterDispatchResponse(turnPhase.current);
-      setWaiting(turnPhase.current === 'accepted');
-      setDraft((current) => {
-        const next = remainingDraft(current, capturedDraft);
-        try { localStorage.setItem(draftKey, next); } catch { /* disk draft route remains authoritative */ } return next;
-      });
-      // HTTP dispatch acceptance is distinct from a confirmed runtime acknowledgement.
-    } catch (cause) {
+    if (!text || !sendAllowed.current) return;
+    const owner = submission.current;
+    let id: string | undefined;
+    const result = await owner.send({
+      canSend: () => sendAllowed.current && !['dispatching', 'accepted', 'running'].includes(turnPhase.current),
+      prepare: async () => {
+        setPreparing(true); setError('');
+        return await beforeSend?.();
+      },
+      dispatch: async (pageReference) => {
+        setPreparing(false);
+        const clientSubmissionId = crypto.randomUUID(); id = clientSubmissionId; submittedId.current = clientSubmissionId;
+        setMessages((previous) => pendingMessage(previous, clientSubmissionId, text));
+        turnPhase.current = 'dispatching'; setDispatching(true); setError('');
+        await api('/hermes/send', 'POST', { threadId: thread.id, text, clientSubmissionId: id, ...(pageReference ? { pageReference } : {}) });
+      },
+    });
+    if (result.status === 'busy' || result.status === 'stale' || owner !== submission.current) return;
+    setPreparing(false);
+    if (result.status === 'blocked') {
+      setError('The connection or turn changed while preparing. Your message was not sent; your draft is preserved.');
+      return;
+    }
+    setDispatching(false);
+    if (result.status === 'error') {
+      const message = result.cause instanceof Error ? result.cause.message : 'The request failed.';
+      if (result.stage === 'prepare') { setError(message); return; }
       turnPhase.current = 'error'; setUncertain(true);
       setMessages((previous) => delivery(previous, id, 'uncertain'));
-      setError(cause instanceof Error ? `${cause.message} Delivery must be checked; your draft is preserved.` : 'Delivery must be checked. Your draft is preserved.');
+      setError(`${message} Delivery must be checked; your draft is preserved.`);
+      return;
     }
-    finally { setDispatching(false); }
+    turnPhase.current = afterDispatchResponse(turnPhase.current);
+    setWaiting(turnPhase.current === 'accepted');
+    setDraft((current) => {
+      const next = remainingDraft(current, capturedDraft);
+      try { localStorage.setItem(draftKey, next); } catch { /* disk draft route remains authoritative */ }
+      return next;
+    });
   };
   const connect = async () => {
     try { await api('/hermes/connect', 'POST', { connectionId: status.connectionId ?? 'local' }); setStatus(await api(`/hermes/status?threadId=${encodeURIComponent(thread.id)}`)); await loadHistory(); setError(''); }
@@ -228,7 +273,12 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
         <button className="icon-button" aria-label="Show computer" onClick={onComputer}><Monitor size={21} /></button>
       </div>
     </header>
-    <ConversationHost threadId={thread.id} onChanged={() => setHostRevision(value => value + 1)} />
+    <ConversationHost threadId={thread.id} onChanging={() => {
+      sendAllowed.current = false; submission.current.close(); setPreparing(false); setStreamConnected(false); setLoading(true);
+    }} onChanged={() => {
+      submission.current.close(); setPreparing(false); setStreamConnected(false); setLoading(true);
+      setStatus({ connected: false }); setHostRevision(value => value + 1);
+    }} />
     <div className="hermes-timeline" ref={timeline} role="log" aria-label="Conversation">
       {(!status.connected || uncertain) && <div className="hermes-connection"><strong>Connect your Hermes runtime</strong><p>{uncertain ? 'Delivery or ongoing work needs inspection. Reconnecting does not resend your request or cancel the runtime.' : 'Your documents remain available. A connection enables real conversations and tool activity.'}</p><button onClick={() => void connect()}>Connect Hermes</button></div>}
       {backgroundApproval && <div className="hermes-connection" role="status"><strong>Another conversation needs your decision</strong>{onOpenConversation ? <button onClick={() => onOpenConversation(backgroundApproval)}>Open conversation</button> : <p>Open the waiting conversation from Chats to review the request.</p>}</div>}

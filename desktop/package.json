@@ -11,7 +11,7 @@
     "typecheck": "npm run typecheck:renderer && npm run typecheck:metadata",
     "test:upstream": "vitest run --root upstream",
     "test": "npm run typecheck && node --test hermes/*.test.mjs && npm run test:metadata && npm run test:bootstrap && npm run test:external-links",
-    "test:metadata": "vitest run --root upstream tests/pages.test.ts tests/page-routes.test.ts tests/workspace.test.ts tests/store.test.ts tests/autosave.test.ts tests/app.test.ts tests/voice.test.ts tests/page-snapshots.test.ts src/client/hermes-display.test.ts src/client/manual-space-review.test.ts",
+    "test:metadata": "vitest run --root upstream tests/pages.test.ts tests/page-routes.test.ts tests/workspace.test.ts tests/store.test.ts tests/autosave.test.ts tests/app.test.ts tests/voice.test.ts tests/page-snapshots.test.ts src/client/hermes-display.test.ts src/client/manual-space-review.test.ts src/client/conversation-submission.test.ts",
     "verify:package": "node scripts/verify-package.cjs",
     "test:bootstrap": "node scripts/test-bootstrap.cjs",
     "typecheck:upstream": "tsc --noEmit -p upstream/tsconfig.json",
@@ -20,6 +20,7 @@
     "build:metadata": "tsc -p tsconfig.metadata.json && node scripts/metadata-manifest.cjs",
     "test:external-links": "node scripts/test-external-links.cjs",
     "test:packaged-ui": "node scripts/test-packaged-ui.cjs",
+    "test:packaged-conversations": "node scripts/test-packaged-conversations.cjs",
     "test:packaged-connections": "node scripts/test-packaged-connections.cjs"
   },
   "keywords": [],

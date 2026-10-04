@@ -25,6 +25,27 @@ class FixtureGateway extends EventEmitter {
 }
 const ownThread = id => { if (!['a', 'b'].includes(id)) throw new Error('Conversation is not owned.'); };
 
+test('a delayed admission cannot regress working or change the next turn', async () => {
+  const gateway = new FixtureGateway(), bridge = new HermesBridge({ gateway }), updates = [];
+  bridge.on('update', event => updates.push(event));
+  try {
+    await bridge.send('a', 'First synthetic request', 'first');
+    const firstAdmission = gateway.finishSubmit;
+    gateway.emit('event', { type: 'message.delta', session_id: 'live-id', payload: { text: 'Streaming' } });
+    firstAdmission({ admitted: true }); await new Promise(resolve => setImmediate(resolve));
+    assert.equal(updates.filter(event => event.type === 'turn').at(-1).status, 'running');
+    gateway.emit('event', { type: 'message.complete', session_id: 'live-id', payload: { text: 'Done' } });
+    await bridge.send('a', 'Second synthetic request', 'second');
+    const secondAdmission = gateway.finishSubmit;
+    gateway.emit('event', { type: 'message.complete', session_id: 'live-id', payload: { text: 'Done again' } });
+    await bridge.send('a', 'Third synthetic request', 'third');
+    const count = updates.length;
+    secondAdmission({ admitted: true }); await new Promise(resolve => setImmediate(resolve));
+    assert.equal(updates.length, count);
+    assert.equal((await bridge.history('a')).messages.find(message => message.id === 'second').metadata.delivery, 'acknowledged');
+  } finally { bridge.close(); }
+});
+
 test('connect is attach-only, never creates a session or sends a prompt', async () => {
   const gateway = new FixtureGateway(); const bridge = new HermesBridge({ gateway });
   await bridge.connect({ endpoint: 'http://127.0.0.1:8400', serverRequests: true });

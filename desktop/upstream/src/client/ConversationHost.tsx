@@ -5,9 +5,11 @@ import type { RuntimeConnection, ThreadHost } from "./runtime-connections";
 export function ConversationHost({
   threadId,
   onChanged,
+  onChanging,
 }: {
   threadId: string;
   onChanged: () => void;
+  onChanging?: () => void;
 }) {
   const [host, setHost] = useState<ThreadHost>();
   const [connections, setConnections] = useState<RuntimeConnection[]>([]);
@@ -52,6 +54,7 @@ export function ConversationHost({
   const choose = async (connectionId: string) => {
     setBusy(true);
     setError("");
+    onChanging?.();
     try {
       setHost(
         await api<ThreadHost>("/hermes/thread-host", "PUT", {
@@ -59,13 +62,13 @@ export function ConversationHost({
           connectionId,
         }),
       );
-      onChanged();
     } catch (cause) {
       setError(
         cause instanceof Error ? cause.message : "Could not assign host.",
       );
     } finally {
       setBusy(false);
+      onChanged();
     }
   };
   const connection = connections.find(

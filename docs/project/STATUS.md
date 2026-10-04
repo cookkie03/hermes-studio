@@ -1,6 +1,6 @@
 # Hermes Studio — stato corrente
 
-Consolidato 2026-10-04. **F0 completata; F1 incremento locale/SSH implementato e verificato; altre feature documentate o parziali.** Incremento selezionato D32/D33: attach locale/SSH e routing host; codice prodotto modificato. [Catalogo](../features/README.md), [piano](feature-development-plan.md), [decisioni](decisions.md).
+Consolidato 2026-10-04. **F0 completata; F1 incremento locale/SSH implementato e verificato; F2 incremento invio/bozze verificato, feature completa parziale; altre feature documentate o parziali.** Incremento selezionato D32/D33: attach locale/SSH e routing host; codice prodotto modificato. [Catalogo](../features/README.md), [piano](feature-development-plan.md), [decisioni](decisions.md).
 
 ## Baseline verificata
 
@@ -83,3 +83,11 @@ Commit codice locale `71a5d6a` creato: 37 file, solo incremento F1 e persistenza
 ## D37 — Bots dei runtime collegati (2026-10-04)
 
 Correzione esplicita dell’utente: intendeva Bots, non Docs. Ogni runtime Hermes collegato porta in Studio il proprio roster autorizzato, presentato come Dots senza ricreazione manuale, con identità runtime/installazione/profilo e Bot Chat canonica preservate. Riconnessione senza duplicati, host/origine visibili, offline/stale distinti; nessun import globale di chat, clonazione o avvio implicito. Aggiornate F1/F7/F2/F4 e requisiti GUI; rimossa dalle F5/F6 la specifica Docs introdotta per errore nel commit 17f39a3. Requisiti documentali, non implementazione o prova live. Commit correttivo separato, storia preservata.
+
+## 2026-10-04 — F2 selezionata: invio scoped e bozze
+
+Scheda F2 allegata dall’utente come incarico. Incremento verticale corrente: proteggere preparazione/invio da doppio submit, cambio chat/host e risposta tardiva; mantenere bozze e stati Hermes distinti. Baseline Git ecdddfa. Letture ask-matt/implement/tdd/codebase-design e spec F2: test al seam pubblico del ciclo submission, bridge e GUI packaged con dati sintetici, come richiesto dalla scheda. Nessun runtime personale, roster F7, progetto F6 o executor alternativo coinvolto. Rischi trovati: invio dopo unmount durante beforeSend; ack RPC tardivo che regredisce Working o aggiorna un turno successivo. Implementazione e prove in corso; F2 completa non dichiarata.
+
+## 2026-10-04 — F2 incremento invio/bozze verificato
+
+Lock preparazione/dispatch per vista; close/scelta host invalida prima del PUT, esiti tardivi non modificano un nuovo owner. Ack requestId/clientSubmissionId non regredisce Working né aggiorna turni nuovi. Draft serializzati per thread e flush al cambio chat; bozza nuova/clear/restart su nuova origin PASS. Suite finale 36 Node + 61 metadata/display, strict typechecks/bootstrap/external-links e package arm64/firma ad hoc PASS. Smoke .app con REST/SSE/HTTP/WS sintetici PASS: double send, delta prima HTTP, tool tardivo, cambio chat durante invio, PageConversation close/host mentre preparazione sospesa e riferimento revisione salvata, IME/focus/900/1360/Reduced Motion. Review Standards/Spec finale 0 findings aperti; fase evento-before-render e barriera host test corrette. Matrice/skill/esiti/gap in [prove F2](../architecture/f2-submission-review-2026-10-04.md). Modello Hermes reale isolato, interrupt/resume GUI, contesto modello/effort/Space, Bots/approvals/collaborazione e restante F2 non certificati. Nessun prompt o dato del runtime personale utilizzato. Commit locale in preparazione; push non ritentato dopo rifiuto auto-review storico.

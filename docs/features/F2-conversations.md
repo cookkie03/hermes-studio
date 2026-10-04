@@ -23,7 +23,7 @@ Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti c
 <!-- implementation-packet:end -->
 
 
-Stato: specifica per una chat futura; baseline esistente parziale, feature non completa. Aggiornamento: 2026-10-04. La richiesta attuale è documentazione per feature e MVP quasi vuoto; non autorizza implementazioni ulteriori in questa chat.
+Stato: incremento invio scoped/bozze implementato e verificato il 2026-10-04; F2 completa resta parziale. [Prove e gate aperti](../architecture/f2-submission-review-2026-10-04.md). La selezione della scheda ha autorizzato questo incremento, senza sviluppo delle altre feature.
 
 
 <!-- feature-guidance:start -->
@@ -168,3 +168,7 @@ Discovery del roster non importa tutte le conversazioni, non clona Bots, credenz
 ## Prompt per una nuova chat
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa soltanto la slice di F2 esplicitamente selezionata, leggendo AGENTS.md, MEMORY/STATUS, GLOSSARY, component-system e questa spec. Prima verifica se il prerequisito runtime è pronto; in caso contrario realizza soltanto conversazioni/bozze locali, senza simulare risposte. Riusa il prototipo dove utile e non riscrivere server o shell fuori ownership. Mantieni Pending, ack, Working e terminale distinti; niente auto retry o approvazioni automatiche. Usa profilo e gateway sintetici, salva le prove dei race test e della vera.app. PageConversation richiede flush e revisione salvata ad ogni invio. Aggiorna documentazione e consegna limiti verificati; non riprendere il piano notturno globale. Segui anche Incarico per la chat implementatrice di F2: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+
+## Consegna incremento — 2026-10-04
+
+Invio scoped e lock, cancellazione preparazione su close/scelta host, ack correlati senza regressione Working, bozze serializzate con flush all’uscita. Suite 36 Node + 61 metadata/display, build/package e smoke .app sintetico PASS; tastiera/IME, 900/1360 e Reduced Motion verificati. [Matrice requisiti/contratti/file/prove e limiti](../architecture/f2-submission-review-2026-10-04.md). Il modello Hermes reale isolato e i requisiti completi di F2 non sono certificati; non attribuire il completamento della feature a questo incremento.

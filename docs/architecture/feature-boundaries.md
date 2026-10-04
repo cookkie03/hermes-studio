@@ -26,3 +26,7 @@ Controllare scope locale vs host remoto, dati autorevoli vs derivati, esito appl
 ## Settings e chat native — D34
 
 F4 possiede la sezione Settings distinta in Hermes e Hermes Studio. F1 connessioni; F8 inventario impostazioni native/copertura; ogni feature possiede le proprie mutazioni, con F3 approvazioni. F2 presenta streaming/thinking/tool/codice/changes/approvals; F5/F15 conservano semantica file/terminale. Nessun settings endpoint generico o secondo writer config runtime per unificare la UI. F1 non implementa incidentalmente la parità chat o settings completa.
+
+## Contratto F1/F2 — preparazione invio e scelta host (2026-10-04)
+
+ConversationHost notifica `onChanging?` prima del PUT di assegnazione e `onChanged` in finally. Chat invalida il proprio preparatore prima della rete e rinnova owner/stream dopo esito anche fallito. Non migra sessioni né cancella lavoro backend. File condivisi temporaneamente modificati per F2: Chat.tsx, ConversationHost.tsx e bridge.mjs (ack correlati al requestId corrente). Prove in [review F2](f2-submission-review-2026-10-04.md).
