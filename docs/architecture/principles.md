@@ -36,3 +36,7 @@ Per Git: diff e index reali, scan segreti, nessun add indiscriminato di cache/DB
 ## Decisioni e review
 
 ADR per variazioni costose a persistenza/identità/autenticazione/lifecycle. Proposta prima della scelta, decisione accettata dopo scelta. Nessun refactor automatico basato soltanto su un report della skill. Retro: trasformare bug ripetuti in verifiche deterministiche al seam giusto, senza aggiungere test che riscrivono l'implementation.
+
+## Parità e osservabilità Hermes — D30
+
+[Contratto F18](../features/F18-hermes-native-features-and-observability.md): preservare le funzioni native del runtime e mapparle a superfici UI o gap espliciti. UI semplificata non disabilita memory/skills/curator/tools nel backend. La memoria Hermes resta autoritativa, Studio presenta dati derivati scoped; niente nuovo archivio reiniettato. Eventi post-turn restano osservabili dopo la risposta, con origine/esito e persistenza provata; review, proposte pending e curator distinti. Parità funzionale obiettivo versionato, non certificazione automatica o implementazione di tutte le feature.

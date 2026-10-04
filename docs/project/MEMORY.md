@@ -170,3 +170,5 @@ D28: memoria Markdown per Space, identità SOUL del profilo, ricordi Hermes e cr
 D29: aggiungere messaggi vocali/dettatura, TTS e conversazione vocale in-app alla scheda F13, riusando capacità Hermes. Telefonate PSTN/SIP ancora future, nessuna attivazione mic/provider/runtime.
 
 Questa revisione è documentale; prossime chat scelgono singoli incrementi. Fork annullato, repository indipendente; nessuna ripresa notturna o nuova implementazione automatica.
+
+D30 — Luca chiarisce che tutte le capacità/memorie native Hermes devono essere preservate e trasmesse alla UI Studio. La memoria rimane runtime; user può vederla e seguire come cambia, senza secondo archivio reiniettato. Nuova scheda F18 (parità/capacità, note post-turn, viewer memoria) porta catalogo a19 schede F00–F18. F15 rimane memoria Markdown Space/legacy ed eventuale management esplicito. Verificato nel sorgente pubblico: evento review.summary e nota system nel desktop ufficiale; review e curator distinti, notifiche off/on/verbose. /api/memory dà byte/provider, non testo; viewer read-only richiede contratto supportato. Nessuna feature implementata, profilo personale letto o config mutata.

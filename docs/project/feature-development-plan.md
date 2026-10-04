@@ -5,7 +5,7 @@
 ## Consegna di questa chat
 
 1. Preservare l'MVP parziale e le sue evidenze, senza implementare altre feature.
-2. Consegnare il catalogo F00–F17 con ambito, fonti, ownership, dipendenze, criteri di accettazione e prompt di handoff.
+2. Consegnare il catalogo F00–F18 con ambito, fonti, ownership, dipendenze, criteri di accettazione e prompt di handoff.
 3. Consolidare principi e review architetturale; nessun candidato viene refattorizzato automaticamente.
 4. Allineare memoria, stato, roadmap e istruzioni per impedire ripartenze sul vecchio piano.
 5. Verificare documenti, collegamenti e diff; salvare un commit della documentazione. Nessuna release in questa chat.
@@ -29,3 +29,7 @@ La review propone due candidati: ciclo Conversazione e Metadata locali. Nessuna 
 ## Revisione documentale D25–D29
 
 F00 completata dall'utente. Nessuna nuova feature selezionata per implementazione. Schede aggiornate: F03/F10 cartelle reali, F04-A avatar OpenDots indipendente dal binding runtime, F08 browser unico visibile/persistente/shared-control, F15 memoria runtime distinta dai documenti Markdown Space, F13 messaggi vocali e vocal chat in-app. Telefonate rimangono future. Prima chat consigliabile per la nuova richiesta: F10/F03 per un incremento folder selezionato con ownership condivisa; non avviare entrambe automaticamente. Documentazione memory ufficiale e confronto sorgente in docs/research/hermes-memory-system.md.
+
+## F18 — Parità e presentazione delle capacità native, D30
+
+Nuova scheda dedicata: F18-A note post-turn, F18-B viewer memoria Hermes, F18-C mappa capacità. Hermes conserva tutta la sua memoria; Studio osserva origine/stato/aggiornamenti senza import o nuovo motore. F15 memoria Markdown Space distinta. Implementazione non selezionata; ogni incremento richiede backend/read contracts e ownership della UI. Questo principio si applica a tutte le feature senza riavviare sviluppo globale.

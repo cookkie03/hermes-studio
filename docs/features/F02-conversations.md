@@ -105,3 +105,7 @@ Slice locale: vuota al primo avvio, conversazione creabile, bozza ripristinata d
 ## Contesto file, memoria e voce — D25–D29
 
 Contesto Space usa riferimenti a file e revisione/host autorizzati F03/F10, non solo pageId legacy. Memoria Space e snapshot Hermes distinti F15. Un attachment non concede accesso all'intero folder. F13 possiede mic/playback; F02 conserva transcript e identità turno, distinguendo bozza dettata, invio e risposta. Risultati tardivi audio/browser non vengono associati a un Dot nuovo; nessun retry di prompt incerto.
+
+## D30 — Eventi nativi e note dopo la risposta
+
+[F18-A](F18-hermes-native-features-and-observability.md) possiede proiezione degli eventi Hermes; F02 presenta la nota `review.summary` nella timeline del suo owner anche dopo fine turno. Non scartare aggiornamenti memoria/skill alla fine della risposta e non limitarli a toast. Correlazione a messaggio preciso solo se supportata, altrimenti nota di sessione. Preservare testo runtime, pending/applicato distinti, e subscription scoped oltre `turn complete`. Review/self-improvement non equivale sempre al curator.

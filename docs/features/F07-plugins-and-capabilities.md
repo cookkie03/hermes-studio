@@ -64,3 +64,7 @@ Fixture tool enabled vs serverinactive, unknown/deferredtools, profile collision
 ## Prompt nuova chat
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F07 read-only capabilities con allowlist scoped, usando contracts/tools_mcp_plugins e desktop contrib/plugins. Parti da toolsets/tools/plugins e stati installato≠attivo. Non installare plugin né modificare config personale durante test. Se estendi a management, prepara diff concreto/review per capabilitydelta, vault-safe settings e rollback. Completa DoD e aggiorna docs; preserva strumenti Hermes deferiti.
+
+## D30 — Parità del catalogo Hermes e visibilità apprendimento
+
+[F18](F18-hermes-native-features-and-observability.md) mappa capacità/esiti native alla UI. F07 conserva catalogo skill/plugin/toolsets del profilo Hermes e gestione autorizzata; nessuna libreria parallela Studio. Aggiornamenti di skill/review/curator ricevuti possono aggiornare la vista con freshness e origine, non attivare installazioni/run. Non occultare deferred tools per aderire al template OpenDots. Segnali post-turn in chat sono F18-A/F02.

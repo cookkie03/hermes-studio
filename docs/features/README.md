@@ -4,6 +4,10 @@
 
 L'app resta una repository indipendente. Il codice MIT OpenDots già riusato conserva licenza e provenienza. Struttura visiva OpenDots; componenti e microinterazioni con riferimenti Unsloth/Codex. Motore e strumenti Hermes. Nessun secondo executor OpenDots per simulare capacità Hermes.
 
+## Parità Hermes — D30
+
+Capacità e memoria native rimangono nel runtime: Studio deve presentarle con origine/esito senza duplicarle o disabilitarle per semplificare la UI. [F18](F18-hermes-native-features-and-observability.md) tratta viewer memoria, notifiche post-turn e mappa di copertura; F15 resta memoria Markdown Space/legacy ed eventuale gestione selezionata. Catalogo aggiornato a **19 schede F00–F18**, una per chat.
+
 ## Catalogo
 
 | ID | Scheda da scegliere | Dipendenze principali | Stato |
@@ -26,6 +30,7 @@ L'app resta una repository indipendente. Il codice MIT OpenDots già riusato con
 | F15 | [Memoria Hermes e Markdown Space](F15-memory.md) | F03/F10 per file Space; F11/F04 per runtime | documentata; memoria Studio legacy parziale |
 | F16 | [Permessi e approvazioni](F16-permissions-and-approvals.md) | F11 | contratto parziale; fixture disponibili |
 | F17 | [Terminale](F17-terminal.md) | F11, F16 | documentata; preview eventi parziale |
+| F18 | [Capacità native Hermes e memoria visibile](F18-hermes-native-features-and-observability.md) | F11/F02 per note; F04/contratto read-only per viewer | documentata, non implementata |
 
 L'ordine numerico identifica le schede, non impone l'ordine di sviluppo. Percorso consigliato: F00 (completata) → F01/F10/F03 per cartelle oppure F11/F02 per chat → F16 → una feature avanzata scelta dall'utente. F06 è importante ma non deve aggirare i prerequisiti su esecuzioni durevoli e autorizzazioni. F12 può distribuire il solo MVP, indicando onestamente le capacità incluse.
 

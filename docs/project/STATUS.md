@@ -1,10 +1,10 @@
 # Hermes Studio — stato corrente
 
-Aggiornato 2026-10-04. **F00 completata: baseline MVP verificata e consolidata; nessuna nuova feature da implementare automaticamente.** D19–D23 e ADR0006 prevalgono sul lavoro notturno. Piano: [feature-development-plan](feature-development-plan.md). Catalogo: [F00–F17](../features/README.md).
+Aggiornato 2026-10-04. **F00 completata: baseline MVP verificata e consolidata; nessuna nuova feature da implementare automaticamente.** D19–D23 e ADR0006 prevalgono sul lavoro notturno. Piano: [feature-development-plan](feature-development-plan.md). Catalogo: [F00–F18](../features/README.md).
 
 ## Consegna documentale
 
-18 schede autonome: base, componenti, conversazioni, Spaces/documenti, bot, collaborazione, routine, plugin, browser, computer use, file, runtime, release DMG, voce, specialisti, memoria, approvazioni e terminale. Ogni feature sarà scelta in una chat separata. Principi e review architetturale salvati; candidati Conversazione e Metadata non selezionati né refattorizzati. Proposta fork/upstream annullata; licenze e provenienza del codice riusato conservate.
+19 schede autonome (incluse capacità native/visibilità F18): base, componenti, conversazioni, Spaces/documenti, bot, collaborazione, routine, plugin, browser, computer use, file, runtime, release DMG, voce, specialisti, memoria, approvazioni e terminale. Ogni feature sarà scelta in una chat separata. Principi e review architetturale salvati; candidati Conversazione e Metadata non selezionati né refattorizzati. Proposta fork/upstream annullata; licenze e provenienza del codice riusato conservate.
 
 Riferimento visivo OpenDots autorevole; sistema componenti ispirato a Unsloth e Codex. Disclosure attività Unsloth verificata dal vivo. Codex analizzato dallo screenshot fornito: accesso live negato dallo strumento; animazioni e popover non dichiarati osservati. Screenshot personali esclusi da Git.
 
@@ -44,3 +44,7 @@ Aggiornamento D24: 18 schede corredate di skill principali/condizionali e file d
 Aggiornate specifiche, non codice: Space-folder/file reali F03/F10; picker avatar F04-A; browser integrato stesso profilo/pagina F08; memoria Hermes/Markdown Space F15; messaggi vocali e vocal chat F13. SOUL, MEMORY/USER, cronologia, review e curator analizzati nel prospetto ufficiale con link e sorgente fissato e1e82d7. Gate reali di queste feature ancora aperti. Nessun profilo/vault personale letto, mic/runtime avviato o provider installato. Schede e prompt pronti per selezione in chat dedicate; telefonate future.
 
 Validazione D25–D29:212 link locali e18 guidance/handoff PASS; diff whitespace pulito. Nessuna build richiesta per modifiche soltanto documentali.
+
+## D30 — Feature native e memoria visibile
+
+Catalogo aggiornato a19 schede F00–F18. F18 documenta conservazione delle capacità Hermes, viewer memoria runtime e riepiloghi post-turn nella chat. Memory autoritativa nel backend, niente seconda memoria Studio; F15 Space/legacy distinto. Sorgente desktop/runtime verificato per review.summary e byte/status; persist/replay e viewer contenuto ancora gate futuri. Sole modifiche documentali, nessuna implementazione o accesso personale.

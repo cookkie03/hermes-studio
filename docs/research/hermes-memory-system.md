@@ -153,3 +153,7 @@ I numeri di linea sono punti d'ingresso, non inviti a leggere dati runtime local
 ## Verifiche ancora necessarie
 
 Versione del backend effettivamente collegato, schema/routing/auth API, fresh-session/reload e notifiche Desktop; prova di review/pending senza prompt personali; gestione dei provider installati e identità di ciascun Dot; protocollo per aggiornare i Markdown dello Space senza race o duplicazioni. Un file aggiornato, un tool visibile o un processo attivo non prova che tutto venga ricordato. Questo report non attiva alcuna feature, installazione o manutenzione.
+
+## Precisazione Studio D30 — observer, non secondo archivio
+
+[F18](../features/F18-hermes-native-features-and-observability.md) documenta la richiesta successiva dell'utente: preservare memoria/capacità del runtime e mostrarne aggiornamenti in Studio. Verifica sorgente alla stessa SHA: gateway `_wire_session_agent` inoltra background review via `review.summary {text}`; desktop `gateway-event/status.ts:175` proietta una riga system `review:` e `thread/system-message.tsx` la presenta come nota. Non è evento curator universale e non garantisce un mutation list/turn ID. Le notifiche rispettano off/on/verbose; il codice distingue staged e operazioni realmente applicate. `/api/memory` dà dimensioni **in byte** e provider, non contenuti; il viewer richiede un contratto scoped distinto. Osservato solo sorgente pubblico, nessun runtime/profilo personale letto o mutato.

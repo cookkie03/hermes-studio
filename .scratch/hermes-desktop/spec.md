@@ -8,7 +8,7 @@ Applicazione macOS per assistente personale e progetti, disposizione OpenDots co
 
 ## Consegna attuale
 
-MVP essenziale parzialmente funzionante preservato, catalogo docs/features/README.md con 18 schede e prompt pronti per chat dedicate, principi architetturali e review. Non implementare le feature documentate in questa fase. La feature F12 contiene il percorso GitHub/release/DMG da sviluppare separatamente.
+MVP essenziale parzialmente funzionante preservato, catalogo docs/features/README.md con 19 schede e prompt pronti per chat dedicate, principi architetturali e review. Non implementare le feature documentate in questa fase. La feature F12 contiene il percorso GitHub/release/DMG da sviluppare separatamente.
 
 ## Storie e gate
 
@@ -21,3 +21,5 @@ Leggere docs/project/feature-development-plan.md, STATUS, MEMORY, GLOSSARY, ADR0
 ## Revisione D25–D29 dopo F00
 
 F00 completata; implementazione nuove feature ancora non selezionata. Spaces ora folder-backed F03/F10 (ADR0007), avatar scegliibili F04-A, browser unico persistente condiviso utente/Hermes F08, memoria profilo e Markdown Space F15, vocali e vocal chat in-app F13. Telefonate future separate. Fonti memoria ufficiali e confronto sorgente in docs/research/hermes-memory-system.md. Specifiche implementative definitive da delimitare nella singola chat; nessuna migrazione automatica.
+
+D30: preservare capacità e memoria native Hermes, mostrarle e seguirne aggiornamenti nella UI tramite F18. La memoria resta backend, viewer e ricevute sono proiezioni; F15 Space/legacy distinto. Nessuna implementazione automatica.

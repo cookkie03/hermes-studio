@@ -1,6 +1,6 @@
 # F15 — Memoria Hermes, identità e memoria Markdown degli Spaces
 
-Stato: specifica D28, 2026-10-04. Baseline preferenze Studio parziale, integrazione Hermes e Markdown per Space non implementate. La richiesta corrente è documentare, non attivare apprendimento o importare memorie personali.
+Stato: specifica D28 aggiornata D30, 2026-10-04. Baseline preferenze Studio parziale, integrazione Hermes e Markdown per Space non implementate. La richiesta corrente è documentare, non attivare apprendimento o importare memorie personali.
 
 ## Documentazione ufficiale da leggere
 
@@ -34,6 +34,10 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
 <!-- feature-guidance:end -->
 
+## Precisazione D30 — memoria Hermes preservata, viewer in F18
+
+La memoria runtime resta integralmente nel suo profilo Hermes. **Non creare un nuovo archivio Studio per copiarla o sostituirla.** La nuova [F18](F18-hermes-native-features-and-observability.md) possiede viewer read-only, riepiloghi nella chat e copertura delle capacità native. F15 possiede memoria Markdown dello Space e preferenze legacy; F15-C/D restano eventuale gestione esplicitamente selezionata del backend esistente, non prerequisito per osservarlo. F18-B supersede la proposta di viewer runtime in F15-A. Le sezioni tecniche sotto restano vincoli, non istruzioni per duplicare Hermes.
+
 ## Livelli da mantenere distinti
 
 | Livello | Autorità e funzione | Aggiornamento |
@@ -50,7 +54,7 @@ Un Dot non riceve una memoria separata solo perché ha un avatar: l'ambito dipen
 
 ## Incrementi selezionabili, uno alla volta
 
-**F15-A — Visibilità e scope:** mostrare origine, profilo, archivio locale legacy e destinazioni; read-only dove non c'è contratto supportato. Nessuna importazione automatica. F01/F04/F11 solo per la parte collegata al runtime.
+**F15-A — Visibilità locale e scope:** archivio legacy e destinazioni Space; nessuna importazione. Viewer runtime e collegamento alle note native passano a F18-B/A, che riusano i vincoli Hermes qui documentati.
 
 **F15-B — Memoria Markdown Space:** scegliere/creare un file nel folder autorizzato, con percorso e revisione visibili. F03/F10 prerequisiti; contenuto filesystem autoritativo. `MEMORY.md` è un possibile nome, non un file scoperto magicamente da Hermes. Nome/percorso definitivo scelto nella chat feature per evitare collisioni.
 
