@@ -60,6 +60,15 @@ Per file locali: base F0 e selezione root esplicita; F1/F3 per tool agente/host 
 
 Uscita dal root, symlink, huge/binary files, stale revision, permesso negato, offline, cambio host, bozza modificata e restart. Fixture con contenuti sintetici, poi operazione runtime isolata e UI e tastiera. Nessun test su cartelle personali, nessun DELETE automatico. Attività tool persistita non prova un file esista ancora: refresh autorevole.
 
+## Contratto futuro multi-host richiesto durante F1
+
+F6 richiede Space con più cartelle anche su host diversi. F5 deve identificare ogni root/file con host e percorso, preservare scope e revisioni e indicare host offline. Il tunnel F1 verso Hermes non rende automaticamente disponibili i filesystem degli altri host. Riprendere [promemoria F6](F6-spaces-documents-memory.md#progetti-hermes-e-space--promemoria-per-lo-sviluppo-f6) prima del writer o del trasporto remoto; nessuna implementazione F5 selezionata da questa richiesta.
+
+## D34 — Changes visibili nella chat
+
+Modifiche file/diff ricevute e verificabili dal runtime devono essere presentabili nella chat con host/percorso/revisione ed esito. F5 possiede identità file, diff e ricevute; F2 presenta la timeline. Testo che dichiara una modifica non basta a certificarla; collegamento allo Space e review seguono F6. Non confondere approvazione preventiva, proposta di changes e scrittura già applicata.
+
+
 ## Handoff
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F5, partendo da una root esplicita read-only sul client locale oppure sull’host runtime autorizzato, secondo l’incremento selezionato. Per l’agente usa tool Hermes reali; per il client locale usa una interface nativa limitata alle root scelte. Condividi riferimenti e revisioni con F6, senza copie dei contenuti. Definisci module e prove path/symlink/conflitto. Non sviluppare terminale o browser; preserva dati personali.

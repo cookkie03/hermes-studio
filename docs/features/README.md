@@ -1,6 +1,6 @@
 # Hermes Studio — una feature per chat
 
-2026-10-04. F0 completata; lavoro corrente di consolidamento documentale. Non implementare automaticamente le schede. La baseline esistente è parziale; `documentata` non significa `implementata` o `verificata`.
+2026-10-04. F0 completata; F1 selezionata, scelte di prodotto confermate e spec/piano tecnico proposti. Non implementare automaticamente le schede. La baseline esistente è parziale; `documentata` non significa `implementata` o `verificata`.
 
 L'app resta una repository indipendente. Il codice MIT OpenDots già riusato conserva licenza e provenienza. Struttura visiva OpenDots; componenti e microinterazioni con riferimenti Unsloth/Codex. Motore e strumenti Hermes. Nessun secondo executor OpenDots per simulare capacità Hermes.
 
@@ -13,7 +13,7 @@ Capacità e memoria native rimangono nel runtime: Studio deve presentarle con or
 | ID | Scheda da scegliere | Dipendenze principali | Stato |
 |---|---|---|---|
 | F0 | [MVP e qualità della base](F0-mvp-foundation.md) | nessuna | completata; baseline verificata, limiti dichiarati |
-| F1 | [Connessione al runtime](F1-runtime-connection.md) | F0 | attach locale parziale; altre modalità da scegliere |
+| F1 | [Connessione al runtime](F1-runtime-connection.md) | F0 | selezionata D32/D33; locale/SSH e autonomia, spec/piano proposti |
 | F2 | [Conversazioni](F2-conversations.md) | F0, F1 | documentata; bridge parziale |
 | F3 | [Permessi e approvazioni](F3-permissions-and-approvals.md) | F1 | contratto parziale; fixture disponibili |
 | F4 | [Shell, sidebar e componenti](F4-workspace-shell.md) | F0 | documentata; UI esistente parziale |
@@ -55,3 +55,7 @@ Una chat possiede una scheda e i suoi file; se emerge un cambiamento in un modul
 Usare `documentata → selezionata → in sviluppo → in verifica → completata`; `bloccata` richiede prerequisito preciso e lavoro indipendente esaurito. Una feature è completata solo quando i gate sono provati sull'app/runtimes pertinenti. Una fixture prova il contratto simulato; handshake non prova prompt, tools o lavoro quando il client è chiuso.
 
 Norme: [principi](../architecture/principles.md), [review F0](../architecture/f00-review-2026-10-04.md), [audit storico](../architecture/feature-architecture-review.md), [componenti](../design/component-system.md), [fonte Hermes](../research/hermes-desktop-reference.md), [stato](../project/STATUS.md), [baseline storica](../project/desktop-acceptance.md). Idee future restano nell'indice ../future/README.md.
+
+## F1 corrente e D34
+
+F1: [spec tecnica](../project/F1-connection-design.md), [piano](../project/F1-implementation-plan.md), ADR0008 proposed. D34 preserva chat Hermes completa (F2/F3/F5/F15/F8) e Settings Hermes/Studio distinti (F4/F8/F11); documentazione per le feature proprietarie, nessuna loro implementazione aggiunta a F1.

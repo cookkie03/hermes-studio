@@ -13,3 +13,5 @@ Le decisioni utente stanno nel [registro D01–D31](../project/decisions.md); qu
 | [0007](0007-folder-backed-spaces.md) | Filesystem autoritativo per Spaces, requisito non migrazione implementata |
 
 Data/status di un ADR non prova implementazione o release: consultare STATUS e i gate della scheda.
+
+- [ADR0008 — Connessioni per host e autonomia](0008-runtime-connections-and-autonomy.md): **proposed**, strategia F1 e registrazione servizi da revieware; nessuna implementazione.

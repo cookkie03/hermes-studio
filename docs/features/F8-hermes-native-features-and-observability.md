@@ -2,6 +2,10 @@
 
 Stato: documentata D30, 2026-10-04; nuova scheda per chat dedicata, nessuna implementazione selezionata. L'utente vuole preservare tutte le funzioni del backend Hermes e poterle vedere/usare da Studio, come nel desktop ufficiale. La memoria rimane Hermes: qui si progetta la sua presentazione, non un nuovo motore o archivio di ricordi.
 
+## Continuità autonoma richiesta in F1 — D33
+
+Principio utente: Hermes lavora 24/7 indipendentemente da Studio aperto; Studio facilita e visualizza il backend Hermes completo. Routine/cron, heartbeat, bots, strumenti e memoria mantengono ownership native Hermes. Configurazione, stato host/servizio e risultati devono restare osservabili dopo riapertura, con esiti reali. Nessun timer/heartbeat/executor alternativo nel client e nessun arresto del backend alla chiusura. Il requisito non è ancora una verifica di durata o di esecuzione dopo riavvio; riprendere [F1/D33](F1-runtime-connection.md#principio-cardine--hermes-autonomo-studio-facilitatore-d33) e i gate specifici della scheda prima di implementare.
+
 <!-- feature-guidance:start -->
 ## File e skill da leggere e usare
 
@@ -94,6 +98,11 @@ C: ogni capacità in scope ha superficie o gap tracciato e ownership; strumenti 
 ## Fonti
 
 [Persistent Memory](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/), [Curator](https://hermes-agent.nousresearch.com/docs/user-guide/features/curator/), [analisi memoria](../research/hermes-memory-system.md). Sorgente fissato: [eventi](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/tui_gateway/contracts/events.py#L247), [gateway wiring](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/tui_gateway/server.py#L1042), [review](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/agent/background_review.py#L730), [desktop handler](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/apps/desktop/src/app/session/hooks/use-message-stream/gateway-event/status.ts#L175), [riga UI](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/apps/desktop/src/components/assistant-ui/thread/system-message.tsx), [memory status](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/hermes_cli/web_routers/ops.py#L491).
+
+## D34 — Copertura chat e impostazioni native
+
+Mappare esplicitamente tutte le componenti chat Hermes/TUI: streaming, thinking esposto, tool, codice/comandi/output, changes, approvals/validation e controlli chat. Per ciascuna voce indicare contratto/versione, destinazione owner e prova/gap. Mappare inoltre tutte le impostazioni Hermes nella sezione dedicata Settings Hermes, per host/profilo, distinta da Settings Hermes Studio. F4 possiede contenitore e navigazione; F8 copertura/provenienza, non un writer generico di configurazione. Ogni mutazione passa dalla feature proprietaria e policy F3. Nessuna funzione nativa eliminata per adattare il template.
+
 
 ## Prompt per una nuova chat
 

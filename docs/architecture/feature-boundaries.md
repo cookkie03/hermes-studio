@@ -4,7 +4,7 @@
 
 | Comportamento condiviso | Owner del comportamento | Consumatori / confine |
 |---|---|---|
-| Connessione, autenticazione e routing profile/session | F1 | F2/F7/F11/F8 usano trasporto scoped; non aprono un secondo executor/socket globale |
+| Connessione, autenticazione e routing host/profile/session | F1 | F2/F7/F11/F8 usano trasporto scoped; non aprono un secondo executor/socket globale |
 | Conversazione/bozza/transcript/turn state | F2 | F17 audio e F8 note native forniscono eventi; F2 decide presentazione/owner, non inventa correlazioni |
 | Root, file refs, listing/read/write/revisione/conflitto | F5 | F6 Space/editor e F9 memoria su file condividono writer; nessun store di testi divergente |
 | Space, cartelle collegate, editor e review save | F6 | F5 operazioni file; F3 grants; le pagine MVP legacy sono preservate |
@@ -22,3 +22,7 @@
 Indicare la scheda e il singolo incremento, chiamanti del contratto e file da toccare. Separare owner semantico da ownership temporanea del file: nessuna chat possiede App.tsx o bridge.mjs interi. Concordare input/eventi, ordine, esiti, scope e prove prima dell'edit. Se emerge un prerequisito fuori feature, documentare il contratto e il gate; implementarlo nella stessa chat solo se l'utente ne include esplicitamente l'ambito.
 
 Controllare scope locale vs host remoto, dati autorevoli vs derivati, esito applicato vs staged e retry di azione incerta. Per principi di moduli/quality gate leggere [principles](principles.md); per sequenza/skill leggere [workflow](../agents/feature-workflow.md).
+
+## Settings e chat native — D34
+
+F4 possiede la sezione Settings distinta in Hermes e Hermes Studio. F1 connessioni; F8 inventario impostazioni native/copertura; ogni feature possiede le proprie mutazioni, con F3 approvazioni. F2 presenta streaming/thinking/tool/codice/changes/approvals; F5/F15 conservano semantica file/terminale. Nessun settings endpoint generico o secondo writer config runtime per unificare la UI. F1 non implementa incidentalmente la parità chat o settings completa.

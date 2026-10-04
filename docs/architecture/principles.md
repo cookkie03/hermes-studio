@@ -40,3 +40,7 @@ ADR per variazioni costose a persistenza/identità/autenticazione/lifecycle. Pro
 ## Parità e osservabilità Hermes — D30
 
 [Contratto F8](../features/F8-hermes-native-features-and-observability.md): preservare le funzioni native del runtime e mapparle a superfici UI o gap espliciti. UI semplificata non disabilita memory/skills/curator/tools nel backend. La memoria Hermes resta autoritativa, Studio presenta dati derivati scoped; niente nuovo archivio reiniettato. Eventi post-turn restano osservabili dopo la risposta, con origine/esito e persistenza provata; review, proposte pending e curator distinti. Parità funzionale obiettivo versionato, non certificazione automatica o implementazione di tutte le feature.
+
+## Autonomia Hermes — D33
+
+Backend Hermes completo e attività autonome indipendenti da Studio, con cron/heartbeat/bots native. Client e tunnel sono superfici di collegamento; la loro chiusura non arresta backend o lavoro. Servizi e ownership risiedono sull'host; capacità e continuità vanno provate per la versione collegata. Nessun scheduler, executor o archivio Hermes sostitutivo nel client. Dettaglio e gate in [F1](../features/F1-runtime-connection.md); feature native conservano ownership proprie.

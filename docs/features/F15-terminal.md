@@ -43,6 +43,11 @@ Dipendenze F1+F3. Verificare source desktop Hermes terminal adapters e endpoint 
 
 Gate: stdout/stderr ordering, output voluminoso/backpressure, codice di uscita, disconnect senza terminazione automatica, resize, interruzione esplicita e restart. Test processi sintetici isolati, nessun comando personale/distruttivo. Tastiera/focus e accessibilità del pannello; distinguere CtrlC terminale e cancellazione composer.
 
+## D34 — Codice e comandi visibili dalla chat
+
+La chat deve poter presentare codice/comandi realmente eseguiti e output ricevuti da Hermes, con host, tool/sessione e stato. F2 possiede la timeline e F15 la superficie terminale; snippet della risposta e comando eseguito hanno provenienze distinte. Interattività/PTY non è dimostrata dalla sola tool card. Gating ed esito runtime restano necessari.
+
+
 ## Handoff
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Lavora soltanto F15; scegli output tool oppure PTY e verifica il contratto Hermes ufficiale. Usa processi test isolati, ownership esplicita e permessi F3. Non aggiungere una shell generica Electron e non sviluppare Files/browser. Documenta esito e limiti.

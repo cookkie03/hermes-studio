@@ -45,3 +45,7 @@ Provare stati vuoti, popolati, in attesa, errore, incerti e offline; tastiera e 
 ## Anatomia aggiuntiva D25–D29, proposta da implementare nelle feature
 
 Folder picker e file tree nello Space (F6/F5), con host/percorso e conflitto; avatar picker Create/Edit Dot (F7-A) con griglia, selezione non solo colore e radiogroup. Browser (F12) mostra tab/URL/profilo/owner e takeover sullo stesso viewport; Memory (F9) mostra origine, ambito, percorso, pending/esito. Composer mic (F17) distingue bozza vocale da Send; vocal chat ha Mute/End/transcript e livello audio reale. Queste sono specifiche, non osservazioni o controlli già funzionanti. Dimensioni/motion seguono token centrali finché misurate nella .app.
+
+## D34 — Copertura chat e Settings
+
+Timeline Hermes completa: risposta streaming, thinking ricevuto, strumenti, codice/output, changes e decisioni rischiose, con disclosure e provenienza; owner F2/F3/F5/F15/F8. Sezione Settings dedicata con ambiti Hermes (host/profilo runtime) e Hermes Studio (app standalone), owner F4 e feature delle operazioni. La struttura OpenDots resta autorevole; contenuto e controlli seguono capacità native reali.

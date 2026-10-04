@@ -19,3 +19,8 @@ Per UI/componenti: [target](../design/opendots-target.md), [component-system](..
 Per skill disponibili/applicate leggere [catalogo](../agents/skills-catalog.md) e WORKLOG della chat. Le ricerche di installazione non sono un inventario aggiornato. Link pubblici a `main` o alla documentazione possono cambiare: verificare la versione prima di implementare il contratto scelto.
 
 [Computer Use e Bot Screen](hermes-computer-use-integration.md): verifica sorgente e gap Studio F16, senza esecuzione sul desktop personale.
+
+## Ricerche F1 per host e autonomia
+
+- [Progetti Hermes e Space su più host](hermes-projects-and-space-hosts.md): sorgente fissato, mapping F6 ancora proposto.
+- [Lifecycle/autonomia Hermes e SSH](hermes-runtime-autonomy.md): sorgente fissato, servizi/sessioni/scheduler distinti; gate reali aperti.

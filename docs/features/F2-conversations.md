@@ -107,6 +107,21 @@ Contesto Space usa riferimenti a file e revisione/host autorizzati F6/F5, non so
 
 [F8-A](F8-hermes-native-features-and-observability.md) possiede proiezione degli eventi Hermes; F2 presenta la nota `review.summary` nella timeline del suo owner anche dopo fine turno. Non scartare aggiornamenti memoria/skill alla fine della risposta e non limitarli a toast. Correlazione a messaggio preciso solo se supportata, altrimenti nota di sessione. Preservare testo runtime, pending/applicato distinti, e subscription scoped oltre `turn complete`. Review/self-improvement non equivale sempre al curator.
 
+## Handoff F1: conversazioni e host
+
+Scelta utente: conversazioni assegnate al rispettivo host, con host diversi utilizzabili contemporaneamente. F1 possiede connessione/routing; F2 conserva il legame della conversazione a host, profilo e sessione. La selezione di un altro host non migra una conversazione. Per il contesto Space/progetto e la working directory riprendere il [promemoria F6](F6-spaces-documents-memory.md#progetti-hermes-e-space--promemoria-per-lo-sviluppo-f6), senza assumere che una sessione raggiunga tutte le cartelle multi-host.
+
+## D34 — Chat completa Hermes
+
+Studio deve presentare le componenti della chat Hermes, anche quelle visibili nella TUI: streaming della risposta, thinking quando emesso dal runtime, tool eseguiti, codice/comandi e relativo output, changes/diff, richieste di approvazione e validazione delle operazioni rischiose. Controlli modello/effort e altre impostazioni chat devono usare contratti reali del runtime collegato. Non sintetizzare thinking o esito di una validazione dal testo della risposta; associare eventi a host/profilo/sessione/turno solo con identità verificate. F2 presenta timeline/composer; F3 possiede approvazioni; F5 changes/file; F15 terminale; F8 mappa copertura e gap. Preservare layout OpenDots e norma componenti.
+
+Settings persistenti hanno una sezione dedicata, distinta dai controlli contestuali del composer. F4 struttura Settings Hermes e Settings Hermes Studio; F8 inventaria impostazioni native e superfici, ciascuna feature mantiene ownership delle proprie operazioni. Non implementare questa parità incidentalmente in F1.
+
+
+## Requisito utente aggiornato — contesto e frontend Hermes
+
+[Spec trasversale](gui-context-and-references.md): Space è la presentazione/associazione di progetti Hermes scoped, non un nuovo backend progetto. Space/host/modello/effort sempre riconoscibili; @ per file e range/testo versionati, / per cataloghi skill/tool effettivi. Questa richiesta chiarisce il mapping progetti prima indicato come proposta; multi-host resta limitato a contratti reali, niente Project distribuito inventato o accesso cross-host implicito. Nessuna implementazione automatica.
+
 ## Prompt per una nuova chat
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa soltanto la slice di F2 esplicitamente selezionata, leggendo AGENTS.md, MEMORY/STATUS, GLOSSARY, component-system e questa spec. Prima verifica se il prerequisito runtime è pronto; in caso contrario realizza soltanto conversazioni/bozze locali, senza simulare risposte. Riusa il prototipo dove utile e non riscrivere server o shell fuori ownership. Mantieni Pending, ack, Working e terminale distinti; niente auto retry o approvazioni automatiche. Usa profilo e gateway sintetici, salva le prove dei race test e della vera.app. PageConversation richiede flush e revisione salvata ad ogni invio. Aggiorna documentazione e consegna limiti verificati; non riprendere il piano notturno globale.

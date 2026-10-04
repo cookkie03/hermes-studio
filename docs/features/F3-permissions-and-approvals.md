@@ -54,6 +54,11 @@ Pending/cancel/stale/disconnect/reconnect/thread in background, doppio clic e ri
 
 Grant folder dello Space esplicito per root/host/operazioni, distinto da selezione/membership; unlink preserva dati. Browser profilo e lease condiviso F12, Take over/revoke/resume distinti senza fallback nascosto. Memoria profilo e file Space F9 hanno writer/gates propri; pending non è applied. Voce F17 richiede microfono, routing provider e retention chiari; consenso a vocal chat non autorizza chiamate telefoniche o azioni sensibili senza revisione.
 
+## D34 — Approvals e validation nella chat
+
+Le richieste di approvazione/validazione delle operazioni rischiose presenti in Hermes devono apparire nella chat Studio con azione, destinatario host/profilo/sessione, ambito, scelte del runtime ed esito verificato. F3 conserva semantica, scadenza/cancel e policy; F2 presenta le card. Non ricostruire un classificatore di rischio parallelo, non autoapprovare per assenza del client e non trasformare una semplice risposta in autorizzazione. Le impostazioni runtime di permessi appartengono alla sezione Settings Hermes; preferenze solo client restano Settings Hermes Studio. Parità ancora da implementare/provare, non autorizzata da F1.
+
+
 ## Handoff
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Sviluppa esclusivamente F3. Verifica il contratto Hermes della versione corrente, parti dalle fixture esistenti e definisci gli invarianti del decision module. Non aggiungere auto-approve né plugin/browser/computer nuovi. Prova richieste annullate e routing tra conversazioni possedute; aggiorna docs e limiti.

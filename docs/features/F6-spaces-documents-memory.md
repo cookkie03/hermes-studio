@@ -50,6 +50,18 @@ Il filesystem è la fonte dei contenuti. Studio conserva collegamenti, selezioni
 
 Uno Space può esistere prima del collegamento, ma finché non ha cartelle mostra Add folder: non creare contenuti fittizi. Nomi di radici uguali mantengono host/percorso distinguibili. Una root annidata o già collegata va riconosciuta per evitare duplicati e permessi involontariamente ampliati.
 
+## Requisito multi-host confermato durante F1
+
+Uno Space deve poter collegare più cartelle anche su host diversi; ogni cartella mantiene il proprio host e le conversazioni il proprio host di esecuzione. Il collegamento ai progetti Hermes va progettato in F6 sulla base dei contratti upstream riportati sotto. Accesso cross-host, mount/sync e trasformazione di Space in progetto Hermes non sono impliciti; nessuna implementazione F6 avviata da questa intervista.
+
+## Progetti Hermes e Space — promemoria per lo sviluppo F6
+
+Ricerca sorgente, non prova runtime: [contratti verificati e limiti](../research/hermes-projects-and-space-hosts.md), SHA `e1e82d782f353766c7a22db6e5ac4fa58bbff325`. Project Hermes supporta più cartelle, ma è scoped a un backend/profilo; le cartelle contengono path/label e nessun host. Le sessioni hanno una working directory; `session.workspace.move` cambia directory, non runtime/host.
+
+Proposta da scegliere in F6: Space come contenitore Studio che aggrega cartelle su più host e riferimenti a progetti Hermes scoped almeno da connessione/host, profilo e projectId. Il path va sempre risolto insieme all'host; identici path su due macchine restano cartelle distinte. Un Project Hermes singolo non rappresenta tutte le cartelle di uno Space multi-host.
+
+Decisioni da riprendere nella chat F6: collegare progetti Hermes esistenti oppure crearli esplicitamente; cardinalità Space/progetti per ciascun host; scelta di host e cartella di lavoro quando nasce una conversazione; accesso di un agente alle cartelle su altri host e comportamento delle cartelle offline. Nessuna creazione/importazione di progetti, copia/sync o mount impliciti. F1 fornisce connessioni stabili e routing; F2 lega le conversazioni al rispettivo host; F5 risolve file/cartelle; F6 possiede associazioni e UI Space. Registrare contratto e ownership prima degli edit condivisi.
+
 ## Dominio e ownership dei dati
 
 Proposta tecnica da affinare: `Space`, `FolderBinding` (identità stabile, host, root scelta, stato di accesso), `WorkspaceFile` (folderId, percorso relativo, tipo, versione), `DocumentDraft` e `SaveReceipt`. Il nome visibile dello Space non è un percorso. Una cartella non equivale a profilo Hermes o sessione.
@@ -91,6 +103,10 @@ File di ingresso già esistenti: SpaceWorkspace, SpaceLibrary, SpaceNav, Workspa
 ## Definition of done
 
 Folder sintetico con `.md`, `.txt` e codice: link senza copia; due root distinguibili; lettura dei byte reali; aggiungi/scollega senza distruzione; root spostata/offline recuperabile; salvataggio e riavvio; modifica esterna preserva bozza; symlink/root escape e accesso negato testati tramite F5/F3. Nessun test sul Second Brain personale. Gate specialisti distinto: tool Hermes isolato legge/modifica un file nella root autorizzata, UI riflette il risultato; fuori root negato. Fixture non prova accesso runtime live.
+
+## Requisito utente aggiornato — contesto e frontend Hermes
+
+[Spec trasversale](gui-context-and-references.md): Space è la presentazione/associazione di progetti Hermes scoped, non un nuovo backend progetto. Space/host/modello/effort sempre riconoscibili; @ per file e range/testo versionati, / per cataloghi skill/tool effettivi. Questa richiesta chiarisce il mapping progetti prima indicato come proposta; multi-host resta limitato a contratti reali, niente Project distribuito inventato o accesso cross-host implicito. Nessuna implementazione automatica.
 
 ## Prompt per una nuova chat
 

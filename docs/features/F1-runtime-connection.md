@@ -1,8 +1,16 @@
 # F1 — Collegamento al runtime Hermes
 
-Stato: documentata; attach locale parziale esistente. Nessuna nuova integrazione implementata ora.
+Stato: selezionata; attach locale parziale esistente. D32: attach locale senza login e collegamento remoto tramite SSH scelti; scelte di prodotto confermate, spec/piano tecnico proposti, nessuna nuova integrazione implementata.
 
+## Direzione selezionata — D32
 
+L'utente vuole una zona dell'app per gestire le connessioni, partendo dall'attach locale senza login Hermes. Per un host remoto con Hermes già installato (caso Minisforum nella rete Tailscale), indirizzo IP e accesso SSH devono consentire il collegamento attraverso un tunnel, senza dipendere dalla dashboard o da altri servizi di collegamento. Autenticazione SSH distinta dal login Hermes. Scelte confermate: riusare il backend disponibile o avviarlo quando necessario; riconoscere automaticamente chiavi SSH già sul Mac e supportare utente/password senza salvarla nel Portachiavi; conversazioni assegnate al rispettivo host, con più host utilizzabili. Riconnessione automatica degli host già configurati confermata; password solo in memoria fino alla chiusura dell'app o alla disconnessione esplicita, mai su disco o nel Portachiavi. Una nuova apertura richiede la password se l'accesso tramite chiave non basta. Q7 confermata: il backend resta attivo quando Studio chiude o si disconnette; Hermes deve poter lavorare 24/7 indipendentemente dal client. Il contratto Space/progetti è documentato per F6. Non è stato autorizzato un intervento sul runtime personale dalla sola scelta di prodotto.
+
+## Principio cardine — Hermes autonomo, Studio facilitatore (D33)
+
+Hermes è il backend completo: esecuzione, strumenti, memoria, bots, cron/routine e heartbeat devono usare le capacità native Hermes. Studio facilita configurazione, osservazione e interazione con origine/esiti coerenti; non sostituisce il backend con executor, scheduler, memoria o heartbeat propri. Il lavoro deve poter avanzare senza Studio aperto o tunnel SSH attivo. Riusare servizi Hermes esistenti; quando serve avviarli, progettare gestione sull'host indipendente dal processo UI/SSH e verificare ownership/readiness. Chiudere Studio o disconnettere un host non arresta backend/esecuzioni/routine. Un eventuale arresto è azione esplicita e distinta.
+
+Il requisito 24/7 è una direzione di prodotto confermata, non un esito già verificato. [Ricerca lifecycle alla SHA fissata](../research/hermes-runtime-autonomy.md): gateway nativo cron/messaging distinto dal backend web; le sessioni detached hanno policy/reaper, quindi non basta lasciare un socket/backend acceso. F1 deve separare disponibilità del backend, sessioni attive e scheduler/bots operativi: health o gateway.ready non provano tutti e tre. Prove isolate devono coprire chiusura client/tunnel e ricollegamento senza retry del prompt; F2 verifica continuità della singola esecuzione, F10 riattivazioni native con client chiuso, F7/F14 bots e collaborazione. Host spento/sospeso o servizio non supervisionato va mostrato con il suo effetto reale. Non promettere sopravvivenza di un'esecuzione al riavvio dell'host senza contratto/prova.
 
 <!-- feature-guidance:start -->
 
@@ -44,7 +52,7 @@ Discovery → probe HTTP → autenticazione autorizzata → WebSocket → gatewa
 
 Stati UI: non configurato, ricerca locale, collegamento, login necessario, disponibile, disconnesso, errore. Mostrare host e modalità perché tool/files/terminale agiscono sull'host runtime. Nessun `Working` da health, socket o prompt ammesso.
 
-Quit client termina soltanto servizio UI posseduto. Se in futuro Studio avvia un Hermes gestito, ownership e responsabilità shutdown vanno definite prima; mai kill di un runtime personale agganciato. Nessuna installazione sul computer senza selezione esplicita della modalità.
+Quit client termina soltanto servizio UI posseduto. Per il backend avviato da Studio, D33 richiede lifecycle sull’host indipendente dal client; ownership e arresto esplicito vanno definiti prima dell’implementazione. Mai kill di un runtime personale agganciato. Nessuna installazione sul computer senza selezione esplicita della modalità.
 
 ## Seam e ownership
 
@@ -60,6 +68,10 @@ Test readiness/timeout/redirect/login, discovery stale, cambio host senza invii 
 
 [F8](F8-hermes-native-features-and-observability.md) usa il trasporto scoped F1 per osservare anche `review.summary` e stati successivi alla risposta. La connessione/session subscription non termina implicitamente quando il testo è completo. Mapping versione/profilo/capability e gap visibili; nessun request(method) generico o import di profili personali per ottenere parità. Memoria/learning restano Hermes, mentre cache UI derivate non sono ricordi del modello.
 
+## Piano tecnico e stato dell'intervista
+
+Q8 confermata dall'utente: intervista di prodotto conclusa. [Spec tecnica](../project/F1-connection-design.md) e [piano](../project/F1-implementation-plan.md) concretizzano D32/D33 e ownership; eventuali gate tecnici non sono nuove scelte di prodotto implicite. D34 chat completa e Settings Hermes/Studio registrata nelle schede owner, non implementazione aggiunta a F1.
+
 ## Handoff
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F1 con riferimento al desktop Hermes ufficiale e versioni pin. Leggi principi/ADR0006. Delimita il primo incremento attach locale, autenticazione o remoto; non implementarli tutti implicitamente. Preserva runtime/configurazioni personali, usa profilo/dati isolati per i prompt, documenta ogni capability effettivamente provata.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F1 con riferimento al desktop Hermes ufficiale e versioni pin. Leggi principi/ADR0006. Segui scope D32/D33: attach locale e tunnel SSH, credenziali effimere, riconnessione e routing per host; backend Hermes indipendente dal client. Non implementare le feature native F7/F8/F10 incidentalmente. Preserva runtime/configurazioni personali, usa profilo/dati isolati per i prompt, documenta ogni capability effettivamente provata.

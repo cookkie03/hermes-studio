@@ -66,6 +66,11 @@ Fixture tool enabled vs serverinactive, unknown/deferredtools, profile collision
 
 [F8](F8-hermes-native-features-and-observability.md) mappa capacità/esiti native alla UI. F11 conserva catalogo skill/plugin/toolsets del profilo Hermes e gestione autorizzata; nessuna libreria parallela Studio. Aggiornamenti di skill/review/curator ricevuti possono aggiornare la vista con freshness e origine, non attivare installazioni/run. Non occultare deferred tools per aderire al template OpenDots. Segnali post-turn in chat sono F8-A/F2.
 
+## D34 — Impostazioni runtime nella sezione Hermes
+
+Toolsets, plugin, skill e MCP devono essere raggiungibili dai settings Hermes del corretto host/profilo quando supportati. F11 mantiene schema, autorizzazione e ricevuta di queste mutazioni; F4 organizza la sezione dedicata, F8 documenta copertura/gap. Non mescolare impostazioni Hermes e preferenze standalone Studio né duplicare config nel client.
+
+
 ## Prompt nuova chat
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F11 read-only capabilities con allowlist scoped, usando contracts/tools_mcp_plugins e desktop contrib/plugins. Parti da toolsets/tools/plugins e stati installato≠attivo. Non installare plugin né modificare config personale durante test. Se estendi a management, prepara diff concreto/review per capabilitydelta, vault-safe settings e rollback. Completa DoD e aggiorna docs; preserva strumenti Hermes deferiti.

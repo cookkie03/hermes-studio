@@ -2,6 +2,10 @@
 
 
 
+## Continuità autonoma richiesta in F1 — D33
+
+Principio utente: Hermes lavora 24/7 indipendentemente da Studio aperto; Studio facilita e visualizza il backend Hermes completo. Routine/cron, heartbeat, bots, strumenti e memoria mantengono ownership native Hermes. Configurazione, stato host/servizio e risultati devono restare osservabili dopo riapertura, con esiti reali. Nessun timer/heartbeat/executor alternativo nel client e nessun arresto del backend alla chiusura. Il requisito non è ancora una verifica di durata o di esecuzione dopo riavvio; riprendere [F1/D33](F1-runtime-connection.md#principio-cardine--hermes-autonomo-studio-facilitatore-d33) e i gate specifici della scheda prima di implementare.
+
 <!-- feature-guidance:start -->
 
 ## File e skill da leggere e usare

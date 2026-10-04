@@ -37,3 +37,19 @@ Memoria operativa in [MEMORY](MEMORY.md), cronologia in [WORKLOG](WORKLOG.md). S
 ## Rinumerazione D31
 
 Schede e riferimenti attivi passano agli ID F0–F18 senza padding, secondo la sequenza approvata. Catalogo ordinato numericamente e tabella vecchi/nuovi ID disponibile; documenti storici mantengono i numeri originali con avviso e link aggiornati. Verifica PASS: 19 schede con ID/titoli/dipendenze/handoff coerenti e 1.144 collegamenti locali validi. Contenuti delle schede equivalenti salvo numerazione; storia preservata salvo percorsi aggiornati. Nessun test prodotto rieseguito; commit/push tracciati in Git.
+
+## F1 — scelte di prodotto confermate, spec/piano tecnico proposti
+
+D32 confermata: attach locale senza login Hermes; connessioni SSH in-app, riuso o avvio backend; chiavi Mac rilevate e utente/password senza Portachiavi/disco; riconnessione automatica; password in memoria fino a quit/disconnessione esplicita; conversazioni per host. Q7/D33 confermata: backend Hermes completo/autonomo 24/7, resta attivo dopo quit/disconnessione; Studio facilitatore. Continuità sessioni/scheduler/bots da verificare separatamente, nessuna prova 24h corrente. [F6](../features/F6-spaces-documents-memory.md) conserva requisito multi-cartella/multi-host e decisioni future sul mapping progetti Hermes; ricerca sorgente fissata, nessuna prova live o implementazione nuova.
+
+Connector loopback esistente: discovery, health/root/gateway.ready e capability server-request false per default. Fixture e handshake live limitato documentati in WORKLOG, non rieseguiti; non dimostrano chat/remoto.
+
+## Verifica Computer Use — 2026-10-04
+
+Computer Use presente nel sorgente Hermes e documentazione ufficiale; F16 esplicitata per utilizzo tramite Studio. Pannello attuale privo di catture Computer Use; replay media grandi limitato a fallback, stream/takeover non collegati. [Audit F16](../research/hermes-computer-use-integration.md). Nessun prompt/driver/cattura/permesso personale eseguito; codice invariato.
+
+Q8 confermata; intervista conclusa. [Spec](F1-connection-design.md) e [piano F1](F1-implementation-plan.md) documentano contratti/gate; ADR0008 proposed, registrazione dei servizi mancanti da revieware prima del codice. D34 parità chat/settings registrata nelle schede owner. Nessun nuovo codice F1/F2/F4 o runtime personale modificato da questo blocco.
+
+## Requisiti GUI documentati
+
+Scheda trasversale nelle feature: contesto Space/progetto Hermes, host, modello/effort; @ file/range/testo e / skill/tool dal backend. Collegata a F4/F7/F6/F2, senza edit F0/F1 o implementation. Contratti sorgente progetti e commands.catalog letti; schema attachment/range/catalogo tool e prove UI/runtime ancora gate.

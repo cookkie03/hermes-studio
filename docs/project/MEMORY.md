@@ -1,6 +1,6 @@
 # Memoria operativa di Hermes Studio
 
-Consolidata 2026-10-04. Leggere questo riepilogo e [STATUS](STATUS.md) all'inizio del lavoro. [Decisioni D01–D31](decisions.md) conserva le richieste; [WORKLOG](WORKLOG.md) la cronologia. [Indice documentazione](../README.md) distingue fonti attuali e storia.
+Consolidata 2026-10-04. Leggere questo riepilogo e [STATUS](STATUS.md) all'inizio del lavoro. [Decisioni D01–D34](decisions.md) conserva le richieste; [WORKLOG](WORKLOG.md) la cronologia. [Indice documentazione](../README.md) distingue fonti attuali e storia.
 
 ## Direzione corrente
 
@@ -30,3 +30,11 @@ Prima della feature: [workflow ask-matt](../agents/feature-workflow.md), scheda 
 Git: origin confermato `git@github.com:cookkie03/hermes-studio.git`; [procedura](git-workflow.md). Commit/push di incrementi verificati autorizzati; release richiede la selezione F13. Ultimi esiti tecnici nel STATUS e nelle prove F0.
 
 La memoria precedente è conservata integralmente in [snapshot storico](MEMORY.history-2026-10-04.md); non è una fonte di istruzioni correnti.
+
+F1 selezionata, Q8 confermata e intervista di prodotto conclusa: D32 conferma attach locale senza login Hermes, connessioni SSH in-app, riuso/avvio backend, chiavi Mac rilevate automaticamente e utente/password. Host riconnessi automaticamente; password solo in memoria fino a chiusura o disconnessione esplicita, senza Portachiavi/disco. Conversazioni assegnate al rispettivo host. D33 conferma backend Hermes completo/autonomo 24/7, mantenuto attivo dopo quit/disconnessione; Studio facilitatore e visualizzatore. Scheduler/heartbeat/bots native, continuità da verificare per host e feature. Space multi-cartella/multi-host richiesti; relazione ai progetti Hermes e accesso cross-host rimandati a F6/F5, con [promemoria e ricerca](../features/F6-spaces-documents-memory.md#progetti-hermes-e-space--promemoria-per-lo-sviluppo-f6). Nessuna implementazione F1/F6 nuova.
+
+Computer Use nativo Hermes deve essere utilizzabile tramite Studio: F16-A catture/eventi, F16-B azione agente con postcondizione, F16-C Bot Screen/lease nativi previa verifica. [Audit](../research/hermes-computer-use-integration.md): sorgente confermato, integrazione Studio non provata; host/display del bot distinto dal Mac client.
+
+D34: chat Studio con streaming/thinking emesso/tool/codice/output/changes/approvals/validation e controlli reali Hermes. Settings dedicati distinti Hermes (runtime host/profilo) e Hermes Studio (app). Requisiti conservati F2/F3/F4/F5/F8/F11/F15 e component-system; non allargano implementazione F1. Piano/spec tecnici F1 in docs/project.
+
+Requisito GUI confermato: Space collegato ai progetti Hermes, host/modello/effort sempre riconoscibili; @ suggerimenti file Space e riferimenti a righe/testo, / cataloghi skill/tool Hermes. [Spec trasversale nelle feature](../features/gui-context-and-references.md). Studio solo frontend/adapter delle capacità native; niente nuovo backend o capacità agente simulata. F0/F1 non modificate da questa richiesta.
