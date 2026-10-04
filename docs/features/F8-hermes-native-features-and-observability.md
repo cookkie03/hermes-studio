@@ -1,4 +1,27 @@
-# F8 — Capacità native Hermes, memoria visibile e aggiornamenti nella UI
+# F8 — Visibilità delle capacità e della memoria Hermes
+
+<!-- implementation-packet:start -->
+## Incarico per la chat implementatrice
+
+Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F8**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+
+**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+
+**Risultato:** Esporre capacità, memoria e aggiornamenti nativi Hermes preservando autorità e ambiti del backend.
+
+**Backend e confine:** review.summary e contratti read-only memory/capability alla versione verificata; memoria/procedure rimangono Hermes. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+
+**Contesto e interazioni pertinenti:** Note post-turn persistenti nella chat corretta; viewer scoped; coverage di Computer Use F16, browser F12, comandi/skill F11 e settings reali con gap espliciti. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+
+**Dipendenze e letture aggiuntive:** A note, B viewer, C mappa: selezionare uno; F2 timeline/F1 routing/F7 profile. Le funzioni native scoperte si assegnano agli owner, non si implementano tutte in F8. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+
+**Prove specifiche obbligatorie per l’incremento pertinente:** Review dopo fine turno, pending contro applied, notifiche off, dedup/replay/restart, evento di altra sessione, profilo cambiato e API status senza contenuti. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+
+**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+
+Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+<!-- implementation-packet:end -->
+
 
 Stato: documentata D30, 2026-10-04; nuova scheda per chat dedicata, nessuna implementazione selezionata. L'utente vuole preservare tutte le funzioni del backend Hermes e poterle vedere/usare da Studio, come nel desktop ufficiale. La memoria rimane Hermes: qui si progetta la sua presentazione, non un nuovo motore o archivio di ricordi.
 
@@ -106,4 +129,4 @@ Mappare esplicitamente tutte le componenti chat Hermes/TUI: streaming, thinking 
 
 ## Prompt per una nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e File e skill F8. Implementa soltanto F8-A/B/C selezionato: preservare capacità e memoria Hermes e presentarle in Studio, senza secondo archivio/motore. Verifica contratti/versione e confronta handler desktop ufficiale. Per A usa review.summary scoped anche dopo fine turno, nota persistente e correlazione solo quando provata; non chiamare tutto curator o applied. Per B sola lettura supportata del profilo scelto, nessun import/reset/config change o reiniezione. Mappa gap alle feature proprietarie, non implementarle incidentalmente. Prove sintetiche/isolate e UI packaged; aggiorna scheda, MEMORY/STATUS/WORKLOG e fai review prima del commit.
+> Prima segui docs/agents/feature-workflow.md e File e skill F8. Implementa soltanto F8-A/B/C selezionato: preservare capacità e memoria Hermes e presentarle in Studio, senza secondo archivio/motore. Verifica contratti/versione e confronta handler desktop ufficiale. Per A usa review.summary scoped anche dopo fine turno, nota persistente e correlazione solo quando provata; non chiamare tutto curator o applied. Per B sola lettura supportata del profilo scelto, nessun import/reset/config change o reiniezione. Mappa gap alle feature proprietarie, non implementarle incidentalmente. Prove sintetiche/isolate e UI packaged; aggiorna scheda, MEMORY/STATUS/WORKLOG e fai review prima del commit. Segui anche Incarico per la chat implementatrice di F8: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.

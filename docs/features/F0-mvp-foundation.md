@@ -1,7 +1,29 @@
-# F0 — MVP essenziale e qualità della base
+# F0 — Baseline MVP e manutenzione
+
+<!-- implementation-packet:start -->
+## Incarico per la chat implementatrice
+
+Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F0**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+
+**Tipo di lavoro:** manutenzione client della baseline verificata. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+
+**Risultato:** Manutenere solo il problema della baseline completata richiesto nella chat; preservare Metadata locali e comportamento già verificato.
+
+**Backend e confine:** MVP Electron/React e adapter Hermes esistenti; metadata/bozze sono stato del client, non memoria/esecuzione agente. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+
+**Contesto e interazioni pertinenti:** Preservare contesto e layout già presenti; controlli futuri mostrano disponibilità reale, senza nuove capacità simulate. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+
+**Dipendenze e letture aggiuntive:** [Review consegna F0](../architecture/f00-review-2026-10-04.md); nuova manutenzione delimitata, non ripetizione dell’intero MVP. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+
+**Prove specifiche obbligatorie per l’incremento pertinente:** Restart metadata e bozze, errore di scrittura/conflitto, offline, smoke packaged e regressione esatta del bug selezionato. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+
+**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+
+Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+<!-- implementation-packet:end -->
+
 
 Stato: completata — 2026-10-04. Baseline MVP consolidata con review, build/test e correzioni essenziali; commit locale della consegna. I limiti delle altre feature restano espliciti.
-
 
 
 <!-- feature-guidance:start -->
@@ -72,4 +94,4 @@ Evidenze e limiti: [review F0](../architecture/f00-review-2026-10-04.md). Artefa
 
 ## Handoff per eventuale manutenzione esplicita
 
-> Prima segui docs/agents/feature-workflow.md e File e skill F0. F0 è completata: leggi docs/architecture/f00-review-2026-10-04.md e delimita soltanto il nuovo problema di manutenzione richiesto dall’utente. Preserva contratto Metadata, dati e gate già verificati; non scegliere un nuovo refactor o implementare altre feature automaticamente. Esegui verifiche proporzionate al cambiamento e aggiorna prove/STATUS/WORKLOG prima del commit.
+> Prima segui docs/agents/feature-workflow.md e File e skill F0. F0 è completata: leggi docs/architecture/f00-review-2026-10-04.md e delimita soltanto il nuovo problema di manutenzione richiesto dall’utente. Preserva contratto Metadata, dati e gate già verificati; non scegliere un nuovo refactor o implementare altre feature automaticamente. Esegui verifiche proporzionate al cambiamento e aggiorna prove/STATUS/WORKLOG prima del commit. Segui anche Incarico per la chat implementatrice di F0: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.

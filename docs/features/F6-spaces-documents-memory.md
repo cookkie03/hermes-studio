@@ -1,4 +1,27 @@
-# F6 — Spaces collegati a cartelle e documenti su file
+# F6 — Spaces collegati ai progetti e alle cartelle Hermes
+
+<!-- implementation-packet:start -->
+## Incarico per la chat implementatrice
+
+Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F6**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+
+**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+
+**Risultato:** Presentare progetti Hermes come Spaces con cartelle, documenti e conversazioni associati e identità runtime preservata.
+
+**Backend e confine:** projects.* scoped a backend/profilo e working directory sessione; Space è nome UI/mapping, non un nuovo servizio progetti distribuiti. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+
+**Contesto e interazioni pertinenti:** Space corrente sempre visibile nella chat/bot e sidebar; @ solo cartelle autorizzate del progetto. Host di cartella distinto dall’host della conversazione. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+
+**Dipendenze e letture aggiuntive:** F1 host, F5 root/revisioni, F2 associazione chat; cardinalità multi-host delimitata secondo capacità Hermes, niente accesso cross-host inventato. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+
+**Prove specifiche obbligatorie per l’incremento pertinente:** Progetti omonimi su due host/profili, folder multipli, backend offline, nessun Space, archive/unlink senza cancellare file, session.cwd diversa dal progetto e grant negato. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+
+**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+
+Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+<!-- implementation-packet:end -->
+
 
 Stato: specifica aggiornata D25, 2026-10-04; non implementata. La baseline F0 usa ancora pagine metadata. La nuova richiesta sostituisce il modello di Space come solo contenitore di pagine interne; preservare i dati esistenti.
 
@@ -110,4 +133,4 @@ Folder sintetico con `.md`, `.txt` e codice: link senza copia; due root distingu
 
 ## Prompt per una nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e File e skill della scheda. Implementa soltanto la slice selezionata di F6 aggiornata D25: Spaces collegati a cartelle reali, come vault/progetti. Definisci con F5 root/list/read/save e con F3 scope prima degli edit condivisi. Parti da folder sintetico read-only e persistenza del collegamento; contenuti autorevoli nel filesystem, pagine legacy preservate. Aggiungere/scollegare non copia né elimina file. Non scansionare vault personali o attivare specialisti/remote mapping automaticamente. Prova riavvio, errore e cambi esterni; aggiorna documenti e gate con prove.
+> Prima segui docs/agents/feature-workflow.md e File e skill della scheda. Implementa soltanto la slice selezionata di F6 aggiornata D25: Spaces collegati a cartelle reali, come vault/progetti. Definisci con F5 root/list/read/save e con F3 scope prima degli edit condivisi. Parti da folder sintetico read-only e persistenza del collegamento; contenuti autorevoli nel filesystem, pagine legacy preservate. Aggiungere/scollegare non copia né elimina file. Non scansionare vault personali o attivare specialisti/remote mapping automaticamente. Prova riavvio, errore e cambi esterni; aggiorna documenti e gate con prove. Segui anche Incarico per la chat implementatrice di F6: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.

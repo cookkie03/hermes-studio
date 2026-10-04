@@ -40,3 +40,9 @@ WORKLOG: skill effettivamente lette, ramo applicato, file toccati, prove e limit
 ## Requisito comune D30 — preservare Hermes
 
 Prima di cambiare una feature leggere [F8, regola di prodotto e mappa ownership](../features/F8-hermes-native-features-and-observability.md). Verificare quali capacità native sono già presenti e non perderne segnali/stati per adattare la UI. La memoria rimane runtime, le viste Studio sono proiezioni. Registrare contratto/superficie/gap della feature selezionata; non implementare tutta F8 incidentalmente. Una nota «Skills aggiornate» richiede evento/esito reale, non il solo testo della risposta.
+
+## Scheda allegata come incarico di sviluppo
+
+La sezione Incarico per la chat implementatrice di ciascuna F0–F18 riporta risultato, backend, GUI, dipendenze e prove specifiche. Il suo allegato è sufficiente come ingresso nel workspace: aprire le letture linkate, verificare baseline e scegliere il solo incremento autorizzato. Procedere al codice e alle prove; fermarsi per chiarire soltanto scelte essenziali mancanti o approval effettivamente richieste. Specifiche documentate diventano implementation nella chat incaricata, non automatico sviluppo delle altre schede.
+
+Ogni chat consegna una matrice requisiti→contratto Hermes/versione→file modificati→prova/esito/gap. Contesto Space/host/modello/effort e @/ / si implementano solo dove posseduti/pertinenti; gli altri owner forniscono contratti reali. I dati Studio non sostituiscono runtime/memoria/scheduler. F0 è baseline completata, F18 idea futura: gli incarichi devono rispettarne lo stato. Se un backend non supporta un’operazione, completare il lavoro indipendente e dichiarare il gap, senza aggiungere executor/backend alternativo.

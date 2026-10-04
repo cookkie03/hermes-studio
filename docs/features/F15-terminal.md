@@ -1,4 +1,29 @@
-# F15 — Terminale integrato
+# F15 — Vista degli output e del terminale Hermes
+
+<!-- implementation-packet:start -->
+## Incarico per la chat implementatrice
+
+Terminale significa la superficie Studio per output dei comandi eseguiti da Hermes e, quando il backend offre il contratto, una sessione interattiva sul suo host. Prima slice: output/tool card nella chat o pannello. Non è un nuovo tool terminale, una shell indipendente o un executor locale alternativo.
+
+Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F15**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+
+**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+
+**Risultato:** Mostrare e, se supportato, interagire con il terminale Hermes della sessione/host corretti.
+
+**Backend e confine:** Output, stdin/resize/interrupt/PTY soltanto via contratti native Hermes comprovati; nessuna shell parallela nel renderer. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+
+**Contesto e interazioni pertinenti:** Output/codice/stato ed esito reali, host/cwd/Space visibili; link di file/righe condivisi F5 dove supportati. Working non equivale a comando riuscito. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+
+**Dipendenze e letture aggiuntive:** F1/F3/F2; slice output-only distinta da terminale interattivo, capability disponibile prima di attivare controlli. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+
+**Prove specifiche obbligatorie per l’incremento pertinente:** Output incrementale/grande, ANSI/contenuto non attendibile, comando nonzero, disconnect/reconnect, resize, sessione diversa e consegna input incerta. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+
+**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+
+Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+<!-- implementation-packet:end -->
+
 
 Stato: documentata; output di tool in UI non è una sessione PTY interattiva.
 
@@ -50,4 +75,4 @@ La chat deve poter presentare codice/comandi realmente eseguiti e output ricevut
 
 ## Handoff
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Lavora soltanto F15; scegli output tool oppure PTY e verifica il contratto Hermes ufficiale. Usa processi test isolati, ownership esplicita e permessi F3. Non aggiungere una shell generica Electron e non sviluppare Files/browser. Documenta esito e limiti.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Lavora soltanto F15; scegli output tool oppure PTY e verifica il contratto Hermes ufficiale. Usa processi test isolati, ownership esplicita e permessi F3. Non aggiungere una shell generica Electron e non sviluppare Files/browser. Documenta esito e limiti. Segui anche Incarico per la chat implementatrice di F15: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.

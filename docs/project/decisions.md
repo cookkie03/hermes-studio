@@ -1,6 +1,6 @@
 # Registro delle decisioni di Hermes Studio
 
-Consolidato 2026-10-04. Questo file registra le decisioni utente; [MEMORY](MEMORY.md) è il riepilogo operativo, [STATUS](STATUS.md) contiene esiti e gate, [WORKLOG](WORKLOG.md) la cronologia delle prove. Le righe storiche non autorizzano lavoro corrente. Ultima direzione: D19–D34; [ADR0006](../adr/0006-feature-by-feature.md), [ADR0007](../adr/0007-folder-backed-spaces.md) e schede specificano le conseguenze.
+Consolidato 2026-10-04. Questo file registra le decisioni utente; [MEMORY](MEMORY.md) è il riepilogo operativo, [STATUS](STATUS.md) contiene esiti e gate, [WORKLOG](WORKLOG.md) la cronologia delle prove. Le righe storiche non autorizzano lavoro corrente. Ultima direzione: D19–D35; [ADR0006](../adr/0006-feature-by-feature.md), [ADR0007](../adr/0007-folder-backed-spaces.md) e schede specificano le conseguenze.
 
 ## Decisioni operative
 
@@ -35,6 +35,7 @@ Consolidato 2026-10-04. Questo file registra le decisioni utente; [MEMORY](MEMOR
 | D32 | F1: attach locale senza login Hermes e connessioni SSH in-app a host remoti; riuso/avvio backend; chiavi rilevate e password temporanea senza Portachiavi; riconnessione automatica; conversazioni per host. Space multi-cartella/multi-host richiesti | F1 selezionata; password in memoria fino a quit/disconnessione esplicita; associazioni progetti e accesso cross-host rimandati a F6/F5, con ricerca sorgente conservata |
 | D33 | Principio cardine: Hermes backend completo e autonomo 24/7, Studio facilitatore/visualizzatore; backend e lavoro non arrestati da quit/disconnessione | F1 lifecycle host; F2 continuità esecuzioni; F10 cron/heartbeat e F7/F14 bots native; D30 parità; requisito non ancora certificato live |
 | D34 | Chat Studio presenta componenti Hermes/TUI (streaming, thinking, tool, codice/output, changes, approvals/validation/settings); Settings dedicati distinti in Hermes e Hermes Studio | F2/F3/F5/F15 presentazione/semantica; F4 sezione Settings; F8 copertura native; F11 estensioni. Specifiche aggiornate, implementazione futura per feature |
+| D35 | Ogni scheda feature allegata a una chat deve guidare implementazione e verifica del codice della singola feature | Sezione operativa specifica in F0–F18, dipendenze/fonti/skill/gate, GUI e Hermes unico backend; F0 manutenzione e F18 futura preservate |
 
 ## Decisioni storiche superate
 

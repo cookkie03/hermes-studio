@@ -1,4 +1,27 @@
-# F17 — Messaggi vocali e conversazione vocale in-app
+# F17 — GUI della voce e delle conversazioni vocali Hermes
+
+<!-- implementation-packet:start -->
+## Incarico per la chat implementatrice
+
+Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F17**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+
+**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+
+**Risultato:** Integrare dettatura/vocali/TTS o vocal chat nel turno Hermes senza perdere identità, bozze e controllo.
+
+**Backend e confine:** Provider/audio/voice Hermes esistenti; frontend cattura/riproduce e instrada, non impone un nuovo executor voce o API key alternativa. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+
+**Contesto e interazioni pertinenti:** Composer e vocal chat mostrano Dot/Space/host/modello/effort, mic/Mute/End e stato invio reale; niente switch implicito di bot durante audio. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+
+**Dipendenze e letture aggiuntive:** F2/F1/F3; motore voce può differire dal modello chat e va etichettato. Telefonate e wake word future separate. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+
+**Prove specifiche obbligatorie per l’incremento pertinente:** Permesso mic negato, audio sintetico, cancel/draft, eventi tardivi, interrupt/barge-in se supportato, reconnect, cleanup mic e nessun doppio turno. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+
+**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+
+Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+<!-- implementation-packet:end -->
+
 
 Stato: documentata D29, 2026-10-04; nessuna implementazione selezionata adesso. Voce e vocal chat sono feature autonome da sviluppare in una futura chat. Telefonate a numeri PSTN/SIP restano idea futura distinta in [voice-calls](../future/voice-calls.md).
 
@@ -68,4 +91,4 @@ Dati e audio sintetici: permission denied/revoked, device absent/change, silence
 
 ## Prompt per una nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e File e skill F17. Leggi Voice Mode ufficiale e verifica contratti audio desktop/runtime alla SHA attuale. Implementa solo l'incremento F17-A/B/C/D selezionato usando strumenti/provider Hermes, cattura sul Mac e owner/sessione corretti; nessun executor voce OpenDots alternativo. Non imporre OpenAI Voice API Key, installare motori o cambiare profili personali automaticamente. Prova permessi, audio sintetico, ordine dei turni, cleanup e barge-in se supportato nella .app. Telefonate PSTN/SIP e wake word restano fuori incremento. Aggiorna prove/documenti e fai review prima del commit.
+> Prima segui docs/agents/feature-workflow.md e File e skill F17. Leggi Voice Mode ufficiale e verifica contratti audio desktop/runtime alla SHA attuale. Implementa solo l'incremento F17-A/B/C/D selezionato usando strumenti/provider Hermes, cattura sul Mac e owner/sessione corretti; nessun executor voce OpenDots alternativo. Non imporre OpenAI Voice API Key, installare motori o cambiare profili personali automaticamente. Prova permessi, audio sintetico, ordine dei turni, cleanup e barge-in se supportato nella .app. Telefonate PSTN/SIP e wake word restano fuori incremento. Aggiorna prove/documenti e fai review prima del commit. Segui anche Incarico per la chat implementatrice di F17: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
