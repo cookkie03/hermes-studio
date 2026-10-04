@@ -11,7 +11,7 @@ Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifi
 
 **Backend e confine:** Sessioni e tool/events Hermes tramite F1; thinking soltanto se emesso, risultati/changes/approvals/validation con origine e esito backend. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
 
-**Contesto e interazioni pertinenti:** Header/composer Space-host-modello-effort; @ riferimenti file/range F5/F6; / cataloghi F11; note native F8 e output F15. F2 orchestra transcript e invio, non implementa tutti i tool. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Contesto e interazioni pertinenti:** Applicare D37 per Docs provenienti dal runtime/sessione, con origine verificata e documento originale autoritativo. Applicare anche D36 qui sotto: pannello laterale per figli temporanei; Dots persistenti nella propria chat, messaggi attribuiti e attività confermata dal runtime. Header/composer Space-host-modello-effort; @ riferimenti file/range F5/F6; / cataloghi F11; note native F8 e output F15. F2 orchestra transcript e invio, non implementa tutti i tool. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
 
 **Dipendenze e letture aggiuntive:** F1 per slice runtime; F3 approvals. File/range e cataloghi consumano i contratti degli owner; gate reali mancanti dichiarati senza fixture presentata come chat live. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
 
@@ -143,6 +143,26 @@ Settings persistenti hanno una sezione dedicata, distinta dai controlli contestu
 ## Requisito utente aggiornato — contesto e frontend Hermes
 
 [Spec trasversale](gui-context-and-references.md): Space è la presentazione/associazione di progetti Hermes scoped, non un nuovo backend progetto. Space/host/modello/effort sempre riconoscibili; @ per file e range/testo versionati, / per cataloghi skill/tool effettivi. Questa richiesta chiarisce il mapping progetti prima indicato come proposta; multi-host resta limitato a contratti reali, niente Project distribuito inventato o accesso cross-host implicito. Nessuna implementazione automatica.
+
+## D36 — Collaboratori nella chat
+
+Il composer conserva `@` per file delle cartelle dello Space, file interi/range/selezioni secondo F5/F6, e contesto sempre visibile Space/host/modello/effort. La timeline mostra i messaggi tra Bots con mittente, destinatario e stato di consegna reale; una ricevuta queued non significa che il destinatario stia lavorando.
+
+La chat padre offre un controllo «Sub-agent» per aprire il pannello laterale F14: elenco dei figli temporanei e dettaglio del figlio selezionato. Mostrare incarico, stato, contesto disponibile e attività/output forniti da Hermes, senza inventare thinking o transcript completo. I Dots persistenti non occupano questo pannello: il collegamento al destinatario apre la sua conversazione, dove compaiono il messaggio ricevuto e l’attività reale.
+
+Gate: invio A→B, stato di consegna nella chat A, messaggio effettivo nella chat B; attività distinta da non letto. Avvio di una delega apre un dettaglio scoped alla chat padre; cambio chat/host durante il caricamento non mostra eventi del precedente figlio. Offline e stato non verificabile restano espliciti.
+
+## D37 — Docs provenienti dai runtime Hermes
+
+Studio presenta i documenti di ciascun runtime Hermes collegato e quelli associati alle sue sessioni, quando il backend li espone o consente di accedervi. «Portare in Studio» significa renderli consultabili nella GUI conservando il documento originale come fonte autoritativa, non importare o duplicare automaticamente tutti i file in un archivio Studio.
+
+Ogni voce conserva connessione/runtime, host, profilo, identità/percorso del documento e revisione disponibile; associazioni a sessione e Space/progetto solo quando confermate dal backend o esplicitamente scelte dall’utente. Non presumere che ogni sessione possieda una raccolta nativa Docs: verificare il contratto del runtime collegato, distinguendo file di progetto, artefatti del turno e documenti effettivamente associati alla sessione. Nessuna API docs.list inventata.
+
+La vista Docs permette di riconoscere origine e scope, filtrare per runtime/Space/sessione e aprire il file tramite F5. Una scheda nella chat F2 rimanda allo stesso documento; `@` usa soltanto le cartelle e i riferimenti autorizzati. Runtime diversi con file omonimi restano distinti. Aggiornamenti derivati da eventi o riletture supportati dal backend, con revisione e conflitti gestiti da F5; nessuna promessa di sincronizzazione live senza contratto verificato. Offline mostra ultimo dato noto come stale, senza spacciarlo per aggiornato o inviare scritture differite alla cieca.
+
+**Ownership:** F6 associazioni e navigazione Docs/Space, F5 lettura/editor/revisioni, F2 collegamenti dalla conversazione, F1 identità connessione e host. Scollegare runtime, chat o Space non elimina documenti originali. Nessun accesso implicito a file di altre sessioni/profili, mount/copia cross-host o backend documentale parallelo.
+
+**Gate:** due runtime con documenti omonimi, sessioni e progetti distinti; verifica origine corretta, apertura autorizzata, aggiornamento esterno/revisione, conflitto, file rimosso, scope negato, offline/reconnect e cambio runtime durante fetch. Associazione assente esplicita, nessun documento della sessione precedente durante il caricamento. Usare dati sintetici e registrare contratto/versione e limiti prima di dichiarare integrazione completa.
 
 ## Prompt per una nuova chat
 

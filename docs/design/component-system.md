@@ -49,3 +49,7 @@ Folder picker e file tree nello Space (F6/F5), con host/percorso e conflitto; av
 ## D34 — Copertura chat e Settings
 
 Timeline Hermes completa: risposta streaming, thinking ricevuto, strumenti, codice/output, changes e decisioni rischiose, con disclosure e provenienza; owner F2/F3/F5/F15/F8. Sezione Settings dedicata con ambiti Hermes (host/profilo runtime) e Hermes Studio (app standalone), owner F4 e feature delle operazioni. La struttura OpenDots resta autorevole; contenuto e controlli seguono capacità native reali.
+
+## D36 — Segnali di collaborazione
+
+Dots persistenti: riga sidebar con avatar, nome, stato runtime testuale e non letto indipendente; header della propria chat con contesto Space/host/modello/effort. Messaggio tra Bots: mittente, destinatario e stato di consegna nella timeline, collegamento alla chat destinataria. Figli temporanei: controllo nella chat padre, pannello laterale con elenco e dettaglio scoped; mai Dots persistenti nel pannello. Working richiede evento/stato Hermes comprovato, non ack queued. Focus restituito alla chiusura; Reduced Motion e lettore di schermo conservano informazione senza dipendere da colore/pulsazione. Gate dettagliati in [F14](../features/F14-delegation-and-dot-collaboration.md) e [requisiti condivisi](../features/gui-context-and-references.md).

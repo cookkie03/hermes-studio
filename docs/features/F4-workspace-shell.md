@@ -11,7 +11,7 @@ Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifi
 
 **Backend e confine:** Consumare progetti/sessioni/modelli/effort/capability forniti dagli adapter owner; Settings Hermes usa backend scoped, Settings Studio stato app. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
 
-**Contesto e interazioni pertinenti:** Space/host/modello/effort leggibili; sidebar Space attivo, popover @ e /, selettori pending/esito reale. Stato offline/stale/non supportato distinto. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Contesto e interazioni pertinenti:** Applicare anche D36 qui sotto: pannello laterale per figli temporanei; Dots persistenti nella propria chat, messaggi attribuiti e attività confermata dal runtime. Space/host/modello/effort leggibili; sidebar Space attivo, popover @ e /, selettori pending/esito reale. Stato offline/stale/non supportato distinto. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
 
 **Dipendenze e letture aggiuntive:** F2/F6/F7/F11 forniscono contratti/dati; F4 implementa presentazione e interazioni, non una nuova connessione/executor. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
 
@@ -136,6 +136,14 @@ L'app deve avere una sezione Settings dedicata con due ambiti distinguibili: **H
 ## Requisito condiviso: contesto e composer Hermes
 
 Leggere [contesto visibile, Spaces/progetti, @ file/righe e / skill/tool](gui-context-and-references.md). Header identifica Space, host, modello ed effort effettivi della chat/bot. Capacità e mutazioni rimangono nel backend Hermes; non simulare valori o azioni non supportati. Ownership specifica nella scheda trasversale.
+
+## D36 — Sidebar Dots e pannello sub-agent
+
+La sidebar mantiene i Dots persistenti, ognuno con segnale di attività derivato da Hermes e badge non letto indipendente. Il Dot selezionato mostra la propria chat; selezione, attività e non letto sono stati separati. Space/host/modello/effort della chat attiva restano riconoscibili anche con un pannello aperto.
+
+Il controllo «Sub-agent» nella chat apre un pannello laterale per i soli figli temporanei della sessione padre (F14). Elenco, selezione del figlio, dettaglio, chiusura e ritorno focus devono funzionare con tastiera e lettore di schermo. Coordinare questa superficie con browser/file/strumenti già affiancati: a 900px il composer e il contesto rimangono accessibili; non creare finestre separate per Dots né inserire Dots nel pannello dei figli.
+
+Gate: più Dots attivi, uno non letto ma inattivo, figlio temporaneo attivo e pannello aperto; nessuna confusione di identità o copertura del composer. Reduced Motion mantiene etichette di stato senza pulsazioni continue.
 
 ## Prompt per una nuova chat
 

@@ -11,7 +11,7 @@ Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifi
 
 **Backend e confine:** delegate_task, message_agent/bot relay/gruppi solo se realmente supportati; bot persistente distinto da subagent temporaneo. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
 
-**Contesto e interazioni pertinenti:** Mostrare Space e host della consegna e di ogni collaboratore; contesto condiviso esplicito e file/range scoped, non accesso all’intero progetto per membership. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Contesto e interazioni pertinenti:** Applicare anche D36 qui sotto: pannello laterale per figli temporanei; Dots persistenti nella propria chat, messaggi attribuiti e attività confermata dal runtime. Mostrare Space e host della consegna e di ogni collaboratore; contesto condiviso esplicito e file/range scoped, non accesso all’intero progetto per membership. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
 
 **Dipendenze e letture aggiuntive:** F7 bot/F2 transcript/F3 grants/F5-F6 riferimenti. Nessun orchestratore o messaging backend alternativo in Studio. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
 
@@ -71,7 +71,7 @@ Recall: `session_search` cerca/legge messaggi reali (FTS5), non riassunti invent
 
 ## Dominio, UX e stati
 
-Separare DelegationRun, BotMessageDelivery, HostedRoom e RecallResult. Stati UI: composing, queued, admitted, working, awaiting reply, reply received, declined, failed, delivery uncertain; “inviato” soltanto con ricevuta. Un pannello Team mostra figli live, una timeline Messaggi collega bot persistenti e un risultato recall mostra profile/thread/message anchor. Scope recall iniziale: chat propria + fonti condivise selezionate; estendere a profili personali solo con scelta esplicita. Notifica approvazione su thread diverso deve consentire navigazione.
+Separare DelegationRun, BotMessageDelivery, HostedRoom e RecallResult. Stati UI: composing, queued, admitted, working, awaiting reply, reply received, declined, failed, delivery uncertain; “inviato” soltanto con ricevuta. Un pannello laterale Sub-agent mostra i figli temporanei della chat padre; la timeline della conversazione di ciascun Dot mostra i messaggi tra bot persistenti e un risultato recall mostra profile/thread/message anchor. Scope recall iniziale: chat propria + fonti condivise selezionate; estendere a profili personali solo con scelta esplicita. Notifica approvazione su thread diverso deve consentire navigazione.
 
 ## Seam, ownership e dipendenze
 
@@ -84,6 +84,16 @@ Mai inoltrare intera chat privata o spoofare sender; target/author runtime autho
 ## Scope degli Spaces su cartelle — D25
 
 Collaboratori lavorano su file reali autorizzati dello Space F6/F5, con host/root/revisione nelle consegne. Membership non concede accesso al vault o profilo di memoria di altri bot; messaggio/delega non crea mount o copia folder. Scritture concorrenti usano writer e conflitti condivisi F5. Memoria progetto F9 distinta da USER/MEMORY del singolo profilo.
+
+## D36 — Due superfici distinte: sub-agent e Dots
+
+**Sub-agent temporanei:** controllo nella chat padre e pannello laterale in stile Codex, con elenco dei figli della sessione e dettaglio selezionabile. Mostrare identità/incarico, stato reale, Space/host/modello/effort quando forniti dal runtime, attività/output autorizzati e risultati. `subagent.list`/`subagent.tail`/`subagent.interrupt` sono contratti sorgente già citati, da verificare nel backend collegato; tail limitato non equivale a transcript completo o ragionamento nascosto. Steer/stop solo tramite capability nativa supportata e gate pertinenti. Figli temporanei non diventano Dots persistenti.
+
+**Dots persistenti:** restano nella sidebar e nella propria conversazione, senza finestra o sezione nel pannello sub-agent. Nella chat mittente mostrare evento «messaggio a [Dot]», contenuto consentito, destinatario, delivery ID e stato reale. Sul destinatario distinguere badge di messaggio non letto e segnale di lavoro. Aprendo quel Dot si vede il messaggio ricevuto con attribuzione e l’attività della sua sessione canonica. `message_agent` è disponibile solo nei Bot Chat gestiti che lo espongono; niente chat parallela creata dal frontend.
+
+**Semantica:** queued/ack non conferma ricezione, attivazione o risposta. Accendere il segnale Working soltanto con stato/evento Hermes comprovato; se manca il contratto, documentare il gap e mostrare stato non verificato. In attesa di approvazione, fallito, interrotto e completato hanno etichette distinte. Nessun retry automatico su consegna incerta. Indicatori sintetici con testo accessibile; movimento discreto solo durante attività confermata e alternativa Reduced Motion.
+
+**Gate UI/runtime:** due Bot sintetici A→B→risposta, verifica timeline mittente, messaggio nella chat destinatario e segnale Working da evento effettivo; ack senza esecuzione non accende Working. Più figli e più Dots attivi senza mescolarli; apertura/chiusura del pannello, tastiera/focus, approvazione, fallimento/interruzione, riconnessione/replay e cambio chat/host durante tail senza contaminazione. Il non letto cambia dopo visione effettiva, non dopo esecuzione. Verificare nel runtime i contratti degli stati prima di dichiarare il percorso funzionante.
 
 ## Accettazione, DoD e prompt nuova chat
 

@@ -54,6 +54,16 @@ Q8 confermata; intervista conclusa. [Spec](F1-connection-design.md) e [piano F1]
 
 Scheda trasversale nelle feature: contesto Space/progetto Hermes, host, modello/effort; @ file/range/testo e / skill/tool dal backend. Collegata a F4/F7/F6/F2, senza edit F0/F1 o implementation. Contratti sorgente progetti e commands.catalog letti; schema attachment/range/catalogo tool e prove UI/runtime ancora gate.
 
+Commit documentale locale `83878f3` creato; push `origin/main` respinto dall'auto-review per autorizzazione esplicita della pubblicazione non riconosciuta. Nessun push riuscito. Spec/piano inizialmente proposti; il successivo incarico esplicito dell’utente ha avviato il codice; Q8 scelte di prodotto confermata. Nota aggiornata localmente dopo il commit.
+
+## D35 — Schede operative aggiornate
+
+Tutte le 19 schede F0–F18 includono incarico implementatrice con risultato, confine Hermes, GUI pertinente, letture/dipendenze, prove specifiche e consegna codice verificato. Handoff finali rafforzati; stati e fonti preservati, nessun codice implementato in questa revisione. Validazione PASS delle 19 sezioni operative/guidance/handoff e 500 collegamenti locali; titoli esplicitano integrazione frontend di capacità Hermes. Nessuna feature backend/client implementata in questa revisione.
+
+## Aggiornamento D36 — collaborazione visibile (2026-10-04)
+
+Richiesta utente documentata in F2/F4/F7/F14, requisiti GUI condivisi e component-system: figli temporanei nel pannello laterale della chat padre; Dots persistenti nella sidebar e nella propria chat con messaggio ricevuto e lavoro reale. Segnale attività separato da non letto/consegna; queued non conferma Working. Space/host/modello/effort e @ file/range restano requisiti. Solo documentazione: nessun codice o runtime personale modificato; sviluppo F1 concorrente preservato.
+
 ## 2026-10-04 — F1 implementazione connessioni in corso
 
 Registro versionato host/thread, bridge separati, REST/SSE scoped e OpenSSH di sistema implementati. Credential/fingerprint challenge tramite socket Unix privato; password volatile, nessun secret nello snapshot. Bootstrap riusa discovery e comandi nativi Hermes gateway; service manager ospita esclusivamente hermes serve quando assente, senza executor/scheduler Studio. UI Settings aggiunge host SSH e controlli; chat seleziona host prima del binding, Computer segue thread. 17 test bridge/registry/server PASS, typecheck renderer PASS; ulteriori fixture/review/live attach ancora da completare. ssh2 1.17.0 installata soltanto devDependency per server sintetico. Il runtime personale non è ancora stato modificato o interrogato dalla nuova integrazione.
@@ -69,3 +79,7 @@ Package finale arm64/firma ad hoc, smoke offline e smoke connessioni con attach 
 ## 2026-10-04 — Git F1
 
 Commit codice locale `71a5d6a` creato: 37 file, solo incremento F1 e persistenza propria. Index controllato: diff-check, 69 link locali e scan pattern credenziali PASS. Modifiche concorrenti D35/D36 escluse dal commit e preservate nel workspace. Nessun push ritentato dopo il precedente rifiuto auto-review della pubblicazione esterna.
+
+## D37 — Docs dei runtime e delle sessioni (2026-10-04)
+
+Aggiornate F5/F6/F2 e requisiti GUI: documenti provenienti dai runtime Hermes consultabili in Studio con connessione/host/profilo, associazioni sessione/Space verificate, originali autoritativi e aggiornamenti secondo contratti reali. Nessun import automatico o raccolta Docs nativa per sessione presunta; contratto da verificare. Richiesta solo documentale, nessuna implementazione. Utente richiede commit della documentazione pendente D36/D37, separata dal codice F1 già committato.

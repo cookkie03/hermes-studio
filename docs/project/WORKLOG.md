@@ -251,9 +251,19 @@ Spec F1 e piano draft completati in docs/project/F1-connection-design.md e F1-im
 
 Verifica documentale: 25 file del blocco, 240 collegamenti relativi validi, git diff --check pulito e scan candidati credenziali senza risultati. Self-review spec/piano completata: requisiti/tasks e assi privacy/host/lifecycle/migrazione/gate coerenti. Nessun test prodotto perché solo Markdown. Commit documentale separato contiene proposte tecniche marcate draft/proposed; la review della spec prima del codice è richiesta espressamente dal ramo architectural della skill brainstorming, non una riapertura di Q8.
 
+Commit documentale locale 83878f3 creato: 25 file, 405 insertions/8 deletions; nessun sorgente prodotto. Push origin/main tentato tramite escalation e RESPINTO dall'auto-review: pubblicazione esterna su branch condiviso non considerata autorizzata esplicitamente dalla richiesta corrente; nessun workaround o retry. Commit resta locale; occorre approvazione umana del push. Spec/piano tecnico da revieware prima del codice secondo brainstorming; Q8 prodotto resta confermata. Questa nota è un aggiornamento locale successivo al commit.
+
+## 2026-10-04 — D35, schede per implementazione e verifica
+
+Utente chiarisce che allegare una feature alla chat deve guidare codice e verifica, non soltanto un piano. Applicate documentation-and-adrs e writing-for-agents: letture di memoria/stato/workflow, fonti/scope/gate delle schede; aggiunti 19 incarichi operativi specifici (risultato/backend/GUI/dipendenze/prove/consegna), istruzioni handoff e workflow. Requisiti recenti Space/host/modello/effort, @ range/testo, / cataloghi e Computer Use distribuiti agli owner; Hermes backend unico, F0 manutenzione/F18 futura. Nessuna nuova feature/code/runtime/profilo personale o automazione. Preservate modifiche concorrenti preesistenti di STATUS/WORKLOG. Validazione delle 19 schede e 500 collegamenti locali PASS; titoli/catalogo/mapping chiariti come integrazione frontend, cron/routine e terminale Hermes esistenti. Git separato dal codice e dalle modifiche concorrenti.
+
 ## 2026-10-04 — Vincolo generale di non duplicazione
 
 Su richiesta esplicita dell’utente, consolidato in MEMORY il requisito: verificare prima le capacità Hermes esistenti e integrare i contratti nativi; Studio resta presentazione/connessione/adattamento, senza duplicare funzionalità o logiche backend. F1 in implementazione: trasporto e bootstrap da riesaminare rispetto a questo vincolo. Utente autorizza attach al runtime Hermes del MacBook; preservare configurazioni, credenziali e conversazioni personali.
+
+## Aggiornamento D36 — collaborazione visibile (2026-10-04)
+
+Richiesta utente documentata in F2/F4/F7/F14, requisiti GUI condivisi e component-system: figli temporanei nel pannello laterale della chat padre; Dots persistenti nella sidebar e nella propria chat con messaggio ricevuto e lavoro reale. Segnale attività separato da non letto/consegna; queued non conferma Working. Space/host/modello/effort e @ file/range restano requisiti. Solo documentazione: nessun codice o runtime personale modificato; sviluppo F1 concorrente preservato.
 
 ## 2026-10-04 — F1 implementazione connessioni in corso
 
@@ -270,3 +280,7 @@ Package finale arm64/firma ad hoc, smoke offline e smoke connessioni con attach 
 ## 2026-10-04 — Git F1
 
 Commit codice locale `71a5d6a` creato: 37 file, solo incremento F1 e persistenza propria. Index controllato: diff-check, 69 link locali e scan pattern credenziali PASS. Modifiche concorrenti D35/D36 escluse dal commit e preservate nel workspace. Nessun push ritentato dopo il precedente rifiuto auto-review della pubblicazione esterna.
+
+## D37 — Docs dei runtime e delle sessioni (2026-10-04)
+
+Aggiornate F5/F6/F2 e requisiti GUI: documenti provenienti dai runtime Hermes consultabili in Studio con connessione/host/profilo, associazioni sessione/Space verificate, originali autoritativi e aggiornamenti secondo contratti reali. Nessun import automatico o raccolta Docs nativa per sessione presunta; contratto da verificare. Richiesta solo documentale, nessuna implementazione. Utente richiede commit della documentazione pendente D36/D37, separata dal codice F1 già committato.

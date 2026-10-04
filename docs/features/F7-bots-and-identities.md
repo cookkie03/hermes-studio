@@ -11,7 +11,7 @@ Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifi
 
 **Backend e confine:** Avatar è metadata UI; Bot, conversazione canonica e profilo sono runtime Hermes, distinti da delegati temporanei. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
 
-**Contesto e interazioni pertinenti:** Create/Edit Dot include picker quattro avatar OpenDots; header mostra Bot/Space/host/modello/effort senza attribuire default globale al singolo bot. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Contesto e interazioni pertinenti:** Applicare anche D36 qui sotto: pannello laterale per figli temporanei; Dots persistenti nella propria chat, messaggi attribuiti e attività confermata dal runtime. Create/Edit Dot include picker quattro avatar OpenDots; header mostra Bot/Space/host/modello/effort senza attribuire default globale al singolo bot. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
 
 **Dipendenze e letture aggiuntive:** A avatar locale indipendente; B binding richiede F1 e roster verificato. F6/F2 possiedono contesto Space/sessione, non derivarlo dal nome Dot. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
 
@@ -100,6 +100,14 @@ Fixture due host/profili omonimi: nessuna collisione; canonical hidden e lineage
 ## Requisito condiviso: contesto e composer Hermes
 
 Leggere [contesto visibile, Spaces/progetti, @ file/righe e / skill/tool](gui-context-and-references.md). Header identifica Space, host, modello ed effort effettivi della chat/bot. Capacità e mutazioni rimangono nel backend Hermes; non simulare valori o azioni non supportati. Ownership specifica nella scheda trasversale.
+
+## D36 — Attività e messaggi nella conversazione del Dot
+
+Ogni Dot persistente mostra attività nella sidebar e nel proprio header quando Hermes conferma che sta lavorando. Separare inattivo, in coda, in esecuzione, in attesa di approvazione, completato, fallito e stato sconosciuto/stale nei limiti dei dati effettivamente esposti. Non dedurre Working dall’invio di un messaggio o da un ack queued.
+
+Quando un altro Bot gli manda un messaggio, il destinatario conserva la sua conversazione canonica: selezionando quel Dot si vede il messaggio ricevuto, attribuito al mittente, e il lavoro del destinatario. Il badge non letto segnala il messaggio effettivamente disponibile e resta indipendente dall’attività. Identità scoped a connessione/profilo/sessione, non al nome dell’avatar. Non trasformare un figlio delegate_task in Dot persistente e non mostrare Dots nel pannello sub-agent.
+
+Gate: A manda a B, B riceve e lavora; passando a B messaggio e stato sono corretti, senza eventi di A o di un Bot omonimo su altro host. Se la ricezione o l’esecuzione non sono confermate, mostrare il limite; un Dot attivo non viene marcato letto solo perché ha iniziato a lavorare.
 
 ## Prompt pronto per una nuova chat Codex
 

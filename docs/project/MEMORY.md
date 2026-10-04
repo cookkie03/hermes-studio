@@ -43,3 +43,11 @@ Requisito GUI confermato: Space collegato ai progetti Hermes, host/modello/effor
 D35: tutte le schede F0–F18 sono ingressi operativi per chat implementatrici: risultato/backend/GUI/dipendenze/prove/consegna codice verificato inclusi nella scheda. Leggere i riferimenti nel workspace; implementare la singola feature, non fermarsi al piano salvo blocco reale. Stato F0 completata e F18 futura preservati; Hermes unico backend, requisiti trasversali distribuiti per ownership.
 
 Chiarimento D35: Fxx sono lavoro frontend/adattamento in stile OpenDots, non nuove feature backend. Titoli esplicitano cron Hermes, Dot→Bot, Space→Project, approvazioni, browser/Computer Use e output terminale nativi; F2/F3/F4/F6/F7 restano owner di parti della stessa esperienza.
+
+## Aggiornamento D36 — collaborazione visibile (2026-10-04)
+
+Richiesta utente documentata in F2/F4/F7/F14, requisiti GUI condivisi e component-system: figli temporanei nel pannello laterale della chat padre; Dots persistenti nella sidebar e nella propria chat con messaggio ricevuto e lavoro reale. Segnale attività separato da non letto/consegna; queued non conferma Working. Space/host/modello/effort e @ file/range restano requisiti. Solo documentazione: nessun codice o runtime personale modificato; sviluppo F1 concorrente preservato.
+
+## D37 — Docs dei runtime e delle sessioni (2026-10-04)
+
+Aggiornate F5/F6/F2 e requisiti GUI: documenti provenienti dai runtime Hermes consultabili in Studio con connessione/host/profilo, associazioni sessione/Space verificate, originali autoritativi e aggiornamenti secondo contratti reali. Nessun import automatico o raccolta Docs nativa per sessione presunta; contratto da verificare. Richiesta solo documentale, nessuna implementazione. Utente richiede commit della documentazione pendente D36/D37, separata dal codice F1 già committato.

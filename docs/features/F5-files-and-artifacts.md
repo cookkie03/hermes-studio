@@ -11,7 +11,7 @@ Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifi
 
 **Backend e confine:** Per agenti e host remoti usare filesystem/tool Hermes supportati; editor locale ha IPC limitata a root scelta, non concede tool accesso implicito. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
 
-**Contesto e interazioni pertinenti:** @ mostra nome/root/host/percorso e filtra progressivamente; chip file/range riapre il punto corretto. Changes/diff e ricevuta salvataggio visibili. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Contesto e interazioni pertinenti:** Applicare D37 per Docs provenienti dal runtime/sessione, con origine verificata e documento originale autoritativo. @ mostra nome/root/host/percorso e filtra progressivamente; chip file/range riapre il punto corretto. Changes/diff e ricevuta salvataggio visibili. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
 
 **Dipendenze e letture aggiuntive:** F6 progetto/root, F2 attachment/context Hermes verificato, F3 grant; i riferimenti GUI si adattano a contratti esistenti, senza retrieval backend nuovo. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
 
@@ -90,6 +90,18 @@ F6 richiede Space con più cartelle anche su host diversi. F5 deve identificare 
 
 Modifiche file/diff ricevute e verificabili dal runtime devono essere presentabili nella chat con host/percorso/revisione ed esito. F5 possiede identità file, diff e ricevute; F2 presenta la timeline. Testo che dichiara una modifica non basta a certificarla; collegamento allo Space e review seguono F6. Non confondere approvazione preventiva, proposta di changes e scrittura già applicata.
 
+
+## D37 — Docs provenienti dai runtime Hermes
+
+Studio presenta i documenti di ciascun runtime Hermes collegato e quelli associati alle sue sessioni, quando il backend li espone o consente di accedervi. «Portare in Studio» significa renderli consultabili nella GUI conservando il documento originale come fonte autoritativa, non importare o duplicare automaticamente tutti i file in un archivio Studio.
+
+Ogni voce conserva connessione/runtime, host, profilo, identità/percorso del documento e revisione disponibile; associazioni a sessione e Space/progetto solo quando confermate dal backend o esplicitamente scelte dall’utente. Non presumere che ogni sessione possieda una raccolta nativa Docs: verificare il contratto del runtime collegato, distinguendo file di progetto, artefatti del turno e documenti effettivamente associati alla sessione. Nessuna API docs.list inventata.
+
+La vista Docs permette di riconoscere origine e scope, filtrare per runtime/Space/sessione e aprire il file tramite F5. Una scheda nella chat F2 rimanda allo stesso documento; `@` usa soltanto le cartelle e i riferimenti autorizzati. Runtime diversi con file omonimi restano distinti. Aggiornamenti derivati da eventi o riletture supportati dal backend, con revisione e conflitti gestiti da F5; nessuna promessa di sincronizzazione live senza contratto verificato. Offline mostra ultimo dato noto come stale, senza spacciarlo per aggiornato o inviare scritture differite alla cieca.
+
+**Ownership:** F6 associazioni e navigazione Docs/Space, F5 lettura/editor/revisioni, F2 collegamenti dalla conversazione, F1 identità connessione e host. Scollegare runtime, chat o Space non elimina documenti originali. Nessun accesso implicito a file di altre sessioni/profili, mount/copia cross-host o backend documentale parallelo.
+
+**Gate:** due runtime con documenti omonimi, sessioni e progetti distinti; verifica origine corretta, apertura autorizzata, aggiornamento esterno/revisione, conflitto, file rimosso, scope negato, offline/reconnect e cambio runtime durante fetch. Associazione assente esplicita, nessun documento della sessione precedente durante il caricamento. Usare dati sintetici e registrare contratto/versione e limiti prima di dichiarare integrazione completa.
 
 ## Handoff
 
