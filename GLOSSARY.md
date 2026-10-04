@@ -1,11 +1,11 @@
-# Hermes Desktop
+# Hermes Studio
 
 Vocabolario per l'assistente personale e i suoi progetti. Le definizioni riguardano il prodotto, non la sua implementazione.
 
 ## Linguaggio
 
 **Agente**: assistente identificabile con una responsabilità, istruzioni e strumenti assegnati.
-_Evitare_: dot, bot usati come nomi del dominio.
+Nell’interfaccia OpenDots richiesta, **Dot** è il nome visibile dell’agente; non implica un processo sempre attivo.
 
 **Team**: gruppo di agenti che collaborano su un incarico con un responsabile riconoscibile.
 _Evitare_: sciame, azienda.
@@ -35,3 +35,20 @@ _Evitare_: revisione come sinonimo di autorizzazione.
 **Attività ricorrente**: incarico riattivato da una pianificazione; ogni riattivazione produce un'esecuzione distinta.
 
 **Host**: macchina su cui gli agenti eseguono il lavoro. La sua disponibilità determina se gli incarichi possono avanzare quando il client è chiuso.
+
+
+**Space**: spazio che organizza documenti e risultati persistenti. Uno stesso agente può lavorare in più Space; uno Space non equivale a una conversazione.
+
+**Pagina**: documento modificabile conservato in uno Space, con cronologia di revisione distinta dal thread che lo ha prodotto.
+
+**Computer**: superficie per osservare gli strumenti e l’ambiente operativo di un agente. La disponibilità di browser, file, terminale e presa di controllo dipende dalle capacità reali del runtime.
+
+**Bot Hermes**: identità persistente e conversazione canonica gestite dal runtime. Un Dot può rappresentarla dopo un binding verificato; non coincide con un delegato temporaneo.
+
+**Messaggio fra bot**: consegna indirizzata a un altro Bot con mittente e ricevuta tracciabili; accodamento e risposta sono esiti distinti. Non equivale a una delega.
+
+**Routine**: nome visibile dell'attività ricorrente. Conserva pianificazione, profilo proprietario e destinazione; ogni attivazione produce un'esecuzione con consegna separata.
+
+**Plugin**: estensione installabile o configurabile che può rendere disponibili strumenti. Installazione, abilitazione e autorizzazione sono distinte.
+
+**Capacità**: operazione effettivamente supportata dal runtime collegato, entro il suo scope. La presenza di un controllo nell'interfaccia non la dimostra.

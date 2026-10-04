@@ -42,3 +42,13 @@ node_modules/
 *.mobileprovision
 
 # Il tracker Markdown in .scratch e le skill locali in .agents fanno parte del progetto.
+
+# Checkout upstream di ricerca, non codice prodotto incorporato
+.reference/
+
+# Artefatti Electron: allegare alle release, non al sorgente Git
+desktop/release/
+
+# Synthetic Python verification caches
+__pycache__/
+*.pyc

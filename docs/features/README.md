@@ -1,0 +1,44 @@
+# Hermes Studio — una feature per chat
+
+2026-10-04. Piano corrente autorizzato: documentazione e MVP essenziale. Non implementare automaticamente le schede. La baseline esistente è parziale; `documentata` non significa `implementata` o `verificata`.
+
+L'app resta una repository indipendente. Il codice MIT OpenDots già riusato conserva licenza e provenienza. Struttura visiva OpenDots; componenti e microinterazioni con riferimenti Unsloth/Codex. Motore e strumenti Hermes. Nessun secondo executor OpenDots per simulare capacità Hermes.
+
+## Catalogo
+
+| ID | Scheda da scegliere | Dipendenze principali | Stato |
+|---|---|---|---|
+| F00 | [MVP e qualità della base](F00-mvp-foundation.md) | nessuna | baseline parziale; review documentata |
+| F01 | [Shell, sidebar e componenti](F01-workspace-shell.md) | F00 | documentata; UI esistente parziale |
+| F02 | [Conversazioni](F02-conversations.md) | F00, F11 | documentata; bridge parziale |
+| F03 | [Spaces e documenti](F03-spaces-documents-memory.md) | F00, F01 | documentata; metadata verificati parzialmente |
+| F04 | [Bots e identità Dots](F04-bots-and-identities.md) | F11 | documentata, da scegliere |
+| F05 | [Delegazione e collaborazione tra Dots](F05-delegation-and-dot-collaboration.md) | F04, F02, F16 | documentata, da scegliere |
+| F06 | [Routine](F06-routines.md) | F11, F16; F04 se destinatario Bot | priorità prodotto, da scegliere |
+| F07 | [Plugin e capability](F07-plugins-and-capabilities.md) | F11, F16 | documentata, da scegliere |
+| F08 | [Browser integrato](F08-browser.md) | F11, F16 | documentata; nessuno stream/takeover attuale |
+| F09 | [Computer use](F09-computer-use.md) | F11, F16 | documentata, da scegliere |
+| F10 | [File e artefatti](F10-files-and-artifacts.md) | F11, F16 | documentata; UI futura |
+| F11 | [Connessione al runtime](F11-runtime-connection.md) | F00 | attach locale parziale; altre modalità da scegliere |
+| F12 | [Software GitHub e release DMG](F12-github-releases-dmg.md) | F00; versione selezionata delle altre feature | documentata; DMG locale di sviluppo esistente |
+| F13 | [Voce e telefonate](F13-voice-and-calls.md) | F11, F16 | futura, solo documentazione |
+| F14 | [Specialisti Codex](F14-codex-specialists.md) | F05, F16 | futura, solo documentazione |
+| F15 | [Memoria](F15-memory.md) | F11 per memoria runtime | documentata; memoria Studio già parziale |
+| F16 | [Permessi e approvazioni](F16-permissions-and-approvals.md) | F11 | contratto parziale; fixture disponibili |
+| F17 | [Terminale](F17-terminal.md) | F11, F16 | documentata; preview eventi parziale |
+
+L'ordine numerico identifica le schede, non impone l'ordine di sviluppo. Percorso consigliato: F00 → F11/F01 → F02/F03 → F16 → una feature avanzata scelta dall'utente. F06 è importante ma non deve aggirare i prerequisiti su esecuzioni durevoli e autorizzazioni. F12 può distribuire il solo MVP, indicando onestamente le capacità incluse.
+
+## Come aprire una chat dedicata
+
+Copia il prompt finale della scheda scelta, o usa questo schema:
+
+> Lavora soltanto sulla feature Fxx descritta in docs/features/<file>.md. Prima leggi AGENTS.md, docs/project/MEMORY.md, STATUS.md, GLOSSARY.md, ADR0006 e docs/architecture/principles.md. Verifica dipendenze e stato reale: non assumere che documentata significhi implementata. Proponi un incremento verticale delimitato, poi implementa solo questa feature con prove sintetiche e gate della scheda. Preserva dati/configurazioni/credenziali personali. Non sviluppare altre feature, non cambiare layout generale, non creare repository derivate. Aggiorna scheda, MEMORY/STATUS/WORKLOG e fai review prima del commit. Push soltanto al remote confermato; release/pubblicazione solo se richieste in quella chat.
+
+Una chat possiede una scheda e i suoi file; se emerge un cambiamento in un modulo condiviso, registra prima contratto e ownership. Evitare due chat che modificano contemporaneamente Chat.tsx, server.mjs o workspace.sqlite. Nessuna nuova chat è stata creata automaticamente.
+
+## Stati e consegna
+
+Usare `documentata → selezionata → in sviluppo → in verifica → completata`; `bloccata` richiede prerequisito preciso e lavoro indipendente esaurito. Una feature è completata solo quando i gate sono provati sull'app/runtimes pertinenti. Una fixture prova il contratto simulato; handshake non prova prompt, tools o lavoro quando il client è chiuso.
+
+Norme: [principi](../architecture/principles.md), [review](../architecture/feature-architecture-review.md), [componenti](../design/component-system.md), [fonte Hermes](../research/hermes-desktop-reference.md), [baseline](../project/desktop-acceptance.md). Idee future restano nell'indice ../future/README.md.

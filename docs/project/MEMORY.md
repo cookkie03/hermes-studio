@@ -1,8 +1,20 @@
+## Direzione attuale — 2026-10-04 aggiornamento utente
+
+D19: layout OpenDots, componenti/gerarchia/microinterazioni ispirati anche a Unsloth e Codex. Osservazioni live e screenshot distinte da token/durate proposte.
+D20: interrompere sviluppo automatico di nuove feature. Preservare baseline MVP essenziale/parzialmente funzionante; preparare documentazione autonoma per ogni feature, una feature per chat Codex scelta da Luca. Catalogo canonico docs/features/README.md.
+D21: repository indipendente; annullata la proposta di repository derivata e aggiornamenti esterni. Rimossi proposta e promemoria precedenti. Conservare licenze/provenienza MIT.
+D22: Bots/Dots, collaborazione con messaggi/deleghe/ripresa, routine, plugin, browser e computer use Hermes hanno schede separate. Distinguere capacità native comprovate e adattamenti da progettare.
+D23: release GitHub con DMG è feature documentata F12, da sviluppare in chat dedicata; nessuna pubblicazione automatica ora. Architettura: review e principi persistenti, non refactor non selezionato.
+
 # Memoria del progetto Hermes
 
 Aggiornata: 2026-10-04. Documento canonico di continuità richiesto da Luca. Leggere questo file e STATUS prima di ogni sessione. Decisioni confermate qui prevalgono sulle proposte precedenti; WORKLOG conserva la cronologia e i documenti di ricerca le prove.
 
-## Prodotto che stiamo costruendo
+## Direzione attuale — leggere prima
+
+D14–D18 e ADR0005 superano il client SwiftUI e il team-main/editoriale precedenti. Obiettivo: interfaccia OpenDots conforme allo screenshot utente, app macOS/DMG con Hermes backend e strumenti, frontend originale riutilizzato in Electron. Piano di implementazione storico: docs/superpowers/plans/2026-10-04-opendots-desktop.md. Piano corrente documentale: docs/project/feature-development-plan.md; ADR0006 e D19–D23 prevalgono. Screenshot: docs/design/references/opendots-user-reference-2026-10-04.png. Docs/future contiene le idee da ricordare alla chiusura dei task. Non reinterpretare le sezioni storiche seguenti come direzione attuale.
+
+## Baseline iniziale conservata
 
 Client macOS nativo per Hermes: assistente personale e progetti, con agenti collaborativi, responsabilità persistenti e continuità tra conversazioni. Esperienza ispirata alle interazioni Dots/Spaces descritte dall'utente, alle superfici operative Codex e a Unsloth. Non basta una chat con skin diversa.
 
@@ -102,3 +114,29 @@ Utente richiede piano completo e lavoro continuato, con agenti e ruolo PM. Piano
 ## Evidenze successive
 
 Handshake live al backend già avviato PASS (health, root token in memoria, gateway.ready, capabilities(false), gateway.ping, disconnect). Nessuna sessione o prompt né lettura cronologia personale. Non equivale a chat funzionante. Build con art direction e File tab PASS SDK26.5; ultimo corretto pairing security scope richiede rebuild. Sei test filesystem sintetici PASS riferiti dal verificatore; runner scripts/check-research-files.sh. Prossimo gate integrazione RuntimeConnection/UI e transcript persistente.
+
+## Nuova reference: OpenDots
+
+Luca ha condiviso https://github.com/CopilotKit/OpenDots. Reference aggiunta al lavoro corrente senza cambiare stack SwiftUI/runtime Hermes. README verificato: Spaces/pagine separati da Dots, conversazioni legate alle pagine e review prima di salvataggio; delega automatica e gruppi multi-Dot restano sviluppi futuri nel template. Analisi sorgenti affidata ad art_direction, output docs/research/opendots-reference.md. Nessuna demo live ancora osservata; non chiamare questa ricerca un ux-extract esaustivo.
+
+Git ricontrollato: ora main con remote origin git@github.com:cookkie03/hermes-studio.git, aggiornamento rispetto al controllo precedente senza remote. Remote configurato non equivale a push confermato. Preservare modifiche docs/future di altro lavoro.
+
+## Direzione autorevole aggiornata — OpenDots desktop
+
+D14: Luca vuole esattamente l'esperienza/layout OpenDots Dots, Spaces, documenti, chat e memoria. Screenshot originale salvato in docs/design/references/opendots-user-reference-2026-10-04.png con copia verificata hash. Leggere docs/design/opendots-target.md prima di ogni scelta UI; supera atelier editoriale e team-main come composizione. Backend e strumenti Hermes restano; nessun falso stato runtime.
+
+D15: distribuzione vera app macOS con DMG e release, senza npm run dev per l'utente. SwiftUI rewrite facoltativo; riuso frontend/packaging desktop ammesso. Scegliere fedeltà e risultato operativo.
+
+D16 aggiornata: repository Hermes Studio indipendente; mantenere storia e attribuzione del sorgente MIT riusato. Nessuna sincronizzazione automatica o conversione della repository prevista.
+
+D17: telefonate real-time al cellulare con componenti vocali open source sono idea futura, non sviluppo attuale. Tutte le idee future in docs/future/ (Codex specialisti e voice); ricordarle periodicamente solo alla chiusura dei task, senza interrompere lavoro attivo. Non assumere PSTN gratis o nessun operatore per chiamare un numero.
+
+D18: Luca va a dormire e autorizza continuazione finché possibile. Piano/heartbeat devono seguire nuova direzione screenshot, preservare dati e non continuare il redesign SwiftUI precedente per inerzia.
+
+Piano eseguibile autorevole dopo pivot: docs/superpowers/plans/2026-10-04-opendots-desktop.md. ADR0005 riuso UI Electron desktop, risultato/build ancora da verificare. Indice future docs/future/README.md. Piano notturno precedente storico per UI, prove protezione dati/trasporto mantenute.
+
+Ripresa: artefatto Electron arm64 avviato con dati sintetici. Gate UI aperto: overlay Computer blocca Memoria; correggere e rifare smoke prima DMG. App847MB di sviluppo, non notarizzata. Nessun prompt live inviato in questa ripresa.
+
+Overlay repaired: packaged metadataUI smokePASS (Memory/Space/Markdown/autosave/reopen), errorsnone. FinalDMGheld forreview/saveUI +pagecontext +prunedruntimegraph verification. New bridge/server/network14synthetic testsPASS; no live prompt proof.
+
+Nuovo Nodebridge discovery livePASS Hermes0.21.5: scarta backendlogin e collega backendlocaleaccessibile, readiness+capabilityfalse soltanto. Chat/streaming/tools live non provati. Metadata persistenti dopo riavvioappPASS.

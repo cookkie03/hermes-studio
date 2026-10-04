@@ -19,3 +19,17 @@
 | gestione file tree (riferimento utente, nome non identificato) | Requisito aggiunto al piano e agente dedicato | Non affermare una skill specifica applicata; file tree è in implementazione, editor locale non equivale a tree |
 
 Task e prove: ../superpowers/plans/2026-10-04-overnight-hermes.md. Il piano resta vivo e aggiornato; i dettagli di verifica sono in WORKLOG e report dei singoli incrementi.
+
+## Riallineamento OpenDots — D14–D18
+
+Il piano attivo è `../superpowers/plans/2026-10-04-opendots-desktop.md`; i risultati SwiftUI sopra sono storici e non chiudono i gate Electron. `frontend-design` ora segue il riferimento utente senza reinterpretarlo: riuso componenti/avatar upstream e adattamento sidebar/chat/Computer. `documentation-and-adrs` ha prodotto ADR0005 e specv0.2 sul tracker. `domain-modeling` riallinea Dot/Space/Page/Computer nel glossario. `frontend-testing-debugging` guida prove Playwright Electron con profilo temporaneo: il plugin browser specifico non è disponibile, quindi si usa il pacchetto Playwright installato per verificare la vera app.
+
+`code-review`: review incrociata Standards (architecture_review) e Spec (taste_research), adattata a un incremento additivo non ancora committato rispetto6c84b4b e allo snapshot upstream. Baseline scelta dal PM nel lavoro autonomo autorizzato, non fornita dall'utente; non dichiarare esecuzione letterale integrale della skill. Findings materiali: overlay Computer su Memoria, cancelapproval stale, gapsecondsubmit dopo202, lifecycle capability e citazioni esterne. Riparazioni e regressioni in corso. UX extraction OpenDots resta documentale/asset e confronto screenshot; nessuna copertura esaustiva live inventata. Accessibilità assistiva/VoiceOver e notarizzazione ancora aperte.
+
+## Consegna per feature — D19–D23
+
+`documentation-and-adrs`: ADR0006, catalogo di 18 schede, piano e continuità riallineati. `improve-codebase-architecture` e `codebase-design`: review delegata su hotspot desktop, due candidati con deletion test/locality/leverage, principi persistenti e report HTML temporaneo; nessuna interface concreta o refactor scelto. La fase successiva di grilling dipende dalla scelta di un candidato e non viene dichiarata esaurita.
+
+`ux-extract`: estrazione mirata dei componenti, screenshot personali esclusi da Git, disclosure Unsloth verificata dal vivo; Codex solo screenshot per diniego dello strumento. Durate/token sono proposte, non misurazioni. Non è audit esaustivo delle due app. Le skill SwiftUI/Liquid Glass restano applicazioni della baseline storica: non equivalgono a validazione del renderer Electron. Il design corrente è codificato nel component-system e nelle schede F01/F02/F03. Nessuna nuova feature implementata nella fase documentale.
+
+Report architetturale richiesto nel pannello Codex: apertura accodata per questa chat; file temporaneo architecture-review-20261004-134503.html. Scelta/refactor restano fuori dall’ambito attuale.

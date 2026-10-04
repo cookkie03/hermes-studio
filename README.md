@@ -1,44 +1,25 @@
 # Hermes Studio
 
-Fondazioni per un'app desktop Hermes dedicata ad assistente personale e progetti, con agenti collaborativi e incarichi persistenti. Questo repository contiene ricerca, proposta di design, setup delle skill e backlog, oltre al primo incremento del client macOS; le integrazioni runtime non sono ancora implementate.
+Fondazione di un'app macOS per Hermes: disposizione OpenDots, componenti ispirati a Unsloth/Codex, runtime e strumenti Hermes. Client Electron parziale presente; SwiftUI precedente conservato come storia. Repository indipendente con provenienza del codice riusato, senza piano di fork.
 
-## Da dove iniziare
+## Una feature per chat
 
-| Documento | A cosa serve |
+Il lavoro attuale consegna **18 schede**, non implementa automaticamente il backlog. Parti dal [catalogo delle feature](docs/features/README.md), scegli una scheda e usa il suo prompt di handoff in una nuova chat Codex.
+
+| Documento | Scopo |
 |---|---|
-| [Memoria del progetto](docs/project/MEMORY.md) | Decisioni confermate, domande aperte e istruzioni di ripartenza |
-| [Stato](docs/project/STATUS.md) | Cosa è completato, cosa manca e cosa è da decidere |
-| [Spec proposta](.scratch/hermes-desktop/spec.md) | Scopo, storie utente e criteri di successo |
-| [Design](docs/design/desktop-design.md) | Componenti, interazioni, stati, motion e accessibilità |
-| [Wireframe](docs/design/desktop-wireframe.svg) | Composizione proposta con dati sintetici |
-| [Roadmap](docs/project/ROADMAP.md) | Milestone, rischi e dipendenze |
-| [Backlog](.scratch/hermes-desktop/issues/) | Otto ticket draft, uno per risultato |
-| [Pattern Unsloth](docs/ux-extracts/unsloth/pattern-library.md) | Osservazioni con schermate e limiti |
-| [Contratto runtime](docs/architecture/runtime-contract.md) | Integrazione desiderata e capacità da verificare |
-| [Skill e workflow](docs/agents/skills-workflow.md) | Cosa è installato e quando usarlo |
-| [Fonti](docs/research/sources.md) | Evidenze e versioni della ricerca |
-| [Registro continuo](docs/project/WORKLOG.md) | Risultati salvati durante il lavoro |
+| [Stato](docs/project/STATUS.md) | Evidenze, baseline e gate ancora aperti |
+| [Memoria](docs/project/MEMORY.md) | Decisioni confermate e continuità |
+| [Piano corrente](docs/project/feature-development-plan.md) | Ambito documentale e sviluppo selezionato |
+| [Principi](docs/architecture/principles.md) | Qualità della codebase e ownership |
+| [Review architettura](docs/architecture/feature-architecture-review.md) | Due candidati, nessun refactor automatico |
+| [Componenti](docs/design/component-system.md) | Anatomia, dimensioni e motion proposti |
+| [Riferimento Hermes desktop](docs/research/hermes-desktop-reference.md) | Fonti e mappa del runtime ufficiale |
+| [Release DMG](docs/features/F12-github-releases-dmg.md) | Handoff per prodotto GitHub installabile |
+| [Registro](docs/project/WORKLOG.md) | Cronologia di ricerca e verifiche |
 
-## Wireframe iniziale — storico
+## Baseline di sviluppo
 
-![Wireframe Hermes con dati sintetici](docs/design/desktop-wireframe.png)
+Vedi [desktop/README](desktop/README.md) per build e dipendenze. App e DMG locali sono artefatti di sviluppo ad hoc; non sono una release notarizzata. Test metadata e handshake non provano chat reale o strumenti integrati. Il cliente finale dovrà installare una .app, senza npm run dev: F12 specifica questa consegna e la verifica su installazione pulita.
 
-Baseline iniziale: progetti nella sidebar e conversazione centrale. L’utente ha poi scelto team principale, chat secondaria e avatar illustrati; vedere la memoria per la composizione in discussione. Il wireframe illustra le responsabilità delle aree: non simula un runtime reale e non prova le capacità dell'integrazione.
-
-## Prima consegna da realizzare
-
-Una chat Hermes reale che invia, riceve in streaming, si interrompe e si ritrova dopo la riapertura. Prima verificare il riuso del desktop upstream e scegliere il protocollo; poi introdurre incarichi, approvazioni, delegazione e host sempre acceso. Le scelte tecniche e i ticket sono bozze per la revisione.
-
-## Persistenza del lavoro
-
-Su richiesta dell'utente, aggiornare stato, registro e file interessati dopo ogni blocco significativo. Le skill sono installate a livello di progetto e la guida di continuità è in `AGENTS.md`. Nessun provider, gateway o database Hermes personale è stato riconfigurato.
-
-## Build locale
-
-```bash
-bash scripts/build-app.sh
-bash scripts/check-persistence.sh
-open build/Hermes.app
-```
-
-SDK 26.5 locale selezionato nello script; impostare HERMES_MACOS_SDK per un SDK compatibile alternativo. Bundle ad hoc per sviluppo, non notarizzato. Nessun accesso al profilo Hermes personale.
+Usare profili e dati sintetici; nessuna riconfigurazione o import automatico del runtime Hermes personale. `AGENTS.md` descrive la persistenza continua richiesta dall'utente.

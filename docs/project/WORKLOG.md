@@ -122,3 +122,49 @@ Utente autorizza agenti di sviluppo e commit/push per incrementi. frontend-desig
 Piano completo salvato con task0–8, responsabilità, dipendenze, review focus e gate. Audit skill salvato con lacune esplicite. Goal attivo e heartbeat ogni30min creato (id hermes-sviluppo-e-verifica). Art direction e File tab integrati. Primo tentativo build ha rilevato deinit MainActor nel modello file, corretto dal responsabile con helper di lifetime. Seconda build SDK26.5 exit0, bundle firmato ad hoc. UI aggiornata ancora da verificare; nessun commit/push o chat live dichiarato.
 
 Handshake live eseguito dal responsabile runtime con rete autorizzata: PASS health/root/gateway.ready/client.capabilities(false)/ping, nessuna sessione/prompt/history. Sei check filesystem PASS dal verificatore. Ultimo fix di pairing security scope da ricompilare. Chat reale e approvazioni restano aperte nel piano.
+
+## Reference OpenDots
+
+Link fornito da Luca, README GitHub letto e analisi pubblica sorgenti delegata. Pattern candidati: separazione documenti/agenti, thread collegato alla pagina, review prima di save, provenienza del risultato. Il repository dichiara delega automatica/multi-Dot futuri; nessun test live OpenDots svolto. Aggiornata memoria. Git main/origin ora presenti; preservate modifiche concorrenti.
+
+## Pivot confermato OpenDots desktop
+
+Utente conferma layout identico al riferimento, DMG/release priorità, repository indipendente e voice futuro. Screenshot copiato/verificato e documento target creato. Ricerca agenti: upstream MIT React/Vite/Hono Node, nessun packaging desktop incluso. Valutazione Electron vs SwiftUI/Tauri in corso. Vecchio redesign non più obiettivo. Luca autorizza continuazione notturna.
+
+## Ripresa dopo usage — heartbeat
+
+Controllati file esistenti: snapshotMIT e shellElectron/package presenti; bridge e rendererHermes non ancora presenti. Agentiripresi su proprietà separate; pinning/packaging, bridge metadata/runtime e rendererreference. Glossario aggiornato Dot/Space/pagina e memoria riallineata in testa con decisioniD14–D18. Aggiunta matrice acceptance desktop; nessun gate nuovo chiuso per mera presenza del codice. Gitmain origin/main confermati.
+
+## Verifiche baseline documenti
+
+PASS test upstream mirati: workspace, pages, autosave, page-service, markdown — 5 file,27 test,1.17s. Valgono per moduli copiati con fixture locali, non per bridgeHermes/UIElectron. Applicata to-spec per sintesi senza nuova intervista: specv0.2 pronta agente, baselinearchiviata. Metodo/target già espressamente confermati; non inventata nuova approvazione. Tracker riallineato.
+
+## Bridge e revisione prima packaging
+
+Root ha rieseguito suite bridge Node:8testPASS. Coprono privacy eventi estranei, concorrenti/identitàinvio, ack/finale, approvals stale, resume, bozze e loopback. Revisioni hanno imposto drop sessioni non possedute, riserva invio primaawait, working solo runtime e binding duraturo. Moduli metadata copiati hanno ancora una incompatibilità TS nel vecchio executorCopilot non usato: pipeline distingue typecheck renderer da transpilationmetadata, senza direfulltypecheckpassed. Packagingagent detiene buildlock. .gitignore esclude artefatti Electronrelease.
+
+## Verifica artefatto macOS e correzione UI — 2026-10-04
+
+Build `.app` arm64 completata; avvio reale da `desktop/release/mac-arm64/Hermes Studio.app` con userData sintetico temporaneo, nessun prompt Hermes. Finestra significativa con Spaces/Dots, header e Computer; nessun devserver esterno. Test memoria ha individuato un difetto reale: `computer-overlay` intercetta il pulsante Add memory alla finestra iniziale. Riparazione assegnata ad art_direction; DMG finale sospeso fino al nuovo smoke. Il primo errore di locator Preference era del test (label reale Preference or context), distinto da questo difetto UI.
+
+Renderer fixtures7PASS; bridge8PASS e metadata1PASS già verificati, ulteriori test bridge per resume/capability in corso. Typecheck renderer/build PASS; full upstream typecheck ancora incompatibile nel vecchio executor escluso. App di sviluppo non notarizzata, icona predefinita e dipendenze847MB: limiti documentati, non release finale. Capability approvazioni ora in revisione per passaggio Settings→Chat senza riconnessione o prompt.
+
+### Packaged UI metadata smoke PASS
+
+Root `flows.cjs` actual arm64 `.app`: Memory add/save, new Space, page title and Markdown source edit, CmdS autosave, navigate away and reopen PASS; renderer console/page errors none. Synthetic data `/private/tmp/hermes-studio-flow-oCNfSu`, screenshot memory/document outside repository. Reproducible basic smoke now `desktop/scripts/test-packaged-ui.cjs`. No runtime connection/prompt. Network synthetic WebSocket+redirect suite independently rerun: bridge/server/network14PASS, including real local sockets and no personal credentials. New feature gaps discovered in Spec review: conversation review/save UI, page context for Hermes, background approval route, persistent toolcards; implementers addressing before final build.
+
+### Persistenza riavvio e handshake Node live
+
+Riavvio completo dell'artefatto macOS PASS: memoria e Markdown recuperati dalla stessa directory sintetica nonostante nuova porta/origin loopback. Title Hermes Studio. Node bridge discovery+health+ready+capability false live PASS su Hermes0.21.5, senza session.create/resume/prompt/history. Il primo test diretto del solo gateway più recente ha rifiutato correttamente auth_required=true; inventario health pubblico ha trovato anche un gateway auth_required=false e il percorso reale bridge.connect() ha selezionato quello. Nessun bypass login e nessuna credenziale persistita. Non prova chat, streaming o browsertools.
+
+Bridge/server aggiornati13PASS; network2PASS nella precedente verifica. Nuove slice: contesto pagina verificato per proprietà/accesso/revisione prima del prompt; strumenti owned persistenti e transcript che esclude deliverypending/uncertain. Runtime dependency graph prodotto ridotto a quattro radici auditate, nuova build/launch da riprovare.
+
+## 2026-10-04 — Consegna documentale e cambio di ambito D19–D23
+
+Luca chiede una feature per chat, documentazione completa e MVP essenziale preservato; sospeso sviluppo automatico di nuove feature. Annullata proposta fork/upstream e rimossa da memorie/piani attivi e idee future, preservata provenienza MIT e storia del codice. Catalogo F00–F17: 18 schede con contratti, limiti, ownership, dipendenze, accettazione e handoff. F05 distingue delegate_task, message_agent canonico, relay/gruppi e session_search; F06 distingue routine, run, delivery e host scheduler. F12 documenta release GitHub/DMG senza pubblicare.
+
+Agenti documentali: architecture_review ha prodotto candidati Conversazione/Metadata e report HTML; art_direction F01/F02/F03/F15; taste_research F04–F09; root altre schede, principi, ADR0006, sistema componenti e continuità. Nessun refactor scelto. Fonte Hermes desktop verificata sul checkout SHA1cb26bf248e150f715ce8a487fdef2a2bef6b541 e pagina GitHub fornita dall'utente. Lettura sorgente non equivale a prova integrata.
+
+Nuovi screenshot Unsloth/Codex copiati e verificati in .reference/ui-private ignorato da Git. Unsloth disclosure attività aperta/chiusa osservata; niente prompt, cambi permessi/modello o contenuti privati raccolti. Accesso live Codex negato dallo strumento; usato screenshot utente, animazioni non osservate. Token/motion dichiarati proposte. L'ultima build .app precedente allo stop non implica che DMG contenga ultimo layout; gate aperti conservati in STATUS. Automazione riallineata a sola documentazione e da arrestare alla consegna.
+
+Verifica documentale finale: 18 schede, collegamenti locali del catalogo/schede/piano/README/componenti validi; diff e index senza errori whitespace. Scan di 74 file testuali senza credenziali riconosciute; indice di 55 file documentazione/config, senza sorgenti, screenshot personali o artefatti release. Automazione hermes-sviluppo-e-verifica aggiornata a PAUSED con conferma del tool. Implementazione precedente non inclusa nel commit documentale.

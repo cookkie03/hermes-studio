@@ -59,3 +59,7 @@ npx skills@latest add https://github.com/openai/plugins/tree/main/plugins/build-
 ```
 
 Le tre altre installazioni hanno usato i repository raccomandati e gli stessi agenti. Istruzione utente esplicita di iniziare lo sviluppo ricevuta dopo l'analisi; nessuna nuova conferma richiesta per il piano locale.
+
+## Direzione attuale D14–D18
+
+Il blocco fondazioni sopra descrive il setup iniziale. Sviluppo autonomo è stato successivamente autorizzato; non resta una nuova approvazione per iniziare il codice. Specv0.2 e piano OpenDots desktop sostituiscono la UI SwiftUI precedente. Skill native conservate per componenti futuri: non applicare LiquidGlass al renderer se altera il riferimento autorevole. Prove e gap effettivi in docs/project/skill-audit.md e desktop-acceptance.md.

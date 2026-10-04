@@ -1,15 +1,7 @@
-# Tracker: Markdown locale
+# Tracker Markdown locale
 
-Scelto per il setup iniziale perché questo repository non ha un remote. L'utente ha richiesto di impostare le skill e le basi del progetto in questa cartella; nessun tracker esterno è stato creato.
+Spec canonica: `.scratch/hermes-desktop/spec.md` v0.3. Catalogo canonico: `docs/features/README.md`; piano corrente: `docs/project/feature-development-plan.md`. Schede documentate non sono ticket di implementazione autorizzati. L'utente seleziona una feature per chat; creare allora un ticket locale con ID Fxx e incremento, ownership dei file condivisi, dipendenze e gate. I ticket 01–08 e piani notturni precedenti restano storici.
 
-- Spec canonica: `.scratch/hermes-desktop/spec.md`.
-- Un ticket per file: `.scratch/hermes-desktop/issues/NN-slug.md`.
-- Ogni ticket dichiara `Status`, `Blocked by`, risultato per l'utente e criteri di accettazione.
-- `draft`: proposta ancora da rivedere; `ready-for-agent`: ambito e dipendenze approvati; `in-progress`: assegnato e in lavorazione; `blocked`: impedimento concreto descritto; `done`: tutti i criteri verificati con evidenze.
-- I ticket attuali sono **draft**, non un'autorizzazione implicita all'implementazione.
-- Prima di iniziare controllare che ogni blocker sia `done` e che la revisione del design necessaria al percorso scelto sia completata.
-- Aggiornamenti ed evidenze vanno in `## Evidence`; discussioni in `## Comments`.
-- Quando una skill dice “publish”, scrivere il file locale. Quando dice “fetch”, leggere quel file integralmente.
-- Nessuna skill `triage` installata: non servono mapping o etichette di triage. I ticket generati dal piano non passano per triage.
+Status: draft proposta; documented scheda disponibile; ready-for-agent implementazione esplicitamente scelta; in-progress lavoro in corso; blocked impedimento concreto; done tutti i gate con prove. Un documento completato non rende la feature done.
 
-Per migrare a GitHub/Linear servirà una scelta esplicita del repository/tracker; mantenere gli ID e le dipendenze.
+Nessun tracker esterno. Aggiornare STATUS/MEMORY/WORKLOG dopo blocchi significativi. Preservare ID storici e dati; non creare issue o nuove chat automaticamente. Le istruzioni publish/fetch delle skill si applicano ai file locali in questo progetto.

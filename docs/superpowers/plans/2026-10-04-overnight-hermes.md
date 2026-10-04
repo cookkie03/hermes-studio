@@ -1,3 +1,5 @@
+> Piano storico, superato da D19–D23 e ADR0006. Non riprendere implementazioni automaticamente. Piano corrente: docs/project/feature-development-plan.md.
+
 # Hermes macOS — piano operativo notturno
 
 > **For agentic workers:** eseguire task per task con implementatore e revisore distinti, checklist e prove. `writing-plans` raccomanda subagent-driven-development/executing-plans; la disponibilità di quelle skill non è verificata. Il metodo operativo scelto esplicitamente da Luca è l'orchestrazione con gli agenti di questa chat. Non dichiarare applicate skill non lette.
@@ -44,8 +46,8 @@ T1 e T2 sono paralleli; T3 dipende da T1; T4 da T3; T5 da T2/T4; T6 da T5. T7/T8
 Files: docs/project/{MEMORY,STATUS,WORKLOG,skill-audit}.md; spec; ROADMAP.
 
 - [x] Salvare decisioni D01–D13 e autorizzazione orchestrazione/Git.
-- [ ] Separare installata/letta/applicata/verificata nella matrice di tutte le skill esplicitamente citate.
-- [ ] Correggere testo storico che dice shell chat soltanto o nessun codice.
+- [x] Separare installata/letta/applicata/verificata nella matrice di tutte le skill esplicitamente citate.
+- [x] Correggere STATUS e ROADMAP storici; MEMORY conserva cronologia e aggiornamento operativo.
 - [ ] Mappare requisiti iniziali ai task e aggiornare ticket con dipendenze, senza retrodatare done.
 
 ## Task 1 — contratto e trasporto runtime (architecture_review + verificatore)
@@ -57,7 +59,7 @@ Interfaces: HermesRuntimeClient.events: AsyncStream<RuntimeEvent>; connectLocal(
 - [x] Fissare sorgente upstream e documentare contratto, auth gate e gateway.ready.
 - [x] Implementare client actor; token solo memoria, timeout, nessun prompt su connessione.
 - [ ] Verificare con fixture discovery stale, endpoint remoto vietato, RPC error, timeout/disconnect e eventi correlati alla sessione.
-- [ ] Eseguire handshake locale limitato senza leggere transcript né creare sessioni; registrare solo esito non sensibile.
+- [x] Eseguire handshake locale limitato senza leggere transcript né creare sessioni; PASS health/ready/capabilities(false)/ping, esito non sensibile.
 - [ ] Revisione indipendente e ADR; commit dopo gate integrato.
 
 ## Task 2 — direzione artistica e file tree (art_direction + verificatore)
@@ -69,7 +71,7 @@ Interfaces: TeamWorkspaceView(store:openConversation:) invariata; ResearchFilesV
 - [x] Implementare studio editoriale nativo e avatar originale, senza animazione di attività falsa.
 - [ ] Cartella scelta con NSOpenPanel, navigazione file bounded, apertura testo/Markdown e salvataggio atomico.
 - [ ] Prova su cartella temporanea: UTF8 roundtrip, symlink fuori radice rifiutato, contenuto esterno cambiato preservato; nessuna scansione automatica di home.
-- [ ] Documentare formati/limiti e integrare tab File in ToolsPanel (root).
+- [x] Documentare formati/limiti e integrare tab File in ToolsPanel (root); build SDK26.5 exit0.
 - [ ] Smoke UI tema chiaro/scuro, finestra stretta, tastiera, Reduce Motion/Transparency e labels.
 
 ## Task 3 — chat reale e persistenza (root)
@@ -140,3 +142,7 @@ Continuare i task pronti senza chiedere conferme già date. Se una scelta prodot
 ## Self-review del piano
 
 Copertura: D01–D09 nei task2–4/7; persistenza D02 nei task0/3/6; runtime D10 nei task1/3/4; gusto D11 nel task2/5; orchestrazione D12 nella squadra; Git D13 nel task6. Visione24/7 nel task8. Gap espliciti: prove live, scelta candidato architettura, remote e host; non cancellati dal piano. Le firme trasporto sono quelle già implementate. Test di ciascun failure mode sono assegnati sopra. Il piano integra il backlog iniziale, non lo dichiara esaurito.
+
+## Reference aggiuntiva durante esecuzione
+
+2026-10-04: OpenDots fornito dall’utente. art_direction esamina README/sorgenti e salva docs/research/opendots-reference.md. Mappare pattern pagina↔thread, review→salvataggio e agenti↔spazi sui task3/4/7 prima di adottarli. Nessun cambio stack implicito e nessuna dichiarazione di estrazione UX live esaustiva. Lo sviluppo runtime resta obiettivo attivo.
