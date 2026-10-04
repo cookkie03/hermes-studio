@@ -1,6 +1,6 @@
 # F2 — Invio scoped e bozze: verifica incremento
 
-Data client: 2026-10-04. Baseline Studio `ecdddfa473015f4aee47405a6f8813de44e16e72`. Scheda selezionata dall’utente: [F2](../features/F2-conversations.md). Incremento consegnato: sicurezza della preparazione/invio e conservazione bozze. **Non certifica F2 completa.**
+Lavoro avviato 2026-10-04; chiusura 2026-10-05 (Europe/Amsterdam). Baseline Studio `ecdddfa473015f4aee47405a6f8813de44e16e72`. Scheda selezionata dall’utente: [F2](../features/F2-conversations.md). Incremento consegnato: sicurezza della preparazione/invio e conservazione bozze. **Non certifica F2 completa.**
 
 ## Risultato e ownership
 
