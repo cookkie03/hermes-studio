@@ -17,3 +17,5 @@ Ricerche raccolte il 2026-10-04. Una fonte pubblica o un contratto nel sorgente 
 Per UI/componenti: [target](../design/opendots-target.md), [component-system](../design/component-system.md) e [libreria delle osservazioni](../ux-extracts/desktop-components/pattern-library.md). Unsloth ha riscontri UI/AX; Codex screenshot utente e limite di accesso registrato. Token e durate proposti non sono misure del prodotto osservato.
 
 Per skill disponibili/applicate leggere [catalogo](../agents/skills-catalog.md) e WORKLOG della chat. Le ricerche di installazione non sono un inventario aggiornato. Link pubblici a `main` o alla documentazione possono cambiare: verificare la versione prima di implementare il contratto scelto.
+
+[Computer Use e Bot Screen](hermes-computer-use-integration.md): verifica sorgente e gap Studio F16, senza esecuzione sul desktop personale.

@@ -76,6 +76,10 @@ Mostrare il roster non autorizza import di tutte le chat o clonazione credenzial
 
 Fixture due host/profili omonimi: nessuna collisione; canonical hidden e lineage corrette; side-chat più recente non adottata; backend disconnect mantiene metadata; race doppio click non crea due chat; profilo sconosciuto rifiutato. Prova isolata successiva dimostra canonical resume senza lettura di altri archivi. DoD: UI+adapter+schema migration reversibile, test proprietà/routing, build packaged, documentazione e STATUS/WORKLOG aggiornati; capability mostrata soltanto dopo risposta runtime.
 
+## Requisito condiviso: contesto e composer Hermes
+
+Leggere [contesto visibile, Spaces/progetti, @ file/righe e / skill/tool](gui-context-and-references.md). Header identifica Space, host, modello ed effort effettivi della chat/bot. Capacità e mutazioni rimangono nel backend Hermes; non simulare valori o azioni non supportati. Ownership specifica nella scheda trasversale.
+
 ## Prompt pronto per una nuova chat Codex
 
 > Prima segui docs/agents/feature-workflow.md e File e skill della scheda. Implementa solo l’incremento scelto: F7-A avatar locali oppure F7-B binding bot. Per F7-A usa tutti i quattro asset OpenDots disponibili, picker in Create/Edit Dot, avatarId validato e persistente, fallback legacy stabile e stessa resa ovunque. Preserva identità/sessioni/permessi e non configurare Hermes per un cambio estetico. Per F7-B segui roster/canonical resolver e prove isolate descritti sotto. Nessun altro incremento automatico; aggiorna gate e documenti.

@@ -28,11 +28,15 @@ Capacità e memoria native rimangono nel runtime: Studio deve presentarle con or
 | F13 | [Software GitHub e release DMG](F13-github-releases-dmg.md) | F0; versione selezionata delle altre feature | documentata; DMG locale di sviluppo esistente |
 | F14 | [Delegazione e collaborazione tra Dots](F14-delegation-and-dot-collaboration.md) | F7, F2, F3 | documentata, da scegliere |
 | F15 | [Terminale](F15-terminal.md) | F1, F3 | documentata; preview eventi parziale |
-| F16 | [Computer use](F16-computer-use.md) | F1, F3 | documentata, da scegliere |
+| F16 | [Computer use](F16-computer-use.md) | F1, F3 | documentata; A catture, B tool agente, C Bot Screen |
 | F17 | [Vocali e conversazione vocale](F17-voice-and-calls.md) | F2/F1 per conversazione; F3 | documentata in-app; telefonate future |
 | F18 | [Specialisti Codex](F18-codex-specialists.md) | F14, F3 | futura, solo documentazione |
 
 Gli ID seguono l'ordine di sviluppo concordato il 2026-10-04; ogni incremento richiede comunque una selezione esplicita. Percorso concordato: F0 completata → F1 connessione → F2 conversazioni → F3 approvazioni → F4 shell → F5 file → F6 Spaces, poi le schede successive. [Vecchi e nuovi ID](numbering-2026-10-04.md). F10 è importante ma non deve aggirare i prerequisiti su esecuzioni durevoli e autorizzazioni. F13 può distribuire il solo MVP, indicando onestamente le capacità incluse.
+
+## Requisiti trasversali della GUI
+
+[Contesto sempre visibile, Spaces/progetti Hermes, @ file/righe e / skill/tool](gui-context-and-references.md). Studio rimane frontend Hermes: nomi/UI diversi, stesso backend e capacità reali. Computer Use nativo documentato in F16 e relativo audit; nessuna implementazione aggiunta da queste richieste.
 
 ## Letture e skill
 

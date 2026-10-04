@@ -39,9 +39,21 @@ Leggere prima `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `do
 
 Osservare e autorizzare azioni reali su applicazioni, finestre, file e terminale attraverso Hermes, mantenendo chiaro host/destinazione e modo foreground/background. Un pannello strumenti non equivale a una desktop session remota o a una presa di controllo disponibile.
 
+## Requisito esplicito — Computer Use nativo utilizzabile da Studio
+
+Il tool `computer_use` già presente in Hermes deve essere utilizzabile dai Dots nelle chat Studio sul rispettivo host/display autorizzato, con catture, azioni, approvazioni e risultati visibili. Non basta elencarlo tra le capability. [Verifica sorgente e gap Studio](../research/hermes-computer-use-integration.md), SHA e1e82d7; [documentazione ufficiale](https://hermes-agent.nousresearch.com/docs/user-guide/features/computer-use/).
+
+### Incrementi selezionabili
+
+- **F16-A — Osservazione:** superficie Computer Use nel pannello, target/host/sandbox, capture SOM/vision/AX, screenshot e timestamp, azioni ed esiti nella chat. Il pannello attuale Browser/Files/Terminal non la implementa. Supportare JSON e risultati multimodali; verificare grandi payload e replay, perché il bridge archivia solo fallback testuale oltre 64 KiB.
+- **F16-B — Percorso agente completo:** toolset e driver sul backend scelto, richiesta in chat → capture → azione approvata → capture di verifica. Hermes esegue l’azione e applica la policy; Studio rende visibili scelta e risultato, anche quando negati/uncertain. Probe disponibile non equivale a driver/display/permessi operativi.
+- **F16-C — Bot Screen live e controllo umano:** riuso della funzione nativa [Bot Screen](https://hermes-agent.nousresearch.com/docs/user-guide/features/bot-screen/), dopo verifica dei contratti stream/input/lease della versione collegata. Nessuno stream promesso dal solo screenshot; nessun secondo executor o desktop parallelo. Rispetto `human_has_control`, takeover e restituzione controllo reali, con prove isolate.
+
+Il computer è quello del bot: gateway locale o sandbox/display del terminal backend. Collegare un host SSH non dà accesso al Mac di Studio. Per macOS verificare permessi del driver, distinti da quelli Electron. Browser web/profili autenticati rimangono F12 e tool browser Hermes; F16 non li rimpiazza.
+
 ## Contratto runtime verificato
 
-`computer_use` è registrato da `tools/computer_use_tool.py` e schema in `tools/computer_use/schema.py`. Azioni capture/click/double_click/right_click/middle_click/drag/scroll/type/key/set_value/wait/list_apps/list_windows/focus_app; modes som/vision/ax. Parametri targeting includono app/window/element/coordinate e delivery foreground/background secondo schema. Capture privo di side effects; schema dichiara approvazione per altre azioni salvo autoapproval runtime. Non inventare whitelist safeactions diversa dalla policy reale.
+`computer_use` è registrato da `tools/computer_use_tool.py` e schema in `tools/computer_use/schema.py`. Azioni capture/click/double_click/right_click/middle_click/drag/scroll/type/key/set_value/wait/list_apps/list_windows/focus_app; modes som/vision/ax. Parametri targeting includono app/window/element/coordinate e delivery foreground/background secondo schema. Capture è read-only. Lo schema descrive genericamente approvazioni per le altre azioni, ma l’handler applica il gate condiviso alle mutazioni/focus, mentre wait/list sono read-only: preservare la policy effettiva, hard-block e lease Hermes senza inventare whitelist o autoapproval Studio.
 
 Output accessibility/screenshot e capacità variano da host e backend. Toolstartcomplete passano già bridge owned; Studio non possiede ancora computer backend/live desktop stream, takeover o ACL per Dot. Prima integrare eventi/risultati con scope, poi valutare controller se API ufficiale esiste e testata; non chiamare API arbitrarie dal renderer. Fonti `tools/computer_use/schema.py:18–203`, `tools/computer_use_tool.py:1–20`, package `tools/computer_use/`; `apps/desktop` UI/bridge come riferimento, senza attribuire feature non lette a questa build.
 
@@ -55,7 +67,7 @@ Dipende F1 routing/identità, F11 capability e F3 approval, con F2 per interruzi
 
 ## Privacy, migrazione e non-obiettivi
 
-Test in profilo isolato e app sintetica; non richiedere/abilitare Accessibility o Screen Recording sul Mac personale durante docs/tests. Permission macOS è separata dal consenso azione e dall’authorizationruntime. Retention captures opt-in, niente full-frame archivio perpetuo per default. File e Terminal tooloutputs bounded con provenance; accesso filesystem editor distinto da computeruse. Non migrare permissionspill locali in ACL effettive. Remote desktop/session takeover, registrazione continua e controllo iPhone sono fuori scope iniziale.
+Test in profilo isolato e app sintetica; non richiedere/abilitare Accessibility o Screen Recording sul Mac personale durante docs/tests. Permission macOS è separata dal consenso azione e dall’authorizationruntime. Retention captures opt-in, niente full-frame archivio perpetuo per default. File e Terminal tooloutputs bounded con provenance; accesso filesystem editor distinto da computeruse. Non migrare permissionspill locali in ACL effettive. Bot Screen/takeover nativo è incremento F16-C separato, da verificare; registrazione continua, desktop remoti arbitrari e controllo iPhone fuori scope iniziale.
 
 ## Accettazione e DoD
 
@@ -63,4 +75,4 @@ Fixture capture AX/vision/SOM, app/window mismatch, coordinatesobsolete, permiss
 
 ## Prompt nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F16 usando computer_use schema runtime e bridge owned, prima receipts/capture/approval target. Non aggiungere executor diretto o assumere takeover. Verifica supporto reale host+permissions e deliverymode; prova soltanto app/profilo sintetici autorizzati. Implementa failclosed scope/staleapproval e postconditionverification, completa DoD e persisti risultati senza screenshot personali.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa soltanto F16-A/B/C selezionato, leggendo docs/research/hermes-computer-use-integration.md e Computer Use/Bot Screen ufficiali, usando computer_use schema runtime e bridge owned, prima receipts/capture/approval target. Non aggiungere executor diretto o assumere takeover. Verifica supporto reale host+permissions e deliverymode; prova soltanto app/profilo sintetici autorizzati. Implementa failclosed scope/staleapproval e postconditionverification, completa DoD e persisti risultati senza screenshot personali.

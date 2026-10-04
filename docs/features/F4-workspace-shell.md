@@ -106,6 +106,15 @@ Definition of done: avvio con zero dati senza chiamate runtime; navigazione da t
 
 La destinazione Space presenta folder e documenti reali (F6/F5), preservando pagine legacy; non è soltanto elenco pagine metadata. Identità Dot usa avatar scelto F7-A in ogni superficie. Browser Computer è stesso profilo/pagina di utente e Hermes (F12), non preview statica. Memory distingue Space/profilo/legacy F9; composer offre voce soltanto quando F17 readiness/permesso provati. Questi controlli restano indisponibili finché feature implementate; F4 non le implementa incidentalmente.
 
+## D34 — Settings Hermes e Settings Hermes Studio
+
+L'app deve avere una sezione Settings dedicata con due ambiti distinguibili: **Hermes**, tutte le impostazioni del runtime disponibili per la versione/host/profilo selezionati; **Hermes Studio**, preferenze dell'app standalone. Nome host/profilo, origine e limiti devono restare visibili per i settings Hermes. Configurazione della connessione è F1; F4 possiede navigazione/gerarchia; F8 inventario/copertura; feature specifiche possiedono letture/mutazioni. Le preferenze client non modificano tacitamente il backend. Le impostazioni Hermes non sono una copia locale divergente della sua config. Un gap resta esplicito finché il contratto non è collegato/verificato. Prima implementazione completa in chat F4 e feature proprietarie; F1 aggiunge solo la superficie connessioni concordata.
+
+
+## Requisito condiviso: contesto e composer Hermes
+
+Leggere [contesto visibile, Spaces/progetti, @ file/righe e / skill/tool](gui-context-and-references.md). Header identifica Space, host, modello ed effort effettivi della chat/bot. Capacità e mutazioni rimangono nel backend Hermes; non simulare valori o azioni non supportati. Ownership specifica nella scheda trasversale.
+
 ## Prompt per una nuova chat
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F4 leggendo AGENTS.md, docs/project/MEMORY.md, STATUS.md, GLOSSARY.md, ADR0005 e ADR0006, docs/design/component-system.md e questa specifica. La direzione attuale è MVP quasi vuoto e sviluppo per feature; non riattivare il piano notturno. Ispeziona la shell esistente prima di editarla, preserva asset/provenienza e dati. Lavora soltanto sui file client della shell concordati; coordina gli stili condivisi. Non collegare Hermes né creare dati dimostrativi automaticamente. Verifica 1360/900px, tastiera, nomi accessibili, reduced motion e overlay su profilo sintetico. Aggiorna prove e stato nei documenti; non dichiarare completa una capability remota assente. Se il component-system non è disponibile, completa l’analisi e segnala il prerequisito prima del codice visivo.
