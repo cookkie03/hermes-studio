@@ -1,3 +1,5 @@
+> Ricerca iniziale alla versione indicata sotto; proposta SwiftUI storica. Per stack/stato corrente [STATUS](../project/STATUS.md), per collegamento [F11](../features/F11-runtime-connection.md). Il contratto va verificato contro la versione scelta, non dedotto da questa fotografia.
+
 # Hermes runtime: contratto locale verificato nel sorgente
 
 2026-10-04. Checkout locale `/Users/luca/.hermes/hermes-agent`, HEAD `1cb26bf248e150f715ce8a487fdef2a2bef6b541`. Solo lettura di sorgenti; nessuna credenziale/config privata/DB/conversazione letta e nessun test di rete eseguito durante questa ricerca. Le capacità seguenti sono documentate nel codice, non ancora convalidate live.

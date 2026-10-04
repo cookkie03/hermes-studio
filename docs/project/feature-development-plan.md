@@ -1,35 +1,21 @@
 # Piano corrente: una feature per chat
 
-2026-10-04. D19–D23 e ADR0006 prevalgono sui piani notturni precedenti.
+Consolidato 2026-10-04. D20/ADR0006: sviluppo globale sospeso; F00 completata. Attività corrente solo consolidamento dei documenti. [Catalogo](../features/README.md) seleziona le schede, [STATUS](STATUS.md) riporta gate/esiti, [decisioni](decisions.md) preserva la direzione.
 
-## Consegna di questa chat
+## Percorso della prossima chat
 
-1. Preservare l'MVP parziale e le sue evidenze, senza implementare altre feature.
-2. Consegnare il catalogo F00–F18 con ambito, fonti, ownership, dipendenze, criteri di accettazione e prompt di handoff.
-3. Consolidare principi e review architetturale; nessun candidato viene refattorizzato automaticamente.
-4. Allineare memoria, stato, roadmap e istruzioni per impedire ripartenze sul vecchio piano.
-5. Verificare documenti, collegamenti e diff; salvare un commit della documentazione. Nessuna release in questa chat.
+1. L'utente sceglie Fxx e un incremento verticale della scheda. Numero di feature e roadmap non autorizzano il resto.
+2. Leggere MEMORY/STATUS, scheda, ADR pertinenti e [workflow](../agents/feature-workflow.md); verificare dipendenze reali e [ownership](../architecture/feature-boundaries.md).
+3. Delimitare file/contratto/prove. Se manca un prerequisito, mantenere lo scope e documentare il gap; niente feature simulate.
+4. Implementare solo quanto selezionato; prove sintetiche e profilo isolato, review Standards/Spec proporzionata.
+5. Aggiornare scheda, STATUS, MEMORY se cambia direzione e WORKLOG. Verificare diff/index/segreti, commit e push sul remote confermato. Release solo in chat F12 autorizzata.
 
-## Sviluppo successivo, selezionato dall'utente
+## Percorsi possibili, non selezionati
 
-F00 consolida la base e i gate ancora aperti; F01 cura componenti e navigazione; F11 connessione; F02 conversazioni; F03 documenti; F15 memoria; F16 approvazioni. Le altre schede sono selezionabili quando i loro prerequisiti sono soddisfatti. F04/F05 trattano bot e collaborazione, F06 routine, F07 plugin, F08 browser, F09 computer use, F10 file, F17 terminale. F12 prepara il vero prodotto GitHub con DMG. Voce in-app è documentata in F13; telefonate e specialisti restano idee future.
+- Cartelle e documenti: primo incremento F10 locale, poi integrazione Space F03; F15 per memoria progetto su file.
+- Dialogo Hermes: F11 → F02; F16 per approvazioni; F18-A per note post-turn e F18-B per viewer read-only.
+- Avatar: F04-A locale indipendente dal binding Hermes; F04-B prima di collaborazione bot F05.
+- Routine/plugin/browser/computer/terminale/voce: scheda rispettiva con backend/capability/grants verificati. Telefonate e specialisti restano future.
+- Prima distribuzione: F12 può pubblicare solo MVP, con funzionalità e limiti dichiarati; non richiede tutto il backlog.
 
-Un numero di scheda non è una priorità automatica. Una chat può dividere una feature in incrementi, ma non iniziare le altre. Prima di toccare file condivisi confrontare Git e ownership; pianificare solo il risultato scelto. I vecchi ticket 01–08 restano storici.
-
-## Gate documentale
-
-Tutte le schede sono raggiungibili dal [catalogo](../features/README.md); distinguono esistente, sorgente upstream e proposta. Nuove capacità richiedono test attraverso l'interface reale, fixture isolate e prova packaged proporzionata. Un handshake non prova chat; una bozza di release non prova installazione; il client chiuso non prova continuità per 24 ore.
-
-La review propone due candidati: ciclo Conversazione e Metadata locali. Nessuna scelta effettuata; la prossima chat interessata deve delimitare il candidato prima di implementarlo.
-
-## Incremento selezionato successivo: F00
-
-2026-10-04: Luca richiede esplicitamente review, build/test, correzioni essenziali e commit MVP. F00 completata con Metadata locali e correzioni essenziali di baseline; esiti in STATUS e scheda F00. Nessuna selezione automatica delle schede successive.
-
-## Revisione documentale D25–D29
-
-F00 completata dall'utente. Nessuna nuova feature selezionata per implementazione. Schede aggiornate: F03/F10 cartelle reali, F04-A avatar OpenDots indipendente dal binding runtime, F08 browser unico visibile/persistente/shared-control, F15 memoria runtime distinta dai documenti Markdown Space, F13 messaggi vocali e vocal chat in-app. Telefonate rimangono future. Prima chat consigliabile per la nuova richiesta: F10/F03 per un incremento folder selezionato con ownership condivisa; non avviare entrambe automaticamente. Documentazione memory ufficiale e confronto sorgente in docs/research/hermes-memory-system.md.
-
-## F18 — Parità e presentazione delle capacità native, D30
-
-Nuova scheda dedicata: F18-A note post-turn, F18-B viewer memoria Hermes, F18-C mappa capacità. Hermes conserva tutta la sua memoria; Studio osserva origine/stato/aggiornamenti senza import o nuovo motore. F15 memoria Markdown Space distinta. Implementazione non selezionata; ogni incremento richiede backend/read contracts e ownership della UI. Questo principio si applica a tutte le feature senza riavviare sviluppo globale.
+Una chat per feature e nessuna nuova chat creata automaticamente. Piani notturni e ticket precedenti sono storia. Consolidare documenti non seleziona refactor, nuovo runtime o migrazione dei dati.

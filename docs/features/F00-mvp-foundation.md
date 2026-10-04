@@ -5,6 +5,7 @@ Stato: completata — 2026-10-04. Baseline MVP consolidata con review, build/tes
 
 
 <!-- feature-guidance:start -->
+
 ## File e skill da leggere e usare
 
 Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
@@ -41,11 +42,9 @@ Electron/renderer riusato, servizio locale embedded e connector Hermes esistono.
 
 Non cancellare per rendere l'app vuota i dati/codepath già esistenti. Togliere dalla navigazione le promesse non supportate o dichiararne lo stato. Una .app vuota senza affordance non soddisfa l'MVP.
 
-## Incremento selezionabile
+## Incremento completato e manutenzione
 
-Leggere review architettura e scegliere un solo candidato: ciclo Conversazione oppure Metadata locali. Prima definire invarianti/ownership e una prova di regressione sul comportamento corrente, poi eventuale deepening senza nuove feature. Non spostare tutto il repository per rispettare un'estetica delle cartelle.
-
-File interessati: desktop/hermes/bridge.mjs, server.mjs, src/client/Chat.tsx per ciclo; Store/WorkspaceStore/pages e tsconfig.metadata per metadata. Electron ha ownership separata. Sources SwiftUI sono storiche e preservate.
+In F00 è stato selezionato il candidato Metadata locali e consegnato il contratto disaccoppiato dall'executor legacy; dettagli ed esito sotto. Il candidato Conversazione non è stato selezionato. Ulteriore manutenzione della baseline richiede una nuova richiesta delimitata, non il riavvio automatico di F00.
 
 ## Gate
 
@@ -55,10 +54,6 @@ File interessati: desktop/hermes/bridge.mjs, server.mjs, src/client/Chat.tsx per
 4. Typecheck shipped, fixture principali e packaged smoke passano; limiti --noCheck/upstream dichiarati o risolti con prove.
 5. Nessuna regressione su owner-token, session filtering, no retry incerto, processo posseduto e dati personali.
 6. UI confrontata con norme component-system: focus, minWidth, reduced motion e controlli non supportati.
-
-## Handoff
-
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Sviluppa soltanto F00. Leggi questa scheda, ADR0006, principles.md e feature-architecture-review.md. Prima proponi quale singolo module approfondire e quali comportamenti proveranno equivalenza; non implementare le altre feature. Preserva dati e codice storico. Consegna MVP essenziale e prove, senza dichiarare supporto a feature future.
 
 ## Incremento scelto — Metadata locali
 
@@ -74,3 +69,7 @@ Contratto `metadata-contracts.ts`: route locali dipendono da WorkspaceStore e op
 6. PASS struttura OpenDots ispezionata, 900px senza overflow, Tab con focus visibile, Reduced Motion senza animazioni/transizioni. Audit VoiceOver e confronto visuale completo rimangono F01.
 
 Evidenze e limiti: [review F00](../architecture/f00-review-2026-10-04.md). Artefatto locale: desktop/release/mac-arm64/Hermes Studio.app, firma ad hoc; pubblicazione/notarizzazione e DMG aggiornato sono F12.
+
+## Handoff per eventuale manutenzione esplicita
+
+> Prima segui docs/agents/feature-workflow.md e File e skill F00. F00 è completata: leggi docs/architecture/f00-review-2026-10-04.md e delimita soltanto il nuovo problema di manutenzione richiesto dall’utente. Preserva contratto Metadata, dati e gate già verificati; non scegliere un nuovo refactor o implementare altre feature automaticamente. Esegui verifiche proporzionate al cambiamento e aggiorna prove/STATUS/WORKLOG prima del commit.

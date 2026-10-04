@@ -1,6 +1,8 @@
 ---
 status: accepted
 ---
+> Ambito: archivio della baseline SwiftUI storica. La separazione dal runtime rimane principio; implementazione JSON/store nativo non prescrive quella Electron. [ADR0005](0005-opendots-desktop.md), [ADR0007](0007-folder-backed-spaces.md) e F00/F03/F10 governano il prodotto corrente.
+
 # Archivio locale distinto dallo stato del runtime
 
 2026-10-04. La prima build deve essere utile anche senza collegamento Hermes, senza alterare le conversazioni personali. La continuità richiesta impone salvataggio di bozze e documenti indipendente dalla ricostruzione delle viste.

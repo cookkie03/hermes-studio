@@ -1,6 +1,6 @@
 # Principi di architettura e manutenzione
 
-2026-10-04. Norme per tutte le chat feature. La review `feature-architecture-review.md` fotografa il codice; le direzioni sotto guidano incrementi futuri, non dichiarano un refactor già eseguito.
+2026-10-04. Norme per tutte le chat feature. La [review iniziale](feature-architecture-review.md) è storica; la [review F00](f00-review-2026-10-04.md) documenta la consegna. I [confini delle feature](feature-boundaries.md) fissano ownership condivisa; le direzioni sotto non dichiarano refactor già eseguiti.
 
 ## Moduli profondi e locality
 

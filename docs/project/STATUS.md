@@ -1,50 +1,35 @@
 # Hermes Studio — stato corrente
 
-Aggiornato 2026-10-04. **F00 completata: baseline MVP verificata e consolidata; nessuna nuova feature da implementare automaticamente.** D19–D23 e ADR0006 prevalgono sul lavoro notturno. Piano: [feature-development-plan](feature-development-plan.md). Catalogo: [F00–F18](../features/README.md).
+Consolidato 2026-10-04. **F00 completata; F01–F18 documentate o parziali, nessuna nuova implementazione selezionata.** Consolidamento documentale corrente. [Catalogo](../features/README.md), [piano](feature-development-plan.md), [decisioni](decisions.md).
 
-## Consegna documentale
+## Baseline verificata
 
-19 schede autonome (incluse capacità native/visibilità F18): base, componenti, conversazioni, Spaces/documenti, bot, collaborazione, routine, plugin, browser, computer use, file, runtime, release DMG, voce, specialisti, memoria, approvazioni e terminale. Ogni feature sarà scelta in una chat separata. Principi e review architetturale salvati; candidati Conversazione e Metadata non selezionati né refattorizzati. Proposta fork/upstream annullata; licenze e provenienza del codice riusato conservate.
+Electron/React, servizio Node embedded e bridge Hermes; codice SwiftUI storico preservato. Consegna F00 nel commit `7c7e2a5`: strict typecheck renderer/metadata senza --noCheck, npm test (18 fixture e 55 test), package:dir e smoke .app con dati sintetici; restart/failure storage/conflict/focus/900px/Reduced Motion verificati. Correzioni essenziali cold resume/offline/navigazione incluse. [Evidenze F00](../architecture/f00-review-2026-10-04.md).
 
-Riferimento visivo OpenDots autorevole; sistema componenti ispirato a Unsloth e Codex. Disclosure attività Unsloth verificata dal vivo. Codex analizzato dallo screenshot fornito: accesso live negato dallo strumento; animazioni e popover non dichiarati osservati. Screenshot personali esclusi da Git.
+Questi sono esiti precedentemente documentati, non test rieseguiti dal consolidamento. Template executor storico non distribuito resta incompatibile con alcune dipendenze; full upstream check non certificato. Il candidato Metadata è stato consolidato in F00; approfondimento del ciclo Conversazione non selezionato.
 
-## Baseline tecnica preservata
+.app arm64 locale di sviluppo, firma ad hoc; DMG precedente non rigenerato con F00, nessuna release GitHub/firma Apple/notarizzazione. [Artefatti storici](../releases/development-artifacts.md). Node handshake Hermes 0.21.5 verificato senza sessione/prompt: non prova chat, streaming o strumenti.
 
-Client Electron con servizio Node embedded e renderer OpenDots MIT adattato; codice SwiftUI storico conservato. App arm64 e DMG locali di sviluppo prodotti; firma ad hoc, non notarizzati né pubblicati. La .app è stata ricostruita e verificata in F00; il DMG storico non è stato rigenerato con questo incremento. Non presentarlo come release finale. Evidenze: [development-artifacts](../releases/development-artifacts.md).
+## Requisiti specificati, ancora da implementare/provare
 
-Prove precedenti: 27 test documenti upstream, 14 fixture renderer e typecheck dedicato; 13 bridge/server e 2 fixture di rete; bootstrap/link esterni verificati. App packaged: memoria, Space, Markdown/autosave e riapertura verificati con dati sintetici; test a 900 px senza overflow. Probe Node live health/ready su Hermes 0.21.5 senza prompt o cronologia.
+19 schede F00–F18 con skill, ingressi, incrementi, ownership, gate e handoff. In particolare: folder-backed Spaces F03/F10, picker avatar F04-A, browser condiviso F08, voce in-app F13, memoria Markdown Space F15 e viewer/riepiloghi Hermes F18. Metadata del MVP non dimostrano questi nuovi comportamenti.
 
-## Gate ancora aperti, da assegnare alle feature
+Design OpenDots autorevole; componenti Unsloth/Codex. Unsloth disclosure osservata; Codex solo screenshot per diniego del tool. Token/motion proposti, non misurati. Screenshot personali esclusi da Git.
 
-- Chat reale con profilo isolato, streaming, interruzione e ripresa: F02/F11.
-- Review/salvataggio dalla chat end-to-end: prova non conclusa; F02/F03.
-- Typecheck metadata RISOLTO in F00: strict senza --noCheck. Template executor upstream completo e alcune suite storiche restano incompatibili con SDK legacy, escluso dal prodotto.
-- Confronto finale delle proporzioni della .app dopo ultimo fix, focus/VoiceOver e motion: F01.
-- Browser live, computer use, plugin, collaborazione e routine non dimostrati nel client: rispettive schede, non capacità disponibili.
-- Release GitHub, firma Apple/notarizzazione e installazione pulita: F12. Nessuna durata 24h verificata.
+## Gate aperti
 
-## Continuità
+| Gate | Responsabile | Evidenza ancora necessaria |
+|---|---|---|
+| Chat isolata reale, streaming, interrupt/resume | F02/F11 | Percorso runtime completo, distinto dal handshake |
+| File/cartelle e review save dalla chat | F03/F10 | File autoritativo, grant, conflitti e ricevuta E2E |
+| Layout finale, focus/VoiceOver e motion | F01 | Confronto packaged finale e accessibilità completa |
+| Bot/collaborazione/routine/plugin/strumenti/voce | Scheda specifica | Capability, ownership ed esito reale; UI attuale non basta |
+| Memoria runtime visibile e note dopo risposta | F18 | Contratto read-only, scoped events, persistenza/replay |
+| DMG/release/installazione pulita | F12 | Firma/limiti, checksum e installazione della versione selezionata |
+| Continuità runtime con client chiuso | Feature/host selezionati | Prova effettiva; nessuna durata di 24h verificata |
 
-MEMORY e WORKLOG conservano decisioni e prove. Automazione riallineata al lavoro documentale e sospesa alla consegna (stato PAUSED confermato dal tool): nessuna ripresa automatica di nuove feature. Git origin verificato: git@github.com:cookkie03/hermes-studio.git. Modifiche del precedente incremento sono preservate; un commit documentale non equivale alla consegna di tutto il codice o di una release.
+## Continuità e pubblicazione documentale
 
-Indicazione storica prima della consegna F00: consolidare la baseline. Superata dalla consegna F00 sotto; scegliere ora una feature dal catalogo aggiornato.
+D20/ADR0006 governano il lavoro. Automazione Hermes e goal notturno sospesi secondo ultime verifiche nel WORKLOG; non riattivati né ricontrollati qui. Repo indipendente, origin confermato. Commit documentali precedenti pubblicati: `4726b38` (D25–D29) e `ecf5f64` (F18/D30). Consolidamento documentale verificato: 19 schede, decisioni D01–D30, collegamenti locali e snapshot storici integri; codice invariato. Commit/push tracciati in Git.
 
-## F00 selezionata — 2026-10-04
-
-Luca richiede risultato della scheda F00: review del codice, build/test, correzioni essenziali e commit MVP. Incremento delimitato ai Metadata locali: contratti strutturali delle route separati dai tipi del vecchio executor, typecheck senza --noCheck; preservati store, API e dati. Review a due assi su HEAD 91f3644 e baseline WIP/untracked. Correzioni essenziali emerse: invio dopo cold resume di turno runtime attivo/incerto; stato offline nella schermata vuota e cancellazione della navigazione prima di cambiare selezione. Fixture di rete richiedono porte localhost fuori sandbox; rerun sintetico PASS (2 test). Build packaged e gate finali ancora in corso. Nessuna selezione di altre feature o pubblicazione release.
-
-## Consegna F00 — verificata 2026-10-04
-
-Review Standards/Spec conclusa: cold resume attivo/incerto, offline iniziale e navigazione annullata corretti. npm test PASS (18 fixture +55 test, due typecheck e bootstrap/link); package:dir e smoke .app PASS su userData sintetico, inclusi persistenza al riavvio, errore salvataggio, conflitto, focus visibile, 900px e Reduced Motion. Baseline SwiftUI conservata: build e runner sintetici PASS. [Review ed evidenze](../architecture/f00-review-2026-10-04.md). Commit locale della baseline; nessuna pubblicazione release. Le feature successive richiedono selezione utente.
-
-Aggiornamento D24: 18 schede corredate di skill principali/condizionali e file da leggere, workflow ask-matt comune e inventario completo delle raccolte. Inventario di percorsi leggibili, non certificazione dei tool attivi; implementazione ancora sospesa.
-
-## Revisione dopo prova utente F00 — D25–D29
-
-Aggiornate specifiche, non codice: Space-folder/file reali F03/F10; picker avatar F04-A; browser integrato stesso profilo/pagina F08; memoria Hermes/Markdown Space F15; messaggi vocali e vocal chat F13. SOUL, MEMORY/USER, cronologia, review e curator analizzati nel prospetto ufficiale con link e sorgente fissato e1e82d7. Gate reali di queste feature ancora aperti. Nessun profilo/vault personale letto, mic/runtime avviato o provider installato. Schede e prompt pronti per selezione in chat dedicate; telefonate future.
-
-Validazione D25–D29:212 link locali e18 guidance/handoff PASS; diff whitespace pulito. Nessuna build richiesta per modifiche soltanto documentali.
-
-## D30 — Feature native e memoria visibile
-
-Catalogo aggiornato a19 schede F00–F18. F18 documenta conservazione delle capacità Hermes, viewer memoria runtime e riepiloghi post-turn nella chat. Memory autoritativa nel backend, niente seconda memoria Studio; F15 Space/legacy distinto. Sorgente desktop/runtime verificato per review.summary e byte/status; persist/replay e viewer contenuto ancora gate futuri. Sole modifiche documentali, nessuna implementazione o accesso personale.
+Memoria operativa in [MEMORY](MEMORY.md), cronologia in [WORKLOG](WORKLOG.md). Stato precedente integrale in [snapshot storico](STATUS.history-2026-10-04.md). Per il prossimo lavoro l'utente sceglie scheda e incremento: il numero della feature non impone priorità.

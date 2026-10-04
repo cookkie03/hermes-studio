@@ -3,6 +3,7 @@
 
 
 <!-- feature-guidance:start -->
+
 ## File e skill da leggere e usare
 
 Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
@@ -51,7 +52,7 @@ CapabilitySnapshot identificato da connessione/profilo/sessione/revisione; Plugi
 
 ## Seam, ownership e dipendenze
 
-Nuovi `desktop/hermes/capabilities.mjs`, `capabilities.test.mjs`, `CapabilitiesPanel.tsx`; bridge permette solo RPC allowlist scoped, mai endpoint arbitario request(method). Dipende F04/F11 e F01 approvazioni; sblocca F08/F09 e diagnostica F05. Prima read-only snapshot+refresh+errorreason; poi gestione persistente con serializzazione per profilo e rollback/outcome. Riutilizzare manifest upstream, non cataloghi generici non verificati.
+Nuovi `desktop/hermes/capabilities.mjs`, `capabilities.test.mjs`, `CapabilitiesPanel.tsx`; bridge permette solo RPC allowlist scoped, mai endpoint arbitario request(method). Dipende F11 per scope/connessione, F04 se associato a Bot e F16 per approvazioni; sblocca F08/F09 e diagnostica F05. Prima read-only snapshot+refresh+errorreason; poi gestione persistente con serializzazione per profilo e rollback/outcome. Riutilizzare manifest upstream, non cataloghi generici non verificati.
 
 ## Privacy, migrazione e non-obiettivi
 
@@ -61,10 +62,10 @@ Non leggere `.env`, token o vault plaintext per popolare UI. Non trasferire togg
 
 Fixture tool enabled vs serverinactive, unknown/deferredtools, profile collision, capability update denial, widened update delta, secretsetting reject, stale session rebuild, restart failure. DoD read-only: UI capability gating usata da altre feature, contracttests scoped e packaged smoke; management DoD ulteriore include installisolato/reversibilità e consentoruntime. Registrare provenienza/versione, niente label available prima livecheck.
 
-## Prompt nuova chat
-
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F07 read-only capabilities con allowlist scoped, usando contracts/tools_mcp_plugins e desktop contrib/plugins. Parti da toolsets/tools/plugins e stati installato≠attivo. Non installare plugin né modificare config personale durante test. Se estendi a management, prepara diff concreto/review per capabilitydelta, vault-safe settings e rollback. Completa DoD e aggiorna docs; preserva strumenti Hermes deferiti.
-
 ## D30 — Parità del catalogo Hermes e visibilità apprendimento
 
 [F18](F18-hermes-native-features-and-observability.md) mappa capacità/esiti native alla UI. F07 conserva catalogo skill/plugin/toolsets del profilo Hermes e gestione autorizzata; nessuna libreria parallela Studio. Aggiornamenti di skill/review/curator ricevuti possono aggiornare la vista con freshness e origine, non attivare installazioni/run. Non occultare deferred tools per aderire al template OpenDots. Segnali post-turn in chat sono F18-A/F02.
+
+## Prompt nuova chat
+
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F07 read-only capabilities con allowlist scoped, usando contracts/tools_mcp_plugins e desktop contrib/plugins. Parti da toolsets/tools/plugins e stati installato≠attivo. Non installare plugin né modificare config personale durante test. Se estendi a management, prepara diff concreto/review per capabilitydelta, vault-safe settings e rollback. Completa DoD e aggiorna docs; preserva strumenti Hermes deferiti.

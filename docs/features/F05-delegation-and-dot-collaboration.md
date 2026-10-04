@@ -3,6 +3,7 @@
 
 
 <!-- feature-guidance:start -->
+
 ## File e skill da leggere e usare
 
 Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
@@ -59,12 +60,12 @@ Dipende da F04/F11 per identità e connessione, F02 per cronologia e F16 per app
 
 Mai inoltrare intera chat privata o spoofare sender; target/author runtime authoritative. Scope e grants precedono lettura cross-profile. Conservare event_id/cursor/authority, receipts e origin link senza confondere pin sessione. Non convertire toolEvents storici in messaggi inviati. Non promettere exactly-once con sola dedupe HTTP; rete remota e failover gruppi avanzato sono successivi.
 
+## Scope degli Spaces su cartelle — D25
+
+Collaboratori lavorano su file reali autorizzati dello Space F03/F10, con host/root/revisione nelle consegne. Membership non concede accesso al vault o profilo di memoria di altri bot; messaggio/delega non crea mount o copia folder. Scritture concorrenti usano writer e conflitti condivisi F10. Memoria progetto F15 distinta da USER/MEMORY del singolo profilo.
+
 ## Accettazione, DoD e prompt nuova chat
 
 Due bot isolati: ack ≠ reply, ritardo/errore/offline, omonimi e peer route corretti, replay senza duplicati, cancel stale, callback dopo chiusura UI, recall con anchor e scope negato; delegato temporaneo non appare come bot durevole. DoD: ownership transport e permissions espliciti, fixture e prova isolata di DM+reply+recall, persisted receipts/reopen, packaged UI, nessuna fuga personal data; aggiornare docs.
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F05 per priorità collaborazione e messaggi/recall. Verifica prima sulla versione fissata delegate_task, message_agent canonico, bot_relay e groups.* nel sorgente Hermes apps/desktop. Scegli una slice tracciabile (due bot isolati DM→reply→recall), non unirli in un falso tool generico. Definisci scope/identity/receipts e ownership, testa incerto/offline/replay, completa DoD e persisti esiti. Non usare archivi personali o inviare messaggi reali senza autorizzazione specifica.
-
-## Scope degli Spaces su cartelle — D25
-
-Collaboratori lavorano su file reali autorizzati dello Space F03/F10, con host/root/revisione nelle consegne. Membership non concede accesso al vault o profilo di memoria di altri bot; messaggio/delega non crea mount o copia folder. Scritture concorrenti usano writer e conflitti condivisi F10. Memoria progetto F15 distinta da USER/MEMORY del singolo profilo.

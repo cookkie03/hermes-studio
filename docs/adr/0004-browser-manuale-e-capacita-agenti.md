@@ -1,6 +1,8 @@
 ---
 status: accepted
 ---
+> Ambito storico SwiftUI/WebKit non persistente, superato come target prodotto da [ADR0005](0005-opendots-desktop.md) e [F08](../features/F08-browser.md) (browser condiviso persistente D27). Preservare questa prova; non applicarla al browser Studio futuro.
+
 # Browser manuale prima dell'automazione degli agenti
 
 2026-10-04. Il percorso confermato è ricerca e scrittura con team e strumenti affiancati. La visione comprende browser use e computer use, ma il client non ha ancora un contratto runtime collaudato.

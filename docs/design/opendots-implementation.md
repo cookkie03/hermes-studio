@@ -1,3 +1,5 @@
+> Documento/evidenze storici. Per stato corrente leggere [STATUS](../project/STATUS.md); requisiti e gate attuali nel [catalogo feature](../features/README.md). Il contenuto sotto non autorizza nuove attività né certifica lo stato successivo a F00.
+
 # OpenDots desktop — applicazione del riferimento
 
 2026-10-04. Decisioni D14–D18 e immagine utente in `docs/design/references/opendots-user-reference-2026-10-04.png` prevalgono sull’atelier SwiftUI precedente. Questa implementazione modifica il renderer del sorgente OpenDots fissato nel documento PROVENANCE del desktop; non sostituisce il frontend con un redesign.

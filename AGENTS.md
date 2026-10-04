@@ -1,10 +1,12 @@
 # Hermes Desktop
 
-Prima versione: assistente personale e progetti, confermata dall'utente. Questo workspace contiene le fondazioni del progetto; le proposte di architettura e design sono ancora in revisione.
+Assistente personale e progetti macOS. Prodotto Electron/React con runtime Hermes; baseline SwiftUI storica preservata. F00 completata; feature successive selezionate una per chat.
 
 ## Inizio del lavoro
 
-Leggi prima `docs/project/MEMORY.md` e `docs/project/STATUS.md`, `GLOSSARY.md` e gli ADR pertinenti. D19–D23 e ADR0006: nessuna nuova feature automatica. Leggi `docs/features/README.md`, `docs/project/feature-development-plan.md` e la sola scheda selezionata dall’utente. Per progettare leggi prima `docs/design/opendots-target.md` ; il piano `docs/superpowers/plans/2026-10-04-opendots-desktop.md` è storico: screenshot utente OpenDots è autorevole, design SwiftUI precedente storico. `.scratch/hermes-desktop/spec.md` e `docs/design/desktop-design.md` conservano la baseline. Distingui sempre osservazioni live, documentazione upstream e proposte.
+Leggi `docs/project/MEMORY.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, il catalogo `docs/features/README.md` e la sola scheda selezionata. Per la sequenza usa `docs/agents/feature-workflow.md`; per decisioni/ownership consulta `docs/project/decisions.md`, gli ADR pertinenti e `docs/architecture/feature-boundaries.md`. D20/ADR0006: incrementi solo su selezione utente. `docs/README.md` è l'indice delle fonti, non un'altra spec.
+
+Per UI leggi `docs/design/opendots-target.md` e `docs/design/component-system.md`: screenshot utente autorevole. Piani notturni, atelier/design SwiftUI e vecchie spec sono storia. D30/F18: preservare capacità/memoria Hermes e proiettarne eventi nella UI; file memoria Space F15 distinti. Distingui osservazioni live, sorgente upstream e proposte.
 
 Aggiorna `docs/project/MEMORY.md`, `docs/project/STATUS.md`, `docs/project/WORKLOG.md` e i documenti interessati dopo ogni blocco significativo di ricerca, decisione, implementazione o verifica. Questa persistenza continua è una richiesta esplicita dell'utente.
 

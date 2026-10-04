@@ -3,6 +3,7 @@
 
 
 <!-- feature-guidance:start -->
+
 ## File e skill da leggere e usare
 
 Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
@@ -50,7 +51,7 @@ ComputerTarget {connection,host,profile,app?,window?}, CaptureReceipt, ActionReq
 
 ## Seam, ownership e dipendenze
 
-Dipende F11 routing/identità, F07 capability e F01 approval/interrupt. Nuovi `desktop/hermes/computer.mjs`, fixtures, client `ComputerActivityView.tsx`; ComputerPanel condiviso con F08, ownership concordata prima parallelwork. Nessun secondo executor shell/osautomation. Prima slice visualizza capture e target/approvals da Hermes; azioni dirette UI solo tramite API ufficiale comprovata, non via toolname string generico.
+Dipende F11 routing/identità, F07 capability e F16 approval, con F02 per interruzione del turno. Nuovi `desktop/hermes/computer.mjs`, fixtures, client `ComputerActivityView.tsx`; ComputerPanel condiviso con F08, ownership concordata prima parallelwork. Nessun secondo executor shell/osautomation. Prima slice visualizza capture e target/approvals da Hermes; azioni dirette UI solo tramite API ufficiale comprovata, non via toolname string generico.
 
 ## Privacy, migrazione e non-obiettivi
 

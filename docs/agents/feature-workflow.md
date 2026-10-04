@@ -6,7 +6,7 @@
 
 1. [AGENTS](../../AGENTS.md), [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md): verificare ambito, stato e quali incrementi sono effettivamente versionati.
 2. [GLOSSARY](../../GLOSSARY.md), [ADR0005](../adr/0005-opendots-desktop.md), [ADR0006](../adr/0006-feature-by-feature.md): stack, termini e una feature per chat.
-3. [Piano corrente](../project/feature-development-plan.md), [principi](../architecture/principles.md) e la scheda selezionata nel [catalogo](../features/README.md).
+3. [Piano corrente](../project/feature-development-plan.md), [principi](../architecture/principles.md), [confini condivisi](../architecture/feature-boundaries.md), [decisioni](../project/decisions.md) e la scheda selezionata nel [catalogo](../features/README.md).
 4. [Tracker](issue-tracker.md) prima di ticket; [domain docs](domain.md) se cambiano termini o decisioni. [Desktop README](../../desktop/README.md), package.json e test reali per i comandi: verificare lo stato del codice invece di riprodurre una lista obsoleta.
 
 Poi leggere le skill e i file indicati nella sezione iniziale della scheda. I percorsi sorgente sono punti di ingresso: seguire import/contratti pertinenti, limitando gli edit all’ownership concordata. File upstream nel checkout Hermes sono fonti alla versione fissata, non codice Studio da modificare né prova live. File pianificati ma assenti nella scheda restano proposte: definirli prima di crearli.

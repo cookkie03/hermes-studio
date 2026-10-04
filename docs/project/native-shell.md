@@ -1,3 +1,5 @@
+> Documento/evidenze storici. Per stato corrente leggere [STATUS](STATUS.md); requisiti e gate attuali nel [catalogo feature](../features/README.md). Il contenuto sotto non autorizza nuove attività né certifica lo stato successivo a F00.
+
 # Build di sviluppo Hermes
 
 ```bash

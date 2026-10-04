@@ -10,6 +10,7 @@ Gate: tasksyntheticisolato, ownershipmerge/conflicts, timeout/uncertain/resultve
 
 
 <!-- feature-guidance:start -->
+
 ## File e skill da leggere e usare
 
 Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
@@ -34,8 +35,10 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
 <!-- feature-guidance:end -->
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Lavora soltanto F14 dopo verifica prerequisiti e codice fonte dell'integrazione scelta. Usa una repository test/worktree isolata e autorizzazione esplicita per comunicare con chat Codex. Consegna risultati verificati e limiti; non implementare Bots/routine/voice in questa chat.
-
 ## Scope file aggiornato — D25
 
 Space collega cartelle reali F03/F10; specialisti ricevono solo root/file autorizzati e host raggiungibili. Nessuna copia/import del Second Brain o permesso implicito dall'associazione a un team. Revisione/salvataggio e conflitti condivisi con F10; update memoria Space F15 dopo risultati verificati, non diario duplicato nello store.
+
+## Prompt per una nuova chat
+
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Lavora soltanto F14 dopo verifica prerequisiti e codice fonte dell'integrazione scelta. Usa una repository test/worktree isolata e autorizzazione esplicita per comunicare con chat Codex. Consegna risultati verificati e limiti; non implementare Bots/routine/voice in questa chat.

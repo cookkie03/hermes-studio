@@ -5,6 +5,7 @@ Stato: specifica per una chat futura; baseline esistente parziale, feature non c
 
 
 <!-- feature-guidance:start -->
+
 ## File e skill da leggere e usare
 
 Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
@@ -101,10 +102,10 @@ Nuovo profilo di sviluppo separato, inizialmente vuoto. Non cancellare dati dell
 
 Definition of done: avvio con zero dati senza chiamate runtime; navigazione da tastiera; screenshot 1360 e 900px con rapporti/overflow misurati; inspector apri/chiudi e passaggio Memory senza intercettazioni; zoom e reduced motion; errore archivio preserva dati; nomi accessibili verificati nell’albero UI. Registrare screenshot e misure, non dichiarare identico sulla sola base del CSS. Typecheck/build pertinenti e smoke della vera.app, senza prompt personali.
 
-## Prompt per una nuova chat
-
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F01 leggendo AGENTS.md, docs/project/MEMORY.md, STATUS.md, GLOSSARY.md, ADR0005 e ADR0006, docs/design/component-system.md e questa specifica. La direzione attuale è MVP quasi vuoto e sviluppo per feature; non riattivare il piano notturno. Ispeziona la shell esistente prima di editarla, preserva asset/provenienza e dati. Lavora soltanto sui file client della shell concordati; coordina gli stili condivisi. Non collegare Hermes né creare dati dimostrativi automaticamente. Verifica 1360/900px, tastiera, nomi accessibili, reduced motion e overlay su profilo sintetico. Aggiorna prove e stato nei documenti; non dichiarare completa una capability remota assente. Se il component-system non è disponibile, completa l’analisi e segnala il prerequisito prima del codice visivo.
-
 ## Allineamento D25–D29
 
 La destinazione Space presenta folder e documenti reali (F03/F10), preservando pagine legacy; non è soltanto elenco pagine metadata. Identità Dot usa avatar scelto F04-A in ogni superficie. Browser Computer è stesso profilo/pagina di utente e Hermes (F08), non preview statica. Memory distingue Space/profilo/legacy F15; composer offre voce soltanto quando F13 readiness/permesso provati. Questi controlli restano indisponibili finché feature implementate; F01 non le implementa incidentalmente.
+
+## Prompt per una nuova chat
+
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F01 leggendo AGENTS.md, docs/project/MEMORY.md, STATUS.md, GLOSSARY.md, ADR0005 e ADR0006, docs/design/component-system.md e questa specifica. La direzione attuale è MVP quasi vuoto e sviluppo per feature; non riattivare il piano notturno. Ispeziona la shell esistente prima di editarla, preserva asset/provenienza e dati. Lavora soltanto sui file client della shell concordati; coordina gli stili condivisi. Non collegare Hermes né creare dati dimostrativi automaticamente. Verifica 1360/900px, tastiera, nomi accessibili, reduced motion e overlay su profilo sintetico. Aggiorna prove e stato nei documenti; non dichiarare completa una capability remota assente. Se il component-system non è disponibile, completa l’analisi e segnala il prerequisito prima del codice visivo.

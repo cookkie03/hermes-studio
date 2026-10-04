@@ -1,3 +1,5 @@
+> Documento/evidenze storici. Per stato corrente leggere [STATUS](../project/STATUS.md); requisiti e gate attuali nel [catalogo feature](../features/README.md). Il contenuto sotto non autorizza nuove attività né certifica lo stato successivo a F00.
+
 # Revisione nativa — 2026-10-04
 
 L'utente ha richiesto esplicitamente installazione, applicazione delle quattro skill e avvio dello sviluppo macOS. Questa istruzione supera la precedente attesa di revisione dei draft. Il primo incremento è la shell locale; non equivale al completamento M1 con runtime.

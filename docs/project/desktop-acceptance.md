@@ -1,3 +1,5 @@
+> Documento/evidenze storici. Per stato corrente leggere [STATUS](STATUS.md); requisiti e gate attuali nel [catalogo feature](../features/README.md). Il contenuto sotto non autorizza nuove attività né certifica lo stato successivo a F00.
+
 # Gate della prima build OpenDots desktop
 
 2026-10-04. Esecuzione e prove del nuovo client; le verifiche SwiftUI precedenti non chiudono questi gate. Dati sintetici in directory temporanea; nessuna lettura delle conversazioni personali.

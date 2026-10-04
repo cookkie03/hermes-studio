@@ -3,6 +3,7 @@
 
 
 <!-- feature-guidance:start -->
+
 ## File e skill da leggere e usare
 
 Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
@@ -60,10 +61,10 @@ Default destinazione local/app se supportata; all/shared platform richiede scelt
 
 Fixture create/update/pause/resume/remove, one-shot vs recurring, timezone/DST, collisione stesso jobId su profili diversi, stale refresh, trigger timeout senza retry automatico, failed delivery distinta da run, reopen run sulla connessione proprietaria. Prova isolata breve esegue due riattivazioni e recupera run/result con client chiuso; non dichiarare durata24h. DoD: backend adapter scoped, UI e schema reversibile, run/delivery logs reali, scheduler ownership verificata e packaged smoke; STATUS/WORKLOG aggiornati.
 
-## Prompt pronto nuova chat
-
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F06 leggendo spec e riferimento upstream apps/desktop/api/cron.ts. Priorità routine: partire da list scoped+run history, poi creazione/pause/trigger con fixture e scheduler Hermes isolato. Nessun timer alternativo, messaggio esterno o modifica delle routine personali. Mostra next run e disponibilità host verificati, separa run da delivery e non ritentare esiti incerti. Completa test schedule/timezone/relaunch, DoD e documentazione.
-
 ## Destinazione file e memoria — D25/D28
 
 Routine può riferire un documento del folder Space con root/host/path e grant durevole verificati; metadato Space non garantisce folder disponibile quando client chiuso. File update confermato da revisione/esito F10; memoria Space F15 aggiornata solo entro policy selezionata. Memoria runtime/skill curator non sono il scheduler; nessun salvataggio al vault da sola consegna testuale.
+
+## Prompt pronto nuova chat
+
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F06 leggendo spec e riferimento upstream apps/desktop/api/cron.ts. Priorità routine: partire da list scoped+run history, poi creazione/pause/trigger con fixture e scheduler Hermes isolato. Nessun timer alternativo, messaggio esterno o modifica delle routine personali. Mostra next run e disponibilità host verificati, separa run da delivery e non ritentare esiti incerti. Completa test schedule/timezone/relaunch, DoD e documentazione.

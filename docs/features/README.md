@@ -1,6 +1,6 @@
 # Hermes Studio — una feature per chat
 
-2026-10-04. Piano corrente autorizzato: documentazione e MVP essenziale. Non implementare automaticamente le schede. La baseline esistente è parziale; `documentata` non significa `implementata` o `verificata`.
+2026-10-04. F00 completata; lavoro corrente di consolidamento documentale. Non implementare automaticamente le schede. La baseline esistente è parziale; `documentata` non significa `implementata` o `verificata`.
 
 L'app resta una repository indipendente. Il codice MIT OpenDots già riusato conserva licenza e provenienza. Struttura visiva OpenDots; componenti e microinterazioni con riferimenti Unsloth/Codex. Motore e strumenti Hermes. Nessun secondo executor OpenDots per simulare capacità Hermes.
 
@@ -27,7 +27,7 @@ Capacità e memoria native rimangono nel runtime: Studio deve presentarle con or
 | F12 | [Software GitHub e release DMG](F12-github-releases-dmg.md) | F00; versione selezionata delle altre feature | documentata; DMG locale di sviluppo esistente |
 | F13 | [Vocali e conversazione vocale](F13-voice-and-calls.md) | F02/F11 per conversazione; F16 | documentata in-app; telefonate future |
 | F14 | [Specialisti Codex](F14-codex-specialists.md) | F05, F16 | futura, solo documentazione |
-| F15 | [Memoria Hermes e Markdown Space](F15-memory.md) | F03/F10 per file Space; F11/F04 per runtime | documentata; memoria Studio legacy parziale |
+| F15 | [Memoria Markdown Space e preferenze legacy](F15-memory.md) | F03/F10 per Space; F11/F16 per mutazioni runtime opzionali | documentata; memoria Studio legacy parziale |
 | F16 | [Permessi e approvazioni](F16-permissions-and-approvals.md) | F11 | contratto parziale; fixture disponibili |
 | F17 | [Terminale](F17-terminal.md) | F11, F16 | documentata; preview eventi parziale |
 | F18 | [Capacità native Hermes e memoria visibile](F18-hermes-native-features-and-observability.md) | F11/F02 per note; F04/contratto read-only per viewer | documentata, non implementata |
@@ -50,4 +50,4 @@ Una chat possiede una scheda e i suoi file; se emerge un cambiamento in un modul
 
 Usare `documentata → selezionata → in sviluppo → in verifica → completata`; `bloccata` richiede prerequisito preciso e lavoro indipendente esaurito. Una feature è completata solo quando i gate sono provati sull'app/runtimes pertinenti. Una fixture prova il contratto simulato; handshake non prova prompt, tools o lavoro quando il client è chiuso.
 
-Norme: [principi](../architecture/principles.md), [review](../architecture/feature-architecture-review.md), [componenti](../design/component-system.md), [fonte Hermes](../research/hermes-desktop-reference.md), [baseline](../project/desktop-acceptance.md). Idee future restano nell'indice ../future/README.md.
+Norme: [principi](../architecture/principles.md), [review F00](../architecture/f00-review-2026-10-04.md), [audit storico](../architecture/feature-architecture-review.md), [componenti](../design/component-system.md), [fonte Hermes](../research/hermes-desktop-reference.md), [stato](../project/STATUS.md), [baseline storica](../project/desktop-acceptance.md). Idee future restano nell'indice ../future/README.md.

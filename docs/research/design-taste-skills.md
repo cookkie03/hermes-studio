@@ -1,3 +1,5 @@
+> Ricerca storica della fase nativa. Stack corrente Electron e stato delle skill nel [workflow/catalogo](../agents/skills-workflow.md); risultati e numeri sotto restano uno snapshot, non istruzioni attive.
+
 # Skill per il gusto nel design di applicazioni
 
 Ricerca: 2026-10-04. Stato: **raccomandate, non installate**. Fonti: repository originali e catalogo skills.sh verificati durante questa ricerca. I numeri sono uno snapshot, non una prova di qualità del risultato.

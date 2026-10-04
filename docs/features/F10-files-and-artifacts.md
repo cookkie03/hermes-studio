@@ -5,6 +5,7 @@ Stato: documentata; tree/editor SwiftUI storico e anteprima eventi Electron parz
 
 
 <!-- feature-guidance:start -->
+
 ## File e skill da leggere e usare
 
 Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
@@ -53,7 +54,7 @@ Root scelto → caricamento → albero vuoto/populato → preview → bozza → 
 
 ## Scope e seam
 
-F11 runtime, F16 permessi, F03 editor documenti riusabile. Ownership futuro in module File workspace con adapter runtime e filesystem sintetico; non infilare filesystem nel preload o Chat.tsx. F17 terminale separato; F08 browser non necessario. Primo incremento read-only root selezionato+preview, poi scrittura solo in una slice esplicita.
+Per file locali: base F00 e selezione root esplicita; F11/F16 per tool agente/host runtime. F03 usa il writer F10, non ne è prerequisito per listing/read-only: evitare dipendenza circolare. Il module File workspace possiede politica filesystem e revisioni; preload espone solo IPC limitata alle operazioni/root autorizzate, Chat.tsx rimane presentazione. F17 terminale separato; F08 browser non necessario. Primo incremento read-only root selezionato+preview, poi scrittura solo in una slice esplicita.
 
 ## Gate
 

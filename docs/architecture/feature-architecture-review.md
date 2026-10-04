@@ -1,6 +1,6 @@
 # Revisione architettura per feature
 
-Data: 2026-10-04. Stato: proposta documentale, nessun refactor autorizzato o realizzato.
+Data: 2026-10-04. **Audit storico prima di F00**, conservato per ragionamento e provenienza. Aggiornamento: candidato Metadata locali selezionato/consolidato in F00, strict typecheck senza --noCheck; [review consegna](f00-review-2026-10-04.md). Candidato Conversazione non selezionato. Tabella/limiti sotto fotografano il codice precedente: per norme e ownership attuali usare [principi](principles.md), [confini](feature-boundaries.md) e [STATUS](../project/STATUS.md).
 
 ## Scope autorevole
 

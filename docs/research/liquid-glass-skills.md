@@ -1,3 +1,5 @@
+> Ricerca storica della fase nativa. Stack corrente Electron e stato delle skill nel [workflow/catalogo](../agents/skills-workflow.md); risultati e numeri sotto restano uno snapshot, non istruzioni attive.
+
 # Skill per Hermes macOS e Liquid Glass
 
 Ricerca del 2026-10-04 tramite find-skills: leaderboard skills.sh, CLI Bash `npx skills@latest find 'liquid glass'`, schede e sorgenti. App in attesa su richiesta utente. Nessuna nuova installazione: 21 skill presenti. Scelta dello stack ancora aperta.

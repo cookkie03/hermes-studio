@@ -1,3 +1,5 @@
+> Documento/evidenze storici. Per stato corrente leggere [STATUS](../project/STATUS.md); requisiti e gate attuali nel [catalogo feature](../features/README.md). Il contenuto sotto non autorizza nuove attività né certifica lo stato successivo a F00.
+
 # Direzione artistica — studio di ricerca
 
 2026-10-04. Applicazione esplicita di frontend-design, adattata al brief macOS e alle decisioni D04–D09. La skill web suggerisce una direzione riconoscibile; Axiom Design e il brief nativo governano font, controlli e materiali.

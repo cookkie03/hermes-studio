@@ -5,6 +5,7 @@ Stato: documentata; attach locale parziale esistente. Nessuna nuova integrazione
 
 
 <!-- feature-guidance:start -->
+
 ## File e skill da leggere e usare
 
 Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
@@ -55,10 +56,10 @@ Persistenza: preferenza endpoint sicura con schema/versione; token nel deposito 
 
 Test readiness/timeout/redirect/login, discovery stale, cambio host senza invii al vecchio, caduta socket senza cancel/retry, resume ID e scope. Handshake live senza prompt poi sessione/prova sintetica isolata separata. Remote support richiede test auth reali isolati e indicatori host; se non scelto resta disabilitato. Non appartengono alla feature browser UI, plugin, routine, voce o installazione automatica.
 
-## Handoff
-
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F11 con riferimento al desktop Hermes ufficiale e versioni pin. Leggi principi/ADR0006. Delimita il primo incremento attach locale, autenticazione o remoto; non implementarli tutti implicitamente. Preserva runtime/configurazioni personali, usa profilo/dati isolati per i prompt, documenta ogni capability effettivamente provata.
-
 ## D30 — Eventi oltre il turno e parità runtime
 
 [F18](F18-hermes-native-features-and-observability.md) usa il trasporto scoped F11 per osservare anche `review.summary` e stati successivi alla risposta. La connessione/session subscription non termina implicitamente quando il testo è completo. Mapping versione/profilo/capability e gap visibili; nessun request(method) generico o import di profili personali per ottenere parità. Memoria/learning restano Hermes, mentre cache UI derivate non sono ricordi del modello.
+
+## Handoff
+
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F11 con riferimento al desktop Hermes ufficiale e versioni pin. Leggi principi/ADR0006. Delimita il primo incremento attach locale, autenticazione o remoto; non implementarli tutti implicitamente. Preserva runtime/configurazioni personali, usa profilo/dati isolati per i prompt, documenta ogni capability effettivamente provata.

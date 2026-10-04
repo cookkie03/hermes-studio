@@ -1,3 +1,5 @@
+> Documento/evidenze storici. Per stato corrente leggere [STATUS](STATUS.md); requisiti e gate attuali nel [catalogo feature](../features/README.md). Il contenuto sotto non autorizza nuove attività né certifica lo stato successivo a F00.
+
 # File della ricerca
 
 2026-10-04. Incremento nativo per il percorso ricerca/scrittura: modulo indipendente ResearchFiles in HermesCore e vista ResearchFilesView utilizzabile come tab strumenti. Non modifica il modello delle conversazioni e non introduce un editor universale.

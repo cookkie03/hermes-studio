@@ -1,3 +1,5 @@
+> Documento/evidenze storici. Per stato corrente leggere [STATUS](../project/STATUS.md); requisiti e gate attuali nel [catalogo feature](../features/README.md). Il contenuto sotto non autorizza nuove attività né certifica lo stato successivo a F00.
+
 # Contratto client–runtime: proposta e verifica
 
 2026-10-04. Stato: proposta, nessuna chiamata a un runtime personale effettuata. Fonte primaria: [Programmatic Integration Hermes](https://hermes-agent.nousresearch.com/docs/developer-guide/programmatic-integration). Questa è una specifica dell'adattatore desiderato, non una nuova API già esistente.

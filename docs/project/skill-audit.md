@@ -1,3 +1,5 @@
+> Audit storico della fase iniziale, conservato integralmente. Per stato corrente usare [STATUS](STATUS.md), [workflow](../agents/feature-workflow.md) e [catalogo skill](../agents/skills-catalog.md); applicazione effettiva nel WORKLOG della chat.
+
 # Audit delle skill richieste
 
 2026-10-04. Letta/applicata non significa workflow esaurito. Nessun completamento retroattivo.

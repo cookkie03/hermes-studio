@@ -1,3 +1,5 @@
+> Documento/evidenze storici. Per stato corrente leggere [STATUS](../project/STATUS.md); requisiti e gate attuali nel [catalogo feature](../features/README.md). Il contenuto sotto non autorizza nuove attività né certifica lo stato successivo a F00.
+
 # Hermes Desktop — proposta di design
 
 > Aggiornamento: la composizione iniziale è superata dalle decisioni team/espressività/ricerca e scrittura in `docs/project/MEMORY.md`. Q6 è ancora pendente; conservare questa baseline come storico.

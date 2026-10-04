@@ -4,6 +4,7 @@ Stato: documentata; server-request/lease e fixture parziali esistenti.
 
 
 <!-- feature-guidance:start -->
+
 ## File e skill da leggere e usare
 
 Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
@@ -49,10 +50,10 @@ Decision module condiviso possiede identità richiesta, session ownership, cance
 
 Pending/cancel/stale/disconnect/reconnect/thread in background, doppio clic e risposte fuori enum. Una decisione singola raggiunge RPC corretto; sessioni sconosciute escluse. Capability false a finestra assente, true solo con handler pronto; cleanup non disabilita altre view attive. Test isolati di percorso autorizzato e diniego, verifica focus/tastiera/Reduced Motion. Non cambiare configurazione privata o policy per far passare test.
 
-## Handoff
-
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Sviluppa esclusivamente F16. Verifica il contratto Hermes della versione corrente, parti dalle fixture esistenti e definisci gli invarianti del decision module. Non aggiungere auto-approve né plugin/browser/computer nuovi. Prova richieste annullate e routing tra conversazioni possedute; aggiorna docs e limiti.
-
 ## Ambiti aggiuntivi D25–D29
 
 Grant folder dello Space esplicito per root/host/operazioni, distinto da selezione/membership; unlink preserva dati. Browser profilo e lease condiviso F08, Take over/revoke/resume distinti senza fallback nascosto. Memoria profilo e file Space F15 hanno writer/gates propri; pending non è applied. Voce F13 richiede microfono, routing provider e retention chiari; consenso a vocal chat non autorizza chiamate telefoniche o azioni sensibili senza revisione.
+
+## Handoff
+
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Sviluppa esclusivamente F16. Verifica il contratto Hermes della versione corrente, parti dalle fixture esistenti e definisci gli invarianti del decision module. Non aggiungere auto-approve né plugin/browser/computer nuovi. Prova richieste annullate e routing tra conversazioni possedute; aggiorna docs e limiti.

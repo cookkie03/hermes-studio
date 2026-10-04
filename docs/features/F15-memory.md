@@ -1,14 +1,9 @@
-# F15 — Memoria Hermes, identità e memoria Markdown degli Spaces
+# F15 — Memoria Markdown degli Spaces e preferenze legacy
 
-Stato: specifica D28 aggiornata D30, 2026-10-04. Baseline preferenze Studio parziale, integrazione Hermes e Markdown per Space non implementate. La richiesta corrente è documentare, non attivare apprendimento o importare memorie personali.
-
-## Documentazione ufficiale da leggere
-
-Fonte principale: **[Persistent Memory — Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/)**. Leggere anche [Curator](https://hermes-agent.nousresearch.com/docs/user-guide/features/curator/), [Memory Providers](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers/), [Skills System](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/), [Personality & SOUL.md](https://hermes-agent.nousresearch.com/docs/user-guide/features/personality/) e [Context Files](https://hermes-agent.nousresearch.com/docs/user-guide/features/context-files/).
-
-Il [prospetto completo e confronto col sorgente](../research/hermes-memory-system.md) copre tutta la sezione ufficiale: limiti, snapshot, sessioni, pending, background review, costi/modelli, curator, Journey, provider, richiamo e compaction. Codice fissato alla SHA `e1e82d782f353766c7a22db6e5ac4fa58bbff325`; verificare versione e contratti prima del codice. Non è collaudo del runtime collegato.
+Stato: documentata, non completa; aggiornamento D28/D30, 2026-10-04. Contenuti locali MVP preservati. [F18](F18-hermes-native-features-and-observability.md) possiede visualizzazione della memoria Hermes e note native; questa scheda non crea un secondo archivio runtime.
 
 <!-- feature-guidance:start -->
+
 ## File e skill da leggere e usare
 
 Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
@@ -34,62 +29,40 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
 <!-- feature-guidance:end -->
 
-## Precisazione D30 — memoria Hermes preservata, viewer in F18
+## Risultato e incrementi
 
-La memoria runtime resta integralmente nel suo profilo Hermes. **Non creare un nuovo archivio Studio per copiarla o sostituirla.** La nuova [F18](F18-hermes-native-features-and-observability.md) possiede viewer read-only, riepiloghi nella chat e copertura delle capacità native. F15 possiede memoria Markdown dello Space e preferenze legacy; F15-C/D restano eventuale gestione esplicitamente selezionata del backend esistente, non prerequisito per osservarlo. F18-B supersede la proposta di viewer runtime in F15-A. Le sezioni tecniche sotto restano vincoli, non istruzioni per duplicare Hermes.
+**F15-A — Ambiti locali/legacy:** mostrare preferenze Studio già presenti con origine chiara e collegamenti alle sezioni Space/runtime. Nessuna importazione/migrazione implicita; archivio illeggibile preservato. Non reiniettare copie della memoria Hermes.
 
-## Livelli da mantenere distinti
+**F15-B — Memoria Markdown Space:** scegliere/creare un file nella cartella autorizzata, con percorso, revisione, ultimo esito e stato leggibili. Prerequisiti F03/F10; filesystem autoritativo. `MEMORY.md` è nome possibile, non capacità di discovery automatica Hermes. Evitare collisioni col file esistente.
 
-| Livello | Autorità e funzione | Aggiornamento |
-|---|---|---|
-| Identità Dot/profilo | `<HERMES_HOME>/SOUL.md`: carattere e comportamento; F04 possiede il binding Dot→profilo | Modifica esplicita; non diario generato automaticamente |
-| Memoria Hermes | `memories/USER.md` e `MEMORY.md`: preferenze utente e fatti durevoli; default 1.375/2.200 caratteri | Tool `memory` e review autorizzata; pending distinto da applied |
-| Memoria Space | File Markdown scelto nelle cartelle collegate; decisioni e stato del progetto | Contratto Studio proposto sotto, attraverso F03/F10 |
-| Contesto progetto | `AGENTS.md`, `.hermes.md`/`HERMES.md` e discovery compatibile col working directory | File del progetto, non duplicazione dei built-in |
-| Cronologia/recall | Sessioni runtime persistite e `session_search` | Runtime conserva; richiamo su richiesta e filtrato |
-| Procedure | Skill, `/learn`, `/refine`, curator | Sistema Hermes; integrazione manutenzione con F07 |
-| Preferenze Studio legacy | Archivio locale già presente nel MVP | Conservato e identificato; nessuna migrazione o inclusione doppia automatica |
+**F15-C — Gestione built-in opzionale:** eventuali add/replace/remove/pending/approve/reject sulle memorie del profilo Hermes tramite contratto backend supportato, solo se questo incremento viene selezionato. F18-B rimane viewer read-only. Non usare `/api/memory` status come CRUD né scritture dirette che aggirano gate/lock/formato; prove e permessi F11/F16 richiesti.
 
-Un Dot non riceve una memoria separata solo perché ha un avatar: l'ambito dipende dal profilo Hermes associato. Uno Space non è un profilo, e un `SOUL.md` nel folder non diventa automaticamente identità del runtime. Memoria condivisa fra bot richiede mapping esplicito; non puntare più writer allo stesso home.
+La precedente F15-D (learning/curator) è ricondotta a **F07 per gestione skill/manutenzione** e **F18 per visibilità**. Restano future selezioni autonome, non attività implicite di F15.
 
-## Incrementi selezionabili, uno alla volta
+## File Space aggiornato durante il lavoro
 
-**F15-A — Visibilità locale e scope:** archivio legacy e destinazioni Space; nessuna importazione. Viewer runtime e collegamento alle note native passano a F18-B/A, che riusano i vincoli Hermes qui documentati.
+Eventi significativi: decisione confermata, risultato salvato, milestone verificata e chiusura incarico. Modalità da definire nella chat feature: manuale con diff/Save oppure automatica entro file/ambito scelti. L'agente prepara cambiamenti con fonte/chat/esecuzione, decisioni, stato/prossimo passo e link ai risultati. Mostrare policy, revisione ed esito applicato; testo «ricordato» non prova scrittura.
 
-**F15-B — Memoria Markdown Space:** scegliere/creare un file nel folder autorizzato, con percorso e revisione visibili. F03/F10 prerequisiti; contenuto filesystem autoritativo. `MEMORY.md` è un possibile nome, non un file scoperto magicamente da Hermes. Nome/percorso definitivo scelto nella chat feature per evitare collisioni.
+Usare writer/revision/conflict F10; preservare sezioni manuali e bozza, rileggere versione prima di salvare. Cambi esterni non vengono sovrascritti. Nessun diario infinito: sintesi corrente con link alla storia. Un file salvato non prova che un incarico attivo lo abbia letto; inclusione/lettura per incarico esplicita e versionata. Host remoto richiede root raggiungibile/grant, non semplice path Mac nel prompt.
 
-**F15-C — Gestione memoria Hermes:** adattare tool/API supportati al profilo autenticato; add/replace/remove e pending/approve/reject, limiti e nuova sessione. Non scrivere direttamente il file ignorando separatore, lock, sicurezza e approvazioni del backend. `/api/memory` status non prova un CRUD completo o slash command disponibile via RPC.
+Creazione e aggiornamento di file in un vault personale richiedono destinazione scelta nell'app: niente seed/import/scan personale al lancio, nessuna scrittura automatica su file omonimo esistente o istruzioni AGENTS/SOUL.
 
-**F15-D — Apprendimento e manutenzione:** visibilità review, `/refine`, `/learn`, Journey, curator e provider opzionali con F07/F11/F16. Selezionare singoli incrementi; apertura Memory non avvia curator, consolidamento LLM, installazioni o purge.
+## Contratti runtime da consultare per F15-C
 
-## Contratto proposto per il file Space sempre aggiornato
+[Persistent Memory ufficiale](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/) e [prospetto completo](../research/hermes-memory-system.md) sono il riferimento tecnico per USER/MEMORY, snapshot congelato, budget, pending, tool format, provider, recall e compaction. [Curator](https://hermes-agent.nousresearch.com/docs/user-guide/features/curator/) e [Memory Providers](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers/) sono approfondimenti, non prerequisiti per file Space locale.
 
-Aggiornato dopo **eventi significativi**, non dopo ogni token: decisione confermata, risultato salvato, milestone verificata e chiusura incarico. Modalità da definire per Space nella chat feature: manuale con diff e Save, oppure aggiornamento automatico al verificarsi degli eventi, entro il file e ambito scelti. L’agente prepara il diff con fonte/chat/esecuzione, decisioni, stato/prossimo passo e riferimenti; policy e risultato sono visibili. L’aggiornamento automatico richiesto fa parte della specifica, non viene attivato in questa fase documentale. Un salvataggio deve confermare revisione e timestamp, non basta testo «ricordato».
+Preservare contenuti/profili Hermes senza migrazione: memoria profilo, identità SOUL, cronologia e file progetto distinti. I gates backend decidono staged/applied; una nuova sessione è distinta dal resume. Il viewer è F18; skill/provider management non si implementa per rendere attiva una checkbox Studio.
 
-Riutilizzare writer/revision/conflict F10: rileggere versione, preservare sezioni manuali e bozza, segnalare modifica esterna, nessun overwrite cieco o append concorrente. Niente diario infinito: stato corrente sintetico con link a risultati/storia. Nessuna scrittura automatica in Obsidian, `.git`, `AGENTS.md` o file esistenti a nome uguale.
+## UI, ownership e privacy
 
-La lettura per incarico deve essere esplicita e versionata nel contesto/attachment del working directory dello Space. Non iniettare tutti i vault o duplicare gli stessi fatti in legacy Store e memoria Hermes. Mostrare quando il file è stato letto e da quale incarico; stato su disco e contesto già in uso sono distinti. Host remoto richiede root raggiungibile e grant F16.
+Memory locale/Space mostra origine e percorso, policy, bozza, errore/conflitto e ultima scrittura confermata. Viewer Profilo e note post-turn sono destinazioni F18, identità del Dot F04. Loading, vuoto, offline/stale e errore diversi. Save/Cancel/focus/tastiera/Reduced Motion seguono [component-system](../design/component-system.md).
 
-## Semantica Hermes da preservare
-
-Snapshot built-in congelato all'avvio sessione: scritture persistono subito, il blocco iniziale cambia alla sessione successiva. Restart/resume può continuare la stessa sessione; `/new` è confine distinto. Tool results mostrano stato live. Budget in caratteri: overflow è errore e non elimina automaticamente ricordi.
-
-Scrittura proposta, applicata, rifiutata, conflitto ed errore sono stati distinti. Gate memoria e gate skill separati. Review automatica replace/remove va in pending anche senza gate generale. Mostrare notifiche off non spegne review/scritture. Nessun switch Studio che cambia config personale senza ambito esplicito.
-
-Background review memoria default ogni 10 turni utente; skill dopo 10 iterazioni, con condizioni e tool disponibili. Non aggiornamento garantito di ogni fatto; coda deferred locale può perdere lavoro all'uscita. Curator mantiene procedure, non MEMORY: deterministico stale/archive, consolidamento LLM off per default. Comandi veri `/learn` e `/refine`; non inventare `skilldistill` come API.
-
-Recall storico e compaction separati. Il sorgente limita contenuti/finestre di `session_search` nonostante «no truncation» nel documento; provider esterni possono essere attivi con built-in disabilitati nonostante formulazione generica «always active». Il report documenta queste difformità. Non promettere ricordo totale o durata 24h.
-
-## UI, privacy e ownership
-
-Memory nella sidebar OpenDots, con tab/filtri per Profilo, Space, Preferenze Studio e Apprendimento secondo capability. Mostrare percorso, origine, uso/budget, pending e ultima applicazione; identità si modifica da Dot F04. Empty/offline/unavailable diversi. Focus, Save/Cancel, errori con bozza preservata, Reduced Motion seguono [component-system](../design/component-system.md).
-
-Non leggere home/profili personali come seed. Contesto inviato può arrivare al provider runtime; provider esterni hanno retention e costi propri. Non loggare testo ricordi/prompt/audio, non versionare file runtime. Nessuna attivazione automatica plugin/provider o purge. Ownership: F15 vista e orchestrazione memoria; F10 writer; F03 file/editor; F04 identità/binding; F07 skill; F11 trasporto; F16 grants.
+F15 possiede workflow memoria Space/legacy ed eventuali mutazioni built-in selezionate; F10 writer, F03 editor, F04 binding, F11 trasporto, F16 grants. [Confini condivisi](../architecture/feature-boundaries.md). Niente testo ricordi/prompt completi nei log/Git; dati inviati al runtime possono arrivare al provider scelto. Nessun reset, purge o provider installato all'apertura.
 
 ## Definition of done per incremento
 
-A: origini/scope/legacy visibili, nessun accesso implicito. B: folder sintetico, creazione/aggiornamento/restart, conflitto esterno, evento significativo e lettura per incarico provati; file manuale preservato. C: tool write realmente applicato o pending, approvazione/rifiuto/stale target, overflow, nuova sessione contro resume, isolamento due profili e archivio illeggibile senza reset. D: status/run/completion separati, archive/restore reversibili, gate LLM/skill rispettati e nessuna installazione automatica. Ogni incremento: UI packaged, tastiera/focus/900px, privacy e nessun file personale mutato. Fixture, sorgente e live distinti nelle evidenze.
+A: origini/scope visibili, legacy preservato al restart e su errori, nessuna inclusione doppia o import. B: folder sintetico, creazione/update/restart, conflitto esterno e evento significativo provati; contenuti manuali preservati; lettura per incarico/versione dimostrata. C: mutazione realmente applicata o pending, approve/reject/stale target/overflow, fresh session contro resume, isolamento profili e file illeggibile senza reset. Ogni incremento: packaged UI, focus/tastiera/900px, privacy e nessun dato personale modificato dalle prove.
 
 ## Prompt per una nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e File e skill F15. Leggi Persistent Memory ufficiale e docs/research/hermes-memory-system.md; verifica SHA e capability del backend. Implementa soltanto l'incremento F15 selezionato, preservando memoria Hermes, identità, cronologia, Space Markdown e legacy Studio come ambiti distinti. Usa file/revision F10 per Space e contratti runtime per built-in, senza import personali o scritture dirette che bypassano gates. Prova esito persistito, pending, conflitto e nuova sessione con dati sintetici. Non attivare curator/provider o sviluppare altre feature incidentalmente. Aggiorna documentazione ed evidenze prima del commit.
+> Prima segui docs/agents/feature-workflow.md e File e skill F15. Implementa solo F15-A/B/C selezionato; viewer e note Hermes sono F18, manutenzione skill F07. Per Space usa root/revision/writer F10 ed editor F03, senza copie dei file in un nuovo store. Per eventuali mutazioni runtime leggi Persistent Memory e docs/research/hermes-memory-system.md, verifica contratto/gates del profilo isolato, non scrivere direttamente i built-in. Prova esito/restart/conflitto e aggiornamenti significativi su dati sintetici. Aggiorna scheda, STATUS, MEMORY/decisioni se cambia direzione e WORKLOG; review prima del commit.

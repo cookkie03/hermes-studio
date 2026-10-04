@@ -1,25 +1,20 @@
 # Hermes Studio
 
-Fondazione di un'app macOS per Hermes: disposizione OpenDots, componenti ispirati a Unsloth/Codex, runtime e strumenti Hermes. Client Electron parziale presente; SwiftUI precedente conservato come storia. Repository indipendente con provenienza del codice riusato, senza piano di fork.
+App macOS per assistente personale e progetti: layout OpenDots, componenti Unsloth/Codex e runtime/strumenti Hermes. Client Electron/React con servizio Node embedded; baseline SwiftUI storica conservata. Repository indipendente con attribuzione MIT del codice riusato.
 
-## Una feature per chat
+## Parti da qui
 
-Il lavoro attuale consegna **18 schede**, non implementa automaticamente il backlog. Parti dal [catalogo delle feature](docs/features/README.md), scegli una scheda e usa il suo prompt di handoff in una nuova chat Codex.
+[Indice della documentazione](docs/README.md) distingue decisioni, stato, feature, fonti e storia. Il [catalogo F00–F18](docs/features/README.md) contiene 19 schede con skill, file, gate e prompt per chat dedicate. F00 è completata; altre capacità documentate/parziali si sviluppano solo dopo selezione dell'utente.
 
-| Documento | Scopo |
-|---|---|
-| [Stato](docs/project/STATUS.md) | Evidenze, baseline e gate ancora aperti |
-| [Memoria](docs/project/MEMORY.md) | Decisioni confermate e continuità |
-| [Piano corrente](docs/project/feature-development-plan.md) | Ambito documentale e sviluppo selezionato |
-| [Principi](docs/architecture/principles.md) | Qualità della codebase e ownership |
-| [Review architettura](docs/architecture/feature-architecture-review.md) | Due candidati, nessun refactor automatico |
-| [Componenti](docs/design/component-system.md) | Anatomia, dimensioni e motion proposti |
-| [Riferimento Hermes desktop](docs/research/hermes-desktop-reference.md) | Fonti e mappa del runtime ufficiale |
-| [Release DMG](docs/features/F12-github-releases-dmg.md) | Handoff per prodotto GitHub installabile |
-| [Registro](docs/project/WORKLOG.md) | Cronologia di ricerca e verifiche |
+- [Stato verificato e gate](docs/project/STATUS.md).
+- [Direzione corrente](docs/project/MEMORY.md) e [decisioni](docs/project/decisions.md).
+- [Piano per una feature](docs/project/feature-development-plan.md), [workflow](docs/agents/feature-workflow.md) e [confini](docs/architecture/feature-boundaries.md).
+- [UI autorevole](docs/design/opendots-target.md) e [componenti](docs/design/component-system.md).
+- [Memoria/capacità native Hermes](docs/features/F18-hermes-native-features-and-observability.md); memoria Markdown degli Spaces distinta in F15.
+- [Release GitHub e DMG](docs/features/F12-github-releases-dmg.md).
 
-## Baseline di sviluppo
+## Sviluppo e distribuzione
 
-Vedi [desktop/README](desktop/README.md) per build e dipendenze. App e DMG locali sono artefatti di sviluppo ad hoc; non sono una release notarizzata. Test metadata e handshake non provano chat reale o strumenti integrati. Il cliente finale dovrà installare una .app, senza npm run dev: F12 specifica questa consegna e la verifica su installazione pulita.
+Comandi e dipendenze: [desktop/README](desktop/README.md) e desktop/package.json. Artefatti locali sono build di sviluppo ad hoc, non release notarizzate; il DMG storico non incorpora necessariamente F00. L'utente finale dovrà installare la .app, senza devserver: F12 specifica il percorso.
 
-Usare profili e dati sintetici; nessuna riconfigurazione o import automatico del runtime Hermes personale. `AGENTS.md` descrive la persistenza continua richiesta dall'utente.
+Le prove runtime usano profili/dati sintetici e preservano dati/credenziali personali. Build e handshake non dimostrano chat, strumenti o continuità di 24 ore. [AGENTS](AGENTS.md) descrive l'avvio del lavoro e la persistenza richiesta.

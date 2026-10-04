@@ -1,6 +1,6 @@
 # Artefatti di sviluppo osservati
 
-2026-10-04. Evidenze storiche della baseline; non certificano una release finale né pubblicata. Il build successivo di layout può avere hash diverso: rigenerare/verificare il manifest prima di distribuire.
+2026-10-04. Evidenze storiche della baseline; non certificano una release finale né pubblicata. La consegna F00 è nella [review corrente](../architecture/f00-review-2026-10-04.md) e nel [STATUS](../project/STATUS.md); il DMG sotto precede F00. Rigenerare/verificare il manifest prima di distribuire.
 
 ## Incremento packaging realizzato
 

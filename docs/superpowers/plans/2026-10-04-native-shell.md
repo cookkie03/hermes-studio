@@ -1,3 +1,5 @@
+> Piano storico della baseline SwiftUI, superato per il prodotto da ADR0005/0006. Non eseguire le istruzioni sotto automaticamente. [Piano corrente](../../project/feature-development-plan.md), una feature selezionata per chat.
+
 # Hermes Native Shell Implementation Plan
 
 > For agentic workers: implementation directly in this session, explicitly requested by the user. User direction takes precedence over an additional plan approval cycle.
