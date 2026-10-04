@@ -2,6 +2,35 @@
 
 Stato: documentata, da sviluppare in una chat dedicata. Un DMG locale ad-hoc esiste; pipeline e release pubbliche non sono completate. Questo è il documento di handoff richiesto dall'utente.
 
+
+
+<!-- feature-guidance:start -->
+## File e skill da leggere e usare
+
+Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+
+### Skill specifiche
+
+| Skill / percorso | Quando applicarla a questa feature |
+|---|---|
+| [writing-plans](<../../.agents/skills/writing-plans/SKILL.md>) | Pipeline con gate build/verifica/pubblicazione |
+| [documentation-and-adrs](<../../.agents/skills/documentation-and-adrs/SKILL.md>) | Versione, prerequisiti e limiti release |
+| [wizard](<../../.agents/skills/wizard/SKILL.md>) — condizionale | Solo credenziali di firma o CI da fornire da parte dell’utente |
+| [pr](<../../.agents/skills/pr/SKILL.md>) — condizionale | Se si crea una PR |
+| [security-diff](</Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-diff-scan/SKILL.md>) — condizionale | Se è richiesta review del workflow/diff di packaging |
+
+### Punti di ingresso da leggere
+
+- [desktop/package.json](<../../desktop/package.json>): Comandi e versione.
+- [desktop/electron-builder.config.cjs](<../../desktop/electron-builder.config.cjs>): Packaging.
+- [desktop/scripts/sign-development.cjs](<../../desktop/scripts/sign-development.cjs>): Firma ad hoc di sviluppo.
+- [desktop/scripts/verify-package.cjs](<../../desktop/scripts/verify-package.cjs>): Manifest e verifiche.
+- [docs/releases/development-artifacts.md](<../../docs/releases/development-artifacts.md>): Evidenze storiche.
+- [Hermes: apps/desktop/BUILDING.md](</Users/luca/.hermes/hermes-agent/apps/desktop/BUILDING.md>): Reference distribuzione Hermes; lettura sorgente alla versione fissata, non prova live.
+
+Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+<!-- feature-guidance:end -->
+
 ## Obiettivo
 
 Dalla repository `cookkie03/hermes-studio` ottenere release versionate con DMG installabile, checksum, note chiare e istruzioni per utenti. L'utente scarica, apre DMG e trascina .app in Applications; non deve installare Node/npm né lanciare npm run dev. Il runtime Hermes è prerequisito esplicito finché una feature separata non ne gestisce l'installazione.
@@ -34,4 +63,4 @@ F00 gate della base e versione selezionata delle feature; ownership packaging/CI
 
 ## Prompt da passare a Codex
 
-> Trasforma la repository GitHub cookkie03/hermes-studio in software macOS distribuibile seguendo esclusivamente docs/features/F12-github-releases-dmg.md. Leggi AGENTS.md, MEMORY/STATUS, ADR0006 e principles.md; verifica stato, remote e artifact reali. Prepara build riproducibile e CI, .app+DMG+checksums+note, installazione senza npm per utenti e GitHub release draft. Preserva dati, licenze e credenziali; non implementare altre feature o repository derivate. Non dichiarare notarizzazione senza prova. Prima di pubblicare verifica tutti i gate e l'autorizzazione esplicita della chat. Consegna URL release/commit e checksum confermati oppure prerequisiti precisi.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Trasforma la repository GitHub cookkie03/hermes-studio in software macOS distribuibile seguendo esclusivamente docs/features/F12-github-releases-dmg.md. Leggi AGENTS.md, MEMORY/STATUS, ADR0006 e principles.md; verifica stato, remote e artifact reali. Prepara build riproducibile e CI, .app+DMG+checksums+note, installazione senza npm per utenti e GitHub release draft. Preserva dati, licenze e credenziali; non implementare altre feature o repository derivate. Non dichiarare notarizzazione senza prova. Prima di pubblicare verifica tutti i gate e l'autorizzazione esplicita della chat. Consegna URL release/commit e checksum confermati oppure prerequisiti precisi.

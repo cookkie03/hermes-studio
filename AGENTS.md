@@ -20,7 +20,7 @@ Un solo contesto: `GLOSSARY.md` e `docs/adr/`. Leggi `docs/agents/domain.md` qua
 
 ### Percorso di lavoro
 
-Per scegliere una skill leggi `.agents/skills/ask-matt/SKILL.md`; per il setup e il percorso completo leggi `docs/agents/skills-workflow.md`. Le skill installate sono disponibili come file in questa chat: leggi il rispettivo `SKILL.md` prima di applicarle.
+Per ogni feature leggi `docs/agents/feature-workflow.md` e la sezione File e skill della scheda selezionata. Per skill ulteriori consulta `docs/agents/skills-catalog.md` (progetto/globali/cache/runtime distinti) e leggi il SKILL.md pertinente prima di applicarlo. Per scegliere una skill leggi `.agents/skills/ask-matt/SKILL.md`; per il setup e il percorso completo leggi `docs/agents/skills-workflow.md`. Le skill installate sono disponibili come file in questa chat: leggi il rispettivo `SKILL.md` prima di applicarle.
 
 Per estrarre pattern usa `.agents/skills/ux-extract/SKILL.md` e cita le evidenze nella libreria. Per decisioni visive Apple usa `.agents/skills/axiom-design/SKILL.md`; per una futura implementazione nativa e la sua verifica usa le suite `axiom-swiftui` e `axiom-accessibility`.
 

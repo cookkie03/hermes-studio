@@ -2,6 +2,35 @@
 
 Stato: documentata; attach locale parziale esistente. Nessuna nuova integrazione implementata ora.
 
+
+
+<!-- feature-guidance:start -->
+## File e skill da leggere e usare
+
+Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+
+### Skill specifiche
+
+| Skill / percorso | Quando applicarla a questa feature |
+|---|---|
+| [research](<../../.agents/skills/research/SKILL.md>) | Se schema/eventi upstream sono incerti: ricerca primaria documentata |
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Connessione, autenticazione e processo posseduto |
+| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — condizionale | Se emerge un errore riproducibile di connessione o lifecycle |
+| [wizard](<../../.agents/skills/wizard/SKILL.md>) — condizionale | Solo prerequisiti account/host che il client non può completare |
+| [hermes](</Users/luca/.codex/skills/personal/hermes/SKILL.md>) — condizionale | Soltanto se viene esplicitamente delegata un’operazione a Hermes; non sostituisce il connector |
+
+### Punti di ingresso da leggere
+
+- [docs/research/hermes-desktop-reference.md](<../../docs/research/hermes-desktop-reference.md>): Versione e riferimento principale.
+- [docs/research/runtime-integration-findings.md](<../../docs/research/runtime-integration-findings.md>): Contratti studiati.
+- [desktop/electron/backend-bootstrap.cjs](<../../desktop/electron/backend-bootstrap.cjs>): Discovery/process ownership.
+- [desktop/hermes/gateway.mjs](<../../desktop/hermes/gateway.mjs>): Gateway.
+- [desktop/hermes/gateway-network.test.mjs](<../../desktop/hermes/gateway-network.test.mjs>): Fixture di rete.
+- [Hermes: apps/desktop/electron/main.ts](</Users/luca/.hermes/hermes-agent/apps/desktop/electron/main.ts>): Orchestrazione ufficiale; lettura sorgente alla versione fissata, non prova live.
+
+Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+<!-- feature-guidance:end -->
+
 ## Obiettivo e fonte
 
 Studio usa lo stesso runtime Hermes del desktop ufficiale senza incorporarne l'interfaccia. Fonte primaria: [apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop), electron/backend-discovery.ts, main.ts e src/lib del checkout locale; mappa dettagliata ../research/runtime-integration-findings.md. Annotare SHA/versione prima di sviluppare: main può cambiare.
@@ -28,4 +57,4 @@ Test readiness/timeout/redirect/login, discovery stale, cambio host senza invii 
 
 ## Handoff
 
-> Implementa solo F11 con riferimento al desktop Hermes ufficiale e versioni pin. Leggi principi/ADR0006. Delimita il primo incremento attach locale, autenticazione o remoto; non implementarli tutti implicitamente. Preserva runtime/configurazioni personali, usa profilo/dati isolati per i prompt, documenta ogni capability effettivamente provata.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F11 con riferimento al desktop Hermes ufficiale e versioni pin. Leggi principi/ADR0006. Delimita il primo incremento attach locale, autenticazione o remoto; non implementarli tutti implicitamente. Preserva runtime/configurazioni personali, usa profilo/dati isolati per i prompt, documenta ogni capability effettivamente provata.

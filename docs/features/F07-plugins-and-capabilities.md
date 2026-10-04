@@ -1,5 +1,34 @@
 # F07 — Plugin, skill e capacità reali
 
+
+
+<!-- feature-guidance:start -->
+## File e skill da leggere e usare
+
+Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+
+### Skill specifiche
+
+| Skill / percorso | Quando applicarla a questa feature |
+|---|---|
+| [research](<../../.agents/skills/research/SKILL.md>) | Contratti tool/plugin/skill distinti |
+| [find-skills](<../../.agents/skills/find-skills/SKILL.md>) | Discovery di skill necessarie al lavoro, se manca una capacità |
+| [skill-installer](</Users/luca/.codex/skills/.system/skill-installer/SKILL.md>) — condizionale | Solo installazione delle skill di sviluppo necessarie e autorizzate; non installer plugin Hermes |
+| [skill-creator](</Users/luca/.codex/skills/.system/skill-creator/SKILL.md>) — condizionale | Se viene richiesta una nuova skill di sviluppo |
+| [security-diff](</Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-diff-scan/SKILL.md>) — condizionale | Se la chat richiede review di un diff che cambia privilegi/installazione |
+
+### Punti di ingresso da leggere
+
+- [docs/agents/skills-catalog.md](<../../docs/agents/skills-catalog.md>): Inventario skill di sviluppo vs runtime Hermes.
+- [docs/features/F16-permissions-and-approvals.md](<../../docs/features/F16-permissions-and-approvals.md>): Gate autorizzazioni.
+- [desktop/hermes/gateway.mjs](<../../desktop/hermes/gateway.mjs>): Allowlist e trasporto.
+- [Hermes: tui_gateway/contracts/tools_mcp_plugins.py](</Users/luca/.hermes/hermes-agent/tui_gateway/contracts/tools_mcp_plugins.py>): Registro, plugin e MCP; lettura sorgente alla versione fissata, non prova live.
+- [Hermes: apps/desktop/src/contrib/plugins.ts](</Users/luca/.hermes/hermes-agent/apps/desktop/src/contrib/plugins.ts>): Reference desktop; lettura sorgente alla versione fissata, non prova live.
+- [Hermes: apps/desktop/src/contrib/plugins-store.ts](</Users/luca/.hermes/hermes-agent/apps/desktop/src/contrib/plugins-store.ts>): Store plugin ufficiale; lettura sorgente alla versione fissata, non prova live.
+
+Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+<!-- feature-guidance:end -->
+
 ## Confine delle prove
 
 Stato: **documented, not implemented** (2026-10-04). Questa specifica descrive una futura slice di Hermes Studio; codice upstream disponibile non significa capability collegata nell’app. Evidenze: lettura del checkout sorgente `/Users/luca/.hermes/hermes-agent`, non esecuzione live, nessun prompt/configurazione/database personale. Riferimento autorevole: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). La versione remota può cambiare: prima di implementare fissare SHA e ripetere i contract test.
@@ -34,4 +63,4 @@ Fixture tool enabled vs serverinactive, unknown/deferredtools, profile collision
 
 ## Prompt nuova chat
 
-> Implementa F07 read-only capabilities con allowlist scoped, usando contracts/tools_mcp_plugins e desktop contrib/plugins. Parti da toolsets/tools/plugins e stati installato≠attivo. Non installare plugin né modificare config personale durante test. Se estendi a management, prepara diff concreto/review per capabilitydelta, vault-safe settings e rollback. Completa DoD e aggiorna docs; preserva strumenti Hermes deferiti.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F07 read-only capabilities con allowlist scoped, usando contracts/tools_mcp_plugins e desktop contrib/plugins. Parti da toolsets/tools/plugins e stati installato≠attivo. Non installare plugin né modificare config personale durante test. Se estendi a management, prepara diff concreto/review per capabilitydelta, vault-safe settings e rollback. Completa DoD e aggiorna docs; preserva strumenti Hermes deferiti.

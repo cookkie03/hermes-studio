@@ -2,6 +2,33 @@
 
 Stato: specifica per una singola chat futura; baseline parziale, feature non completa. Aggiornamento: 2026-10-04. Separata da F03 per rispettare una feature per chat. La richiesta corrente riguarda documentazione e MVP quasi vuoto; nessun nuovo sviluppo o import personale è autorizzato qui.
 
+
+<!-- feature-guidance:start -->
+## File e skill da leggere e usare
+
+Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+
+### Skill specifiche
+
+| Skill / percorso | Quando applicarla a questa feature |
+|---|---|
+| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | Memoria Studio distinta da memoria Hermes |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) | Componenti React e stato del renderer |
+| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Verifica UI packaged con dati sintetici e tool realmente disponibili |
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) — condizionale | Scope e persistenza locale |
+| [research](<../../.agents/skills/research/SKILL.md>) — condizionale | Solo se si seleziona integrazione con memoria runtime |
+
+### Punti di ingresso da leggere
+
+- [desktop/upstream/src/client/WorkspaceDialog.tsx](<../../desktop/upstream/src/client/WorkspaceDialog.tsx>): Superficie memoria.
+- [desktop/upstream/src/server/workspace.ts](<../../desktop/upstream/src/server/workspace.ts>): Metadata locali.
+- [desktop/upstream/src/server/store.ts](<../../desktop/upstream/src/server/store.ts>): Persistenza.
+- [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Inclusione nel contesto.
+- [Hermes: tools/memory_tool.py](</Users/luca/.hermes/hermes-agent/tools/memory_tool.py>): Riferimento distinto dal client Studio; lettura sorgente alla versione fissata, non prova live.
+
+Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+<!-- feature-guidance:end -->
+
 ## Risultato e confini
 
 Conservare una preferenza che l’utente può leggere, modificare e scegliere di includere nei nuovi messaggi di un Dot. Rendere chiaro dove viene conservata e quando entra nel contesto.
@@ -61,4 +88,4 @@ Prima slice: avvio vuoto senza import; add/edit/cancel con bozza ed errori; pers
 
 ## Prompt per una nuova chat
 
-> Implementa soltanto la slice selezionata di F15 leggendo AGENTS.md, MEMORY/STATUS, GLOSSARY, component-system e questa specifica. Non importare memorie personali e non usare il profilo Hermes come seed. Prima slice locale, inizialmente vuota; F11/F02 sono prerequisiti solo per futura inclusione nei nuovi messaggi. Ispeziona la baseline e concorda ownership dei file Memory condivisi prima di modificarli. Conserva testo/archivio su errore; contesto Studio è distinto da memoria runtime e lavoro attivo. Verifica restart, privacy, focus/tastiera/reduced motion con dati sintetici, aggiorna prove e documenti. Non riprendere il piano notturno globale né implementare F03 incidentalmente.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa soltanto la slice selezionata di F15 leggendo AGENTS.md, MEMORY/STATUS, GLOSSARY, component-system e questa specifica. Non importare memorie personali e non usare il profilo Hermes come seed. Prima slice locale, inizialmente vuota; F11/F02 sono prerequisiti solo per futura inclusione nei nuovi messaggi. Ispeziona la baseline e concorda ownership dei file Memory condivisi prima di modificarli. Conserva testo/archivio su errore; contesto Studio è distinto da memoria runtime e lavoro attivo. Verifica restart, privacy, focus/tastiera/reduced motion con dati sintetici, aggiorna prove e documenti. Non riprendere il piano notturno globale né implementare F03 incidentalmente.

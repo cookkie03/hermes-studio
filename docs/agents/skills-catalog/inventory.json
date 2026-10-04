@@ -1,0 +1,3430 @@
+{
+  "snapshot": "2026-10-04",
+  "workspace": "/Users/luca/Documents/ChatGPT/Hermes App 2",
+  "roots": [
+    {
+      "scope": "project",
+      "path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills"
+    },
+    {
+      "scope": "agents-global",
+      "path": "/Users/luca/.agents/skills"
+    },
+    {
+      "scope": "codex-global",
+      "path": "/Users/luca/.codex/skills"
+    },
+    {
+      "scope": "plugin-cache",
+      "path": "/Users/luca/.codex/plugins/cache"
+    },
+    {
+      "scope": "hermes-runtime",
+      "path": "/Users/luca/.hermes/skills"
+    }
+  ],
+  "entries": [
+    {
+      "scope": "project",
+      "name": "ask-matt",
+      "path": ".agents/skills/ask-matt/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/ask-matt/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "axiom-accessibility",
+      "path": ".agents/skills/axiom-accessibility/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/axiom-accessibility/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "axiom-design",
+      "path": ".agents/skills/axiom-design/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/axiom-design/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "axiom-macos",
+      "path": ".agents/skills/axiom-macos/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/axiom-macos/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "axiom-swiftui",
+      "path": ".agents/skills/axiom-swiftui/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/axiom-swiftui/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "code-review",
+      "path": ".agents/skills/code-review/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/code-review/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "codebase-design",
+      "path": ".agents/skills/codebase-design/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/codebase-design/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "diagnosing-bugs",
+      "path": ".agents/skills/diagnosing-bugs/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/diagnosing-bugs/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "documentation-and-adrs",
+      "path": ".agents/skills/documentation-and-adrs/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/documentation-and-adrs/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "domain-modeling",
+      "path": ".agents/skills/domain-modeling/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/domain-modeling/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "find-skills",
+      "path": ".agents/skills/find-skills/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/find-skills/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "frontend-design",
+      "path": ".agents/skills/frontend-design/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/frontend-design/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "grill-me",
+      "path": ".agents/skills/grill-me/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/grill-me/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "grill-with-docs",
+      "path": ".agents/skills/grill-with-docs/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/grill-with-docs/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "grilling",
+      "path": ".agents/skills/grilling/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/grilling/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "handoff",
+      "path": ".agents/skills/handoff/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/handoff/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "implement-spec",
+      "path": ".agents/skills/implement-spec/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/implement-spec/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "implement",
+      "path": ".agents/skills/implement/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/implement/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "improve-codebase-architecture",
+      "path": ".agents/skills/improve-codebase-architecture/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/improve-codebase-architecture/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "liquid-glass",
+      "path": ".agents/skills/liquid-glass/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/liquid-glass/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "pr",
+      "path": ".agents/skills/pr/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/pr/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "prototype",
+      "path": ".agents/skills/prototype/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/prototype/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "research",
+      "path": ".agents/skills/research/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/research/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "retro",
+      "path": ".agents/skills/retro/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/retro/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "setup-matt-pocock-skills",
+      "path": ".agents/skills/setup-matt-pocock-skills/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/setup-matt-pocock-skills/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "swiftui-expert-skill",
+      "path": ".agents/skills/swiftui-expert-skill/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/swiftui-expert-skill/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "swiftui-liquid-glass",
+      "path": ".agents/skills/swiftui-liquid-glass/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/swiftui-liquid-glass/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "tdd",
+      "path": ".agents/skills/tdd/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/tdd/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "teach",
+      "path": ".agents/skills/teach/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/teach/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "to-questionnaire",
+      "path": ".agents/skills/to-questionnaire/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/to-questionnaire/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "to-spec",
+      "path": ".agents/skills/to-spec/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/to-spec/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "to-tickets",
+      "path": ".agents/skills/to-tickets/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/to-tickets/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "triage",
+      "path": ".agents/skills/triage/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/triage/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "ux-extract",
+      "path": ".agents/skills/ux-extract/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/ux-extract/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "wait-what",
+      "path": ".agents/skills/wait-what/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/wait-what/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "wayfinder",
+      "path": ".agents/skills/wayfinder/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/wayfinder/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "wizard",
+      "path": ".agents/skills/wizard/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/wizard/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "writing-for-agents",
+      "path": ".agents/skills/writing-for-agents/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/writing-for-agents/SKILL.md"
+    },
+    {
+      "scope": "project",
+      "name": "writing-plans",
+      "path": ".agents/skills/writing-plans/SKILL.md",
+      "resolved_path": "/Users/luca/Documents/ChatGPT/Hermes App 2/.agents/skills/writing-plans/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "ask-matt",
+      "path": "/Users/luca/.agents/skills/ask-matt/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/ask-matt/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "brainstorming",
+      "path": "/Users/luca/.agents/skills/brainstorming/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/brainstorming/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "code-review",
+      "path": "/Users/luca/.agents/skills/code-review/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/code-review/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "codebase-design",
+      "path": "/Users/luca/.agents/skills/codebase-design/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/codebase-design/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "crawl4ai",
+      "path": "/Users/luca/.agents/skills/crawl4ai/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/crawl4ai/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "defuddle",
+      "path": "/Users/luca/.agents/skills/defuddle/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/defuddle/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "diagnosing-bugs",
+      "path": "/Users/luca/.agents/skills/diagnosing-bugs/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/diagnosing-bugs/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "domain-modeling",
+      "path": "/Users/luca/.agents/skills/domain-modeling/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/domain-modeling/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "frontend-design",
+      "path": "/Users/luca/.agents/skills/frontend-design/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/frontend-design/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "glm-ocr",
+      "path": "/Users/luca/.agents/skills/glm-ocr/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/glm-ocr/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "grill-me",
+      "path": "/Users/luca/.agents/skills/grill-me/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/grill-me/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "grill-with-docs",
+      "path": "/Users/luca/.agents/skills/grill-with-docs/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/grill-with-docs/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "grilling",
+      "path": "/Users/luca/.agents/skills/grilling/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/grilling/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "handoff",
+      "path": "/Users/luca/.agents/skills/handoff/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/handoff/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "implement-spec",
+      "path": "/Users/luca/.agents/skills/implement-spec/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/implement-spec/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "implement",
+      "path": "/Users/luca/.agents/skills/implement/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/implement/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "improve-codebase-architecture",
+      "path": "/Users/luca/.agents/skills/improve-codebase-architecture/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/improve-codebase-architecture/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "json-canvas",
+      "path": "/Users/luca/.agents/skills/json-canvas/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/json-canvas/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "obsidian-bases",
+      "path": "/Users/luca/.agents/skills/obsidian-bases/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/obsidian-bases/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "obsidian-markdown",
+      "path": "/Users/luca/.agents/skills/obsidian-markdown/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/obsidian-markdown/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "pr",
+      "path": "/Users/luca/.agents/skills/pr/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/pr/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "prototype",
+      "path": "/Users/luca/.agents/skills/prototype/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/prototype/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "research",
+      "path": "/Users/luca/.agents/skills/research/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/research/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "retro",
+      "path": "/Users/luca/.agents/skills/retro/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/retro/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "rizzo-flow",
+      "path": "/Users/luca/.agents/skills/rizzo-flow/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/rizzo-flow/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "setup-matt-pocock-skills",
+      "path": "/Users/luca/.agents/skills/setup-matt-pocock-skills/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/setup-matt-pocock-skills/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "Spotify Automation",
+      "path": "/Users/luca/.agents/skills/spotify-automation/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/spotify-automation/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "tdd",
+      "path": "/Users/luca/.agents/skills/tdd/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/tdd/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "teach",
+      "path": "/Users/luca/.agents/skills/teach/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/teach/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "to-questionnaire",
+      "path": "/Users/luca/.agents/skills/to-questionnaire/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/to-questionnaire/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "to-spec",
+      "path": "/Users/luca/.agents/skills/to-spec/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/to-spec/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "to-tickets",
+      "path": "/Users/luca/.agents/skills/to-tickets/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/to-tickets/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "triage",
+      "path": "/Users/luca/.agents/skills/triage/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/triage/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "wait-what",
+      "path": "/Users/luca/.agents/skills/wait-what/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wait-what/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "wayfinder",
+      "path": "/Users/luca/.agents/skills/wayfinder/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wayfinder/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "wiki-artifact",
+      "path": "/Users/luca/.agents/skills/wiki-artifact/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wiki-artifact/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "wiki-ingest",
+      "path": "/Users/luca/.agents/skills/wiki-ingest/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wiki-ingest/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "wiki-init",
+      "path": "/Users/luca/.agents/skills/wiki-init/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wiki-init/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "wiki-lint",
+      "path": "/Users/luca/.agents/skills/wiki-lint/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wiki-lint/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "wiki-query",
+      "path": "/Users/luca/.agents/skills/wiki-query/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wiki-query/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "wiki-save",
+      "path": "/Users/luca/.agents/skills/wiki-save/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wiki-save/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "wizard",
+      "path": "/Users/luca/.agents/skills/wizard/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wizard/SKILL.md"
+    },
+    {
+      "scope": "agents-global",
+      "name": "writing-for-agents",
+      "path": "/Users/luca/.agents/skills/writing-for-agents/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/writing-for-agents/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "imagegen",
+      "path": "/Users/luca/.codex/skills/.system/imagegen/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/skills/.system/imagegen/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "openai-docs",
+      "path": "/Users/luca/.codex/skills/.system/openai-docs/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/skills/.system/openai-docs/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "review-agent",
+      "path": "/Users/luca/.codex/skills/.system/review-agent/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/skills/.system/review-agent/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "skill-creator",
+      "path": "/Users/luca/.codex/skills/.system/skill-creator/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/skills/.system/skill-creator/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "skill-installer",
+      "path": "/Users/luca/.codex/skills/.system/skill-installer/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/skills/.system/skill-installer/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "agy",
+      "path": "/Users/luca/.codex/skills/personal/agy/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/agy/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "caldav",
+      "path": "/Users/luca/.codex/skills/personal/caldav/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/caldav/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "canvas-sync-to-obsidian",
+      "path": "/Users/luca/.codex/skills/personal/canvas-sync-to-obsidian/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/canvas-sync-to-obsidian/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "cdx",
+      "path": "/Users/luca/.codex/skills/personal/cdx/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/cdx/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "crawl4ai",
+      "path": "/Users/luca/.codex/skills/personal/crawl4ai/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/crawl4ai/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "daily-notes",
+      "path": "/Users/luca/.codex/skills/personal/daily-notes/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/daily-notes/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "glm-ocr",
+      "path": "/Users/luca/.codex/skills/personal/glm-ocr/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/glm-ocr/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "hermes",
+      "path": "/Users/luca/.codex/skills/personal/hermes/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/hermes/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "hermes",
+      "path": "/Users/luca/.codex/skills/personal/hms/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/hermes/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "lecture-scratchpad",
+      "path": "/Users/luca/.codex/skills/personal/lecture-scratchpad/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/lecture-scratchpad/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "light-rag",
+      "path": "/Users/luca/.codex/skills/personal/light-rag/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/light-rag/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "notion-to-obsidian",
+      "path": "/Users/luca/.codex/skills/personal/notion-to-obsidian/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/notion-to-obsidian/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "obsidian-bases-superpowers",
+      "path": "/Users/luca/.codex/skills/personal/obsidian-bases-superpowers/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-bases-superpowers/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "obsidian-bases",
+      "path": "/Users/luca/.codex/skills/personal/obsidian-bases/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-bases/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "obsidian-cli",
+      "path": "/Users/luca/.codex/skills/personal/obsidian-cli/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-cli/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "obsidian-markdown",
+      "path": "/Users/luca/.codex/skills/personal/obsidian-markdown/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-markdown/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "obsidian-rendering-traps",
+      "path": "/Users/luca/.codex/skills/personal/obsidian-rendering-traps/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-rendering-traps/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "provider-privacy-analysis",
+      "path": "/Users/luca/.codex/skills/personal/provider-privacy-analysis/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/provider-privacy-analysis/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "spotipy",
+      "path": "/Users/luca/.codex/skills/personal/spotipy/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/spotipy/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "unified-study-note",
+      "path": "/Users/luca/.codex/skills/personal/unified-study-note/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/unified-study-note/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "wiki-artifact",
+      "path": "/Users/luca/.codex/skills/personal/wiki-artifact/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-artifact/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "wiki-ingest",
+      "path": "/Users/luca/.codex/skills/personal/wiki-ingest/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-ingest/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "wiki-init",
+      "path": "/Users/luca/.codex/skills/personal/wiki-init/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-init/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "wiki-lint",
+      "path": "/Users/luca/.codex/skills/personal/wiki-lint/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-lint/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "wiki-query",
+      "path": "/Users/luca/.codex/skills/personal/wiki-query/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-query/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "wiki-save",
+      "path": "/Users/luca/.codex/skills/personal/wiki-save/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-save/SKILL.md"
+    },
+    {
+      "scope": "codex-global",
+      "name": "workspace-setup",
+      "path": "/Users/luca/.codex/skills/personal/workspace-setup/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/workspace-setup/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "frontend-app-builder",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/build-web-apps/0.1.2/skills/frontend-app-builder/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/build-web-apps/0.1.2/skills/frontend-app-builder/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "frontend-testing-debugging",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "react-best-practices",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "shadcn",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/build-web-apps/0.1.2/skills/shadcn-best-practices/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/build-web-apps/0.1.2/skills/shadcn-best-practices/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "stripe-best-practices",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/build-web-apps/0.1.2/skills/stripe-best-practices/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/build-web-apps/0.1.2/skills/stripe-best-practices/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "supabase-postgres-best-practices",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/build-web-apps/0.1.2/skills/supabase-best-practices/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/build-web-apps/0.1.2/skills/supabase-best-practices/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "assess-patch-risk",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/assess-patch-risk/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/assess-patch-risk/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "attack-path-analysis",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/attack-path-analysis/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/attack-path-analysis/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "deep-security-scan",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/deep-security-scan/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/deep-security-scan/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "define-security-policy",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/define-security-policy/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/define-security-policy/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "finding-discovery",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/finding-discovery/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/finding-discovery/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "fix-finding",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/fix-finding/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/fix-finding/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "propose-security-hardening",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/propose-security-hardening/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/propose-security-hardening/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "security-diff-scan",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/security-diff-scan/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/security-diff-scan/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "security-scan",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/security-scan/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/security-scan/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "threat-model",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/threat-model/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/threat-model/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "track-findings",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/track-findings/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/track-findings/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "triage-finding",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/triage-finding/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/triage-finding/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "validation",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/validation/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/validation/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "verify-fix",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/verify-fix/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/verify-fix/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vulnerability-writeup",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/vulnerability-writeup/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/codex-security/0.1.24/skills/vulnerability-writeup/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "analyze-data-quality",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/analyze-data-quality/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/analyze-data-quality/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "build-dashboard",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/build-dashboard/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/build-dashboard/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "build-report",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/build-report/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/build-report/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "report-to-google-doc",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/build-report/report-to-google-doc/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/build-report/report-to-google-doc/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "report-to-google-slides",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/build-report/report-to-google-slides/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/build-report/report-to-google-slides/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "report-to-pdf",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/build-report/report-to-pdf/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/build-report/report-to-pdf/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "create-data-context",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/create-data-context/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/create-data-context/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "design-kpis",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/design-kpis/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/design-kpis/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "gather-business-context",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/gather-business-context/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/gather-business-context/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "index",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/index/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/index/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "jupyter-notebooks",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/jupyter-notebooks/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/jupyter-notebooks/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "kpi-reporting",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/kpi-reporting/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/kpi-reporting/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "market-sizing",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/market-sizing/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/market-sizing/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "metric-diagnostics",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/metric-diagnostics/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/metric-diagnostics/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "product-business-analysis",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/product-business-analysis/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/product-business-analysis/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "publish-artifact-to-sites",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/publish-artifact-to-sites/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/publish-artifact-to-sites/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "validate-data",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/validate-data/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/validate-data/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "visualize-data",
+      "path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/visualize-data/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/chatgpt-global/data-analytics/0.2.10-13ceeea1f599/skills/visualize-data/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "codebase",
+      "path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/codebase/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/codebase/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "cognee-digest",
+      "path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/cognee-digest/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/cognee-digest/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "cognee-forget",
+      "path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/cognee-forget/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/cognee-forget/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "cognee-standup",
+      "path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/cognee-standup/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/cognee-standup/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "cognee-switch-datasets",
+      "path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/cognee-switch-datasets/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/cognee-switch-datasets/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "cognee-timeline",
+      "path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/cognee-timeline/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/cognee-timeline/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "local-ui",
+      "path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/local-ui/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/local-ui/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "memory",
+      "path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/memory/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/memory/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "setup",
+      "path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/setup/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/cognee/cognee/1.7.4/skills/setup/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "visualize",
+      "path": "/Users/luca/.codex/plugins/cache/openai-bundled/visualize/1.0.46/skills/visualize/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-bundled/visualize/1.0.46/skills/visualize/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "frontend-app-builder",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-app-builder/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-app-builder/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "frontend-testing-debugging",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "react-best-practices",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "shadcn",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/shadcn-best-practices/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/shadcn-best-practices/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "stripe-best-practices",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/stripe-best-practices/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/stripe-best-practices/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "supabase-postgres-best-practices",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/supabase-best-practices/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/supabase-best-practices/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "cloud-environment-runtime",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/cloud-environment/0.1.2/skills/runtime/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/cloud-environment/0.1.2/skills/runtime/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "assess-patch-risk",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/assess-patch-risk/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/assess-patch-risk/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "attack-path-analysis",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/attack-path-analysis/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/attack-path-analysis/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "deep-security-scan",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/deep-security-scan/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/deep-security-scan/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "define-security-policy",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/define-security-policy/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/define-security-policy/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "finding-discovery",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/finding-discovery/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/finding-discovery/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "fix-finding",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/fix-finding/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/fix-finding/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "propose-security-hardening",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/propose-security-hardening/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/propose-security-hardening/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "security-diff-scan",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-diff-scan/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-diff-scan/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "security-scan",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-scan/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-scan/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "threat-model",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/threat-model/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/threat-model/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "track-findings",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/track-findings/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/track-findings/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "triage-finding",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/triage-finding/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/triage-finding/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "validation",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/validation/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/validation/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "verify-fix",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/verify-fix/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/verify-fix/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vulnerability-writeup",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/vulnerability-writeup/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/vulnerability-writeup/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "analyze-data-quality",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/analyze-data-quality/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/analyze-data-quality/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "build-dashboard",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/build-dashboard/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/build-dashboard/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "build-report",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/build-report/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/build-report/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "report-to-google-doc",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/build-report/report-to-google-doc/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/build-report/report-to-google-doc/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "report-to-google-slides",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/build-report/report-to-google-slides/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/build-report/report-to-google-slides/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "report-to-pdf",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/build-report/report-to-pdf/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/build-report/report-to-pdf/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "create-data-context",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/create-data-context/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/create-data-context/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "design-kpis",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/design-kpis/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/design-kpis/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "gather-business-context",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/gather-business-context/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/gather-business-context/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "index",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/index/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/index/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "jupyter-notebooks",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/jupyter-notebooks/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/jupyter-notebooks/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "kpi-reporting",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/kpi-reporting/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/kpi-reporting/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "market-sizing",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/market-sizing/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/market-sizing/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "metric-diagnostics",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/metric-diagnostics/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/metric-diagnostics/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "product-business-analysis",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/product-business-analysis/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/product-business-analysis/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "publish-artifact-to-sites",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/publish-artifact-to-sites/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/publish-artifact-to-sites/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "validate-data",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/validate-data/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/validate-data/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "visualize-data",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/visualize-data/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/data-analytics/0.2.10-13ceeea1f599/skills/visualize-data/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "google-docs",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-docs/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-docs/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "google-drive-comments",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-drive-comments/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-drive-comments/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "google-drive",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-drive/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-drive/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "google-sheets",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-sheets/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-sheets/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "google-slides",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-slides/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.16/skills/google-slides/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "hf-cli",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/cli/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/cli/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "huggingface-community-evals",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/community-evals/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/community-evals/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "huggingface-datasets",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/datasets/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/datasets/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "huggingface-gradio",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/gradio/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/gradio/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "huggingface-jobs",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/jobs/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/jobs/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "huggingface-llm-trainer",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/llm-trainer/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/llm-trainer/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "huggingface-paper-publisher",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/paper-publisher/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/paper-publisher/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "huggingface-papers",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/papers/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/papers/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "huggingface-trackio",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/trackio/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/trackio/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "transformers-js",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/transformers.js/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/transformers.js/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "huggingface-vision-trainer",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/vision-trainer/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/vision-trainer/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "notion-knowledge-capture",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-knowledge-capture/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-knowledge-capture/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "notion-meeting-intelligence",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-meeting-intelligence/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-meeting-intelligence/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "notion-research-documentation",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-research-documentation/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-research-documentation/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "notion-spec-to-implementation",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-spec-to-implementation/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/notion/0.1.8/skills/notion-spec-to-implementation/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-analytics-dashboard",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-business-review",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-design-report",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-experiment-analysis",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-financial-budget",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-investment-committee-memo",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-legal-memorandum",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-market-trends-report",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-minimal-letterhead",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-operating-calendar",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-operating-review",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-project-kickoff",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-project-tracker",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-sales-pipeline",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-simple-dark-mode",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-simple-light-mode",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-strategy-memorandum",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-system-design",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-team-alignment",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "artifact-template-three-statement-forecast",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "plugin-management",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/skills/plugin-management/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/skills/plugin-management/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "sites-building",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/sites/0.1.75/skills/sites-building/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/sites/0.1.75/skills/sites-building/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "sites-hosting",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/sites/0.1.75/skills/sites-hosting/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/sites/0.1.75/skills/sites-hosting/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "sites-mcp",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/sites/0.1.75/skills/sites-mcp/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/sites/0.1.75/skills/sites-mcp/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "sites-preview-troubleshooting",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/sites/0.1.75/skills/sites-preview-troubleshooting/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/sites/0.1.75/skills/sites-preview-troubleshooting/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "agent-browser-verify",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/agent-browser-verify/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/agent-browser-verify/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "agent-browser",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/agent-browser/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/agent-browser/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "ai-elements",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/ai-elements/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/ai-elements/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "ai-gateway",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/ai-gateway/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/ai-gateway/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "ai-generation-persistence",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/ai-generation-persistence/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/ai-generation-persistence/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "ai-sdk",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/ai-sdk/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/ai-sdk/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "auth",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/auth/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/auth/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "bootstrap",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/bootstrap/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/bootstrap/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "cdn-caching",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/cdn-caching/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/cdn-caching/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "chat-sdk",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/chat-sdk/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/chat-sdk/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "cms",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/cms/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/cms/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "cron-jobs",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/cron-jobs/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/cron-jobs/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "deployments-cicd",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/deployments-cicd/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/deployments-cicd/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "email",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/email/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/email/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "env-vars",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/env-vars/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/env-vars/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "eve",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/eve/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/eve/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "geist",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/geist/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/geist/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "geistdocs",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/geistdocs/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/geistdocs/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "investigation-mode",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/investigation-mode/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/investigation-mode/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "json-render",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/json-render/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/json-render/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "knowledge-update",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/knowledge-update/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/knowledge-update/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "marketplace",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/marketplace/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/marketplace/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "micro",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/micro/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/micro/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "microfrontends",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/microfrontends/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/microfrontends/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "ncc",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/ncc/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/ncc/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "next-cache-components",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/next-cache-components/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/next-cache-components/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "next-forge",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/next-forge/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/next-forge/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "next-upgrade",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/next-upgrade/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/next-upgrade/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "nextjs",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/nextjs/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/nextjs/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "observability",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/observability/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/observability/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "payments",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/payments/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/payments/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "react-best-practices",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/react-best-practices/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/react-best-practices/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "routing-middleware",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/routing-middleware/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/routing-middleware/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "runtime-cache",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/runtime-cache/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/runtime-cache/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "satori",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/satori/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/satori/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "shadcn",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/shadcn/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/shadcn/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "sign-in-with-vercel",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/sign-in-with-vercel/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/sign-in-with-vercel/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "swr",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/swr/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/swr/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "turbopack",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/turbopack/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/turbopack/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "turborepo",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/turborepo/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/turborepo/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "v0-dev",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/v0-dev/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/v0-dev/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vercel-agent",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-agent/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-agent/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vercel-api",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-api/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-api/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vercel-cli",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-cli/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-cli/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vercel-connect",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-connect/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-connect/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vercel-firewall",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-firewall/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-firewall/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vercel-flags",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-flags/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-flags/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vercel-functions",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-functions/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-functions/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vercel-queues",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-queues/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-queues/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vercel-sandbox",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-sandbox/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-sandbox/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vercel-services",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-services/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-services/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "vercel-storage",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-storage/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/vercel-storage/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "verification",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/verification/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/verification/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "workflow",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/workflow/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/vercel/0.21.4/skills/workflow/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "create-pet",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "pets",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/pets/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/pets/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "update-pet",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/update-pet/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/update-pet/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "write-like-me",
+      "path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/write-like-me/0.1.1/skills/write-like-me/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-curated-remote/write-like-me/0.1.1/skills/write-like-me/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "documents",
+      "path": "/Users/luca/.codex/plugins/cache/openai-primary-runtime/documents/26.921.10847/skills/documents/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-primary-runtime/documents/26.921.10847/skills/documents/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "pdf",
+      "path": "/Users/luca/.codex/plugins/cache/openai-primary-runtime/pdf/26.921.10847/skills/pdf/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-primary-runtime/pdf/26.921.10847/skills/pdf/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "Presentations",
+      "path": "/Users/luca/.codex/plugins/cache/openai-primary-runtime/presentations/26.921.10847/skills/presentations/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-primary-runtime/presentations/26.921.10847/skills/presentations/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "excel-live-control",
+      "path": "/Users/luca/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.921.10847/skills/excel-live-control/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.921.10847/skills/excel-live-control/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "Spreadsheets",
+      "path": "/Users/luca/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.921.10847/skills/spreadsheets/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.921.10847/skills/spreadsheets/SKILL.md"
+    },
+    {
+      "scope": "plugin-cache",
+      "name": "template-creator",
+      "path": "/Users/luca/.codex/plugins/cache/openai-primary-runtime/template-creator/26.921.10847/skills/template-creator/SKILL.md",
+      "resolved_path": "/Users/luca/.codex/plugins/cache/openai-primary-runtime/template-creator/26.921.10847/skills/template-creator/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "ask-matt",
+      "path": "/Users/luca/.hermes/skills/.archive/ask-matt/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/ask-matt/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "brainstorming",
+      "path": "/Users/luca/.hermes/skills/.archive/brainstorming/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/brainstorming/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "caldav",
+      "path": "/Users/luca/.hermes/skills/.archive/caldav/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/caldav/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "clawhub",
+      "path": "/Users/luca/.hermes/skills/.archive/clawhub/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/clawhub/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "daily-notes",
+      "path": "/Users/luca/.hermes/skills/.archive/daily-notes/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/daily-notes/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "domain-modeling",
+      "path": "/Users/luca/.hermes/skills/.archive/domain-modeling/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/domain-modeling/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "find-skills",
+      "path": "/Users/luca/.hermes/skills/.archive/find-skills/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/find-skills/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "gemini-memory-sync",
+      "path": "/Users/luca/.hermes/skills/.archive/gemini-memory-sync/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/gemini-memory-sync/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "improve-codebase-architecture",
+      "path": "/Users/luca/.hermes/skills/.archive/improve-codebase-architecture/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/improve-codebase-architecture/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "light-rag",
+      "path": "/Users/luca/.hermes/skills/.archive/light-rag/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/light-rag/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "loop-me",
+      "path": "/Users/luca/.hermes/skills/.archive/loop-me/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/loop-me/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "migrate-to-shoehorn",
+      "path": "/Users/luca/.hermes/skills/.archive/migrate-to-shoehorn/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/migrate-to-shoehorn/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "notion",
+      "path": "/Users/luca/.hermes/skills/.archive/notion/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/notion/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "ontology",
+      "path": "/Users/luca/.hermes/skills/.archive/ontology/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/ontology/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "retro",
+      "path": "/Users/luca/.hermes/skills/.archive/retro/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/retro/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "scaffold-exercises",
+      "path": "/Users/luca/.hermes/skills/.archive/scaffold-exercises/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/scaffold-exercises/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "setup-matt-pocock-skills",
+      "path": "/Users/luca/.hermes/skills/.archive/setup-matt-pocock-skills/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/setup-matt-pocock-skills/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "setup-pre-commit",
+      "path": "/Users/luca/.hermes/skills/.archive/setup-pre-commit/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/setup-pre-commit/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "setup-ts-deep-modules",
+      "path": "/Users/luca/.hermes/skills/.archive/setup-ts-deep-modules/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/setup-ts-deep-modules/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "skill-vetter",
+      "path": "/Users/luca/.hermes/skills/.archive/skill-vetter/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/skill-vetter/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "synology-caldav",
+      "path": "/Users/luca/.hermes/skills/.archive/synology-caldav/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/synology-caldav/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "teach",
+      "path": "/Users/luca/.hermes/skills/.archive/teach/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/teach/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "to-questionnaire",
+      "path": "/Users/luca/.hermes/skills/.archive/to-questionnaire/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/to-questionnaire/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "triage",
+      "path": "/Users/luca/.hermes/skills/.archive/triage/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/triage/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "using-superpowers",
+      "path": "/Users/luca/.hermes/skills/.archive/using-superpowers/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/using-superpowers/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "verification-before-completion",
+      "path": "/Users/luca/.hermes/skills/.archive/verification-before-completion/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/verification-before-completion/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wait-what",
+      "path": "/Users/luca/.hermes/skills/.archive/wait-what/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/wait-what/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wayfinder",
+      "path": "/Users/luca/.hermes/skills/.archive/wayfinder/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/wayfinder/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "web-design-guidelines",
+      "path": "/Users/luca/.hermes/skills/.archive/web-design-guidelines/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/web-design-guidelines/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wizard",
+      "path": "/Users/luca/.hermes/skills/.archive/wizard/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/wizard/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "workspace-setup",
+      "path": "/Users/luca/.hermes/skills/.archive/workspace-setup/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/workspace-setup/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "writing-beats",
+      "path": "/Users/luca/.hermes/skills/.archive/writing-beats/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/writing-beats/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "writing-for-agents",
+      "path": "/Users/luca/.hermes/skills/.archive/writing-for-agents/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/writing-for-agents/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "writing-fragments",
+      "path": "/Users/luca/.hermes/skills/.archive/writing-fragments/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/writing-fragments/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "writing-shape",
+      "path": "/Users/luca/.hermes/skills/.archive/writing-shape/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/.archive/writing-shape/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "apple-notes",
+      "path": "/Users/luca/.hermes/skills/apple/apple-notes/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/apple/apple-notes/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "apple-reminders-calendar",
+      "path": "/Users/luca/.hermes/skills/apple/apple-reminders-calendar/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/apple/apple-reminders-calendar/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "apple-reminders",
+      "path": "/Users/luca/.hermes/skills/apple/apple-reminders/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/apple/apple-reminders/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "findmy",
+      "path": "/Users/luca/.hermes/skills/apple/findmy/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/apple/findmy/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "imessage",
+      "path": "/Users/luca/.hermes/skills/apple/imessage/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/apple/imessage/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "agy",
+      "path": "/Users/luca/.hermes/skills/aside/agy/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/agy/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "caldav",
+      "path": "/Users/luca/.hermes/skills/aside/caldav/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/caldav/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "canvas-sync-to-obsidian",
+      "path": "/Users/luca/.hermes/skills/aside/canvas-sync-to-obsidian/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/canvas-sync-to-obsidian/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "cdx",
+      "path": "/Users/luca/.hermes/skills/aside/cdx/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/cdx/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "crawl4ai",
+      "path": "/Users/luca/.hermes/skills/aside/crawl4ai/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/crawl4ai/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "daily-notes",
+      "path": "/Users/luca/.hermes/skills/aside/daily-notes/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/daily-notes/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "glm-ocr",
+      "path": "/Users/luca/.hermes/skills/aside/glm-ocr/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/glm-ocr/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "hermes",
+      "path": "/Users/luca/.hermes/skills/aside/hermes/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/hermes/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "hermes",
+      "path": "/Users/luca/.hermes/skills/aside/hms/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/hermes/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "lecture-scratchpad",
+      "path": "/Users/luca/.hermes/skills/aside/lecture-scratchpad/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/lecture-scratchpad/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "light-rag",
+      "path": "/Users/luca/.hermes/skills/aside/light-rag/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/light-rag/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "notion-to-obsidian",
+      "path": "/Users/luca/.hermes/skills/aside/notion-to-obsidian/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/notion-to-obsidian/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-bases-superpowers",
+      "path": "/Users/luca/.hermes/skills/aside/obsidian-bases-superpowers/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-bases-superpowers/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-bases",
+      "path": "/Users/luca/.hermes/skills/aside/obsidian-bases/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-bases/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-cli",
+      "path": "/Users/luca/.hermes/skills/aside/obsidian-cli/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-cli/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-markdown",
+      "path": "/Users/luca/.hermes/skills/aside/obsidian-markdown/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-markdown/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-rendering-traps",
+      "path": "/Users/luca/.hermes/skills/aside/obsidian-rendering-traps/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-rendering-traps/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "provider-privacy-analysis",
+      "path": "/Users/luca/.hermes/skills/aside/provider-privacy-analysis/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/provider-privacy-analysis/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "spotipy",
+      "path": "/Users/luca/.hermes/skills/aside/spotipy/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/spotipy/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "unified-study-note",
+      "path": "/Users/luca/.hermes/skills/aside/unified-study-note/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/unified-study-note/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-artifact",
+      "path": "/Users/luca/.hermes/skills/aside/wiki-artifact/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-artifact/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-ingest",
+      "path": "/Users/luca/.hermes/skills/aside/wiki-ingest/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-ingest/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-init",
+      "path": "/Users/luca/.hermes/skills/aside/wiki-init/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-init/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-lint",
+      "path": "/Users/luca/.hermes/skills/aside/wiki-lint/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-lint/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-query",
+      "path": "/Users/luca/.hermes/skills/aside/wiki-query/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-query/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-save",
+      "path": "/Users/luca/.hermes/skills/aside/wiki-save/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-save/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "workspace-setup",
+      "path": "/Users/luca/.hermes/skills/aside/workspace-setup/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/workspace-setup/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "ask-matt",
+      "path": "/Users/luca/.hermes/skills/ask-matt/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/ask-matt/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "claude-code",
+      "path": "/Users/luca/.hermes/skills/autonomous-ai-agents/claude-code/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/autonomous-ai-agents/claude-code/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "codex",
+      "path": "/Users/luca/.hermes/skills/autonomous-ai-agents/codex/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/autonomous-ai-agents/codex/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "computer-use",
+      "path": "/Users/luca/.hermes/skills/autonomous-ai-agents/computer-use/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/autonomous-ai-agents/computer-use/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "hermes-agent",
+      "path": "/Users/luca/.hermes/skills/autonomous-ai-agents/hermes-agent/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/autonomous-ai-agents/hermes-agent/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "hermes-webui-remote-access",
+      "path": "/Users/luca/.hermes/skills/autonomous-ai-agents/hermes-webui-remote-access/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/autonomous-ai-agents/hermes-webui-remote-access/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "hermes-webui-remote-tailnet",
+      "path": "/Users/luca/.hermes/skills/autonomous-ai-agents/hermes-webui-remote-tailnet/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/autonomous-ai-agents/hermes-webui-remote-tailnet/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "llm-provider-configuration",
+      "path": "/Users/luca/.hermes/skills/autonomous-ai-agents/llm-provider-configuration/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/autonomous-ai-agents/llm-provider-configuration/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "merge-reconciler",
+      "path": "/Users/luca/.hermes/skills/autonomous-ai-agents/merge-reconciler/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/autonomous-ai-agents/merge-reconciler/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "opencode",
+      "path": "/Users/luca/.hermes/skills/autonomous-ai-agents/opencode/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/autonomous-ai-agents/opencode/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "brainstorming",
+      "path": "/Users/luca/.hermes/skills/brainstorming/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/brainstorming/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "aside-browser",
+      "path": "/Users/luca/.hermes/skills/browser-automation/aside-browser/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/browser-automation/aside-browser/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "cloud-git-sync",
+      "path": "/Users/luca/.hermes/skills/cloud-git-sync/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/cloud-git-sync/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "code-review",
+      "path": "/Users/luca/.hermes/skills/code-review/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/code-review/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "codebase-design",
+      "path": "/Users/luca/.hermes/skills/codebase-design/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/codebase-design/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "course-study-note-synthesis-v2",
+      "path": "/Users/luca/.hermes/skills/course-study-note-synthesis-v2/course-study-note-synthesis-v2/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/course-study-note-synthesis-v2/course-study-note-synthesis-v2/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "course-study-note-synthesis",
+      "path": "/Users/luca/.hermes/skills/course-study-note-synthesis/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/course-study-note-synthesis/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "crawl4ai",
+      "path": "/Users/luca/.hermes/skills/crawl4ai/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/crawl4ai/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "architecture-diagram",
+      "path": "/Users/luca/.hermes/skills/creative/architecture-diagram/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/architecture-diagram/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "ascii-art",
+      "path": "/Users/luca/.hermes/skills/creative/ascii-art/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/ascii-art/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "ascii-video",
+      "path": "/Users/luca/.hermes/skills/creative/ascii-video/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/ascii-video/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "baoyu-infographic",
+      "path": "/Users/luca/.hermes/skills/creative/baoyu-infographic/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/baoyu-infographic/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "claude-design",
+      "path": "/Users/luca/.hermes/skills/creative/claude-design/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/claude-design/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "comfyui",
+      "path": "/Users/luca/.hermes/skills/creative/comfyui/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/comfyui/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "design-md",
+      "path": "/Users/luca/.hermes/skills/creative/design-md/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/design-md/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "excalidraw",
+      "path": "/Users/luca/.hermes/skills/creative/excalidraw/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/excalidraw/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "humanizer",
+      "path": "/Users/luca/.hermes/skills/creative/humanizer/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/humanizer/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "manim-video",
+      "path": "/Users/luca/.hermes/skills/creative/manim-video/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/manim-video/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "p5js",
+      "path": "/Users/luca/.hermes/skills/creative/p5js/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/p5js/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "popular-web-designs",
+      "path": "/Users/luca/.hermes/skills/creative/popular-web-designs/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/popular-web-designs/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "pretext",
+      "path": "/Users/luca/.hermes/skills/creative/pretext/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/pretext/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "sketch",
+      "path": "/Users/luca/.hermes/skills/creative/sketch/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/sketch/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "songwriting-and-ai-music",
+      "path": "/Users/luca/.hermes/skills/creative/songwriting-and-ai-music/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/songwriting-and-ai-music/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "touchdesigner-mcp",
+      "path": "/Users/luca/.hermes/skills/creative/touchdesigner-mcp/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/creative/touchdesigner-mcp/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "defuddle",
+      "path": "/Users/luca/.hermes/skills/defuddle/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/defuddle/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "disk-cleanup",
+      "path": "/Users/luca/.hermes/skills/devops/disk-cleanup/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/devops/disk-cleanup/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "dockerized-ml-inference-services",
+      "path": "/Users/luca/.hermes/skills/devops/dockerized-ml-inference-services/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/devops/dockerized-ml-inference-services/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "git-lfs-operations",
+      "path": "/Users/luca/.hermes/skills/devops/git-lfs-operations/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/devops/git-lfs-operations/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "headless-github-workflows",
+      "path": "/Users/luca/.hermes/skills/devops/headless-github-workflows/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/devops/headless-github-workflows/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "multi-node-sync",
+      "path": "/Users/luca/.hermes/skills/devops/multi-node-sync/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/devops/multi-node-sync/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "sdlc-review",
+      "path": "/Users/luca/.hermes/skills/devops/sdlc-review/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/devops/sdlc-review/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "diagnosing-bugs",
+      "path": "/Users/luca/.hermes/skills/diagnosing-bugs/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/diagnosing-bugs/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "domain-modeling",
+      "path": "/Users/luca/.hermes/skills/domain-modeling/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/domain-modeling/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "email-inbox-triage",
+      "path": "/Users/luca/.hermes/skills/email/email-inbox-triage/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/email/email-inbox-triage/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "himalaya",
+      "path": "/Users/luca/.hermes/skills/email/himalaya/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/email/himalaya/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "frontend-design",
+      "path": "/Users/luca/.hermes/skills/frontend-design/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/frontend-design/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "git-maintenance",
+      "path": "/Users/luca/.hermes/skills/git-maintenance/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/git-maintenance/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "codebase-inspection",
+      "path": "/Users/luca/.hermes/skills/github/codebase-inspection/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/github/codebase-inspection/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "github-auth",
+      "path": "/Users/luca/.hermes/skills/github/github-auth/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/github/github-auth/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "github-code-review",
+      "path": "/Users/luca/.hermes/skills/github/github-code-review/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/github/github-code-review/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "github-issue-to-pr",
+      "path": "/Users/luca/.hermes/skills/github/github-issue-to-pr/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/github/github-issue-to-pr/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "github-issues",
+      "path": "/Users/luca/.hermes/skills/github/github-issues/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/github/github-issues/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "github-pr-workflow",
+      "path": "/Users/luca/.hermes/skills/github/github-pr-workflow/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/github/github-pr-workflow/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "github-repo-management",
+      "path": "/Users/luca/.hermes/skills/github/github-repo-management/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/github/github-repo-management/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "glm-ocr",
+      "path": "/Users/luca/.hermes/skills/glm-ocr/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/glm-ocr/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "grill-me",
+      "path": "/Users/luca/.hermes/skills/grill-me/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/grill-me/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "grill-with-docs",
+      "path": "/Users/luca/.hermes/skills/grill-with-docs/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/grill-with-docs/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "grilling",
+      "path": "/Users/luca/.hermes/skills/grilling/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/grilling/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "handoff",
+      "path": "/Users/luca/.hermes/skills/handoff/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/handoff/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "hermes-import-relabel-projects",
+      "path": "/Users/luca/.hermes/skills/hermes-import-relabel-projects/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/hermes-import-relabel-projects/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "impeccable",
+      "path": "/Users/luca/.hermes/skills/impeccable/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/impeccable/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "implement-spec",
+      "path": "/Users/luca/.hermes/skills/implement-spec/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/implement-spec/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "implement",
+      "path": "/Users/luca/.hermes/skills/implement/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/implement/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "improve-codebase-architecture",
+      "path": "/Users/luca/.hermes/skills/improve-codebase-architecture/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/improve-codebase-architecture/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "json-canvas",
+      "path": "/Users/luca/.hermes/skills/json-canvas/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/json-canvas/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "gif-search",
+      "path": "/Users/luca/.hermes/skills/media/gif-search/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/media/gif-search/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "songsee",
+      "path": "/Users/luca/.hermes/skills/media/songsee/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/media/songsee/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "youtube-content",
+      "path": "/Users/luca/.hermes/skills/media/youtube-content/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/media/youtube-content/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "evaluating-llms-harness",
+      "path": "/Users/luca/.hermes/skills/mlops/evaluation/evaluating-llms-harness/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/mlops/evaluation/evaluating-llms-harness/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "weights-and-biases",
+      "path": "/Users/luca/.hermes/skills/mlops/evaluation/weights-and-biases/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/mlops/evaluation/weights-and-biases/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "huggingface-hub",
+      "path": "/Users/luca/.hermes/skills/mlops/huggingface-hub/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/mlops/huggingface-hub/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "llama-cpp",
+      "path": "/Users/luca/.hermes/skills/mlops/inference/llama-cpp/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/mlops/inference/llama-cpp/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "serving-llms-vllm",
+      "path": "/Users/luca/.hermes/skills/mlops/inference/serving-llms-vllm/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/mlops/inference/serving-llms-vllm/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "llama-cpp",
+      "path": "/Users/luca/.hermes/skills/mlops/llama-cpp/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/mlops/llama-cpp/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "course-study-note-synthesis-v3",
+      "path": "/Users/luca/.hermes/skills/note-taking/course-study-note-synthesis-v3/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/note-taking/course-study-note-synthesis-v3/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-webdav-remotesave-git-sync",
+      "path": "/Users/luca/.hermes/skills/note-taking/obsidian-webdav-remotesave-git-sync/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/note-taking/obsidian-webdav-remotesave-git-sync/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian",
+      "path": "/Users/luca/.hermes/skills/note-taking/obsidian/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/note-taking/obsidian/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "unified-study-note",
+      "path": "/Users/luca/.hermes/skills/note-taking/unified-study-note/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/note-taking/unified-study-note/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-bases",
+      "path": "/Users/luca/.hermes/skills/obsidian-bases/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/obsidian-bases/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-markdown",
+      "path": "/Users/luca/.hermes/skills/obsidian-markdown/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/obsidian-markdown/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-vault-consolidation",
+      "path": "/Users/luca/.hermes/skills/obsidian-vault-consolidation/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/obsidian-vault-consolidation/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "cli-cost-usage",
+      "path": "/Users/luca/.hermes/skills/omniroute/cli-cost-usage/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/omniroute/cli-cost-usage/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "omni-auth",
+      "path": "/Users/luca/.hermes/skills/omniroute/omni-auth/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/omniroute/omni-auth/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "omni-combos-routing",
+      "path": "/Users/luca/.hermes/skills/omniroute/omni-combos-routing/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/omniroute/omni-combos-routing/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "omni-compression",
+      "path": "/Users/luca/.hermes/skills/omniroute/omni-compression/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/omniroute/omni-compression/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "omni-context-rtk",
+      "path": "/Users/luca/.hermes/skills/omniroute/omni-context-rtk/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/omniroute/omni-context-rtk/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "omni-proxies",
+      "path": "/Users/luca/.hermes/skills/omniroute/omni-proxies/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/omniroute/omni-proxies/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "omni-resilience",
+      "path": "/Users/luca/.hermes/skills/omniroute/omni-resilience/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/omniroute/omni-resilience/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "omni-settings",
+      "path": "/Users/luca/.hermes/skills/omniroute/omni-settings/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/omniroute/omni-settings/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "omni-usage-logs",
+      "path": "/Users/luca/.hermes/skills/omniroute/omni-usage-logs/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/omniroute/omni-usage-logs/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "pii-interception-proxy",
+      "path": "/Users/luca/.hermes/skills/omniroute/pii-interception-proxy/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/omniroute/pii-interception-proxy/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "pr",
+      "path": "/Users/luca/.hermes/skills/pr/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/pr/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "airtable",
+      "path": "/Users/luca/.hermes/skills/productivity/airtable/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/airtable/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "box",
+      "path": "/Users/luca/.hermes/skills/productivity/box/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/box/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "career-dossier-management",
+      "path": "/Users/luca/.hermes/skills/productivity/career-dossier-management/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/career-dossier-management/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "document-to-action-items",
+      "path": "/Users/luca/.hermes/skills/productivity/document-to-action-items/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/document-to-action-items/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "docx",
+      "path": "/Users/luca/.hermes/skills/productivity/docx/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/docx/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "external-session-migration",
+      "path": "/Users/luca/.hermes/skills/productivity/external-session-migration/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/external-session-migration/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "google-workspace",
+      "path": "/Users/luca/.hermes/skills/productivity/google-workspace/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/google-workspace/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "maps",
+      "path": "/Users/luca/.hermes/skills/productivity/maps/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/maps/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "meeting-action-items",
+      "path": "/Users/luca/.hermes/skills/productivity/meeting-action-items/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/meeting-action-items/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "nano-pdf",
+      "path": "/Users/luca/.hermes/skills/productivity/nano-pdf/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/nano-pdf/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "notion",
+      "path": "/Users/luca/.hermes/skills/productivity/notion/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/notion/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "ocr-and-documents",
+      "path": "/Users/luca/.hermes/skills/productivity/ocr-and-documents/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/ocr-and-documents/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "office-document-conversion",
+      "path": "/Users/luca/.hermes/skills/productivity/office-document-conversion/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/office-document-conversion/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "pdf",
+      "path": "/Users/luca/.hermes/skills/productivity/pdf/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/pdf/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "powerpoint",
+      "path": "/Users/luca/.hermes/skills/productivity/powerpoint/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/powerpoint/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "product-price-monitor",
+      "path": "/Users/luca/.hermes/skills/productivity/product-price-monitor/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/product-price-monitor/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "session-librarian",
+      "path": "/Users/luca/.hermes/skills/productivity/session-librarian/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/session-librarian/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "teams-meeting-pipeline",
+      "path": "/Users/luca/.hermes/skills/productivity/teams-meeting-pipeline/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/teams-meeting-pipeline/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "weekly-review-planning",
+      "path": "/Users/luca/.hermes/skills/productivity/weekly-review-planning/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/weekly-review-planning/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "xlsx",
+      "path": "/Users/luca/.hermes/skills/productivity/xlsx/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/productivity/xlsx/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "prototype",
+      "path": "/Users/luca/.hermes/skills/prototype/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/prototype/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "research",
+      "path": "/Users/luca/.hermes/skills/research/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/research/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "resolving-merge-conflicts",
+      "path": "/Users/luca/.hermes/skills/resolving-merge-conflicts/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/resolving-merge-conflicts/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "retro",
+      "path": "/Users/luca/.hermes/skills/retro/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/retro/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "rizzo-flow",
+      "path": "/Users/luca/.hermes/skills/rizzo-flow/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/rizzo-flow/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "setup-matt-pocock-skills",
+      "path": "/Users/luca/.hermes/skills/setup-matt-pocock-skills/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/setup-matt-pocock-skills/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "skill-creator",
+      "path": "/Users/luca/.hermes/skills/skill-creator/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/skill-creator/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "agy",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/agy/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/agy/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "caldav",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/caldav/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/caldav/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "canvas-sync-to-obsidian",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/canvas-sync-to-obsidian/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/canvas-sync-to-obsidian/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "cdx",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/cdx/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/cdx/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "crawl4ai",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/crawl4ai/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/crawl4ai/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "daily-notes",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/daily-notes/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/daily-notes/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "glm-ocr",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/glm-ocr/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/glm-ocr/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "hermes",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/hermes/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/hermes/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "hermes",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/hms/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/hermes/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "lecture-scratchpad",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/lecture-scratchpad/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/lecture-scratchpad/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "light-rag",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/light-rag/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/light-rag/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "notion-to-obsidian",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/notion-to-obsidian/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/notion-to-obsidian/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-bases-superpowers",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/obsidian-bases-superpowers/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-bases-superpowers/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-bases",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/obsidian-bases/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-bases/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-cli",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/obsidian-cli/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-cli/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-markdown",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/obsidian-markdown/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-markdown/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "obsidian-rendering-traps",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/obsidian-rendering-traps/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/obsidian-rendering-traps/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "provider-privacy-analysis",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/provider-privacy-analysis/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/provider-privacy-analysis/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "spotipy",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/spotipy/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/spotipy/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "unified-study-note",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/unified-study-note/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/unified-study-note/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-artifact",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/wiki-artifact/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-artifact/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-ingest",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/wiki-ingest/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-ingest/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-init",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/wiki-init/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-init/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-lint",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/wiki-lint/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-lint/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-query",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/wiki-query/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-query/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-save",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/wiki-save/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/wiki-save/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "workspace-setup",
+      "path": "/Users/luca/.hermes/skills/skills-desktop/workspace-setup/SKILL.md",
+      "resolved_path": "/Users/luca/Desktop/skills/workspace-setup/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "openhue",
+      "path": "/Users/luca/.hermes/skills/smart-home/openhue/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/smart-home/openhue/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "reddit-reading",
+      "path": "/Users/luca/.hermes/skills/social-media/reddit-reading/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/social-media/reddit-reading/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "xurl",
+      "path": "/Users/luca/.hermes/skills/social-media/xurl/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/social-media/xurl/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "codebase-design",
+      "path": "/Users/luca/.hermes/skills/software-development/codebase-design/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/codebase-design/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "codebase-inspection",
+      "path": "/Users/luca/.hermes/skills/software-development/codebase-inspection/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/codebase-inspection/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "dogfood",
+      "path": "/Users/luca/.hermes/skills/software-development/dogfood/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/dogfood/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "github",
+      "path": "/Users/luca/.hermes/skills/software-development/github/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/github/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "hermes-agent-skill-authoring",
+      "path": "/Users/luca/.hermes/skills/software-development/hermes-agent-skill-authoring/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/hermes-agent-skill-authoring/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "inspecting-hermes-desktop-dom",
+      "path": "/Users/luca/.hermes/skills/software-development/inspecting-hermes-desktop-dom/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/inspecting-hermes-desktop-dom/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "macos-app-development",
+      "path": "/Users/luca/.hermes/skills/software-development/macos-app-development/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/macos-app-development/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "node-inspect-debugger",
+      "path": "/Users/luca/.hermes/skills/software-development/node-inspect-debugger/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/node-inspect-debugger/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "plan",
+      "path": "/Users/luca/.hermes/skills/software-development/plan/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/plan/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "python-debugpy",
+      "path": "/Users/luca/.hermes/skills/software-development/python-debugpy/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/python-debugpy/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "requesting-code-review",
+      "path": "/Users/luca/.hermes/skills/software-development/requesting-code-review/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/requesting-code-review/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "simplify-code",
+      "path": "/Users/luca/.hermes/skills/software-development/simplify-code/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/simplify-code/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "spike",
+      "path": "/Users/luca/.hermes/skills/software-development/spike/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/spike/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "subagent-driven-development",
+      "path": "/Users/luca/.hermes/skills/software-development/subagent-driven-development/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/subagent-driven-development/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "systematic-debugging",
+      "path": "/Users/luca/.hermes/skills/software-development/systematic-debugging/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/systematic-debugging/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "test-driven-development",
+      "path": "/Users/luca/.hermes/skills/software-development/test-driven-development/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/test-driven-development/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "to-spec",
+      "path": "/Users/luca/.hermes/skills/software-development/to-spec/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/to-spec/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "to-tickets",
+      "path": "/Users/luca/.hermes/skills/software-development/to-tickets/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/software-development/to-tickets/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "Spotify Automation",
+      "path": "/Users/luca/.hermes/skills/spotify-automation/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/spotify-automation/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "omniroute-audio-transcription",
+      "path": "/Users/luca/.hermes/skills/stt/omniroute-audio-transcription/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/stt/omniroute-audio-transcription/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "swiftui-github-actions",
+      "path": "/Users/luca/.hermes/skills/swiftui-github-actions/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/swiftui-github-actions/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "tdd",
+      "path": "/Users/luca/.hermes/skills/tdd/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/tdd/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "teach",
+      "path": "/Users/luca/.hermes/skills/teach/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/teach/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "to-questionnaire",
+      "path": "/Users/luca/.hermes/skills/to-questionnaire/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/to-questionnaire/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "to-spec",
+      "path": "/Users/luca/.hermes/skills/to-spec/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/to-spec/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "to-tickets",
+      "path": "/Users/luca/.hermes/skills/to-tickets/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/to-tickets/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "triage",
+      "path": "/Users/luca/.hermes/skills/triage/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/triage/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wait-what",
+      "path": "/Users/luca/.hermes/skills/wait-what/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wait-what/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wayfinder",
+      "path": "/Users/luca/.hermes/skills/wayfinder/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wayfinder/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "web-design-guidelines",
+      "path": "/Users/luca/.hermes/skills/web-design-guidelines/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/web-design-guidelines/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "blocked-page-recovery",
+      "path": "/Users/luca/.hermes/skills/web/blocked-page-recovery/SKILL.md",
+      "resolved_path": "/Users/luca/.hermes/skills/web/blocked-page-recovery/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-artifact",
+      "path": "/Users/luca/.hermes/skills/wiki-artifact/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wiki-artifact/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-ingest",
+      "path": "/Users/luca/.hermes/skills/wiki-ingest/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wiki-ingest/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-init",
+      "path": "/Users/luca/.hermes/skills/wiki-init/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wiki-init/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-lint",
+      "path": "/Users/luca/.hermes/skills/wiki-lint/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wiki-lint/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-query",
+      "path": "/Users/luca/.hermes/skills/wiki-query/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wiki-query/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wiki-save",
+      "path": "/Users/luca/.hermes/skills/wiki-save/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wiki-save/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "wizard",
+      "path": "/Users/luca/.hermes/skills/wizard/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/wizard/SKILL.md"
+    },
+    {
+      "scope": "hermes-runtime",
+      "name": "writing-for-agents",
+      "path": "/Users/luca/.hermes/skills/writing-for-agents/SKILL.md",
+      "resolved_path": "/Users/luca/.agents/skills/writing-for-agents/SKILL.md"
+    }
+  ]
+}

@@ -2,6 +2,35 @@
 
 Stato: specifica per una chat futura; baseline esistente parziale, feature non completa. Aggiornamento: 2026-10-04. La richiesta attuale è documentazione per feature e MVP quasi vuoto; non autorizza implementazioni ulteriori in questa chat.
 
+
+
+<!-- feature-guidance:start -->
+## File e skill da leggere e usare
+
+Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+
+### Skill specifiche
+
+| Skill / percorso | Quando applicarla a questa feature |
+|---|---|
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Ciclo Conversazione dietro una interface verificabile |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) | Componenti React e stato del renderer |
+| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Verifica UI packaged con dati sintetici e tool realmente disponibili |
+| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — condizionale | Riprodurre race, invio incerto o stream interrotto |
+| [improve-codebase-architecture](<../../.agents/skills/improve-codebase-architecture/SKILL.md>) — condizionale | Solo se si sceglie il candidato Conversazione |
+
+### Punti di ingresso da leggere
+
+- [docs/research/runtime-integration-findings.md](<../../docs/research/runtime-integration-findings.md>): Eventi e scope.
+- [desktop/upstream/src/client/Chat.tsx](<../../desktop/upstream/src/client/Chat.tsx>): Composer e orchestration.
+- [desktop/upstream/src/client/ChatTranscript.tsx](<../../desktop/upstream/src/client/ChatTranscript.tsx>): Presentazione.
+- [desktop/upstream/src/client/PageConversation.tsx](<../../desktop/upstream/src/client/PageConversation.tsx>): Secondo caller del ciclo chat.
+- [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Ammissione e stream.
+- [desktop/hermes/bridge.test.mjs](<../../desktop/hermes/bridge.test.mjs>): Fixture esistenti da ampliare con comportamento reale.
+
+Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+<!-- feature-guidance:end -->
+
 ## Risultato e confini
 
 Preparare una domanda per un Dot, vedere che è stata inviata e distinguere la ricezione dal lavoro effettivo. Ritrovare bozza, messaggi e richieste di decisione senza duplicare un prompt durante una riconnessione.
@@ -71,4 +100,4 @@ Slice locale: vuota al primo avvio, conversazione creabile, bozza ripristinata d
 
 ## Prompt per una nuova chat
 
-> Implementa soltanto la slice di F02 esplicitamente selezionata, leggendo AGENTS.md, MEMORY/STATUS, GLOSSARY, component-system e questa spec. Prima verifica se il prerequisito runtime è pronto; in caso contrario realizza soltanto conversazioni/bozze locali, senza simulare risposte. Riusa il prototipo dove utile e non riscrivere server o shell fuori ownership. Mantieni Pending, ack, Working e terminale distinti; niente auto retry o approvazioni automatiche. Usa profilo e gateway sintetici, salva le prove dei race test e della vera.app. PageConversation richiede flush e revisione salvata ad ogni invio. Aggiorna documentazione e consegna limiti verificati; non riprendere il piano notturno globale.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa soltanto la slice di F02 esplicitamente selezionata, leggendo AGENTS.md, MEMORY/STATUS, GLOSSARY, component-system e questa spec. Prima verifica se il prerequisito runtime è pronto; in caso contrario realizza soltanto conversazioni/bozze locali, senza simulare risposte. Riusa il prototipo dove utile e non riscrivere server o shell fuori ownership. Mantieni Pending, ack, Working e terminale distinti; niente auto retry o approvazioni automatiche. Usa profilo e gateway sintetici, salva le prove dei race test e della vera.app. PageConversation richiede flush e revisione salvata ad ogni invio. Aggiorna documentazione e consegna limiti verificati; non riprendere il piano notturno globale.

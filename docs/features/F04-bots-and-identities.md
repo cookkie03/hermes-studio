@@ -1,5 +1,33 @@
 # F04 — Bots, identità e Dot
 
+
+
+<!-- feature-guidance:start -->
+## File e skill da leggere e usare
+
+Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+
+### Skill specifiche
+
+| Skill / percorso | Quando applicarla a questa feature |
+|---|---|
+| [research](<../../.agents/skills/research/SKILL.md>) | Se schema/eventi upstream sono incerti: ricerca primaria documentata |
+| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | Quando cambiano identità, stato o termini del dominio |
+| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — condizionale | Se emerge un errore riproducibile di connessione o lifecycle |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) — condizionale | Componenti React e stato del renderer |
+
+### Punti di ingresso da leggere
+
+- [docs/research/hermes-desktop-reference.md](<../../docs/research/hermes-desktop-reference.md>): Mappa identità e runtime.
+- [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Binding owned attuale.
+- [desktop/upstream/src/server/workspace.ts](<../../desktop/upstream/src/server/workspace.ts>): Dot locali.
+- [desktop/upstream/src/client/WorkspaceDialog.tsx](<../../desktop/upstream/src/client/WorkspaceDialog.tsx>): Configurazione locale.
+- [Hermes: tools/bot_mode_dm.py](</Users/luca/.hermes/hermes-agent/tools/bot_mode_dm.py>): Bot canonici e gating; lettura sorgente alla versione fissata, non prova live.
+- [docs/features/F11-runtime-connection.md](<../../docs/features/F11-runtime-connection.md>): Scope connessione.
+
+Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+<!-- feature-guidance:end -->
+
 ## Confine delle prove
 
 Stato: **documented, not implemented** (2026-10-04). Questa specifica descrive una futura slice di Hermes Studio; codice upstream disponibile non significa capability collegata nell’app. Evidenze: lettura del checkout sorgente `/Users/luca/.hermes/hermes-agent`, non esecuzione live, nessun prompt/configurazione/database personale. Riferimento autorevole: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). La versione remota può cambiare: prima di implementare fissare SHA e ripetere i contract test.
@@ -36,4 +64,4 @@ Fixture due host/profili omonimi: nessuna collisione; canonical hidden e lineage
 
 ## Prompt pronto per una nuova chat Codex
 
-> Implementa F04 leggendo questa specifica e i documenti iniziali elencati. Parti da roster read-only e canonical chat resolver con fixture isolate. Preserva Dots locali e separa connection/install/profile dai session ID. Riuso dei contratti upstream apps/desktop, nessun prompt o clone credenziali automatico. Concorda ownership di bridge/server/client prima di modificare file. Completa test, migrazione reversibile, smoke dell’app e DoD; aggiorna STATUS/WORKLOG distinguendo sintesi, sorgente e prova live.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F04 leggendo questa specifica e i documenti iniziali elencati. Parti da roster read-only e canonical chat resolver con fixture isolate. Preserva Dots locali e separa connection/install/profile dai session ID. Riuso dei contratti upstream apps/desktop, nessun prompt o clone credenziali automatico. Concorda ownership di bridge/server/client prima di modificare file. Completa test, migrazione reversibile, smoke dell’app e DoD; aggiorna STATUS/WORKLOG distinguendo sintesi, sorgente e prova live.

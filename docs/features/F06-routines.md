@@ -1,5 +1,33 @@
 # F06 — Routine e attività ricorrenti
 
+
+
+<!-- feature-guidance:start -->
+## File e skill da leggere e usare
+
+Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+
+### Skill specifiche
+
+| Skill / percorso | Quando applicarla a questa feature |
+|---|---|
+| [research](<../../.agents/skills/research/SKILL.md>) | Se schema/eventi upstream sono incerti: ricerca primaria documentata |
+| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | Quando cambiano identità, stato o termini del dominio |
+| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — condizionale | Se emerge un errore riproducibile di connessione o lifecycle |
+| [wizard](<../../.agents/skills/wizard/SKILL.md>) — condizionale | Solo per prerequisiti host/account che richiedono davvero il contributo umano |
+
+### Punti di ingresso da leggere
+
+- [docs/features/F11-runtime-connection.md](<../../docs/features/F11-runtime-connection.md>): Host e profilo.
+- [docs/features/F16-permissions-and-approvals.md](<../../docs/features/F16-permissions-and-approvals.md>): Autorizzazioni.
+- [desktop/hermes/server.mjs](<../../desktop/hermes/server.mjs>): Route tasks attuale non equivale a scheduler.
+- [Hermes: tools/cronjob_tools.py](</Users/luca/.hermes/hermes-agent/tools/cronjob_tools.py>): Azioni pianificazione; lettura sorgente alla versione fissata, non prova live.
+- [Hermes: apps/desktop/src/api/cron.ts](</Users/luca/.hermes/hermes-agent/apps/desktop/src/api/cron.ts>): REST client desktop; lettura sorgente alla versione fissata, non prova live.
+- [Hermes: hermes_cli/web_routers/cron.py](</Users/luca/.hermes/hermes-agent/hermes_cli/web_routers/cron.py>): Owner, run e delivery; lettura sorgente alla versione fissata, non prova live.
+
+Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+<!-- feature-guidance:end -->
+
 ## Confine delle prove
 
 Stato: **documented, not implemented** (2026-10-04). Questa specifica descrive una futura slice di Hermes Studio; codice upstream disponibile non significa capability collegata nell’app. Evidenze: lettura del checkout sorgente `/Users/luca/.hermes/hermes-agent`, non esecuzione live, nessun prompt/configurazione/database personale. Riferimento autorevole: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). La versione remota può cambiare: prima di implementare fissare SHA e ripetere i contract test.
@@ -34,4 +62,4 @@ Fixture create/update/pause/resume/remove, one-shot vs recurring, timezone/DST, 
 
 ## Prompt pronto nuova chat
 
-> Implementa F06 leggendo spec e riferimento upstream apps/desktop/api/cron.ts. Priorità routine: partire da list scoped+run history, poi creazione/pause/trigger con fixture e scheduler Hermes isolato. Nessun timer alternativo, messaggio esterno o modifica delle routine personali. Mostra next run e disponibilità host verificati, separa run da delivery e non ritentare esiti incerti. Completa test schedule/timezone/relaunch, DoD e documentazione.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F06 leggendo spec e riferimento upstream apps/desktop/api/cron.ts. Priorità routine: partire da list scoped+run history, poi creazione/pause/trigger con fixture e scheduler Hermes isolato. Nessun timer alternativo, messaggio esterno o modifica delle routine personali. Mostra next run e disponibilità host verificati, separa run da delivery e non ritentare esiti incerti. Completa test schedule/timezone/relaunch, DoD e documentazione.

@@ -1,5 +1,33 @@
 # F09 — Computer use e controllo della macchina
 
+
+
+<!-- feature-guidance:start -->
+## File e skill da leggere e usare
+
+Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+
+### Skill specifiche
+
+| Skill / percorso | Quando applicarla a questa feature |
+|---|---|
+| [research](<../../.agents/skills/research/SKILL.md>) | Schema computer use e host supportato |
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Target e ricevuta azione distinti |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) — condizionale | Componenti React e stato del renderer |
+| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Verifica UI packaged con dati sintetici e tool realmente disponibili |
+| [security-diff](</Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-diff-scan/SKILL.md>) — condizionale | Se è richiesta review del diff sui privilegi o targeting |
+
+### Punti di ingresso da leggere
+
+- [docs/features/F16-permissions-and-approvals.md](<../../docs/features/F16-permissions-and-approvals.md>): Approvazioni.
+- [desktop/upstream/src/client/ComputerPanel.tsx](<../../desktop/upstream/src/client/ComputerPanel.tsx>): Superficie condivisa.
+- [desktop/electron/preload.cjs](<../../desktop/electron/preload.cjs>): Privilegi esposti.
+- [Hermes: tools/computer_use/schema.py](</Users/luca/.hermes/hermes-agent/tools/computer_use/schema.py>): Target e azioni; lettura sorgente alla versione fissata, non prova live.
+- [Hermes: tools/computer_use_tool.py](</Users/luca/.hermes/hermes-agent/tools/computer_use_tool.py>): Registrazione del tool; lettura sorgente alla versione fissata, non prova live.
+
+Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+<!-- feature-guidance:end -->
+
 ## Confine delle prove
 
 Stato: **documented, not implemented** (2026-10-04). Questa specifica descrive una futura slice di Hermes Studio; codice upstream disponibile non significa capability collegata nell’app. Evidenze: lettura del checkout sorgente `/Users/luca/.hermes/hermes-agent`, non esecuzione live, nessun prompt/configurazione/database personale. Riferimento autorevole: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). La versione remota può cambiare: prima di implementare fissare SHA e ripetere i contract test.
@@ -34,4 +62,4 @@ Fixture capture AX/vision/SOM, app/window mismatch, coordinatesobsolete, permiss
 
 ## Prompt nuova chat
 
-> Implementa F09 usando computer_use schema runtime e bridge owned, prima receipts/capture/approval target. Non aggiungere executor diretto o assumere takeover. Verifica supporto reale host+permissions e deliverymode; prova soltanto app/profilo sintetici autorizzati. Implementa failclosed scope/staleapproval e postconditionverification, completa DoD e persisti risultati senza screenshot personali.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F09 usando computer_use schema runtime e bridge owned, prima receipts/capture/approval target. Non aggiungere executor diretto o assumere takeover. Verifica supporto reale host+permissions e deliverymode; prova soltanto app/profilo sintetici autorizzati. Implementa failclosed scope/staleapproval e postconditionverification, completa DoD e persisti risultati senza screenshot personali.

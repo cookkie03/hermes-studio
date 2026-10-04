@@ -23,7 +23,7 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 
 - [docs/architecture/feature-architecture-review.md](<../../docs/architecture/feature-architecture-review.md>): Candidati e limiti; nessuno già selezionato.
 - [desktop/package.json](<../../desktop/package.json>): Script e grafi dipendenze effettivi.
-- [desktop/tsconfig.metadata.json](<../../desktop/tsconfig.metadata.json>): Gap metadata --noCheck.
+- [desktop/tsconfig.metadata.json](<../../desktop/tsconfig.metadata.json>): Configurazione typecheck metadata e dipendenze.
 - [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Orchestrazione attuale.
 - [desktop/hermes/server.mjs](<../../desktop/hermes/server.mjs>): Metadata/trasporto attuali.
 - [desktop/scripts/test-packaged-ui.cjs](<../../desktop/scripts/test-packaged-ui.cjs>): Prova packaged esistente, da verificare rispetto ai gate.

@@ -1,5 +1,34 @@
 # F05 — Delega, messaggi fra bot e recall
 
+
+
+<!-- feature-guidance:start -->
+## File e skill da leggere e usare
+
+Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+
+### Skill specifiche
+
+| Skill / percorso | Quando applicarla a questa feature |
+|---|---|
+| [research](<../../.agents/skills/research/SKILL.md>) | Se schema/eventi upstream sono incerti: ricerca primaria documentata |
+| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | Quando cambiano identità, stato o termini del dominio |
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) — condizionale | Separare Delega, Messaggio e Gruppo |
+| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — condizionale | Se emerge un errore riproducibile di connessione o lifecycle |
+
+### Punti di ingresso da leggere
+
+- [docs/features/F04-bots-and-identities.md](<../../docs/features/F04-bots-and-identities.md>): Identità canonica.
+- [docs/features/F16-permissions-and-approvals.md](<../../docs/features/F16-permissions-and-approvals.md>): Autorizzazione e richieste stale.
+- [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Trasporto owned.
+- [Hermes: tools/delegate_tool.py](</Users/luca/.hermes/hermes-agent/tools/delegate_tool.py>): Delega temporanea; lettura sorgente alla versione fissata, non prova live.
+- [Hermes: tools/bot_mode_dm.py](</Users/luca/.hermes/hermes-agent/tools/bot_mode_dm.py>): Messaggi tra bot; lettura sorgente alla versione fissata, non prova live.
+- [Hermes: tools/session_search_tool.py](</Users/luca/.hermes/hermes-agent/tools/session_search_tool.py>): Recupero cronologia; lettura sorgente alla versione fissata, non prova live.
+- [Hermes: tui_gateway/contracts/groups_bot_relay.py](</Users/luca/.hermes/hermes-agent/tui_gateway/contracts/groups_bot_relay.py>): Relay/gruppi e scope; lettura sorgente alla versione fissata, non prova live.
+
+Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+<!-- feature-guidance:end -->
+
 ## Confine delle prove
 
 Stato: **documented, not implemented** (2026-10-04). Questa specifica descrive una futura slice di Hermes Studio; codice upstream disponibile non significa capability collegata nell’app. Evidenze: lettura del checkout sorgente `/Users/luca/.hermes/hermes-agent`, non esecuzione live, nessun prompt/configurazione/database personale. Riferimento autorevole: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). La versione remota può cambiare: prima di implementare fissare SHA e ripetere i contract test.
@@ -34,4 +63,4 @@ Mai inoltrare intera chat privata o spoofare sender; target/author runtime autho
 
 Due bot isolati: ack ≠ reply, ritardo/errore/offline, omonimi e peer route corretti, replay senza duplicati, cancel stale, callback dopo chiusura UI, recall con anchor e scope negato; delegato temporaneo non appare come bot durevole. DoD: ownership transport e permissions espliciti, fixture e prova isolata di DM+reply+recall, persisted receipts/reopen, packaged UI, nessuna fuga personal data; aggiornare docs.
 
-> Implementa F05 per priorità collaborazione e messaggi/recall. Verifica prima sulla versione fissata delegate_task, message_agent canonico, bot_relay e groups.* nel sorgente Hermes apps/desktop. Scegli una slice tracciabile (due bot isolati DM→reply→recall), non unirli in un falso tool generico. Definisci scope/identity/receipts e ownership, testa incerto/offline/replay, completa DoD e persisti esiti. Non usare archivi personali o inviare messaggi reali senza autorizzazione specifica.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F05 per priorità collaborazione e messaggi/recall. Verifica prima sulla versione fissata delegate_task, message_agent canonico, bot_relay e groups.* nel sorgente Hermes apps/desktop. Scegli una slice tracciabile (due bot isolati DM→reply→recall), non unirli in un falso tool generico. Definisci scope/identity/receipts e ownership, testa incerto/offline/replay, completa DoD e persisti esiti. Non usare archivi personali o inviare messaggi reali senza autorizzazione specifica.

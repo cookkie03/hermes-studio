@@ -1,5 +1,34 @@
 # F08 — Browser, ricerca e controllo scoped
 
+
+
+<!-- feature-guidance:start -->
+## File e skill da leggere e usare
+
+Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+
+### Skill specifiche
+
+| Skill / percorso | Quando applicarla a questa feature |
+|---|---|
+| [research](<../../.agents/skills/research/SKILL.md>) | Verificare browser tool vs controller |
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Lease e scope del browser |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) — condizionale | Componenti React e stato del renderer |
+| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Verifica UI packaged con dati sintetici e tool realmente disponibili |
+| [ux-extract](<../../.agents/skills/ux-extract/SKILL.md>) — condizionale | Solo osservazioni del browser panel che mancano |
+
+### Punti di ingresso da leggere
+
+- [docs/features/F11-runtime-connection.md](<../../docs/features/F11-runtime-connection.md>): Autenticazione necessaria al controller.
+- [docs/features/F16-permissions-and-approvals.md](<../../docs/features/F16-permissions-and-approvals.md>): Permessi.
+- [desktop/upstream/src/client/ComputerPanel.tsx](<../../desktop/upstream/src/client/ComputerPanel.tsx>): Pannello corrente.
+- [desktop/electron/external-links.cjs](<../../desktop/electron/external-links.cjs>): Apertura URL protetta.
+- [Hermes: tools/browser_tool.py](</Users/luca/.hermes/hermes-agent/tools/browser_tool.py>): Tool browser; lettura sorgente alla versione fissata, non prova live.
+- [Hermes: tui_gateway/methods_browser_control.py](</Users/luca/.hermes/hermes-agent/tui_gateway/methods_browser_control.py>): Controller e gates; lettura sorgente alla versione fissata, non prova live.
+
+Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+<!-- feature-guidance:end -->
+
 ## Confine delle prove
 
 Stato: **documented, not implemented** (2026-10-04). Questa specifica descrive una futura slice di Hermes Studio; codice upstream disponibile non significa capability collegata nell’app. Evidenze: lettura del checkout sorgente `/Users/luca/.hermes/hermes-agent`, non esecuzione live, nessun prompt/configurazione/database personale. Riferimento autorevole: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). La versione remota può cambiare: prima di implementare fissare SHA e ripetere i contract test.
@@ -30,4 +59,4 @@ Test fixture toolresults/sourceURL/screenshot/malformed URL, private session dro
 
 ## Prompt nuova chat
 
-> Implementa F08 per slice receipts browser/source e preview supportata. Verifica schema/browser mode upstream, non simulare live viewport o takeover. Controller successivo deve passare authenticated non-internal lease gate e failclosed4403, con profilo browser isolato. Mantieni CSP/sandbox e sourceURL allowlist; testa cleanup, privacy, actualbrowsercontract quando autorizzato. Aggiorna DoD e documentazione.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F08 per slice receipts browser/source e preview supportata. Verifica schema/browser mode upstream, non simulare live viewport o takeover. Controller successivo deve passare authenticated non-internal lease gate e failclosed4403, con profilo browser isolato. Mantieni CSP/sandbox e sourceURL allowlist; testa cleanup, privacy, actualbrowsercontract quando autorizzato. Aggiorna DoD e documentazione.

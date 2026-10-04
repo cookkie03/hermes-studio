@@ -2,6 +2,36 @@
 
 Stato: specifica per una chat futura; baseline esistente parziale, feature non completa. Aggiornamento: 2026-10-04. La nuova richiesta dell’utente è documentare il progetto per feature e partire da un MVP quasi vuoto. Questo documento non autorizza a riprendere il piano notturno né a eliminare il prototipo.
 
+
+
+<!-- feature-guidance:start -->
+## File e skill da leggere e usare
+
+Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+
+### Skill specifiche
+
+| Skill / percorso | Quando applicarla a questa feature |
+|---|---|
+| [frontend-design](<../../.agents/skills/frontend-design/SKILL.md>) | Direzione visiva conforme al riferimento e anatomia dei componenti |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) | Componenti React e stato del renderer |
+| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Verifica UI packaged con dati sintetici e tool realmente disponibili |
+| [ux-extract](<../../.agents/skills/ux-extract/SKILL.md>) — condizionale | Se manca evidenza su un componente o una microinterazione |
+| [axiom-design](<../../.agents/skills/axiom-design/SKILL.md>) — condizionale | Gerarchia e convenzioni macOS, applicate allo stack Electron |
+| [axiom-accessibility](<../../.agents/skills/axiom-accessibility/SKILL.md>) — condizionale | Criteri tastiera/focus/contrasto; API native solo nel ramo nativo |
+
+### Punti di ingresso da leggere
+
+- [docs/design/component-system.md](<../../docs/design/component-system.md>): Token, stati e motion proposti.
+- [docs/design/opendots-target.md](<../../docs/design/opendots-target.md>): Composizione autorevole.
+- [docs/ux-extracts/desktop-components/pattern-library.md](<../../docs/ux-extracts/desktop-components/pattern-library.md>): Osservazioni live vs screenshot.
+- [desktop/upstream/src/client/App.tsx](<../../desktop/upstream/src/client/App.tsx>): Navigazione shell.
+- [desktop/upstream/src/client/ThreadList.tsx](<../../desktop/upstream/src/client/ThreadList.tsx>): Sidebar.
+- [desktop/upstream/src/client/style.css](<../../desktop/upstream/src/client/style.css>): Stili condivisi da coordinare.
+
+Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+<!-- feature-guidance:end -->
+
 ## Risultato e confini
 
 Aprire Hermes Studio e capire dove si trovano agenti, conversazioni, documenti e strumenti, anche quando non esiste ancora alcun dato. La shell organizza il lavoro; non crea un agente, avvia una sessione o collega Hermes da sola.
@@ -61,7 +91,7 @@ Le righe hanno stati idle/hover/focus-visible/selected/disabled distinti; selezi
 
 ## Dipendenze e ownership
 
-Prerequisiti: MEMORY/STATUS/GLOSSARY correnti, ADR0005, component-system e spec aggiornata dell’MVP vuoto. Dipendenza F02 per contenuto conversazioni e F03 per documenti e F15 per memoria; F01 può mostrare destinazioni vuote senza implementarle.
+Prerequisiti: MEMORY/STATUS/GLOSSARY correnti, ADR0005 e ADR0006, component-system e spec aggiornata dell’MVP vuoto. Dipendenza F02 per contenuto conversazioni e F03 per documenti e F15 per memoria; F01 può mostrare destinazioni vuote senza implementarle.
 
 Ownership futura: `desktop/upstream/src/client/App.tsx`, `ThreadList.tsx`, stile della shell e componenti dedicati eventualmente estratti. Condividere `style.css` solo con accordo esplicito per evitare sovrascritture. Non modificare bridge/runtime, modelli server, packaging o editor. Preservare sorgente/asset/provenienza MIT. La baseline contiene già sidebar e inspector: controllare lo stato reale prima di decidere riuso o sostituzione.
 
@@ -73,4 +103,4 @@ Definition of done: avvio con zero dati senza chiamate runtime; navigazione da t
 
 ## Prompt per una nuova chat
 
-> Implementa solo F01 leggendo AGENTS.md, docs/project/MEMORY.md, STATUS.md, GLOSSARY.md, ADR0005, docs/design/component-system.md e questa specifica. La direzione attuale è MVP quasi vuoto e sviluppo per feature; non riattivare il piano notturno. Ispeziona la shell esistente prima di editarla, preserva asset/provenienza e dati. Lavora soltanto sui file client della shell concordati; coordina gli stili condivisi. Non collegare Hermes né creare dati dimostrativi automaticamente. Verifica 1360/900px, tastiera, nomi accessibili, reduced motion e overlay su profilo sintetico. Aggiorna prove e stato nei documenti; non dichiarare completa una capability remota assente. Se il component-system non è disponibile, completa l’analisi e segnala il prerequisito prima del codice visivo.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F01 leggendo AGENTS.md, docs/project/MEMORY.md, STATUS.md, GLOSSARY.md, ADR0005 e ADR0006, docs/design/component-system.md e questa specifica. La direzione attuale è MVP quasi vuoto e sviluppo per feature; non riattivare il piano notturno. Ispeziona la shell esistente prima di editarla, preserva asset/provenienza e dati. Lavora soltanto sui file client della shell concordati; coordina gli stili condivisi. Non collegare Hermes né creare dati dimostrativi automaticamente. Verifica 1360/900px, tastiera, nomi accessibili, reduced motion e overlay su profilo sintetico. Aggiorna prove e stato nei documenti; non dichiarare completa una capability remota assente. Se il component-system non è disponibile, completa l’analisi e segnala il prerequisito prima del codice visivo.

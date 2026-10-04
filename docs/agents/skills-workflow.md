@@ -1,5 +1,7 @@
 # Skill e percorso di lavoro
 
+Percorso operativo corrente per una feature: [feature-workflow](feature-workflow.md). Elenco completo verificato sul disco: [skills-catalog](skills-catalog.md). Le 18 schede contengono ora skill principali, rami condizionali e file da leggere. Le sezioni sotto conservano il setup e i percorsi storici; prevalgono D19–D23 e ADR0006.
+
 Setup progetto: 2026-10-04. Skill locali in `.agents/skills/`; Hermes Agent ha collegamenti in `.hermes/skills/`. Per Codex la directory `.agents/skills/` è il punto di lettura. La lettura esplicita permette l'applicazione in questa chat; non è stato verificato un comando slash hot-reloaded nell'interfaccia.
 
 ## Percorso scelto con ask-matt

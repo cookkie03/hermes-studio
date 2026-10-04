@@ -2,6 +2,34 @@
 
 Stato: specifica per una chat futura; baseline esistente parziale, feature non completa. Aggiornamento: 2026-10-04. MVP quasi vuoto: nessuno Space, documento o ricordo dimostrativo aggiunto automaticamente. Questo documento non avvia sviluppo.
 
+
+
+<!-- feature-guidance:start -->
+## File e skill da leggere e usare
+
+Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+
+### Skill specifiche
+
+| Skill / percorso | Quando applicarla a questa feature |
+|---|---|
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) | Componenti React e stato del renderer |
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Revisioni e ownership metadata |
+| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Verifica UI packaged con dati sintetici e tool realmente disponibili |
+| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — condizionale | Se autosave o conflitto non preserva la bozza |
+
+### Punti di ingresso da leggere
+
+- [desktop/upstream/src/client/PageDocument.tsx](<../../desktop/upstream/src/client/PageDocument.tsx>): Documento.
+- [desktop/upstream/src/client/editor/use-page-autosave.ts](<../../desktop/upstream/src/client/editor/use-page-autosave.ts>): Ciclo autosave.
+- [desktop/upstream/src/client/SaveToSpaceReview.tsx](<../../desktop/upstream/src/client/SaveToSpaceReview.tsx>): Revisione e salvataggio esplicito.
+- [desktop/upstream/src/server/page-routes.ts](<../../desktop/upstream/src/server/page-routes.ts>): Contratto metadata.
+- [desktop/upstream/src/server/pages.ts](<../../desktop/upstream/src/server/pages.ts>): Persistenza pagine.
+- [docs/features/F15-memory.md](<../../docs/features/F15-memory.md>): Confine con memoria separata.
+
+Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+<!-- feature-guidance:end -->
+
 ## Risultato e slice
 
 Organizzare e scrivere contenuti persistenti indipendentemente dalla disponibilità di Hermes. Prima slice: Space e pagina Markdown creabili esplicitamente, salvataggio e riapertura. Seconda slice: revisione di risposta prima di trasformarla in pagina. La memoria è una feature separata: [F15 — Memoria](F15-memory.md). Review e memoria non sono prerequisiti per un editor locale funzionante.
@@ -76,4 +104,4 @@ Gate prima slice: crea Space/pagina, modifica source, autosave/Cmd+S, riapri e r
 
 ## Prompt per una nuova chat
 
-> Implementa soltanto la slice scelta di F03 leggendo AGENTS.md, MEMORY/STATUS, GLOSSARY, component-system e questa spec. La prima slice è documenti locali e MVP vuoto; memoria è F15 e non va implementata qui; non aggiungere review/runtime insieme per inerzia. Ispeziona i componenti upstream e i test autosave prima di editarli, preserva provenienza e dati. Lavora nei file documento/editor concordati e coordina PageConversation/schema/server con i loro owner. Usa profilo sintetico, verifica fallimenti/revisioni/riavvio sulla vera.app e nessuna scrittura personale automatica. Per review richiedi azione esplicita e ricevuta idempotente, non un finto tool approval. Aggiorna documenti con prove e limiti; non riprendere il piano notturno globale.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa soltanto la slice scelta di F03 leggendo AGENTS.md, MEMORY/STATUS, GLOSSARY, component-system e questa spec. La prima slice è documenti locali e MVP vuoto; memoria è F15 e non va implementata qui; non aggiungere review/runtime insieme per inerzia. Ispeziona i componenti upstream e i test autosave prima di editarli, preserva provenienza e dati. Lavora nei file documento/editor concordati e coordina PageConversation/schema/server con i loro owner. Usa profilo sintetico, verifica fallimenti/revisioni/riavvio sulla vera.app e nessuna scrittura personale automatica. Per review richiedi azione esplicita e ricevuta idempotente, non un finto tool approval. Aggiorna documenti con prove e limiti; non riprendere il piano notturno globale.
