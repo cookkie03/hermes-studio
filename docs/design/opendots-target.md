@@ -24,4 +24,4 @@ Repository indipendente: proposta fork e aggiornamenti upstream annullata (D21).
 
 ## Requisiti funzionali aggiornati D25–D29
 
-Layout screenshot resta autorevole, con semantica aggiornata: Spaces collegano cartelle e file reali F03/F10; Create/Edit Dot include scelta fra avatar OpenDots disponibili F04-A; Browser è pagina/profilo visibile condiviso con Hermes F08; Memory distingue profilo Hermes, Markdown Space e legacy Studio F15. Voce in-app e vocali F13 separati dalla telefonata futura: azione Start voice non simula Call disponibile. Componenti/stati restano gated dalla feature effettivamente implementata.
+Layout screenshot resta autorevole, con semantica aggiornata: Spaces collegano cartelle e file reali F6/F5; Create/Edit Dot include scelta fra avatar OpenDots disponibili F7-A; Browser è pagina/profilo visibile condiviso con Hermes F12; Memory distingue profilo Hermes, Markdown Space e legacy Studio F9. Voce in-app e vocali F17 separati dalla telefonata futura: azione Start voice non simula Call disponibile. Componenti/stati restano gated dalla feature effettivamente implementata.

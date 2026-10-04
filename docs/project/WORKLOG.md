@@ -1,3 +1,5 @@
+> Numerazione storica: gli ID nel testo precedono il riordino; i link alle schede puntano ai file attuali. [Corrispondenza vecchi/nuovi ID](../features/numbering-2026-10-04.md).
+
 # Registro di lavoro
 
 ## 2026-10-04 — direzione futura per Codex
@@ -208,3 +210,7 @@ Utente richiede scheda dedicata alla conservazione/esposizione delle feature run
 ## 2026-10-04 — Consolidamento documentazione richiesto dall'utente
 
 Letti ask-matt, documentation-and-adrs e writing-for-agents; applicate gerarchia/single source/progressive disclosure senza implementation/refactor prodotto. Audit: MEMORY e STATUS accumulavano stati superati; F00 invitava a selezionare candidato già concluso; F15/F18 e approval F01/F16 avevano sovrapposizioni; README/roadmap restavano a 18 schede. Snapshot integrali con hash di MEMORY/STATUS preservati, registro D01–D30 consolidato, indice docs/README e confini feature aggiunti. Riscritti soli documenti correnti; ADR/audit/checklist storici etichettati e collegati alla consegna F00. F15 Space/legacy/management esplicito, F18 viewer/note native, F07 manutenzione skill; F10 non dipende circolarmente dall'editor F03. Handoff finali riordinati dopo requisiti. Nessun sorgente/profilo/vault/artefatto modificato o test prodotto eseguito. Verifica documentale PASS: 394 collegamenti locali nei 51 documenti modificati, 19 schede con handoff finale univoco, decisioni D01–D30 complete e snapshot MEMORY/STATUS identici ai corpi pre-consolidamento (hash verificati). Controllo esteso: 1.081 collegamenti locali in tutta docs validi. git diff --check PASS. Nessuna build necessaria per soli testi; review diff/index/segreti e commit/push separati.
+
+## 2026-10-04 — D31, rinumerazione delle feature
+
+Richiesta esplicita: nomi e ID secondo la sequenza proposta, F0 MVP, F1 runtime, F2 conversazioni, F3 permessi, F4 shell, F5 file, F6 Spaces, F7 bots, F8 capacità native/memoria, F9 memoria Space, F10 routine, F11 plugin, F12 browser, F13 release, F14 collaborazione, F15 terminale, F16 computer, F17 voce, F18 specialisti. Applicata documentation-and-adrs; nessun ADR tecnico nuovo perché cambia solo la numerazione. Aggiornati nomi, titoli, dipendenze, prompt, indici e riferimenti; tabella di corrispondenza per le vecchie chat. Testi storici conservano ID originali con nota; link delle schede aggiornati, snapshot hash riferito al corpo pre-migrazione in Git 52d14ea. Nessun codice/artefatto/runtime/dato personale modificato. Verifica PASS: 19 schede rinumerate, catalogo F0–F18 ordinato, contenuti equivalenti salvo ID/percorsi, guidance/handoff univoci, snapshot storici preservati salvo link e 1.144 link locali validi. diff/index/pattern credenziali controllati prima del commit; pubblicazione tracciata in Git.

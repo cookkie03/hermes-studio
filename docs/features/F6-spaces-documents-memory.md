@@ -1,6 +1,6 @@
-# F03 — Spaces collegati a cartelle e documenti su file
+# F6 — Spaces collegati a cartelle e documenti su file
 
-Stato: specifica aggiornata D25, 2026-10-04; non implementata. La baseline F00 usa ancora pagine metadata. La nuova richiesta sostituisce il modello di Space come solo contenitore di pagine interne; preservare i dati esistenti.
+Stato: specifica aggiornata D25, 2026-10-04; non implementata. La baseline F0 usa ancora pagine metadata. La nuova richiesta sostituisce il modello di Space come solo contenitore di pagine interne; preservare i dati esistenti.
 
 <!-- feature-guidance:start -->
 ## File e skill da leggere e usare
@@ -20,7 +20,7 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 ### Punti di ingresso da leggere
 
 - [docs/adr/0007-folder-backed-spaces.md](../adr/0007-folder-backed-spaces.md): decisione filesystem e migrazione.
-- [docs/features/F10-files-and-artifacts.md](F10-files-and-artifacts.md): contratto filesystem condiviso.
+- [docs/features/F5-files-and-artifacts.md](F5-files-and-artifacts.md): contratto filesystem condiviso.
 - [desktop/upstream/src/client/SpaceWorkspace.tsx](../../desktop/upstream/src/client/SpaceWorkspace.tsx): contenitore dello Space.
 - [desktop/upstream/src/client/WorkspaceDialog.tsx](../../desktop/upstream/src/client/WorkspaceDialog.tsx): selezione esplicita cartelle da aggiungere.
 - [desktop/upstream/src/client/PageDocument.tsx](<../../desktop/upstream/src/client/PageDocument.tsx>): Documento.
@@ -28,7 +28,7 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 - [desktop/upstream/src/client/SaveToSpaceReview.tsx](<../../desktop/upstream/src/client/SaveToSpaceReview.tsx>): Revisione e salvataggio esplicito.
 - [desktop/upstream/src/server/page-routes.ts](<../../desktop/upstream/src/server/page-routes.ts>): Contratto metadata.
 - [desktop/upstream/src/server/pages.ts](<../../desktop/upstream/src/server/pages.ts>): Persistenza pagine.
-- [docs/features/F15-memory.md](<../../docs/features/F15-memory.md>): Confine con memoria separata.
+- [docs/features/F9-memory.md](<../../docs/features/F9-memory.md>): Confine con memoria separata.
 
 Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
 <!-- feature-guidance:end -->
@@ -37,7 +37,7 @@ Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. L
 
 Uno Space collega una o più cartelle reali scelte dall’utente: un vault Obsidian, un progetto software o un’altra directory di lavoro. Si vedono struttura e file testuali, si aprono/modificano i documenti e gli specialisti possono lavorare sulle stesse cartelle entro l’ambito autorizzato. Aggiungere una cartella significa collegarla, senza copiare o importare tutto in un database Studio.
 
-Il filesystem è la fonte dei contenuti. Studio conserva collegamenti, selezioni, bozze recuperabili e ricevute; il testo salvato è il file reale. La UI resta nel linguaggio OpenDots, mentre l’organizzazione dei contenuti segue il modello cartella/progetto richiesto. La memoria degli agenti è F15.
+Il filesystem è la fonte dei contenuti. Studio conserva collegamenti, selezioni, bozze recuperabili e ricevute; il testo salvato è il file reale. La UI resta nel linguaggio OpenDots, mentre l’organizzazione dei contenuti segue il modello cartella/progetto richiesto. La memoria degli agenti è F9.
 
 ## Percorso e componenti
 
@@ -54,19 +54,19 @@ Uno Space può esistere prima del collegamento, ma finché non ha cartelle mostr
 
 Proposta tecnica da affinare: `Space`, `FolderBinding` (identità stabile, host, root scelta, stato di accesso), `WorkspaceFile` (folderId, percorso relativo, tipo, versione), `DocumentDraft` e `SaveReceipt`. Il nome visibile dello Space non è un percorso. Una cartella non equivale a profilo Hermes o sessione.
 
-F10 possiede la risoluzione delle root, listing, lettura/scrittura e rilevamento cambiamenti. F03 possiede organizzazione Space, selezione cartelle, editor e revisione. Le azioni native attraversano un’interface limitata: nessun filesystem generico nel renderer. Definire il contratto comune prima di cambiare shared types/server/preload.
+F5 possiede la risoluzione delle root, listing, lettura/scrittura e rilevamento cambiamenti. F6 possiede organizzazione Space, selezione cartelle, editor e revisione. Le azioni native attraversano un’interface limitata: nessun filesystem generico nel renderer. Definire il contratto comune prima di cambiare shared types/server/preload.
 
-Per runtime remoto, distinguere root Mac e root host Hermes. Un path del Mac non diventa accessibile al server per essere inserito nel prompt. Se manca il mapping/autorizzazione mostrare Unavailable to agent; mount/sync/import remoto è un incremento esplicito, non requisito implicito di F03.
+Per runtime remoto, distinguere root Mac e root host Hermes. Un path del Mac non diventa accessibile al server per essere inserito nel prompt. Se manca il mapping/autorizzazione mostrare Unavailable to agent; mount/sync/import remoto è un incremento esplicito, non requisito implicito di F6.
 
 ## Salvataggio e modifiche esterne
 
-Le modifiche restano bozze finché la scrittura sul file non riesce. Verificare la versione letta prima di salvare; una modifica di Obsidian o di uno specialista produce conflitto, non overwrite silenzioso. La strategia concreta (hash/revisione, osservazione directory, scrittura atomica) va scelta in F10 e condivisa con l’editor.
+Le modifiche restano bozze finché la scrittura sul file non riesce. Verificare la versione letta prima di salvare; una modifica di Obsidian o di uno specialista produce conflitto, non overwrite silenzioso. La strategia concreta (hash/revisione, osservazione directory, scrittura atomica) va scelta in F5 e condivisa con l’editor.
 
 Refresh esterno non sostituisce una bozza dirty. Permission denied, volume scollegato, file rinominato o non disponibile conservano testo e collegamento. Su file binari/grandi mostrare un limite onesto invece di forzare l’editor. Preservare encoding e newline supportati; dichiarare formati esclusi. Cmd+S, ritorno focus, scroll, IME e Reduced Motion seguono component-system.
 
 ## Lavoro degli specialisti
 
-F11/F02 forniscono connessione e conversazione; F04/F05 identità e collaborazione; F16 controlla l’ambito. Lo specialista riceve riferimenti e istruzioni pertinenti alle cartelle selezionate. Collegare uno Space non autorizza tutte le sessioni o tutti i bot alla lettura/scrittura. Il runtime usa i suoi tool file sugli stessi file raggiungibili; il client presenta risultati e revisioni confermati.
+F1/F2 forniscono connessione e conversazione; F7/F14 identità e collaborazione; F3 controlla l’ambito. Lo specialista riceve riferimenti e istruzioni pertinenti alle cartelle selezionate. Collegare uno Space non autorizza tutte le sessioni o tutti i bot alla lettura/scrittura. Il runtime usa i suoi tool file sugli stessi file raggiungibili; il client presenta risultati e revisioni confermati.
 
 Prima dell’invio di un documento, salvare o scegliere esplicitamente come trattare la bozza. Lettura/versione/provenienza devono corrispondere al file effettivo; non usare un vecchio snapshot della pagina SQLite come contenuto corrente. Attività parallele sullo stesso file richiedono conflitto rilevabile e responsabilità tracciata.
 
@@ -82,16 +82,16 @@ Le pagine già esistenti rimangono recuperabili come documenti legacy; nessuna c
 
 ## Dipendenze e incremento
 
-F01 shell; F10 contratto minimo read-only/cartelle e successivamente salvataggio; F16 scope. F11/F02 servono per il lavoro remoto, non per leggere documenti locali offline. F04/F05/F14 riguardano specialisti, non sono prerequisiti per collegare una cartella.
+F4 shell; F5 contratto minimo read-only/cartelle e successivamente salvataggio; F3 scope. F1/F2 servono per il lavoro remoto, non per leggere documenti locali offline. F7/F14/F18 riguardano specialisti, non sono prerequisiti per collegare una cartella.
 
-Prima slice: collega folder sintetico → tree → apri testo → riavvia e ritrova binding/file. Seconda: editing, conflitti esterni e review-to-file. Si può concordare F03/F10 come due chat con contratto condiviso; questa scheda non autorizza di implementarle entrambe automaticamente.
+Prima slice: collega folder sintetico → tree → apri testo → riavvia e ritrova binding/file. Seconda: editing, conflitti esterni e review-to-file. Si può concordare F6/F5 come due chat con contratto condiviso; questa scheda non autorizza di implementarle entrambe automaticamente.
 
 File di ingresso già esistenti: SpaceWorkspace, SpaceLibrary, SpaceNav, WorkspaceDialog, PageDocument/editor, page/store/routes e Electron main/preload. Il vecchio page store è compatibilità, non nuova fonte dei file.
 
 ## Definition of done
 
-Folder sintetico con `.md`, `.txt` e codice: link senza copia; due root distinguibili; lettura dei byte reali; aggiungi/scollega senza distruzione; root spostata/offline recuperabile; salvataggio e riavvio; modifica esterna preserva bozza; symlink/root escape e accesso negato testati tramite F10/F16. Nessun test sul Second Brain personale. Gate specialisti distinto: tool Hermes isolato legge/modifica un file nella root autorizzata, UI riflette il risultato; fuori root negato. Fixture non prova accesso runtime live.
+Folder sintetico con `.md`, `.txt` e codice: link senza copia; due root distinguibili; lettura dei byte reali; aggiungi/scollega senza distruzione; root spostata/offline recuperabile; salvataggio e riavvio; modifica esterna preserva bozza; symlink/root escape e accesso negato testati tramite F5/F3. Nessun test sul Second Brain personale. Gate specialisti distinto: tool Hermes isolato legge/modifica un file nella root autorizzata, UI riflette il risultato; fuori root negato. Fixture non prova accesso runtime live.
 
 ## Prompt per una nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e File e skill della scheda. Implementa soltanto la slice selezionata di F03 aggiornata D25: Spaces collegati a cartelle reali, come vault/progetti. Definisci con F10 root/list/read/save e con F16 scope prima degli edit condivisi. Parti da folder sintetico read-only e persistenza del collegamento; contenuti autorevoli nel filesystem, pagine legacy preservate. Aggiungere/scollegare non copia né elimina file. Non scansionare vault personali o attivare specialisti/remote mapping automaticamente. Prova riavvio, errore e cambi esterni; aggiorna documenti e gate con prove.
+> Prima segui docs/agents/feature-workflow.md e File e skill della scheda. Implementa soltanto la slice selezionata di F6 aggiornata D25: Spaces collegati a cartelle reali, come vault/progetti. Definisci con F5 root/list/read/save e con F3 scope prima degli edit condivisi. Parti da folder sintetico read-only e persistenza del collegamento; contenuti autorevoli nel filesystem, pagine legacy preservate. Aggiungere/scollegare non copia né elimina file. Non scansionare vault personali o attivare specialisti/remote mapping automaticamente. Prova riavvio, errore e cambi esterni; aggiorna documenti e gate con prove.

@@ -83,4 +83,4 @@ La ricerca non costituisce autorizzazione a scaricare modelli, aprire porte, cre
 
 ## Confine aggiornato D29
 
-Messaggi vocali, dettatura, TTS e vocal chat in-app sono ora specificati in [F13](../features/F13-voice-and-calls.md), da selezionare in una chat dedicata. Questo documento conserva la ricerca futura di telefonate/rete e alternative audio; non prescrive sostituzione degli strumenti o provider Hermes già disponibili.
+Messaggi vocali, dettatura, TTS e vocal chat in-app sono ora specificati in [F17](../features/F17-voice-and-calls.md), da selezionare in una chat dedicata. Questo documento conserva la ricerca futura di telefonate/rete e alternative audio; non prescrive sostituzione degli strumenti o provider Hermes già disponibili.

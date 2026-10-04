@@ -10,7 +10,7 @@ Luca vuole scegliere ogni feature in una chat Codex dedicata. La base deve esser
 
 Catalogo canonico docs/features/README.md, una scheda autonoma per feature con prerequisiti, scope, stati, dati, ownership, fonti, gate e prompt di handoff. Il lavoro corrente produce documenti e una baseline MVP con limiti dichiarati. Nessuna nuova feature, refactor o pubblicazione automatica. La repository resta indipendente; ritirata la manutenzione di una derivazione della repository di riferimento. Conservare attribuzioni MIT del codice riusato.
 
-Collaborazione Bots/Dots e routine sono feature esplicite. Release GitHub con DMG è F12, selezionabile come le altre; artefatto locale esistente non equivale a pipeline/release pubblicata.
+Collaborazione Bots/Dots e routine sono feature esplicite. Release GitHub con DMG è F13, selezionabile come le altre; artefatto locale esistente non equivale a pipeline/release pubblicata.
 
 ## Alternative
 

@@ -4,11 +4,11 @@ Data: 2026-10-04. Stato: accettata per richiesta utente D25; decisione di prodot
 
 ## Contesto
 
-Durante la prova F00 Luca chiede Spaces come cartelle/vault Obsidian e progetti Codex, con file testuali visibili e lavoro degli specialisti sugli stessi contenuti. La baseline riusata salva pagine nello store locale: questo non soddisfa il nuovo modello.
+Durante la prova F0 Luca chiede Spaces come cartelle/vault Obsidian e progetti Codex, con file testuali visibili e lavoro degli specialisti sugli stessi contenuti. La baseline riusata salva pagine nello store locale: questo non soddisfa il nuovo modello.
 
 ## Decisione
 
-Uno Space collega cartelle selezionate esplicitamente. Il filesystem è fonte dei contenuti; il client conserva collegamenti, bozze e ricevute. F03 cura workspace/editor; F10 operazioni file e revisioni; F16 ambito degli accessi. Collegare o scollegare non copia, sposta o elimina la directory. Gli specialisti lavorano soltanto sui riferimenti raggiungibili dal loro host e autorizzati.
+Uno Space collega cartelle selezionate esplicitamente. Il filesystem è fonte dei contenuti; il client conserva collegamenti, bozze e ricevute. F6 cura workspace/editor; F5 operazioni file e revisioni; F3 ambito degli accessi. Collegare o scollegare non copia, sposta o elimina la directory. Gli specialisti lavorano soltanto sui riferimenti raggiungibili dal loro host e autorizzati.
 
 ## Alternative
 

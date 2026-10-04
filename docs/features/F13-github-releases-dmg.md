@@ -1,4 +1,4 @@
-# F12 — Rendere Hermes Studio software distribuibile su GitHub
+# F13 — Rendere Hermes Studio software distribuibile su GitHub
 
 Stato: documentata, da sviluppare in una chat dedicata. Un DMG locale ad-hoc esiste; pipeline e release pubbliche non sono completate. Questo è il documento di handoff richiesto dall'utente.
 
@@ -49,7 +49,7 @@ Scegliere il tag/versione e insieme di feature realmente inclusi. Nessun reposit
 4. DMG contiene .app e collegamento Applications; Electron/Node embedded e servizio UI posseduto. Nessun devserver/localhost hardcoded, secret/config/runtime/database personali incluso.
 5. Firma: canale sviluppo ad-hoc dichiarato; release Apple Developer/notarization/stapling solo con account/credenziali forniti in secureCI. Non inventare identità o aggirare Gatekeeper. Se manca account, mantenere draft/devrelease chiaramente etichettata e spiegare prerequisito.
 6. Generare release notes con supporto macOS/arch, feature incluse, runtime setup, limiti, install/upgrade/uninstall con dati preservati. Repo README orientato a download utente, CONTRIBUTING orientato allo sviluppo.
-7. Preparare GitHub release draft associata al tag/commit verificato, allegare DMG+SHA256+manifest. Pubblicazione solo se autorizzata nella chat F12 e tutti i gate passano; non pubblicare semplicemente perché builder exit0.
+7. Preparare GitHub release draft associata al tag/commit verificato, allegare DMG+SHA256+manifest. Pubblicazione solo se autorizzata nella chat F13 e tutti i gate passano; non pubblicare semplicemente perché builder exit0.
 
 Auto-updater non è obbligatorio per prima release; non aggiungere account backend/certificati o feed di aggiornamento come deviazione. Intel/universal vanno provati nativamente prima di prometterli; arm64 attuale non prova x64.
 
@@ -59,8 +59,8 @@ Fresh build sul commit scelto e runner pulito; firma effettiva ispezionata, code
 
 ## Ownership e dipendenze
 
-F00 gate della base e versione selezionata delle feature; ownership packaging/CI/docs release. Non modificare browser, Bots, routine o chat per completare F12. Se gate app fallisce, registrare blocker e correzione delimitata, non ampliare il prodotto. In questa chat di preparazione non sono creati tag, Actions o release.
+F0 gate della base e versione selezionata delle feature; ownership packaging/CI/docs release. Non modificare browser, Bots, routine o chat per completare F13. Se gate app fallisce, registrare blocker e correzione delimitata, non ampliare il prodotto. In questa chat di preparazione non sono creati tag, Actions o release.
 
 ## Prompt da passare a Codex
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Trasforma la repository GitHub cookkie03/hermes-studio in software macOS distribuibile seguendo esclusivamente docs/features/F12-github-releases-dmg.md. Leggi AGENTS.md, MEMORY/STATUS, ADR0006 e principles.md; verifica stato, remote e artifact reali. Prepara build riproducibile e CI, .app+DMG+checksums+note, installazione senza npm per utenti e GitHub release draft. Preserva dati, licenze e credenziali; non implementare altre feature o repository derivate. Non dichiarare notarizzazione senza prova. Prima di pubblicare verifica tutti i gate e l'autorizzazione esplicita della chat. Consegna URL release/commit e checksum confermati oppure prerequisiti precisi.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Trasforma la repository GitHub cookkie03/hermes-studio in software macOS distribuibile seguendo esclusivamente docs/features/F13-github-releases-dmg.md. Leggi AGENTS.md, MEMORY/STATUS, ADR0006 e principles.md; verifica stato, remote e artifact reali. Prepara build riproducibile e CI, .app+DMG+checksums+note, installazione senza npm per utenti e GitHub release draft. Preserva dati, licenze e credenziali; non implementare altre feature o repository derivate. Non dichiarare notarizzazione senza prova. Prima di pubblicare verifica tutti i gate e l'autorizzazione esplicita della chat. Consegna URL release/commit e checksum confermati oppure prerequisiti precisi.

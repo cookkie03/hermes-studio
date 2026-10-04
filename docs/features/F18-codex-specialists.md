@@ -1,8 +1,8 @@
-# F14 — Specialisti Codex come capacità esterna
+# F18 — Specialisti Codex come capacità esterna
 
 Stato: futura/documentata. Leggere ../future/codex-specialists.md. Non creare task/thread o usare credenziali per questa feature ora.
 
-Obiettivo: un Dot può affidare un incarico delimitato a uno specialista Codex tramite contratto esplicito e riportare risultato/provenienza, non confondere agenti interni Hermes e chat umane Codex. F05 delegazione/routing + F16 autorizzazioni sono prerequisiti.
+Obiettivo: un Dot può affidare un incarico delimitato a uno specialista Codex tramite contratto esplicito e riportare risultato/provenienza, non confondere agenti interni Hermes e chat umane Codex. F14 delegazione/routing + F3 autorizzazioni sono prerequisiti.
 
 Definire perimetrorepository/worktree, proprietà delle modifiche, quota/modello/config, eventi e artifact receipts, cleanup e cancellazione. La ricezione di un messaggio da un agente non autorizza messaggi verso altre chat/app. Non introdurre integrazione account o CLI generica privilegiata nel renderer.
 
@@ -28,8 +28,8 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 ### Punti di ingresso da leggere
 
 - [docs/future/codex-specialists.md](<../../docs/future/codex-specialists.md>): Idea futura e limiti.
-- [docs/features/F05-delegation-and-dot-collaboration.md](<../../docs/features/F05-delegation-and-dot-collaboration.md>): Delega vs bot durevole.
-- [docs/features/F16-permissions-and-approvals.md](<../../docs/features/F16-permissions-and-approvals.md>): Autorizzazione.
+- [docs/features/F14-delegation-and-dot-collaboration.md](<../../docs/features/F14-delegation-and-dot-collaboration.md>): Delega vs bot durevole.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Autorizzazione.
 - [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Binding e provenance del runtime corrente.
 
 Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
@@ -37,8 +37,8 @@ Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. L
 
 ## Scope file aggiornato — D25
 
-Space collega cartelle reali F03/F10; specialisti ricevono solo root/file autorizzati e host raggiungibili. Nessuna copia/import del Second Brain o permesso implicito dall'associazione a un team. Revisione/salvataggio e conflitti condivisi con F10; update memoria Space F15 dopo risultati verificati, non diario duplicato nello store.
+Space collega cartelle reali F6/F5; specialisti ricevono solo root/file autorizzati e host raggiungibili. Nessuna copia/import del Second Brain o permesso implicito dall'associazione a un team. Revisione/salvataggio e conflitti condivisi con F5; update memoria Space F9 dopo risultati verificati, non diario duplicato nello store.
 
 ## Prompt per una nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Lavora soltanto F14 dopo verifica prerequisiti e codice fonte dell'integrazione scelta. Usa una repository test/worktree isolata e autorizzazione esplicita per comunicare con chat Codex. Consegna risultati verificati e limiti; non implementare Bots/routine/voice in questa chat.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Lavora soltanto F18 dopo verifica prerequisiti e codice fonte dell'integrazione scelta. Usa una repository test/worktree isolata e autorizzazione esplicita per comunicare con chat Codex. Consegna risultati verificati e limiti; non implementare Bots/routine/voice in questa chat.

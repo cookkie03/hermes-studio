@@ -2,7 +2,7 @@
 
 Snapshot 2026-10-04. 255 percorsi SKILL.md leggibili. Un percorso non certifica che la skill o i suoi tool siano attivi in una chat. Symlink e versioni possono ripetere la stessa skill.
 
-Queste skill appartengono al runtime Hermes; non sono automaticamente istruzioni di sviluppo Codex. F07 potrà adattarne discovery/gestione dopo verifica del contratto. Nessuna skill runtime è installata, abilitata o invocata da questo inventario.
+Queste skill appartengono al runtime Hermes; non sono automaticamente istruzioni di sviluppo Codex. F11 potrà adattarne discovery/gestione dopo verifica del contratto. Nessuna skill runtime è installata, abilitata o invocata da questo inventario.
 
 | Skill | File da leggere quando pertinente |
 |---|---|

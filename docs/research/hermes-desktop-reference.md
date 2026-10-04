@@ -14,15 +14,15 @@ Le modalità bundled, bootstrap e remote hanno responsabilità diverse: un paylo
 
 | Area | File nel repository Hermes | Scheda Studio |
 |---|---|---|
-| Risoluzione, probe, autenticazione, ownership processo | `apps/desktop/electron/main.ts`, moduli discovery/probe; `apps/shared` | F11 |
-| Conversazione ed eventi | `apps/desktop/src/lib`, contratti `tui_gateway` | F02, F16 |
-| Bot canonici e messaggi | `tools/bot_mode_dm.py`, contratti bot relay e gruppi | F04, F05 |
-| Delega e recupero cronologia | `tools/delegate_tool.py`, `tools/session_search_tool.py` | F05 |
-| Routine e run | `apps/desktop/src/api/cron.ts`, `hermes_cli/web_routers/cron.py`, `tools/cronjob_tools.py` | F06 |
-| Plugin e strumenti | Registro e contratti citati nella scheda; verificare installazione e abilitazione separatamente | F07 |
-| Browser e computer use | Controller e capability citati nelle rispettive schede | F08, F09 |
-| File e terminale | Bridge nativo e contratti host; non sostituire con accesso locale implicito | F10, F17 |
-| Packaging e distribuzione | `apps/desktop/BUILDING.md`, script e pipeline upstream | F12 |
+| Risoluzione, probe, autenticazione, ownership processo | `apps/desktop/electron/main.ts`, moduli discovery/probe; `apps/shared` | F1 |
+| Conversazione ed eventi | `apps/desktop/src/lib`, contratti `tui_gateway` | F2, F3 |
+| Bot canonici e messaggi | `tools/bot_mode_dm.py`, contratti bot relay e gruppi | F7, F14 |
+| Delega e recupero cronologia | `tools/delegate_tool.py`, `tools/session_search_tool.py` | F14 |
+| Routine e run | `apps/desktop/src/api/cron.ts`, `hermes_cli/web_routers/cron.py`, `tools/cronjob_tools.py` | F10 |
+| Plugin e strumenti | Registro e contratti citati nella scheda; verificare installazione e abilitazione separatamente | F11 |
+| Browser e computer use | Controller e capability citati nelle rispettive schede | F12, F16 |
+| File e terminale | Bridge nativo e contratti host; non sostituire con accesso locale implicito | F5, F15 |
+| Packaging e distribuzione | `apps/desktop/BUILDING.md`, script e pipeline upstream | F13 |
 
 I percorsi puntuali e le verifiche dei contratti sono nelle schede e in [runtime-integration-findings](runtime-integration-findings.md). I nomi non garantiscono compatibilità: verificare schema, autorizzazione, eventi ed errori alla versione scelta.
 

@@ -1,4 +1,4 @@
-# F02 — Conversazioni
+# F2 — Conversazioni
 
 Stato: specifica per una chat futura; baseline esistente parziale, feature non completa. Aggiornamento: 2026-10-04. La richiesta attuale è documentazione per feature e MVP quasi vuoto; non autorizza implementazioni ulteriori in questa chat.
 
@@ -50,7 +50,7 @@ Leggere [component-system](../design/component-system.md) come norma visiva e li
 | Delivery indicator | Pending/received/uncertain sul messaggio utente, distinto dallo stato operativo del turno. |
 | Activity card | Nome strumento, stato, input espandibile e risultato reale limitato; copy/download solo se supportati. Forme Unsloth/Codex derivate dalla norma, non aggiunte arbitrariamente. |
 | Approval card | Comando/descrizione, ambito e sole scelte del backend. Pulsanti espliciti; nessuna scelta preapprovata. |
-| Review document | Azione nominata Review response for Space; apre draft locale modificabile. Il salvataggio e la ricevuta appartengono a F03. |
+| Review document | Azione nominata Review response for Space; apre draft locale modificabile. Il salvataggio e la ricevuta appartengono a F6. |
 
 ## Token proposti e motion
 
@@ -91,22 +91,22 @@ Esistono Chat.tsx, ChatTranscript.tsx e reducer di display. Quattordici fixture 
 
 ## Dipendenze, ownership e reversibilità
 
-F01 per shell; F03 per review/documento; specifica runtime per invio/stream/approvazioni. La slice locale non dipende da Hermes. F11 è il prerequisito della connessione/invio; F16 soltanto delle approvazioni, che possono restare fuori dalla prima slice remota. Ownership futura: Chat.tsx, ChatTranscript.tsx, hermes-display.ts e fixture; PageConversation.tsx solo coordinandosi con F03. Non cambiare gateway/server/shared contracts senza accordo e review. Non coinvolgere packaging salvo verifica finale coordinata.
+F4 per shell; F6 per review/documento; specifica runtime per invio/stream/approvazioni. La slice locale non dipende da Hermes. F1 è il prerequisito della connessione/invio; F3 soltanto delle approvazioni, che possono restare fuori dalla prima slice remota. Ownership futura: Chat.tsx, ChatTranscript.tsx, hermes-display.ts e fixture; PageConversation.tsx solo coordinandosi con F6. Non cambiare gateway/server/shared contracts senza accordo e review. Non coinvolgere packaging salvo verifica finale coordinata.
 
 Profilo client sintetico separato; thread locali non creano sessioni remote finché non c’è invio esplicito. Nessun import automatico della cronologia personale. Migrazioni non distruttive; errore di storage preserva bozza e byte. Close, disconnect e interrupt sono azioni diverse; interrupt esplicito con esito, non terminate del processo runtime.
 
 ## Definition of done
 
-Slice locale: vuota al primo avvio, conversazione creabile, bozza ripristinata dopo cambio chat e riavvio con nuova origin, tastiera/IME e nomi accessibili verificati. Slice remota: fixture su HTTP/WS reali sintetici per delta prima di HTTP, ack lento, doppio invio, disconnect, errore terminale, cancel approval, reopen e storia/toolcards. Verificare messaggi in ordine, nessuna duplicazione o retry automatico, bozza nuova preservata, ambiti approval rispettati. Collaudo del runtime reale solo isolato e autorizzato; documentare il risultato effettivo. UI in.app 1360/900px e reduced motion. Review salva solo con scelta esplicita e ricevuta F03.
+Slice locale: vuota al primo avvio, conversazione creabile, bozza ripristinata dopo cambio chat e riavvio con nuova origin, tastiera/IME e nomi accessibili verificati. Slice remota: fixture su HTTP/WS reali sintetici per delta prima di HTTP, ack lento, doppio invio, disconnect, errore terminale, cancel approval, reopen e storia/toolcards. Verificare messaggi in ordine, nessuna duplicazione o retry automatico, bozza nuova preservata, ambiti approval rispettati. Collaudo del runtime reale solo isolato e autorizzato; documentare il risultato effettivo. UI in.app 1360/900px e reduced motion. Review salva solo con scelta esplicita e ricevuta F6.
 
 ## Contesto file, memoria e voce — D25–D29
 
-Contesto Space usa riferimenti a file e revisione/host autorizzati F03/F10, non solo pageId legacy. Memoria Space e snapshot Hermes distinti F15. Un attachment non concede accesso all'intero folder. F13 possiede mic/playback; F02 conserva transcript e identità turno, distinguendo bozza dettata, invio e risposta. Risultati tardivi audio/browser non vengono associati a un Dot nuovo; nessun retry di prompt incerto.
+Contesto Space usa riferimenti a file e revisione/host autorizzati F6/F5, non solo pageId legacy. Memoria Space e snapshot Hermes distinti F9. Un attachment non concede accesso all'intero folder. F17 possiede mic/playback; F2 conserva transcript e identità turno, distinguendo bozza dettata, invio e risposta. Risultati tardivi audio/browser non vengono associati a un Dot nuovo; nessun retry di prompt incerto.
 
 ## D30 — Eventi nativi e note dopo la risposta
 
-[F18-A](F18-hermes-native-features-and-observability.md) possiede proiezione degli eventi Hermes; F02 presenta la nota `review.summary` nella timeline del suo owner anche dopo fine turno. Non scartare aggiornamenti memoria/skill alla fine della risposta e non limitarli a toast. Correlazione a messaggio preciso solo se supportata, altrimenti nota di sessione. Preservare testo runtime, pending/applicato distinti, e subscription scoped oltre `turn complete`. Review/self-improvement non equivale sempre al curator.
+[F8-A](F8-hermes-native-features-and-observability.md) possiede proiezione degli eventi Hermes; F2 presenta la nota `review.summary` nella timeline del suo owner anche dopo fine turno. Non scartare aggiornamenti memoria/skill alla fine della risposta e non limitarli a toast. Correlazione a messaggio preciso solo se supportata, altrimenti nota di sessione. Preservare testo runtime, pending/applicato distinti, e subscription scoped oltre `turn complete`. Review/self-improvement non equivale sempre al curator.
 
 ## Prompt per una nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa soltanto la slice di F02 esplicitamente selezionata, leggendo AGENTS.md, MEMORY/STATUS, GLOSSARY, component-system e questa spec. Prima verifica se il prerequisito runtime è pronto; in caso contrario realizza soltanto conversazioni/bozze locali, senza simulare risposte. Riusa il prototipo dove utile e non riscrivere server o shell fuori ownership. Mantieni Pending, ack, Working e terminale distinti; niente auto retry o approvazioni automatiche. Usa profilo e gateway sintetici, salva le prove dei race test e della vera.app. PageConversation richiede flush e revisione salvata ad ogni invio. Aggiorna documentazione e consegna limiti verificati; non riprendere il piano notturno globale.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa soltanto la slice di F2 esplicitamente selezionata, leggendo AGENTS.md, MEMORY/STATUS, GLOSSARY, component-system e questa spec. Prima verifica se il prerequisito runtime è pronto; in caso contrario realizza soltanto conversazioni/bozze locali, senza simulare risposte. Riusa il prototipo dove utile e non riscrivere server o shell fuori ownership. Mantieni Pending, ack, Working e terminale distinti; niente auto retry o approvazioni automatiche. Usa profilo e gateway sintetici, salva le prove dei race test e della vera.app. PageConversation richiede flush e revisione salvata ad ogni invio. Aggiorna documentazione e consegna limiti verificati; non riprendere il piano notturno globale.

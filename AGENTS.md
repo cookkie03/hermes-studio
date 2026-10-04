@@ -1,12 +1,12 @@
 # Hermes Desktop
 
-Assistente personale e progetti macOS. Prodotto Electron/React con runtime Hermes; baseline SwiftUI storica preservata. F00 completata; feature successive selezionate una per chat.
+Assistente personale e progetti macOS. Prodotto Electron/React con runtime Hermes; baseline SwiftUI storica preservata. F0 completata; feature successive selezionate una per chat.
 
 ## Inizio del lavoro
 
 Leggi `docs/project/MEMORY.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, il catalogo `docs/features/README.md` e la sola scheda selezionata. Per la sequenza usa `docs/agents/feature-workflow.md`; per decisioni/ownership consulta `docs/project/decisions.md`, gli ADR pertinenti e `docs/architecture/feature-boundaries.md`. D20/ADR0006: incrementi solo su selezione utente. `docs/README.md` è l'indice delle fonti, non un'altra spec.
 
-Per UI leggi `docs/design/opendots-target.md` e `docs/design/component-system.md`: screenshot utente autorevole. Piani notturni, atelier/design SwiftUI e vecchie spec sono storia. D30/F18: preservare capacità/memoria Hermes e proiettarne eventi nella UI; file memoria Space F15 distinti. Distingui osservazioni live, sorgente upstream e proposte.
+Per UI leggi `docs/design/opendots-target.md` e `docs/design/component-system.md`: screenshot utente autorevole. Piani notturni, atelier/design SwiftUI e vecchie spec sono storia. D30/F8: preservare capacità/memoria Hermes e proiettarne eventi nella UI; file memoria Space F9 distinti. Distingui osservazioni live, sorgente upstream e proposte.
 
 Aggiorna `docs/project/MEMORY.md`, `docs/project/STATUS.md`, `docs/project/WORKLOG.md` e i documenti interessati dopo ogni blocco significativo di ricerca, decisione, implementazione o verifica. Questa persistenza continua è una richiesta esplicita dell'utente.
 

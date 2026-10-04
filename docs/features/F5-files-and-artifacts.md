@@ -1,4 +1,4 @@
-# F10 — File e artefatti
+# F5 — File e artefatti
 
 Stato: documentata; tree/editor SwiftUI storico e anteprima eventi Electron parziali non equivalgono a file workspace completo.
 
@@ -23,7 +23,7 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 ### Punti di ingresso da leggere
 
 - [docs/project/file-workspace.md](<../../docs/project/file-workspace.md>): Baseline filesystem storica, non contratto remoto.
-- [docs/features/F03-spaces-documents-memory.md](<../../docs/features/F03-spaces-documents-memory.md>): Pagina vs file.
+- [docs/features/F6-spaces-documents-memory.md](<../../docs/features/F6-spaces-documents-memory.md>): Pagina vs file.
 - [desktop/upstream/src/client/ComputerPanel.tsx](<../../desktop/upstream/src/client/ComputerPanel.tsx>): Destinazione Files.
 - [desktop/electron/preload.cjs](<../../desktop/electron/preload.cjs>): Seam privilegi.
 - [Hermes: tools/file_tools.py](</Users/luca/.hermes/hermes-agent/tools/file_tools.py>): Tool file reali; lettura sorgente alla versione fissata, non prova live.
@@ -34,13 +34,13 @@ Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. L
 
 ## D25 — Filesystem condiviso con Spaces
 
-F03 ora collega una o più cartelle reali. F10 fornisce il module File workspace comune per root, listing, read/save, conflitti e provenienza; evitare un secondo store di testi che diverga dai file dello Space. Il pannello Files e l’editor Space usano la stessa risoluzione dei riferimenti. Metadata vecchi restano legacy/export esplicito.
+F6 ora collega una o più cartelle reali. F5 fornisce il module File workspace comune per root, listing, read/save, conflitti e provenienza; evitare un secondo store di testi che diverga dai file dello Space. Il pannello Files e l’editor Space usano la stessa risoluzione dei riferimenti. Metadata vecchi restano legacy/export esplicito.
 
 Il client può navigare cartelle locali scelte anche offline tramite operazioni native limitate; Hermes usa i propri tool file soltanto sulle root raggiungibili e autorizzate sul suo host. API native per l’utente e tool runtime per l’agente hanno stesso riferimento file e revisione, non due copie né un executor nuovo. Root Mac ≠ root server remoto; mancanza di mapping va resa visibile.
 
 Leases/grants sono per Space, folder e identità pertinente; i symlink non ampliano lo scope. Cambi esterni di Obsidian o specialisti aggiornano il tree senza sovrascrivere bozze. Scollegare una cartella rimuove il collegamento, non i dati. Nessun import/index/scan personale automatico. Testare più root, annidamenti, volume offline, rename, file grande/binario, conflitti e accesso fuori root con cartelle sintetiche.
 
-Leggere [ADR0007](../adr/0007-folder-backed-spaces.md) e [F03 aggiornata](F03-spaces-documents-memory.md) prima del contratto; coordinare shared types e main/preload/server con i loro owner.
+Leggere [ADR0007](../adr/0007-folder-backed-spaces.md) e [F6 aggiornata](F6-spaces-documents-memory.md) prima del contratto; coordinare shared types e main/preload/server con i loro owner.
 
 ## Risultato
 
@@ -54,7 +54,7 @@ Root scelto → caricamento → albero vuoto/populato → preview → bozza → 
 
 ## Scope e seam
 
-Per file locali: base F00 e selezione root esplicita; F11/F16 per tool agente/host runtime. F03 usa il writer F10, non ne è prerequisito per listing/read-only: evitare dipendenza circolare. Il module File workspace possiede politica filesystem e revisioni; preload espone solo IPC limitata alle operazioni/root autorizzate, Chat.tsx rimane presentazione. F17 terminale separato; F08 browser non necessario. Primo incremento read-only root selezionato+preview, poi scrittura solo in una slice esplicita.
+Per file locali: base F0 e selezione root esplicita; F1/F3 per tool agente/host runtime. F6 usa il writer F5, non ne è prerequisito per listing/read-only: evitare dipendenza circolare. Il module File workspace possiede politica filesystem e revisioni; preload espone solo IPC limitata alle operazioni/root autorizzate, Chat.tsx rimane presentazione. F15 terminale separato; F12 browser non necessario. Primo incremento read-only root selezionato+preview, poi scrittura solo in una slice esplicita.
 
 ## Gate
 
@@ -62,4 +62,4 @@ Uscita dal root, symlink, huge/binary files, stale revision, permesso negato, of
 
 ## Handoff
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F10, partendo da una root esplicita read-only sul client locale oppure sull’host runtime autorizzato, secondo l’incremento selezionato. Per l’agente usa tool Hermes reali; per il client locale usa una interface nativa limitata alle root scelte. Condividi riferimenti e revisioni con F03, senza copie dei contenuti. Definisci module e prove path/symlink/conflitto. Non sviluppare terminale o browser; preserva dati personali.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F5, partendo da una root esplicita read-only sul client locale oppure sull’host runtime autorizzato, secondo l’incremento selezionato. Per l’agente usa tool Hermes reali; per il client locale usa una interface nativa limitata alle root scelte. Condividi riferimenti e revisioni con F6, senza copie dei contenuti. Definisci module e prove path/symlink/conflitto. Non sviluppare terminale o browser; preserva dati personali.

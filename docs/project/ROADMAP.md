@@ -4,13 +4,13 @@ Consolidata 2026-10-04. Mappa indicativa; [catalogo](../features/README.md) cont
 
 | Percorso | Risultato da ottenere | Schede |
 |---|---|---|
-| Base | MVP offline/persistente e qualità della shell | F00 completata; miglioramenti F01 selezionabili |
-| Progetti su file | Folder reali, editor e risultati nelle cartelle | F10/F03, memoria progetto F15 |
-| Conversazione e continuità | Dialogo runtime, permessi e aggiornamenti native visibili | F11/F02/F16/F18 |
-| Strumenti | Browser condiviso, file, terminale e computer use | F08/F10/F17/F09, discovery F07 |
-| Team e routine | Bot persistenti, messaggi/deleghe e scheduler | F04/F05/F06 |
-| Voce in-app | Dettatura, vocali, TTS e conversazione parlata | F13 |
-| Distribuzione | .app/DMG con release GitHub della versione scelta | F12 |
-| Idee future | Telefonate e specialisti Codex | docs/future, F14 |
+| Base | MVP offline/persistente e qualità della shell | F0 completata; miglioramenti F4 selezionabili |
+| Progetti su file | Folder reali, editor e risultati nelle cartelle | F5/F6, memoria progetto F9 |
+| Conversazione e continuità | Dialogo runtime, permessi e aggiornamenti native visibili | F1/F2/F3/F8 |
+| Strumenti | Browser condiviso, file, terminale e computer use | F12/F5/F15/F16, discovery F11 |
+| Team e routine | Bot persistenti, messaggi/deleghe e scheduler | F7/F14/F10 |
+| Voce in-app | Dettatura, vocali, TTS e conversazione parlata | F17 |
+| Distribuzione | .app/DMG con release GitHub della versione scelta | F13 |
+| Idee future | Telefonate e specialisti Codex | docs/future, F18 |
 
-La parità Hermes F18 è criterio trasversale: conservare capacità backend e mapparne superfici o gap. La roadmap non sostituisce i gate della scheda né la verifica della versione collegata.
+La parità Hermes F8 è criterio trasversale: conservare capacità backend e mapparne superfici o gap. La roadmap non sostituisce i gate della scheda né la verifica della versione collegata.

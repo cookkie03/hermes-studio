@@ -1,4 +1,4 @@
-# F05 — Delega, messaggi fra bot e recall
+# F14 — Delega, messaggi fra bot e recall
 
 
 
@@ -19,8 +19,8 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 
 ### Punti di ingresso da leggere
 
-- [docs/features/F04-bots-and-identities.md](<../../docs/features/F04-bots-and-identities.md>): Identità canonica.
-- [docs/features/F16-permissions-and-approvals.md](<../../docs/features/F16-permissions-and-approvals.md>): Autorizzazione e richieste stale.
+- [docs/features/F7-bots-and-identities.md](<../../docs/features/F7-bots-and-identities.md>): Identità canonica.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Autorizzazione e richieste stale.
 - [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Trasporto owned.
 - [Hermes: tools/delegate_tool.py](</Users/luca/.hermes/hermes-agent/tools/delegate_tool.py>): Delega temporanea; lettura sorgente alla versione fissata, non prova live.
 - [Hermes: tools/bot_mode_dm.py](</Users/luca/.hermes/hermes-agent/tools/bot_mode_dm.py>): Messaggi tra bot; lettura sorgente alla versione fissata, non prova live.
@@ -54,7 +54,7 @@ Separare DelegationRun, BotMessageDelivery, HostedRoom e RecallResult. Stati UI:
 
 ## Seam, ownership e dipendenze
 
-Dipende da F04/F11 per identità e connessione, F02 per cronologia e F16 per approvazioni. F07 è pertinente solo se si amplia il registro delle capacità. Nuovi `desktop/hermes/collaboration.mjs`, `collaboration.test.mjs`, `CollaborationPanel.tsx`, `RecallResults.tsx`; accordare bridge/server/shared types. Prima slice osserva deleghe reali e messaggi di due bot isolati. Seconda introduce relay con single-owner claim e ricevute; terza gruppi/log replay. Nessun executor OpenDots parallelo. Endpoints Studio proposti scoped `/bots/:identity/messages`, `/collaboration/:room/log`, `/recall`; nessuno esiste attualmente.
+Dipende da F7/F1 per identità e connessione, F2 per cronologia e F3 per approvazioni. F11 è pertinente solo se si amplia il registro delle capacità. Nuovi `desktop/hermes/collaboration.mjs`, `collaboration.test.mjs`, `CollaborationPanel.tsx`, `RecallResults.tsx`; accordare bridge/server/shared types. Prima slice osserva deleghe reali e messaggi di due bot isolati. Seconda introduce relay con single-owner claim e ricevute; terza gruppi/log replay. Nessun executor OpenDots parallelo. Endpoints Studio proposti scoped `/bots/:identity/messages`, `/collaboration/:room/log`, `/recall`; nessuno esiste attualmente.
 
 ## Privacy, migrazione e non-obiettivi
 
@@ -62,10 +62,10 @@ Mai inoltrare intera chat privata o spoofare sender; target/author runtime autho
 
 ## Scope degli Spaces su cartelle — D25
 
-Collaboratori lavorano su file reali autorizzati dello Space F03/F10, con host/root/revisione nelle consegne. Membership non concede accesso al vault o profilo di memoria di altri bot; messaggio/delega non crea mount o copia folder. Scritture concorrenti usano writer e conflitti condivisi F10. Memoria progetto F15 distinta da USER/MEMORY del singolo profilo.
+Collaboratori lavorano su file reali autorizzati dello Space F6/F5, con host/root/revisione nelle consegne. Membership non concede accesso al vault o profilo di memoria di altri bot; messaggio/delega non crea mount o copia folder. Scritture concorrenti usano writer e conflitti condivisi F5. Memoria progetto F9 distinta da USER/MEMORY del singolo profilo.
 
 ## Accettazione, DoD e prompt nuova chat
 
 Due bot isolati: ack ≠ reply, ritardo/errore/offline, omonimi e peer route corretti, replay senza duplicati, cancel stale, callback dopo chiusura UI, recall con anchor e scope negato; delegato temporaneo non appare come bot durevole. DoD: ownership transport e permissions espliciti, fixture e prova isolata di DM+reply+recall, persisted receipts/reopen, packaged UI, nessuna fuga personal data; aggiornare docs.
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F05 per priorità collaborazione e messaggi/recall. Verifica prima sulla versione fissata delegate_task, message_agent canonico, bot_relay e groups.* nel sorgente Hermes apps/desktop. Scegli una slice tracciabile (due bot isolati DM→reply→recall), non unirli in un falso tool generico. Definisci scope/identity/receipts e ownership, testa incerto/offline/replay, completa DoD e persisti esiti. Non usare archivi personali o inviare messaggi reali senza autorizzazione specifica.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F14 per priorità collaborazione e messaggi/recall. Verifica prima sulla versione fissata delegate_task, message_agent canonico, bot_relay e groups.* nel sorgente Hermes apps/desktop. Scegli una slice tracciabile (due bot isolati DM→reply→recall), non unirli in un falso tool generico. Definisci scope/identity/receipts e ownership, testa incerto/offline/replay, completa DoD e persisti esiti. Non usare archivi personali o inviare messaggi reali senza autorizzazione specifica.

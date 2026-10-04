@@ -1,4 +1,4 @@
-# F01 — Shell del workspace
+# F4 — Shell del workspace
 
 Stato: specifica per una chat futura; baseline esistente parziale, feature non completa. Aggiornamento: 2026-10-04. La nuova richiesta dell’utente è documentare il progetto per feature e partire da un MVP quasi vuoto. Questo documento non autorizza a riprendere il piano notturno né a eliminare il prototipo.
 
@@ -92,7 +92,7 @@ Le righe hanno stati idle/hover/focus-visible/selected/disabled distinti; selezi
 
 ## Dipendenze e ownership
 
-Prerequisiti: MEMORY/STATUS/GLOSSARY correnti, ADR0005 e ADR0006, component-system e spec aggiornata dell’MVP vuoto. Dipendenza F02 per contenuto conversazioni e F03 per documenti e F15 per memoria; F01 può mostrare destinazioni vuote senza implementarle.
+Prerequisiti: MEMORY/STATUS/GLOSSARY correnti, ADR0005 e ADR0006, component-system e spec aggiornata dell’MVP vuoto. Dipendenza F2 per contenuto conversazioni e F6 per documenti e F9 per memoria; F4 può mostrare destinazioni vuote senza implementarle.
 
 Ownership futura: `desktop/upstream/src/client/App.tsx`, `ThreadList.tsx`, stile della shell e componenti dedicati eventualmente estratti. Condividere `style.css` solo con accordo esplicito per evitare sovrascritture. Non modificare bridge/runtime, modelli server, packaging o editor. Preservare sorgente/asset/provenienza MIT. La baseline contiene già sidebar e inspector: controllare lo stato reale prima di decidere riuso o sostituzione.
 
@@ -104,8 +104,8 @@ Definition of done: avvio con zero dati senza chiamate runtime; navigazione da t
 
 ## Allineamento D25–D29
 
-La destinazione Space presenta folder e documenti reali (F03/F10), preservando pagine legacy; non è soltanto elenco pagine metadata. Identità Dot usa avatar scelto F04-A in ogni superficie. Browser Computer è stesso profilo/pagina di utente e Hermes (F08), non preview statica. Memory distingue Space/profilo/legacy F15; composer offre voce soltanto quando F13 readiness/permesso provati. Questi controlli restano indisponibili finché feature implementate; F01 non le implementa incidentalmente.
+La destinazione Space presenta folder e documenti reali (F6/F5), preservando pagine legacy; non è soltanto elenco pagine metadata. Identità Dot usa avatar scelto F7-A in ogni superficie. Browser Computer è stesso profilo/pagina di utente e Hermes (F12), non preview statica. Memory distingue Space/profilo/legacy F9; composer offre voce soltanto quando F17 readiness/permesso provati. Questi controlli restano indisponibili finché feature implementate; F4 non le implementa incidentalmente.
 
 ## Prompt per una nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F01 leggendo AGENTS.md, docs/project/MEMORY.md, STATUS.md, GLOSSARY.md, ADR0005 e ADR0006, docs/design/component-system.md e questa specifica. La direzione attuale è MVP quasi vuoto e sviluppo per feature; non riattivare il piano notturno. Ispeziona la shell esistente prima di editarla, preserva asset/provenienza e dati. Lavora soltanto sui file client della shell concordati; coordina gli stili condivisi. Non collegare Hermes né creare dati dimostrativi automaticamente. Verifica 1360/900px, tastiera, nomi accessibili, reduced motion e overlay su profilo sintetico. Aggiorna prove e stato nei documenti; non dichiarare completa una capability remota assente. Se il component-system non è disponibile, completa l’analisi e segnala il prerequisito prima del codice visivo.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F4 leggendo AGENTS.md, docs/project/MEMORY.md, STATUS.md, GLOSSARY.md, ADR0005 e ADR0006, docs/design/component-system.md e questa specifica. La direzione attuale è MVP quasi vuoto e sviluppo per feature; non riattivare il piano notturno. Ispeziona la shell esistente prima di editarla, preserva asset/provenienza e dati. Lavora soltanto sui file client della shell concordati; coordina gli stili condivisi. Non collegare Hermes né creare dati dimostrativi automaticamente. Verifica 1360/900px, tastiera, nomi accessibili, reduced motion e overlay su profilo sintetico. Aggiorna prove e stato nei documenti; non dichiarare completa una capability remota assente. Se il component-system non è disponibile, completa l’analisi e segnala il prerequisito prima del codice visivo.

@@ -27,6 +27,6 @@ Packaging computes a manifest of the 13 reachable metadata modules and includes 
 
 Source links open in the default browser only after a trusted user click through the isolated preload. The main process validates the local sender and accepts only parsed HTTP(S) URLs without embedded credentials; the private interface origin and all other schemes remain blocked. Arbitrary popup windows and external redirects remain denied. `npm run test:external-links` verifies the URL boundary.
 
-## MVP quality gate (F00)
+## MVP quality gate (F0)
 
 Run `npm test` for strict renderer/metadata typechecks, 18 bridge/server/network fixtures, 55 metadata/editor/display checks, bootstrap and source-link checks. Network fixtures require loopback sockets. Run `npm run package:dir` and `npm run test:packaged-ui` for the macOS arm64 app, using fresh temporary userData and synthetic content. The UI test covers offline startup, memory/Space/document persistence, storage failure, cancelled navigation, revision conflict, restart, a 900 px window and keyboard focus. This does not certify a full VoiceOver audit, runtime chat, tools or a public release.

@@ -1,6 +1,6 @@
 # Browser Hermes integrato — evidenze e gap
 
-Ricerca sorgente 2026-10-04, checkout pubblico SHA `e1e82d782f353766c7a22db6e5ac4fa58bbff325`. Nessuna sessione/browser/config personale letta o avviata. [Requisito F08](../features/F08-browser.md) distinto da capacità Studio attuale.
+Ricerca sorgente 2026-10-04, checkout pubblico SHA `e1e82d782f353766c7a22db6e5ac4fa58bbff325`. Nessuna sessione/browser/config personale letta o avviata. [Requisito F12](../features/F12-browser.md) distinto da capacità Studio attuale.
 
 | Percorso upstream | Evidenza | Cosa non dimostra |
 |---|---|---|

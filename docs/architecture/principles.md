@@ -1,6 +1,6 @@
 # Principi di architettura e manutenzione
 
-2026-10-04. Norme per tutte le chat feature. La [review iniziale](feature-architecture-review.md) è storica; la [review F00](f00-review-2026-10-04.md) documenta la consegna. I [confini delle feature](feature-boundaries.md) fissano ownership condivisa; le direzioni sotto non dichiarano refactor già eseguiti.
+2026-10-04. Norme per tutte le chat feature. La [review iniziale](feature-architecture-review.md) è storica; la [review F0](f00-review-2026-10-04.md) documenta la consegna. I [confini delle feature](feature-boundaries.md) fissano ownership condivisa; le direzioni sotto non dichiarano refactor già eseguiti.
 
 ## Moduli profondi e locality
 
@@ -29,7 +29,7 @@ Ogni scheda nomina module responsabile, seam condivisa, file posseduti, input/ev
 
 Per ogni incremento: leggere la scheda e baseline; test di comportamento/red-green per rischi veri; typecheck del codice spedito; prove del failure mode rilevante; smoke packaged se cambiano shell/privilegi/integrazione; confronto UI e tastiera se cambia un componente. Review Standards e Spec restano assi separati.
 
-F00 ha separato i contratti Metadata dal tipo Platform CopilotKit: il grafo spedito renderer/metadata passa strict typecheck e build senza --noCheck. Il typecheck upstream completo e alcune suite storiche restano incompatibili nel vecchio executor inutilizzato. Il gate npm test riguarda il prodotto spedito; non dichiararlo audit completo del template storico.
+F0 ha separato i contratti Metadata dal tipo Platform CopilotKit: il grafo spedito renderer/metadata passa strict typecheck e build senza --noCheck. Il typecheck upstream completo e alcune suite storiche restano incompatibili nel vecchio executor inutilizzato. Il gate npm test riguarda il prodotto spedito; non dichiararlo audit completo del template storico.
 
 Per Git: diff e index reali, scan segreti, nessun add indiscriminato di cache/DB/release/screenshot privati. Un commit verificato può essere un incremento parziale, ma la descrizione ne deve dichiarare limiti. Preservare history/remote. Test green, build e handshake non certificano feature non esercitate.
 
@@ -39,4 +39,4 @@ ADR per variazioni costose a persistenza/identità/autenticazione/lifecycle. Pro
 
 ## Parità e osservabilità Hermes — D30
 
-[Contratto F18](../features/F18-hermes-native-features-and-observability.md): preservare le funzioni native del runtime e mapparle a superfici UI o gap espliciti. UI semplificata non disabilita memory/skills/curator/tools nel backend. La memoria Hermes resta autoritativa, Studio presenta dati derivati scoped; niente nuovo archivio reiniettato. Eventi post-turn restano osservabili dopo la risposta, con origine/esito e persistenza provata; review, proposte pending e curator distinti. Parità funzionale obiettivo versionato, non certificazione automatica o implementazione di tutte le feature.
+[Contratto F8](../features/F8-hermes-native-features-and-observability.md): preservare le funzioni native del runtime e mapparle a superfici UI o gap espliciti. UI semplificata non disabilita memory/skills/curator/tools nel backend. La memoria Hermes resta autoritativa, Studio presenta dati derivati scoped; niente nuovo archivio reiniettato. Eventi post-turn restano osservabili dopo la risposta, con origine/esito e persistenza provata; review, proposte pending e curator distinti. Parità funzionale obiettivo versionato, non certificazione automatica o implementazione di tutte le feature.

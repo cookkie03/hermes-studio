@@ -1,4 +1,4 @@
-# F16 — Permessi, capability e approvazioni
+# F3 — Permessi, capability e approvazioni
 
 Stato: documentata; server-request/lease e fixture parziali esistenti.
 
@@ -44,7 +44,7 @@ Richiesta in altra conversazione: indicatore navigabile con identità, niente co
 
 ## Modulo e dati
 
-Decision module condiviso possiede identità richiesta, session ownership, cancellation, idempotency e lifecycle; UI non possiede socket/token. Seam runtime e adapter fixture reali; registro minimo senza segreti nei comandi/log. F11 connessione; F02 rendering/routing; altre feature chiedono autorizzazione attraverso questo percorso.
+Decision module condiviso possiede identità richiesta, session ownership, cancellation, idempotency e lifecycle; UI non possiede socket/token. Seam runtime e adapter fixture reali; registro minimo senza segreti nei comandi/log. F1 connessione; F2 rendering/routing; altre feature chiedono autorizzazione attraverso questo percorso.
 
 ## Gate
 
@@ -52,8 +52,8 @@ Pending/cancel/stale/disconnect/reconnect/thread in background, doppio clic e ri
 
 ## Ambiti aggiuntivi D25–D29
 
-Grant folder dello Space esplicito per root/host/operazioni, distinto da selezione/membership; unlink preserva dati. Browser profilo e lease condiviso F08, Take over/revoke/resume distinti senza fallback nascosto. Memoria profilo e file Space F15 hanno writer/gates propri; pending non è applied. Voce F13 richiede microfono, routing provider e retention chiari; consenso a vocal chat non autorizza chiamate telefoniche o azioni sensibili senza revisione.
+Grant folder dello Space esplicito per root/host/operazioni, distinto da selezione/membership; unlink preserva dati. Browser profilo e lease condiviso F12, Take over/revoke/resume distinti senza fallback nascosto. Memoria profilo e file Space F9 hanno writer/gates propri; pending non è applied. Voce F17 richiede microfono, routing provider e retention chiari; consenso a vocal chat non autorizza chiamate telefoniche o azioni sensibili senza revisione.
 
 ## Handoff
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Sviluppa esclusivamente F16. Verifica il contratto Hermes della versione corrente, parti dalle fixture esistenti e definisci gli invarianti del decision module. Non aggiungere auto-approve né plugin/browser/computer nuovi. Prova richieste annullate e routing tra conversazioni possedute; aggiorna docs e limiti.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Sviluppa esclusivamente F3. Verifica il contratto Hermes della versione corrente, parti dalle fixture esistenti e definisci gli invarianti del decision module. Non aggiungere auto-approve né plugin/browser/computer nuovi. Prova richieste annullate e routing tra conversazioni possedute; aggiorna docs e limiti.

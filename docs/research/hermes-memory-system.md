@@ -118,7 +118,7 @@ Core: `MemoryManager`/`MemoryProvider` coordinano inizializzazione, contesto sta
 
 Questa tabella è **documentazione upstream**, non collaudo dei plugin o raccomandazione d'installazione. I tre provider catalogo possono migrare fuori dal core e avere dipendenze/versioni proprie. Il documento Providers afferma genericamente «built-in always active», mentre codice e pagina Memory consentono di spegnere entrambi i built-in: l'esterno non forza la loro riattivazione. [S9, S12, S16]
 
-## Conseguenze proposte per F15 e Spaces di Studio
+## Conseguenze proposte per F9 e Spaces di Studio
 
 Proposta da integrare nella scheda, **non implementata da questa ricerca**:
 
@@ -126,7 +126,7 @@ Proposta da integrare nella scheda, **non implementata da questa ricerca**:
 2. Per lo Space-folder, definire file di progetto leggibili come `AGENTS.md` e un documento memoria aggiornato secondo un contratto concordato: autore, evento di aggiornamento, revisione/ultimo esito e conflitti. Il nome/percorso di questo file e la sua lettura automatica sono un **adattamento Studio**, non capacità Hermes già provata per ogni `MEMORY.md`.
 3. La personalità `SOUL.md` deve restare profilata; un `SOUL.md` nello Space non va spacciato per identity slot Hermes. Le istruzioni di progetto appartengono al contesto workspace.
 4. Rendere visibili pending/applied/error, budget, nuova sessione vs snapshot in uso, sorgenti richiamate e eventuali provider. Esportazione di file non equivale a «ha ricordato».
-5. Conservare le procedure nell'integrazione skills/F07, con review e curator accessibili per profilo. Non abilitare consolidamento o purge quando si apre la pagina memoria.
+5. Conservare le procedure nell'integrazione skills/F11, con review e curator accessibili per profilo. Non abilitare consolidamento o purge quando si apre la pagina memoria.
 6. Prove future su profilo e cartelle sintetiche: write/read persistente, pending, conflitto, overflow, fresh session, recall, restart, worker/profile isolati e scope condiviso. Nessun test sul Second-Brain personale o avvio autonomo di curator durante questa fase.
 
 ## Fonti sorgente fissate alla SHA
@@ -156,4 +156,4 @@ Versione del backend effettivamente collegato, schema/routing/auth API, fresh-se
 
 ## Precisazione Studio D30 — observer, non secondo archivio
 
-[F18](../features/F18-hermes-native-features-and-observability.md) documenta la richiesta successiva dell'utente: preservare memoria/capacità del runtime e mostrarne aggiornamenti in Studio. Verifica sorgente alla stessa SHA: gateway `_wire_session_agent` inoltra background review via `review.summary {text}`; desktop `gateway-event/status.ts:175` proietta una riga system `review:` e `thread/system-message.tsx` la presenta come nota. Non è evento curator universale e non garantisce un mutation list/turn ID. Le notifiche rispettano off/on/verbose; il codice distingue staged e operazioni realmente applicate. `/api/memory` dà dimensioni **in byte** e provider, non contenuti; il viewer richiede un contratto scoped distinto. Osservato solo sorgente pubblico, nessun runtime/profilo personale letto o mutato.
+[F8](../features/F8-hermes-native-features-and-observability.md) documenta la richiesta successiva dell'utente: preservare memoria/capacità del runtime e mostrarne aggiornamenti in Studio. Verifica sorgente alla stessa SHA: gateway `_wire_session_agent` inoltra background review via `review.summary {text}`; desktop `gateway-event/status.ts:175` proietta una riga system `review:` e `thread/system-message.tsx` la presenta come nota. Non è evento curator universale e non garantisce un mutation list/turn ID. Le notifiche rispettano off/on/verbose; il codice distingue staged e operazioni realmente applicate. `/api/memory` dà dimensioni **in byte** e provider, non contenuti; il viewer richiede un contratto scoped distinto. Osservato solo sorgente pubblico, nessun runtime/profilo personale letto o mutato.

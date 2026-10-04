@@ -1,38 +1,38 @@
 # Hermes Studio — una feature per chat
 
-2026-10-04. F00 completata; lavoro corrente di consolidamento documentale. Non implementare automaticamente le schede. La baseline esistente è parziale; `documentata` non significa `implementata` o `verificata`.
+2026-10-04. F0 completata; lavoro corrente di consolidamento documentale. Non implementare automaticamente le schede. La baseline esistente è parziale; `documentata` non significa `implementata` o `verificata`.
 
 L'app resta una repository indipendente. Il codice MIT OpenDots già riusato conserva licenza e provenienza. Struttura visiva OpenDots; componenti e microinterazioni con riferimenti Unsloth/Codex. Motore e strumenti Hermes. Nessun secondo executor OpenDots per simulare capacità Hermes.
 
 ## Parità Hermes — D30
 
-Capacità e memoria native rimangono nel runtime: Studio deve presentarle con origine/esito senza duplicarle o disabilitarle per semplificare la UI. [F18](F18-hermes-native-features-and-observability.md) tratta viewer memoria, notifiche post-turn e mappa di copertura; F15 resta memoria Markdown Space/legacy ed eventuale gestione selezionata. Catalogo aggiornato a **19 schede F00–F18**, una per chat.
+Capacità e memoria native rimangono nel runtime: Studio deve presentarle con origine/esito senza duplicarle o disabilitarle per semplificare la UI. [F8](F8-hermes-native-features-and-observability.md) tratta viewer memoria, notifiche post-turn e mappa di copertura; F9 resta memoria Markdown Space/legacy ed eventuale gestione selezionata. Catalogo aggiornato a **19 schede F0–F18**, una per chat.
 
 ## Catalogo
 
 | ID | Scheda da scegliere | Dipendenze principali | Stato |
 |---|---|---|---|
-| F00 | [MVP e qualità della base](F00-mvp-foundation.md) | nessuna | completata; baseline verificata, limiti dichiarati |
-| F01 | [Shell, sidebar e componenti](F01-workspace-shell.md) | F00 | documentata; UI esistente parziale |
-| F02 | [Conversazioni](F02-conversations.md) | F00, F11 | documentata; bridge parziale |
-| F03 | [Spaces su cartelle e documenti](F03-spaces-documents-memory.md) | F00, F01, F10 per folder | documentata; metadata legacy parziali, folder non implementati |
-| F04 | [Bots e identità Dots](F04-bots-and-identities.md) | F00/F01 per avatar; F11 per bot runtime | documentata, da scegliere |
-| F05 | [Delegazione e collaborazione tra Dots](F05-delegation-and-dot-collaboration.md) | F04, F02, F16 | documentata, da scegliere |
-| F06 | [Routine](F06-routines.md) | F11, F16; F04 se destinatario Bot | priorità prodotto, da scegliere |
-| F07 | [Plugin e capability](F07-plugins-and-capabilities.md) | F11, F16 | documentata, da scegliere |
-| F08 | [Browser integrato](F08-browser.md) | F11, F16 | documentata; nessuno stream/takeover attuale |
-| F09 | [Computer use](F09-computer-use.md) | F11, F16 | documentata, da scegliere |
-| F10 | [File e artefatti](F10-files-and-artifacts.md) | F00 per file locali; F11/F16 per tool agente | documentata; UI futura |
-| F11 | [Connessione al runtime](F11-runtime-connection.md) | F00 | attach locale parziale; altre modalità da scegliere |
-| F12 | [Software GitHub e release DMG](F12-github-releases-dmg.md) | F00; versione selezionata delle altre feature | documentata; DMG locale di sviluppo esistente |
-| F13 | [Vocali e conversazione vocale](F13-voice-and-calls.md) | F02/F11 per conversazione; F16 | documentata in-app; telefonate future |
-| F14 | [Specialisti Codex](F14-codex-specialists.md) | F05, F16 | futura, solo documentazione |
-| F15 | [Memoria Markdown Space e preferenze legacy](F15-memory.md) | F03/F10 per Space; F11/F16 per mutazioni runtime opzionali | documentata; memoria Studio legacy parziale |
-| F16 | [Permessi e approvazioni](F16-permissions-and-approvals.md) | F11 | contratto parziale; fixture disponibili |
-| F17 | [Terminale](F17-terminal.md) | F11, F16 | documentata; preview eventi parziale |
-| F18 | [Capacità native Hermes e memoria visibile](F18-hermes-native-features-and-observability.md) | F11/F02 per note; F04/contratto read-only per viewer | documentata, non implementata |
+| F0 | [MVP e qualità della base](F0-mvp-foundation.md) | nessuna | completata; baseline verificata, limiti dichiarati |
+| F1 | [Connessione al runtime](F1-runtime-connection.md) | F0 | attach locale parziale; altre modalità da scegliere |
+| F2 | [Conversazioni](F2-conversations.md) | F0, F1 | documentata; bridge parziale |
+| F3 | [Permessi e approvazioni](F3-permissions-and-approvals.md) | F1 | contratto parziale; fixture disponibili |
+| F4 | [Shell, sidebar e componenti](F4-workspace-shell.md) | F0 | documentata; UI esistente parziale |
+| F5 | [File e artefatti](F5-files-and-artifacts.md) | F0 per file locali; F1/F3 per tool agente | documentata; UI futura |
+| F6 | [Spaces su cartelle e documenti](F6-spaces-documents-memory.md) | F0, F4, F5 per folder | documentata; metadata legacy parziali, folder non implementati |
+| F7 | [Bots e identità Dots](F7-bots-and-identities.md) | F0/F4 per avatar; F1 per bot runtime | documentata, da scegliere |
+| F8 | [Capacità native Hermes e memoria visibile](F8-hermes-native-features-and-observability.md) | F1/F2 per note; F7/contratto read-only per viewer | documentata, non implementata |
+| F9 | [Memoria Markdown Space e preferenze legacy](F9-memory.md) | F6/F5 per Space; F1/F3 per mutazioni runtime opzionali | documentata; memoria Studio legacy parziale |
+| F10 | [Routine](F10-routines.md) | F1, F3; F7 se destinatario Bot | priorità prodotto, da scegliere |
+| F11 | [Plugin e capability](F11-plugins-and-capabilities.md) | F1, F3 | documentata, da scegliere |
+| F12 | [Browser integrato](F12-browser.md) | F1, F3 | documentata; nessuno stream/takeover attuale |
+| F13 | [Software GitHub e release DMG](F13-github-releases-dmg.md) | F0; versione selezionata delle altre feature | documentata; DMG locale di sviluppo esistente |
+| F14 | [Delegazione e collaborazione tra Dots](F14-delegation-and-dot-collaboration.md) | F7, F2, F3 | documentata, da scegliere |
+| F15 | [Terminale](F15-terminal.md) | F1, F3 | documentata; preview eventi parziale |
+| F16 | [Computer use](F16-computer-use.md) | F1, F3 | documentata, da scegliere |
+| F17 | [Vocali e conversazione vocale](F17-voice-and-calls.md) | F2/F1 per conversazione; F3 | documentata in-app; telefonate future |
+| F18 | [Specialisti Codex](F18-codex-specialists.md) | F14, F3 | futura, solo documentazione |
 
-L'ordine numerico identifica le schede, non impone l'ordine di sviluppo. Percorso consigliato: F00 (completata) → F01/F10/F03 per cartelle oppure F11/F02 per chat → F16 → una feature avanzata scelta dall'utente. F06 è importante ma non deve aggirare i prerequisiti su esecuzioni durevoli e autorizzazioni. F12 può distribuire il solo MVP, indicando onestamente le capacità incluse.
+Gli ID seguono l'ordine di sviluppo concordato il 2026-10-04; ogni incremento richiede comunque una selezione esplicita. Percorso concordato: F0 completata → F1 connessione → F2 conversazioni → F3 approvazioni → F4 shell → F5 file → F6 Spaces, poi le schede successive. [Vecchi e nuovi ID](numbering-2026-10-04.md). F10 è importante ma non deve aggirare i prerequisiti su esecuzioni durevoli e autorizzazioni. F13 può distribuire il solo MVP, indicando onestamente le capacità incluse.
 
 ## Letture e skill
 
@@ -50,4 +50,4 @@ Una chat possiede una scheda e i suoi file; se emerge un cambiamento in un modul
 
 Usare `documentata → selezionata → in sviluppo → in verifica → completata`; `bloccata` richiede prerequisito preciso e lavoro indipendente esaurito. Una feature è completata solo quando i gate sono provati sull'app/runtimes pertinenti. Una fixture prova il contratto simulato; handshake non prova prompt, tools o lavoro quando il client è chiuso.
 
-Norme: [principi](../architecture/principles.md), [review F00](../architecture/f00-review-2026-10-04.md), [audit storico](../architecture/feature-architecture-review.md), [componenti](../design/component-system.md), [fonte Hermes](../research/hermes-desktop-reference.md), [stato](../project/STATUS.md), [baseline storica](../project/desktop-acceptance.md). Idee future restano nell'indice ../future/README.md.
+Norme: [principi](../architecture/principles.md), [review F0](../architecture/f00-review-2026-10-04.md), [audit storico](../architecture/feature-architecture-review.md), [componenti](../design/component-system.md), [fonte Hermes](../research/hermes-desktop-reference.md), [stato](../project/STATUS.md), [baseline storica](../project/desktop-acceptance.md). Idee future restano nell'indice ../future/README.md.

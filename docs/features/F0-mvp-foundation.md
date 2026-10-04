@@ -1,4 +1,4 @@
-# F00 — MVP essenziale e qualità della base
+# F0 — MVP essenziale e qualità della base
 
 Stato: completata — 2026-10-04. Baseline MVP consolidata con review, build/test e correzioni essenziali; commit locale della consegna. I limiti delle altre feature restano espliciti.
 
@@ -38,13 +38,13 @@ Una .app significativa anche senza runtime: sidebar Spaces/Dots, chat vuota, doc
 
 ## Baseline e limiti
 
-Electron/renderer riusato, servizio locale embedded e connector Hermes esistono. Prove packaged di metadata/riavvio e fixture runtime sono disponibili; handshake Node live provato senza prompt. Chat/tool sintetici sono stati osservati, mentre review/save E2E e dialogo reale isolato restano gate. DMG locale di sviluppo non notarizzato, distinta da F12.
+Electron/renderer riusato, servizio locale embedded e connector Hermes esistono. Prove packaged di metadata/riavvio e fixture runtime sono disponibili; handshake Node live provato senza prompt. Chat/tool sintetici sono stati osservati, mentre review/save E2E e dialogo reale isolato restano gate. DMG locale di sviluppo non notarizzato, distinta da F13.
 
 Non cancellare per rendere l'app vuota i dati/codepath già esistenti. Togliere dalla navigazione le promesse non supportate o dichiararne lo stato. Una .app vuota senza affordance non soddisfa l'MVP.
 
 ## Incremento completato e manutenzione
 
-In F00 è stato selezionato il candidato Metadata locali e consegnato il contratto disaccoppiato dall'executor legacy; dettagli ed esito sotto. Il candidato Conversazione non è stato selezionato. Ulteriore manutenzione della baseline richiede una nuova richiesta delimitata, non il riavvio automatico di F00.
+In F0 è stato selezionato il candidato Metadata locali e consegnato il contratto disaccoppiato dall'executor legacy; dettagli ed esito sotto. Il candidato Conversazione non è stato selezionato. Ulteriore manutenzione della baseline richiede una nuova richiesta delimitata, non il riavvio automatico di F0.
 
 ## Gate
 
@@ -66,10 +66,10 @@ Contratto `metadata-contracts.ts`: route locali dipendono da WorkspaceStore e op
 3. PASS invarianti Metadata espliciti e regressioni attraverso API/store reali; nessun executor aggiunto.
 4. PASS strict renderer/metadata senza --noCheck, npm test e smoke packaged. Il template executor storico non è il grafo prodotto: incompatibilità SDK dichiarata nella review.
 5. PASS fixture token/origin, session filtering, cold resume/no retry e bootstrap processo posseduto; dati personali non usati.
-6. PASS struttura OpenDots ispezionata, 900px senza overflow, Tab con focus visibile, Reduced Motion senza animazioni/transizioni. Audit VoiceOver e confronto visuale completo rimangono F01.
+6. PASS struttura OpenDots ispezionata, 900px senza overflow, Tab con focus visibile, Reduced Motion senza animazioni/transizioni. Audit VoiceOver e confronto visuale completo rimangono F4.
 
-Evidenze e limiti: [review F00](../architecture/f00-review-2026-10-04.md). Artefatto locale: desktop/release/mac-arm64/Hermes Studio.app, firma ad hoc; pubblicazione/notarizzazione e DMG aggiornato sono F12.
+Evidenze e limiti: [review F0](../architecture/f00-review-2026-10-04.md). Artefatto locale: desktop/release/mac-arm64/Hermes Studio.app, firma ad hoc; pubblicazione/notarizzazione e DMG aggiornato sono F13.
 
 ## Handoff per eventuale manutenzione esplicita
 
-> Prima segui docs/agents/feature-workflow.md e File e skill F00. F00 è completata: leggi docs/architecture/f00-review-2026-10-04.md e delimita soltanto il nuovo problema di manutenzione richiesto dall’utente. Preserva contratto Metadata, dati e gate già verificati; non scegliere un nuovo refactor o implementare altre feature automaticamente. Esegui verifiche proporzionate al cambiamento e aggiorna prove/STATUS/WORKLOG prima del commit.
+> Prima segui docs/agents/feature-workflow.md e File e skill F0. F0 è completata: leggi docs/architecture/f00-review-2026-10-04.md e delimita soltanto il nuovo problema di manutenzione richiesto dall’utente. Preserva contratto Metadata, dati e gate già verificati; non scegliere un nuovo refactor o implementare altre feature automaticamente. Esegui verifiche proporzionate al cambiamento e aggiorna prove/STATUS/WORKLOG prima del commit.

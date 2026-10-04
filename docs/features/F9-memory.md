@@ -1,6 +1,6 @@
-# F15 — Memoria Markdown degli Spaces e preferenze legacy
+# F9 — Memoria Markdown degli Spaces e preferenze legacy
 
-Stato: documentata, non completa; aggiornamento D28/D30, 2026-10-04. Contenuti locali MVP preservati. [F18](F18-hermes-native-features-and-observability.md) possiede visualizzazione della memoria Hermes e note native; questa scheda non crea un secondo archivio runtime.
+Stato: documentata, non completa; aggiornamento D28/D30, 2026-10-04. Contenuti locali MVP preservati. [F8](F8-hermes-native-features-and-observability.md) possiede visualizzazione della memoria Hermes e note native; questa scheda non crea un secondo archivio runtime.
 
 <!-- feature-guidance:start -->
 
@@ -31,33 +31,33 @@ Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. L
 
 ## Risultato e incrementi
 
-**F15-A — Ambiti locali/legacy:** mostrare preferenze Studio già presenti con origine chiara e collegamenti alle sezioni Space/runtime. Nessuna importazione/migrazione implicita; archivio illeggibile preservato. Non reiniettare copie della memoria Hermes.
+**F9-A — Ambiti locali/legacy:** mostrare preferenze Studio già presenti con origine chiara e collegamenti alle sezioni Space/runtime. Nessuna importazione/migrazione implicita; archivio illeggibile preservato. Non reiniettare copie della memoria Hermes.
 
-**F15-B — Memoria Markdown Space:** scegliere/creare un file nella cartella autorizzata, con percorso, revisione, ultimo esito e stato leggibili. Prerequisiti F03/F10; filesystem autoritativo. `MEMORY.md` è nome possibile, non capacità di discovery automatica Hermes. Evitare collisioni col file esistente.
+**F9-B — Memoria Markdown Space:** scegliere/creare un file nella cartella autorizzata, con percorso, revisione, ultimo esito e stato leggibili. Prerequisiti F6/F5; filesystem autoritativo. `MEMORY.md` è nome possibile, non capacità di discovery automatica Hermes. Evitare collisioni col file esistente.
 
-**F15-C — Gestione built-in opzionale:** eventuali add/replace/remove/pending/approve/reject sulle memorie del profilo Hermes tramite contratto backend supportato, solo se questo incremento viene selezionato. F18-B rimane viewer read-only. Non usare `/api/memory` status come CRUD né scritture dirette che aggirano gate/lock/formato; prove e permessi F11/F16 richiesti.
+**F9-C — Gestione built-in opzionale:** eventuali add/replace/remove/pending/approve/reject sulle memorie del profilo Hermes tramite contratto backend supportato, solo se questo incremento viene selezionato. F8-B rimane viewer read-only. Non usare `/api/memory` status come CRUD né scritture dirette che aggirano gate/lock/formato; prove e permessi F1/F3 richiesti.
 
-La precedente F15-D (learning/curator) è ricondotta a **F07 per gestione skill/manutenzione** e **F18 per visibilità**. Restano future selezioni autonome, non attività implicite di F15.
+La precedente F9-D (learning/curator) è ricondotta a **F11 per gestione skill/manutenzione** e **F8 per visibilità**. Restano future selezioni autonome, non attività implicite di F9.
 
 ## File Space aggiornato durante il lavoro
 
 Eventi significativi: decisione confermata, risultato salvato, milestone verificata e chiusura incarico. Modalità da definire nella chat feature: manuale con diff/Save oppure automatica entro file/ambito scelti. L'agente prepara cambiamenti con fonte/chat/esecuzione, decisioni, stato/prossimo passo e link ai risultati. Mostrare policy, revisione ed esito applicato; testo «ricordato» non prova scrittura.
 
-Usare writer/revision/conflict F10; preservare sezioni manuali e bozza, rileggere versione prima di salvare. Cambi esterni non vengono sovrascritti. Nessun diario infinito: sintesi corrente con link alla storia. Un file salvato non prova che un incarico attivo lo abbia letto; inclusione/lettura per incarico esplicita e versionata. Host remoto richiede root raggiungibile/grant, non semplice path Mac nel prompt.
+Usare writer/revision/conflict F5; preservare sezioni manuali e bozza, rileggere versione prima di salvare. Cambi esterni non vengono sovrascritti. Nessun diario infinito: sintesi corrente con link alla storia. Un file salvato non prova che un incarico attivo lo abbia letto; inclusione/lettura per incarico esplicita e versionata. Host remoto richiede root raggiungibile/grant, non semplice path Mac nel prompt.
 
 Creazione e aggiornamento di file in un vault personale richiedono destinazione scelta nell'app: niente seed/import/scan personale al lancio, nessuna scrittura automatica su file omonimo esistente o istruzioni AGENTS/SOUL.
 
-## Contratti runtime da consultare per F15-C
+## Contratti runtime da consultare per F9-C
 
 [Persistent Memory ufficiale](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/) e [prospetto completo](../research/hermes-memory-system.md) sono il riferimento tecnico per USER/MEMORY, snapshot congelato, budget, pending, tool format, provider, recall e compaction. [Curator](https://hermes-agent.nousresearch.com/docs/user-guide/features/curator/) e [Memory Providers](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers/) sono approfondimenti, non prerequisiti per file Space locale.
 
-Preservare contenuti/profili Hermes senza migrazione: memoria profilo, identità SOUL, cronologia e file progetto distinti. I gates backend decidono staged/applied; una nuova sessione è distinta dal resume. Il viewer è F18; skill/provider management non si implementa per rendere attiva una checkbox Studio.
+Preservare contenuti/profili Hermes senza migrazione: memoria profilo, identità SOUL, cronologia e file progetto distinti. I gates backend decidono staged/applied; una nuova sessione è distinta dal resume. Il viewer è F8; skill/provider management non si implementa per rendere attiva una checkbox Studio.
 
 ## UI, ownership e privacy
 
-Memory locale/Space mostra origine e percorso, policy, bozza, errore/conflitto e ultima scrittura confermata. Viewer Profilo e note post-turn sono destinazioni F18, identità del Dot F04. Loading, vuoto, offline/stale e errore diversi. Save/Cancel/focus/tastiera/Reduced Motion seguono [component-system](../design/component-system.md).
+Memory locale/Space mostra origine e percorso, policy, bozza, errore/conflitto e ultima scrittura confermata. Viewer Profilo e note post-turn sono destinazioni F8, identità del Dot F7. Loading, vuoto, offline/stale e errore diversi. Save/Cancel/focus/tastiera/Reduced Motion seguono [component-system](../design/component-system.md).
 
-F15 possiede workflow memoria Space/legacy ed eventuali mutazioni built-in selezionate; F10 writer, F03 editor, F04 binding, F11 trasporto, F16 grants. [Confini condivisi](../architecture/feature-boundaries.md). Niente testo ricordi/prompt completi nei log/Git; dati inviati al runtime possono arrivare al provider scelto. Nessun reset, purge o provider installato all'apertura.
+F9 possiede workflow memoria Space/legacy ed eventuali mutazioni built-in selezionate; F5 writer, F6 editor, F7 binding, F1 trasporto, F3 grants. [Confini condivisi](../architecture/feature-boundaries.md). Niente testo ricordi/prompt completi nei log/Git; dati inviati al runtime possono arrivare al provider scelto. Nessun reset, purge o provider installato all'apertura.
 
 ## Definition of done per incremento
 
@@ -65,4 +65,4 @@ A: origini/scope visibili, legacy preservato al restart e su errori, nessuna inc
 
 ## Prompt per una nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e File e skill F15. Implementa solo F15-A/B/C selezionato; viewer e note Hermes sono F18, manutenzione skill F07. Per Space usa root/revision/writer F10 ed editor F03, senza copie dei file in un nuovo store. Per eventuali mutazioni runtime leggi Persistent Memory e docs/research/hermes-memory-system.md, verifica contratto/gates del profilo isolato, non scrivere direttamente i built-in. Prova esito/restart/conflitto e aggiornamenti significativi su dati sintetici. Aggiorna scheda, STATUS, MEMORY/decisioni se cambia direzione e WORKLOG; review prima del commit.
+> Prima segui docs/agents/feature-workflow.md e File e skill F9. Implementa solo F9-A/B/C selezionato; viewer e note Hermes sono F8, manutenzione skill F11. Per Space usa root/revision/writer F5 ed editor F6, senza copie dei file in un nuovo store. Per eventuali mutazioni runtime leggi Persistent Memory e docs/research/hermes-memory-system.md, verifica contratto/gates del profilo isolato, non scrivere direttamente i built-in. Prova esito/restart/conflitto e aggiornamenti significativi su dati sintetici. Aggiorna scheda, STATUS, MEMORY/decisioni se cambia direzione e WORKLOG; review prima del commit.

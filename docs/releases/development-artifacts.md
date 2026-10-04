@@ -1,3 +1,5 @@
+> Numerazione storica: gli ID nel testo precedono il riordino; i link alle schede puntano ai file attuali. [Corrispondenza vecchi/nuovi ID](../features/numbering-2026-10-04.md).
+
 # Artefatti di sviluppo osservati
 
 2026-10-04. Evidenze storiche della baseline; non certificano una release finale né pubblicata. La consegna F00 è nella [review corrente](../architecture/f00-review-2026-10-04.md) e nel [STATUS](../project/STATUS.md); il DMG sotto precede F00. Rigenerare/verificare il manifest prima di distribuire.

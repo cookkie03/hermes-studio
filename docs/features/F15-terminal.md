@@ -1,4 +1,4 @@
-# F17 — Terminale integrato
+# F15 — Terminale integrato
 
 Stato: documentata; output di tool in UI non è una sessione PTY interattiva.
 
@@ -20,7 +20,7 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 
 ### Punti di ingresso da leggere
 
-- [docs/features/F16-permissions-and-approvals.md](<../../docs/features/F16-permissions-and-approvals.md>): Autorizzazioni.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Autorizzazioni.
 - [desktop/upstream/src/client/ComputerToolCard.tsx](<../../desktop/upstream/src/client/ComputerToolCard.tsx>): Output tool attuale.
 - [desktop/upstream/src/client/ComputerPanel.tsx](<../../desktop/upstream/src/client/ComputerPanel.tsx>): Destinazione Terminal.
 - [desktop/electron/preload.cjs](<../../desktop/electron/preload.cjs>): Privilegi.
@@ -39,10 +39,10 @@ Host/session/cwd/stato/permessi sempre chiari. Console vuota, apertura, collegat
 
 Module Terminal owns PTY/identità tool, transport/backpressure, resize, detach/attach e ownership del processo. Renderer mostra stream; preload non offre exec generico. Sessioni personali esistenti non importate per default. Output può contenere segreti: limitare log persistenti e clipboard/export espliciti.
 
-Dipendenze F11+F16. Verificare source desktop Hermes terminal adapters e endpoint reali prima di progettare interface. Primo incremento output confermato dei tool e cronologia; PTY interattiva è slice separata scelta nella chat, con dichiarazione host locale/remoto.
+Dipendenze F1+F3. Verificare source desktop Hermes terminal adapters e endpoint reali prima di progettare interface. Primo incremento output confermato dei tool e cronologia; PTY interattiva è slice separata scelta nella chat, con dichiarazione host locale/remoto.
 
 Gate: stdout/stderr ordering, output voluminoso/backpressure, codice di uscita, disconnect senza terminazione automatica, resize, interruzione esplicita e restart. Test processi sintetici isolati, nessun comando personale/distruttivo. Tastiera/focus e accessibilità del pannello; distinguere CtrlC terminale e cancellazione composer.
 
 ## Handoff
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Lavora soltanto F17; scegli output tool oppure PTY e verifica il contratto Hermes ufficiale. Usa processi test isolati, ownership esplicita e permessi F16. Non aggiungere una shell generica Electron e non sviluppare Files/browser. Documenta esito e limiti.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Lavora soltanto F15; scegli output tool oppure PTY e verifica il contratto Hermes ufficiale. Usa processi test isolati, ownership esplicita e permessi F3. Non aggiungere una shell generica Electron e non sviluppare Files/browser. Documenta esito e limiti.

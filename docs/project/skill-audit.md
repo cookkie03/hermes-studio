@@ -1,3 +1,5 @@
+> Numerazione storica: gli ID nel testo precedono il riordino; i link alle schede puntano ai file attuali. [Corrispondenza vecchi/nuovi ID](../features/numbering-2026-10-04.md).
+
 > Audit storico della fase iniziale, conservato integralmente. Per stato corrente usare [STATUS](STATUS.md), [workflow](../agents/feature-workflow.md) e [catalogo skill](../agents/skills-catalog.md); applicazione effettiva nel WORKLOG della chat.
 
 # Audit delle skill richieste

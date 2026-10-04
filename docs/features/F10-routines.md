@@ -1,4 +1,4 @@
-# F06 — Routine e attività ricorrenti
+# F10 — Routine e attività ricorrenti
 
 
 
@@ -19,8 +19,8 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 
 ### Punti di ingresso da leggere
 
-- [docs/features/F11-runtime-connection.md](<../../docs/features/F11-runtime-connection.md>): Host e profilo.
-- [docs/features/F16-permissions-and-approvals.md](<../../docs/features/F16-permissions-and-approvals.md>): Autorizzazioni.
+- [docs/features/F1-runtime-connection.md](<../../docs/features/F1-runtime-connection.md>): Host e profilo.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Autorizzazioni.
 - [desktop/hermes/server.mjs](<../../desktop/hermes/server.mjs>): Route tasks attuale non equivale a scheduler.
 - [Hermes: tools/cronjob_tools.py](</Users/luca/.hermes/hermes-agent/tools/cronjob_tools.py>): Azioni pianificazione; lettura sorgente alla versione fissata, non prova live.
 - [Hermes: apps/desktop/src/api/cron.ts](</Users/luca/.hermes/hermes-agent/apps/desktop/src/api/cron.ts>): REST client desktop; lettura sorgente alla versione fissata, non prova live.
@@ -51,7 +51,7 @@ Routine `{connectionId,profile,jobId}` e Run `{sessionId,runId?,startedAt,status
 
 ## Seam, ownership e dipendenze
 
-Dipende da F11 per connessione e host, F16 per autorizzazioni; F04 soltanto per destinazioni Bot e F03 se il risultato diventa documento. La cronologia delle esecuzioni appartiene a questa feature. Nuovi `desktop/hermes/routines.mjs`, `.test.mjs`, client `RoutinesView.tsx`/`RoutineEditor.tsx`; sostituire route Studio tasks501 soltanto dopo contratto confermato. Non creare cron macOS o timer Electron parallelo; Hermes scheduler unico. Configurazione del gateway/scheduler deve avere gate separato, nessuna modifica in questa specifica.
+Dipende da F1 per connessione e host, F3 per autorizzazioni; F7 soltanto per destinazioni Bot e F6 se il risultato diventa documento. La cronologia delle esecuzioni appartiene a questa feature. Nuovi `desktop/hermes/routines.mjs`, `.test.mjs`, client `RoutinesView.tsx`/`RoutineEditor.tsx`; sostituire route Studio tasks501 soltanto dopo contratto confermato. Non creare cron macOS o timer Electron parallelo; Hermes scheduler unico. Configurazione del gateway/scheduler deve avere gate separato, nessuna modifica in questa specifica.
 
 ## Privacy, migrazione e non-obiettivi
 
@@ -63,8 +63,8 @@ Fixture create/update/pause/resume/remove, one-shot vs recurring, timezone/DST, 
 
 ## Destinazione file e memoria — D25/D28
 
-Routine può riferire un documento del folder Space con root/host/path e grant durevole verificati; metadato Space non garantisce folder disponibile quando client chiuso. File update confermato da revisione/esito F10; memoria Space F15 aggiornata solo entro policy selezionata. Memoria runtime/skill curator non sono il scheduler; nessun salvataggio al vault da sola consegna testuale.
+Routine può riferire un documento del folder Space con root/host/path e grant durevole verificati; metadato Space non garantisce folder disponibile quando client chiuso. File update confermato da revisione/esito F5; memoria Space F9 aggiornata solo entro policy selezionata. Memoria runtime/skill curator non sono il scheduler; nessun salvataggio al vault da sola consegna testuale.
 
 ## Prompt pronto nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F06 leggendo spec e riferimento upstream apps/desktop/api/cron.ts. Priorità routine: partire da list scoped+run history, poi creazione/pause/trigger con fixture e scheduler Hermes isolato. Nessun timer alternativo, messaggio esterno o modifica delle routine personali. Mostra next run e disponibilità host verificati, separa run da delivery e non ritentare esiti incerti. Completa test schedule/timezone/relaunch, DoD e documentazione.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F10 leggendo spec e riferimento upstream apps/desktop/api/cron.ts. Priorità routine: partire da list scoped+run history, poi creazione/pause/trigger con fixture e scheduler Hermes isolato. Nessun timer alternativo, messaggio esterno o modifica delle routine personali. Mostra next run e disponibilità host verificati, separa run da delivery e non ritentare esiti incerti. Completa test schedule/timezone/relaunch, DoD e documentazione.

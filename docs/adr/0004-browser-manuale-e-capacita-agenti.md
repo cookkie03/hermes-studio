@@ -1,7 +1,9 @@
+> Numerazione storica: gli ID nel testo precedono il riordino; i link alle schede puntano ai file attuali. [Corrispondenza vecchi/nuovi ID](../features/numbering-2026-10-04.md).
+
 ---
 status: accepted
 ---
-> Ambito storico SwiftUI/WebKit non persistente, superato come target prodotto da [ADR0005](0005-opendots-desktop.md) e [F08](../features/F08-browser.md) (browser condiviso persistente D27). Preservare questa prova; non applicarla al browser Studio futuro.
+> Ambito storico SwiftUI/WebKit non persistente, superato come target prodotto da [ADR0005](0005-opendots-desktop.md) e [F08](../features/F12-browser.md) (browser condiviso persistente D27). Preservare questa prova; non applicarla al browser Studio futuro.
 
 # Browser manuale prima dell'automazione degli agenti
 

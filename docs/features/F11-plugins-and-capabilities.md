@@ -1,4 +1,4 @@
-# F07 — Plugin, skill e capacità reali
+# F11 — Plugin, skill e capacità reali
 
 
 
@@ -21,7 +21,7 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 ### Punti di ingresso da leggere
 
 - [docs/agents/skills-catalog.md](<../../docs/agents/skills-catalog.md>): Inventario skill di sviluppo vs runtime Hermes.
-- [docs/features/F16-permissions-and-approvals.md](<../../docs/features/F16-permissions-and-approvals.md>): Gate autorizzazioni.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Gate autorizzazioni.
 - [desktop/hermes/gateway.mjs](<../../desktop/hermes/gateway.mjs>): Allowlist e trasporto.
 - [Hermes: tui_gateway/contracts/tools_mcp_plugins.py](</Users/luca/.hermes/hermes-agent/tui_gateway/contracts/tools_mcp_plugins.py>): Registro, plugin e MCP; lettura sorgente alla versione fissata, non prova live.
 - [Hermes: apps/desktop/src/contrib/plugins.ts](</Users/luca/.hermes/hermes-agent/apps/desktop/src/contrib/plugins.ts>): Reference desktop; lettura sorgente alla versione fissata, non prova live.
@@ -52,7 +52,7 @@ CapabilitySnapshot identificato da connessione/profilo/sessione/revisione; Plugi
 
 ## Seam, ownership e dipendenze
 
-Nuovi `desktop/hermes/capabilities.mjs`, `capabilities.test.mjs`, `CapabilitiesPanel.tsx`; bridge permette solo RPC allowlist scoped, mai endpoint arbitario request(method). Dipende F11 per scope/connessione, F04 se associato a Bot e F16 per approvazioni; sblocca F08/F09 e diagnostica F05. Prima read-only snapshot+refresh+errorreason; poi gestione persistente con serializzazione per profilo e rollback/outcome. Riutilizzare manifest upstream, non cataloghi generici non verificati.
+Nuovi `desktop/hermes/capabilities.mjs`, `capabilities.test.mjs`, `CapabilitiesPanel.tsx`; bridge permette solo RPC allowlist scoped, mai endpoint arbitario request(method). Dipende F1 per scope/connessione, F7 se associato a Bot e F3 per approvazioni; sblocca F12/F16 e diagnostica F14. Prima read-only snapshot+refresh+errorreason; poi gestione persistente con serializzazione per profilo e rollback/outcome. Riutilizzare manifest upstream, non cataloghi generici non verificati.
 
 ## Privacy, migrazione e non-obiettivi
 
@@ -64,8 +64,8 @@ Fixture tool enabled vs serverinactive, unknown/deferredtools, profile collision
 
 ## D30 — Parità del catalogo Hermes e visibilità apprendimento
 
-[F18](F18-hermes-native-features-and-observability.md) mappa capacità/esiti native alla UI. F07 conserva catalogo skill/plugin/toolsets del profilo Hermes e gestione autorizzata; nessuna libreria parallela Studio. Aggiornamenti di skill/review/curator ricevuti possono aggiornare la vista con freshness e origine, non attivare installazioni/run. Non occultare deferred tools per aderire al template OpenDots. Segnali post-turn in chat sono F18-A/F02.
+[F8](F8-hermes-native-features-and-observability.md) mappa capacità/esiti native alla UI. F11 conserva catalogo skill/plugin/toolsets del profilo Hermes e gestione autorizzata; nessuna libreria parallela Studio. Aggiornamenti di skill/review/curator ricevuti possono aggiornare la vista con freshness e origine, non attivare installazioni/run. Non occultare deferred tools per aderire al template OpenDots. Segnali post-turn in chat sono F8-A/F2.
 
 ## Prompt nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F07 read-only capabilities con allowlist scoped, usando contracts/tools_mcp_plugins e desktop contrib/plugins. Parti da toolsets/tools/plugins e stati installato≠attivo. Non installare plugin né modificare config personale durante test. Se estendi a management, prepara diff concreto/review per capabilitydelta, vault-safe settings e rollback. Completa DoD e aggiorna docs; preserva strumenti Hermes deferiti.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F11 read-only capabilities con allowlist scoped, usando contracts/tools_mcp_plugins e desktop contrib/plugins. Parti da toolsets/tools/plugins e stati installato≠attivo. Non installare plugin né modificare config personale durante test. Se estendi a management, prepara diff concreto/review per capabilitydelta, vault-safe settings e rollback. Completa DoD e aggiorna docs; preserva strumenti Hermes deferiti.

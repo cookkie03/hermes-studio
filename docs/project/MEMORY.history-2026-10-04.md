@@ -1,4 +1,4 @@
-> Snapshot storico prima del consolidamento del 2026-10-04. Contiene stati e istruzioni superati; leggere [MEMORY corrente](MEMORY.md) e [indice documentazione](../README.md). Il corpo originale è conservato integralmente sotto. SHA256 originale: `11b13a3c005dc28e285e4527ec390419813c4f2c27669a2f2a8f813aa069a943`.
+> Snapshot storico prima del consolidamento del 2026-10-04. Contiene stati e istruzioni superati; leggere [MEMORY corrente](MEMORY.md) e [indice documentazione](../README.md). I contenuti storici e gli ID originali sono conservati; soli percorsi delle schede aggiornati alla rinumerazione. SHA256 del corpo originale prima di aggiornare i link (Git 52d14ea): `11b13a3c005dc28e285e4527ec390419813c4f2c27669a2f2a8f813aa069a943`.
 
 ## Ultimo incremento — F00 completata, 2026-10-04
 

@@ -4,9 +4,9 @@ Ricerche raccolte il 2026-10-04. Una fonte pubblica o un contratto nel sorgente 
 
 | Report | Evidenza e versione | Uso e limite |
 |---|---|---|
-| [Memoria Hermes](hermes-memory-system.md) | Documentazione ufficiale e codice pubblico SHA `e1e82d782f353766c7a22db6e5ac4fa58bbff325` | F15/F18/F07; livelli, curator, notifiche e provider. Nessun archivio personale o runtime esercitato |
-| [Browser integrato](hermes-integrated-browser.md) | Codice alla stessa SHA `e1e82d7` | F08: controller/callback/CDP candidati, persistenza e takeover ancora gate |
-| [Desktop ufficiale](hermes-desktop-reference.md) | Lettura sorgenti alla SHA precedente `1cb26bf248e150f715ce8a487fdef2a2bef6b541` | Ingressi F02/F11/F16 e ownership; non il pin degli audit memoria/browser successivi |
+| [Memoria Hermes](hermes-memory-system.md) | Documentazione ufficiale e codice pubblico SHA `e1e82d782f353766c7a22db6e5ac4fa58bbff325` | F9/F8/F11; livelli, curator, notifiche e provider. Nessun archivio personale o runtime esercitato |
+| [Browser integrato](hermes-integrated-browser.md) | Codice alla stessa SHA `e1e82d7` | F12: controller/callback/CDP candidati, persistenza e takeover ancora gate |
+| [Desktop ufficiale](hermes-desktop-reference.md) | Lettura sorgenti alla SHA precedente `1cb26bf248e150f715ce8a487fdef2a2bef6b541` | Ingressi F2/F1/F3 e ownership; non il pin degli audit memoria/browser successivi |
 | [Contratto runtime iniziale](runtime-integration-findings.md) | Sorgenti alla SHA `1cb26b…`, baseline SwiftUI storica | Architettura/protocollo come riferimento, non stack attuale o verifica live |
 | [Hermes UI osservata](hermes-live-features.md) | App v0.21.5+6453, inventario e albero AX | Funzioni esposte, non contratti API testati; versione distinta dal checkout |
 | [OpenDots](opendots-reference.md) | Sorgenti pin `c2569bb6a13a22e565cf3eb791c62267d06babb1` | Composizione UI, MIT e limiti template; screenshot utente resta autorevole |

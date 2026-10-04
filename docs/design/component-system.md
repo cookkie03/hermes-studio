@@ -1,6 +1,6 @@
 # Sistema dei componenti Hermes Studio
 
-2026-10-04. Struttura OpenDots; componenti e microinterazioni ispirati a Unsloth e Codex. Specifica per F01/F02/F03, non implementazione completata.
+2026-10-04. Struttura OpenDots; componenti e microinterazioni ispirati a Unsloth e Codex. Specifica per F4/F2/F6, non implementazione completata.
 
 ## Evidenze
 
@@ -13,8 +13,8 @@ Screenshot personali conservati solo in `.reference/ui-private/`, ignorato da Gi
 | Componente | Parti e comportamento | Riferimento |
 |---|---|---|
 | Sidebar | Ricerca, Spaces, Dots con avatar e preview, chat, Memory/Settings; selezione distinta da hover; azioni anche su focus | OpenDots; densità Unsloth/Codex |
-| Composer | Textarea adattiva, bozza persistente, strumenti contestuali, invio/stop nello stesso posto; Enter invia, Shift+Enter nuova riga; composizione IME preservata | Unsloth/Codex; stati F02 |
-| Messaggio utente | Bolla a destra; inserimento immediato distinto da accodamento, conferma ed esito incerto | Screenshot; contratto F02 |
+| Composer | Textarea adattiva, bozza persistente, strumenti contestuali, invio/stop nello stesso posto; Enter invia, Shift+Enter nuova riga; composizione IME preservata | Unsloth/Codex; stati F2 |
+| Messaggio utente | Bolla a destra; inserimento immediato distinto da accodamento, conferma ed esito incerto | Screenshot; contratto F2 |
 | Risposta agente | Markdown, copia e revisione accessibili su hover e focus; ricevute strumenti separate | Unsloth e card OpenDots |
 | Attività | Riga compatta con stato e durata se nota; apertura dei passi/tool confermati | Disclosure Unsloth osservata |
 | Tool card | Icona, nome, destinazione, stato; dettagli apribili con host e provenienza | OpenDots e contratto Hermes |
@@ -40,8 +40,8 @@ Indicatore attività con etichetta; spinner solo durante un'operazione attiva. D
 
 ## Gate
 
-Provare stati vuoti, popolati, in attesa, errore, incerti e offline; tastiera e ritorno focus; multilinea/IME; bozza nuova durante invio; disclosure con dati reali; scroll senza disturbo; finestre 900/1360 e zoom testo. Misurare o registrare motion in F01 prima di dichiararla verificata. I controlli riflettono capability reali: i tool futuri hanno stato esplicito; selezione modello e permessi richiedono contratti Hermes.
+Provare stati vuoti, popolati, in attesa, errore, incerti e offline; tastiera e ritorno focus; multilinea/IME; bozza nuova durante invio; disclosure con dati reali; scroll senza disturbo; finestre 900/1360 e zoom testo. Misurare o registrare motion in F4 prima di dichiararla verificata. I controlli riflettono capability reali: i tool futuri hanno stato esplicito; selezione modello e permessi richiedono contratti Hermes.
 
 ## Anatomia aggiuntiva D25–D29, proposta da implementare nelle feature
 
-Folder picker e file tree nello Space (F03/F10), con host/percorso e conflitto; avatar picker Create/Edit Dot (F04-A) con griglia, selezione non solo colore e radiogroup. Browser (F08) mostra tab/URL/profilo/owner e takeover sullo stesso viewport; Memory (F15) mostra origine, ambito, percorso, pending/esito. Composer mic (F13) distingue bozza vocale da Send; vocal chat ha Mute/End/transcript e livello audio reale. Queste sono specifiche, non osservazioni o controlli già funzionanti. Dimensioni/motion seguono token centrali finché misurate nella .app.
+Folder picker e file tree nello Space (F6/F5), con host/percorso e conflitto; avatar picker Create/Edit Dot (F7-A) con griglia, selezione non solo colore e radiogroup. Browser (F12) mostra tab/URL/profilo/owner e takeover sullo stesso viewport; Memory (F9) mostra origine, ambito, percorso, pending/esito. Composer mic (F17) distingue bozza vocale da Send; vocal chat ha Mute/End/transcript e livello audio reale. Queste sono specifiche, non osservazioni o controlli già funzionanti. Dimensioni/motion seguono token centrali finché misurate nella .app.

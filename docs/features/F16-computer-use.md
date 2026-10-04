@@ -1,4 +1,4 @@
-# F09 — Computer use e controllo della macchina
+# F16 — Computer use e controllo della macchina
 
 
 
@@ -20,7 +20,7 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 
 ### Punti di ingresso da leggere
 
-- [docs/features/F16-permissions-and-approvals.md](<../../docs/features/F16-permissions-and-approvals.md>): Approvazioni.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Approvazioni.
 - [desktop/upstream/src/client/ComputerPanel.tsx](<../../desktop/upstream/src/client/ComputerPanel.tsx>): Superficie condivisa.
 - [desktop/electron/preload.cjs](<../../desktop/electron/preload.cjs>): Privilegi esposti.
 - [Hermes: tools/computer_use/schema.py](</Users/luca/.hermes/hermes-agent/tools/computer_use/schema.py>): Target e azioni; lettura sorgente alla versione fissata, non prova live.
@@ -51,7 +51,7 @@ ComputerTarget {connection,host,profile,app?,window?}, CaptureReceipt, ActionReq
 
 ## Seam, ownership e dipendenze
 
-Dipende F11 routing/identità, F07 capability e F16 approval, con F02 per interruzione del turno. Nuovi `desktop/hermes/computer.mjs`, fixtures, client `ComputerActivityView.tsx`; ComputerPanel condiviso con F08, ownership concordata prima parallelwork. Nessun secondo executor shell/osautomation. Prima slice visualizza capture e target/approvals da Hermes; azioni dirette UI solo tramite API ufficiale comprovata, non via toolname string generico.
+Dipende F1 routing/identità, F11 capability e F3 approval, con F2 per interruzione del turno. Nuovi `desktop/hermes/computer.mjs`, fixtures, client `ComputerActivityView.tsx`; ComputerPanel condiviso con F12, ownership concordata prima parallelwork. Nessun secondo executor shell/osautomation. Prima slice visualizza capture e target/approvals da Hermes; azioni dirette UI solo tramite API ufficiale comprovata, non via toolname string generico.
 
 ## Privacy, migrazione e non-obiettivi
 
@@ -63,4 +63,4 @@ Fixture capture AX/vision/SOM, app/window mismatch, coordinatesobsolete, permiss
 
 ## Prompt nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F09 usando computer_use schema runtime e bridge owned, prima receipts/capture/approval target. Non aggiungere executor diretto o assumere takeover. Verifica supporto reale host+permissions e deliverymode; prova soltanto app/profilo sintetici autorizzati. Implementa failclosed scope/staleapproval e postconditionverification, completa DoD e persisti risultati senza screenshot personali.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F16 usando computer_use schema runtime e bridge owned, prima receipts/capture/approval target. Non aggiungere executor diretto o assumere takeover. Verifica supporto reale host+permissions e deliverymode; prova soltanto app/profilo sintetici autorizzati. Implementa failclosed scope/staleapproval e postconditionverification, completa DoD e persisti risultati senza screenshot personali.

@@ -1,4 +1,4 @@
-> Snapshot storico prima del consolidamento del 2026-10-04. Contiene stati e istruzioni superati; leggere [STATUS corrente](STATUS.md) e [indice documentazione](../README.md). Il corpo originale è conservato integralmente sotto. SHA256 originale: `093289d254690f4f03227edea50db1140fabb06c1a1b4bfbf9d8ab0d29208877`.
+> Snapshot storico prima del consolidamento del 2026-10-04. Contiene stati e istruzioni superati; leggere [STATUS corrente](STATUS.md) e [indice documentazione](../README.md). I contenuti storici e gli ID originali sono conservati; soli percorsi delle schede aggiornati alla rinumerazione. SHA256 del corpo originale prima di aggiornare i link (Git 52d14ea): `093289d254690f4f03227edea50db1140fabb06c1a1b4bfbf9d8ab0d29208877`.
 
 # Hermes Studio — stato corrente
 

@@ -1,4 +1,4 @@
-# F08 — Browser integrato condiviso tra utente e Hermes
+# F12 — Browser integrato condiviso tra utente e Hermes
 
 Stato: specifica aggiornata D27, 2026-10-04; non implementata né provata nel client. Obiettivo finale: un browser visibile dentro Hermes Studio, controllato dagli strumenti esistenti di Hermes e utilizzabile direttamente dall'utente, con profilo, cookie, storage e cronologia persistenti. Ricevute, URL e screenshot sono incrementi intermedi e non completano questa feature.
 
@@ -19,8 +19,8 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 
 ### Punti di ingresso da leggere
 
-- [docs/features/F11-runtime-connection.md](<../../docs/features/F11-runtime-connection.md>): Autenticazione necessaria al controller.
-- [docs/features/F16-permissions-and-approvals.md](<../../docs/features/F16-permissions-and-approvals.md>): Permessi.
+- [docs/features/F1-runtime-connection.md](<../../docs/features/F1-runtime-connection.md>): Autenticazione necessaria al controller.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Permessi.
 - [desktop/upstream/src/client/ComputerPanel.tsx](<../../desktop/upstream/src/client/ComputerPanel.tsx>): Pannello corrente.
 - [desktop/electron/external-links.cjs](<../../desktop/electron/external-links.cjs>): Apertura URL protetta.
 - [Hermes: tools/browser_tool.py](</Users/luca/.hermes/hermes-agent/tools/browser_tool.py>): Tool browser; lettura sorgente alla versione fissata, non prova live.
@@ -52,7 +52,7 @@ Il controller RPC richiede identità autenticata non-internal, derivata dal serv
 
 CDP configurato tramite `BROWSER_CDP_URL`/`browser.cdp_url` evita avvio di un altro browser, ma compatibilità del guest Electron e isolamento devono essere provati. Non modificare config globale o runtime personale per collegare una finestra. Il percorso scelto deve preservare scope per profilo; remoto Hermes non vede automaticamente il browser del Mac.
 
-F11 possiede connessione/autenticazione; F08 profilo browser, controller e superficie; F16 grant/takeover; F07 discovery delle capacità. ComputerPanel.tsx è condiviso con F09/F10/F17: concordare ownership prima del codice. Nessun refactor globale necessario solo per mostrare una scheda.
+F1 possiede connessione/autenticazione; F12 profilo browser, controller e superficie; F3 grant/takeover; F11 discovery delle capacità. ComputerPanel.tsx è condiviso con F16/F5/F15: concordare ownership prima del codice. Nessun refactor globale necessario solo per mostrare una scheda.
 
 ## Privacy e stati
 
@@ -70,4 +70,4 @@ Stati: manuale, collegamento controller, controllo agente, controllo utente, sco
 
 ## Prompt per una nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e File e skill di F08. Implementa solo l'incremento selezionato del browser condiviso, leggendo la ricerca browser e verificando SHA/contratti Hermes. Parti dalla prova stessa-pagina manuale + tool e scegli fra percorsi Hermes esistenti; nessun browser/tool parallelo o config personale mutata. Mantieni autenticazione, owner e permessi. Verifica persistenza, takeover e nessun retry incerto su dati sintetici nella .app. Ricevute/screenshot non completano F08. Aggiorna scheda, prove e memoria di progetto; non implementare F09 o altre feature incidentalmente.
+> Prima segui docs/agents/feature-workflow.md e File e skill di F12. Implementa solo l'incremento selezionato del browser condiviso, leggendo la ricerca browser e verificando SHA/contratti Hermes. Parti dalla prova stessa-pagina manuale + tool e scegli fra percorsi Hermes esistenti; nessun browser/tool parallelo o config personale mutata. Mantieni autenticazione, owner e permessi. Verifica persistenza, takeover e nessun retry incerto su dati sintetici nella .app. Ricevute/screenshot non completano F12. Aggiorna scheda, prove e memoria di progetto; non implementare F16 o altre feature incidentalmente.

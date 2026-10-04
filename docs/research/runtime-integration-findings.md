@@ -1,4 +1,6 @@
-> Ricerca iniziale alla versione indicata sotto; proposta SwiftUI storica. Per stack/stato corrente [STATUS](../project/STATUS.md), per collegamento [F11](../features/F11-runtime-connection.md). Il contratto va verificato contro la versione scelta, non dedotto da questa fotografia.
+> Numerazione storica: gli ID nel testo precedono il riordino; i link alle schede puntano ai file attuali. [Corrispondenza vecchi/nuovi ID](../features/numbering-2026-10-04.md).
+
+> Ricerca iniziale alla versione indicata sotto; proposta SwiftUI storica. Per stack/stato corrente [STATUS](../project/STATUS.md), per collegamento [F11](../features/F1-runtime-connection.md). Il contratto va verificato contro la versione scelta, non dedotto da questa fotografia.
 
 # Hermes runtime: contratto locale verificato nel sorgente
 

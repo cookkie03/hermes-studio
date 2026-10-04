@@ -1,4 +1,4 @@
-# F11 — Collegamento al runtime Hermes
+# F1 — Collegamento al runtime Hermes
 
 Stato: documentata; attach locale parziale esistente. Nessuna nuova integrazione implementata ora.
 
@@ -48,7 +48,7 @@ Quit client termina soltanto servizio UI posseduto. Se in futuro Studio avvia un
 
 ## Seam e ownership
 
-Connector runtime in desktop/hermes/gateway.mjs; orchestrazione binding in bridge.mjs; Electron discovery/bootstrap/privilegi separati. I chiamanti lavorano con operazioni dominio, non token o frame grezzi. Adapter Hermes reale e fixture sintetica esercitano la stessa seam. F02 usa questa connessione, F16 possiede approvazioni/capability; F04/Bots non deve aprire socket concorrenti implicitamente.
+Connector runtime in desktop/hermes/gateway.mjs; orchestrazione binding in bridge.mjs; Electron discovery/bootstrap/privilegi separati. I chiamanti lavorano con operazioni dominio, non token o frame grezzi. Adapter Hermes reale e fixture sintetica esercitano la stessa seam. F2 usa questa connessione, F3 possiede approvazioni/capability; F7/Bots non deve aprire socket concorrenti implicitamente.
 
 Persistenza: preferenza endpoint sicura con schema/versione; token nel deposito sicuro appropriato o effimero secondo contratto. Binding thread-owned Studio separato da DB Hermes. Migrazione/import sessioni esplicita e reversible, niente import personale al lancio.
 
@@ -58,8 +58,8 @@ Test readiness/timeout/redirect/login, discovery stale, cambio host senza invii 
 
 ## D30 — Eventi oltre il turno e parità runtime
 
-[F18](F18-hermes-native-features-and-observability.md) usa il trasporto scoped F11 per osservare anche `review.summary` e stati successivi alla risposta. La connessione/session subscription non termina implicitamente quando il testo è completo. Mapping versione/profilo/capability e gap visibili; nessun request(method) generico o import di profili personali per ottenere parità. Memoria/learning restano Hermes, mentre cache UI derivate non sono ricordi del modello.
+[F8](F8-hermes-native-features-and-observability.md) usa il trasporto scoped F1 per osservare anche `review.summary` e stati successivi alla risposta. La connessione/session subscription non termina implicitamente quando il testo è completo. Mapping versione/profilo/capability e gap visibili; nessun request(method) generico o import di profili personali per ottenere parità. Memoria/learning restano Hermes, mentre cache UI derivate non sono ricordi del modello.
 
 ## Handoff
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F11 con riferimento al desktop Hermes ufficiale e versioni pin. Leggi principi/ADR0006. Delimita il primo incremento attach locale, autenticazione o remoto; non implementarli tutti implicitamente. Preserva runtime/configurazioni personali, usa profilo/dati isolati per i prompt, documenta ogni capability effettivamente provata.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F1 con riferimento al desktop Hermes ufficiale e versioni pin. Leggi principi/ADR0006. Delimita il primo incremento attach locale, autenticazione o remoto; non implementarli tutti implicitamente. Preserva runtime/configurazioni personali, usa profilo/dati isolati per i prompt, documenta ogni capability effettivamente provata.

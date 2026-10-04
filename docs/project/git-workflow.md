@@ -2,7 +2,7 @@
 
 Autorizzazione: Luca ha richiesto il 2026-10-04 di preparare commit e push periodici mentre inizializza Git.
 
-Branch/remote osservati 2026-10-04: main; origin git@github.com:cookkie03/hermes-studio.git. Verificare stato/remote reali prima della mutazione e conservare storia/destinazione. F00 completata; commit e push di incrementi verificati autorizzati. Pubblicazione release appartiene a F12, distinta dai push sorgente/documenti.
+Branch/remote osservati 2026-10-04: main; origin git@github.com:cookkie03/hermes-studio.git. Verificare stato/remote reali prima della mutazione e conservare storia/destinazione. F0 completata; commit e push di incrementi verificati autorizzati. Pubblicazione release appartiene a F13, distinta dai push sorgente/documenti.
 
 Per ogni incremento coerente: completare build e verifiche pertinenti, aggiornare memoria/stato/registro, controllare diff e file aggiunti per credenziali e dati personali, selezionare esplicitamente i file, controllare index e poi commit. Escludere bundle, cache, log, archivi del runtime e credenziali. Le skill e il tracker sono parte del progetto come indicato in .gitignore.
 

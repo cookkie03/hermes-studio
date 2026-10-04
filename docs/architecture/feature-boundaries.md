@@ -4,18 +4,18 @@
 
 | Comportamento condiviso | Owner del comportamento | Consumatori / confine |
 |---|---|---|
-| Connessione, autenticazione e routing profile/session | F11 | F02/F04/F07/F18 usano trasporto scoped; non aprono un secondo executor/socket globale |
-| Conversazione/bozza/transcript/turn state | F02 | F13 audio e F18 note native forniscono eventi; F02 decide presentazione/owner, non inventa correlazioni |
-| Root, file refs, listing/read/write/revisione/conflitto | F10 | F03 Space/editor e F15 memoria su file condividono writer; nessun store di testi divergente |
-| Space, cartelle collegate, editor e review save | F03 | F10 operazioni file; F16 grants; le pagine MVP legacy sono preservate |
-| Avatar/identità Dot e binding bot/profilo | F04 | F01 mostra identità; F05 collaborazione e F18 viewer usano binding verificato. Avatar locale non crea profilo |
-| Richieste approvazione/grants/cancel/idempotenza | F16 | Tutte le feature sensitive; F01 è shell, non owner dei permessi |
-| Memoria Markdown dello Space/preferenze legacy | F15 | F10 writer; F03 editor. Gestione built-in eventuale F15-C usa backend esistente, non nuovo archivio |
-| Viewer memoria Hermes, note review e copertura native | F18 | F11 eventi, F02 timeline, F04 scope. Provider/profilo Hermes autoritativi; cache UI solo derivata |
-| Skills/plugin/toolsets/MCP e manutenzione autorizzata | F07 | F18 rende visibili esiti/status; viewer non lancia curator/review/installazioni |
-| Browser condiviso e presa controllo | F08 | F11 controller/routing, F16 grant; stessa pagina/profilo, niente browser parallelo |
-| Computer, terminale, routine, voce | F09/F17/F06/F13 rispettivamente | Pannello condiviso F01; comportamento rimane feature specifica |
-| Packaging e release | F12 | Distribuisce una versione/grafo selezionati, non implementa le altre capacità |
+| Connessione, autenticazione e routing profile/session | F1 | F2/F7/F11/F8 usano trasporto scoped; non aprono un secondo executor/socket globale |
+| Conversazione/bozza/transcript/turn state | F2 | F17 audio e F8 note native forniscono eventi; F2 decide presentazione/owner, non inventa correlazioni |
+| Root, file refs, listing/read/write/revisione/conflitto | F5 | F6 Space/editor e F9 memoria su file condividono writer; nessun store di testi divergente |
+| Space, cartelle collegate, editor e review save | F6 | F5 operazioni file; F3 grants; le pagine MVP legacy sono preservate |
+| Avatar/identità Dot e binding bot/profilo | F7 | F4 mostra identità; F14 collaborazione e F8 viewer usano binding verificato. Avatar locale non crea profilo |
+| Richieste approvazione/grants/cancel/idempotenza | F3 | Tutte le feature sensitive; F4 è shell, non owner dei permessi |
+| Memoria Markdown dello Space/preferenze legacy | F9 | F5 writer; F6 editor. Gestione built-in eventuale F9-C usa backend esistente, non nuovo archivio |
+| Viewer memoria Hermes, note review e copertura native | F8 | F1 eventi, F2 timeline, F7 scope. Provider/profilo Hermes autoritativi; cache UI solo derivata |
+| Skills/plugin/toolsets/MCP e manutenzione autorizzata | F11 | F8 rende visibili esiti/status; viewer non lancia curator/review/installazioni |
+| Browser condiviso e presa controllo | F12 | F1 controller/routing, F3 grant; stessa pagina/profilo, niente browser parallelo |
+| Computer, terminale, routine, voce | F16/F15/F10/F17 rispettivamente | Pannello condiviso F4; comportamento rimane feature specifica |
+| Packaging e release | F13 | Distribuisce una versione/grafo selezionati, non implementa le altre capacità |
 
 ## Prima di modificare un file condiviso
 

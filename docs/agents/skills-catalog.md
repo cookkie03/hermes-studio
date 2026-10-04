@@ -14,7 +14,7 @@ Totale: 567 percorsi; 469 file risolti distinti. [Inventario strutturato](skills
 
 ## Selezione e portabilità
 
-La mappa delle skill pertinenti è dentro ciascuna scheda F00–F17. Il percorso comune è [feature-workflow](feature-workflow.md), guidato da ask-matt. Prima usare la copia di progetto quando presente; per una globale scegliere il percorso indicato, controllare che esista e leggere SKILL.md e riferimenti richiesti. Quando manca una skill verificare il catalogo attuale della chat e gli altri percorsi: evitare copie/versioni arbitrarie. Installazione solo se necessaria all’ambito autorizzato.
+La mappa delle skill pertinenti è dentro ciascuna scheda F0/F4/F2/F6/F7/F14/F10/F11/F12/F16/F5/F1/F13/F17/F18/F9/F3/F15. Il percorso comune è [feature-workflow](feature-workflow.md), guidato da ask-matt. Prima usare la copia di progetto quando presente; per una globale scegliere il percorso indicato, controllare che esista e leggere SKILL.md e riferimenti richiesti. Quando manca una skill verificare il catalogo attuale della chat e gli altri percorsi: evitare copie/versioni arbitrarie. Installazione solo se necessaria all’ambito autorizzato.
 
 I percorsi globali assoluti descrivono questo Mac; su altro computer risolverli nelle corrispondenti radici utente/plugin. Un file leggibile non concede tool, credenziali, deleghe, pubblicazioni o accesso ai dati. Le skill runtime Hermes sono una raccolta separata dalle skill con cui Codex sviluppa Studio. Quelle per Spotify, vault, calendario o altri progetti restano catalogate senza entrare nei test o nello scope delle feature Hermes.
 

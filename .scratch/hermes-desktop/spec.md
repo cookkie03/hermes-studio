@@ -1,6 +1,6 @@
 # Hermes Studio — ingresso spec corrente
 
-Consolidato 2026-10-04. Le specifiche autoritative sono le [schede F00–F18](../../docs/features/README.md), una per chat. F00 completata; nessun nuovo incremento selezionato dal consolidamento documentale.
+Consolidato 2026-10-04. Le specifiche autoritative sono le [schede F0–F18](../../docs/features/README.md), una per chat. F0 completata; nessun nuovo incremento selezionato dal consolidamento documentale.
 
 Leggere [MEMORY](../../docs/project/MEMORY.md), [STATUS](../../docs/project/STATUS.md), [decisioni](../../docs/project/decisions.md), [piano](../../docs/project/feature-development-plan.md) e la sola scheda scelta. [UI](../../docs/design/opendots-target.md), [componenti](../../docs/design/component-system.md), [principi](../../docs/architecture/principles.md) e [confini](../../docs/architecture/feature-boundaries.md) sono riferimenti condivisi.
 
