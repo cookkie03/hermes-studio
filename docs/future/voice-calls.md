@@ -80,3 +80,7 @@ Ambito iniziale proposto: solo numero del proprietario verificato, limiti di fre
 - Quando gli agenti possono chiamare: solo comando diretto oppure eventi importanti entro regole concordate?
 
 La ricerca non costituisce autorizzazione a scaricare modelli, aprire porte, creare account, registrare audio o effettuare chiamate.
+
+## Confine aggiornato D29
+
+Messaggi vocali, dettatura, TTS e vocal chat in-app sono ora specificati in [F13](../features/F13-voice-and-calls.md), da selezionare in una chat dedicata. Questo documento conserva la ricerca futura di telefonate/rete e alternative audio; non prescrive sostituzione degli strumenti o provider Hermes già disponibili.

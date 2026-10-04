@@ -1,8 +1,6 @@
-# F03 — Spaces e documenti
+# F03 — Spaces collegati a cartelle e documenti su file
 
-Stato: specifica per una chat futura; baseline esistente parziale, feature non completa. Aggiornamento: 2026-10-04. MVP quasi vuoto: nessuno Space, documento o ricordo dimostrativo aggiunto automaticamente. Questo documento non avvia sviluppo.
-
-
+Stato: specifica aggiornata D25, 2026-10-04; non implementata. La baseline F00 usa ancora pagine metadata. La nuova richiesta sostituisce il modello di Space come solo contenitore di pagine interne; preservare i dati esistenti.
 
 <!-- feature-guidance:start -->
 ## File e skill da leggere e usare
@@ -13,13 +11,18 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 
 | Skill / percorso | Quando applicarla a questa feature |
 |---|---|
+| [domain-modeling](../../.agents/skills/domain-modeling/SKILL.md) | Space, documenti su file e pagine legacy distinti |
 | [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) | Componenti React e stato del renderer |
-| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Revisioni e ownership metadata |
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Revisioni dei file e ownership Space/FolderBinding |
 | [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Verifica UI packaged con dati sintetici e tool realmente disponibili |
 | [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — condizionale | Se autosave o conflitto non preserva la bozza |
 
 ### Punti di ingresso da leggere
 
+- [docs/adr/0007-folder-backed-spaces.md](../adr/0007-folder-backed-spaces.md): decisione filesystem e migrazione.
+- [docs/features/F10-files-and-artifacts.md](F10-files-and-artifacts.md): contratto filesystem condiviso.
+- [desktop/upstream/src/client/SpaceWorkspace.tsx](../../desktop/upstream/src/client/SpaceWorkspace.tsx): contenitore dello Space.
+- [desktop/upstream/src/client/WorkspaceDialog.tsx](../../desktop/upstream/src/client/WorkspaceDialog.tsx): selezione esplicita cartelle da aggiungere.
 - [desktop/upstream/src/client/PageDocument.tsx](<../../desktop/upstream/src/client/PageDocument.tsx>): Documento.
 - [desktop/upstream/src/client/editor/use-page-autosave.ts](<../../desktop/upstream/src/client/editor/use-page-autosave.ts>): Ciclo autosave.
 - [desktop/upstream/src/client/SaveToSpaceReview.tsx](<../../desktop/upstream/src/client/SaveToSpaceReview.tsx>): Revisione e salvataggio esplicito.
@@ -30,78 +33,65 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
 <!-- feature-guidance:end -->
 
-## Risultato e slice
+## Risultato richiesto
 
-Organizzare e scrivere contenuti persistenti indipendentemente dalla disponibilità di Hermes. Prima slice: Space e pagina Markdown creabili esplicitamente, salvataggio e riapertura. Seconda slice: revisione di risposta prima di trasformarla in pagina. La memoria è una feature separata: [F15 — Memoria](F15-memory.md). Review e memoria non sono prerequisiti per un editor locale funzionante.
+Uno Space collega una o più cartelle reali scelte dall’utente: un vault Obsidian, un progetto software o un’altra directory di lavoro. Si vedono struttura e file testuali, si aprono/modificano i documenti e gli specialisti possono lavorare sulle stesse cartelle entro l’ambito autorizzato. Aggiungere una cartella significa collegarla, senza copiare o importare tutto in un database Studio.
 
-Non è un file manager universale, una sincronizzazione cloud, una memoria globale Hermes o un sistema ACL del filesystem. Non assume web research, browser takeover o import delle note personali.
+Il filesystem è la fonte dei contenuti. Studio conserva collegamenti, selezioni, bozze recuperabili e ricevute; il testo salvato è il file reale. La UI resta nel linguaggio OpenDots, mentre l’organizzazione dei contenuti segue il modello cartella/progetto richiesto. La memoria degli agenti è F15.
 
-## Reference e anatomia
+## Percorso e componenti
 
-Norma visiva: [component-system](../design/component-system.md), inclusa l’estrazione Unsloth/Codex. OpenDots separa Spaces/documenti dai Dots e mostra una review prima di salvare. Questi pattern sono osservati nella screenshot/sorgente, non una prova di tutti i comportamenti upstream o delle transizioni. Componenti dell’editor e menu contestuali devono seguire evidenze centrali, senza inventare animazioni.
+1. Create Space: nome e Add folder con selezione esplicita della directory; elenco cartelle collegate e host visibile.
+2. Space aperto: radici distinte, albero cartelle/file, ricerca per nome; caricamento progressivo senza scansione ricorsiva dell’intero vault all’apertura.
+3. File testuale selezionato: percorso relativo, editor/source e preview Markdown quando pertinente, stato Modified/Saving/Saved/conflict.
+4. New file: scelta radice/percorso e creazione esplicita; risultato della ricerca salvabile come `.md` nella destinazione scelta.
+5. Specialista: Space attivo e cartelle accessibili visibili nel contesto; riferimenti puntuali ai file, non invio implicito dell’intero vault.
+6. Manage folders: aggiungi/scollega, riassocia una directory spostata; scollegare non elimina o sposta alcun file.
 
-| Componente | Anatomia e comportamento |
-|---|---|
-| Space row | Cartella, nome, espansione figli. Conteggio reale, empty state Create page. |
-| Documento | Breadcrumb/titolo, stato salvataggio, editor Markdown o vista ricca upstream con source accessibile, preview e azioni essenziali. Nessuna toolbar universale anticipata. |
-| Stato editor | Modified/Saving/Saved/error/conflict con revisione verificata. Non mostrare Saved prima dell’esito persistente. |
-| Review | Titolo card, destinazione autorizzata, titolo pagina, testo Markdown modificabile, Cancel e Save reviewed draft. Solo ricevuta confermata abilita Open page. |
-| Page conversation | Pannello apribile, specialista con accesso allo Space, riferimento pagina salvata. Disponibilità dipende da F02/runtime. |
+Uno Space può esistere prima del collegamento, ma finché non ha cartelle mostra Add folder: non creare contenuti fittizi. Nomi di radici uguali mantengono host/percorso distinguibili. Una root annidata o già collegata va riconosciuta per evitare duplicati e permessi involontariamente ampliati.
 
-## Token proposti e disclosure
+## Dominio e ownership dei dati
 
-Norma centrale prevalente. Proposta: documento max-width 760–900px, testo editor 15–16px/24px, Markdown source 13px/20px monospace, toolbar 40–48px, titolo 24px/32px, label 12px/18px, gap 12–24px. Review riusa superficie bianca/bordo 1px/raggio 12–16px; textarea almeno 240px, ridimensionabile. Non sono misure live Unsloth/Codex.
+Proposta tecnica da affinare: `Space`, `FolderBinding` (identità stabile, host, root scelta, stato di accesso), `WorkspaceFile` (folderId, percorso relativo, tipo, versione), `DocumentDraft` e `SaveReceipt`. Il nome visibile dello Space non è un percorso. Una cartella non equivale a profilo Hermes o sessione.
 
-Progressive disclosure: menu contiene azioni secondarie; source/preview espliciti, context chat apribile senza nascondere stato di salvataggio. Review non maschera il documento né impersona un runtime tool. Ridimensionamento/900px e zoom 200% devono mantenere Save/Cancel raggiungibili. Se un pannello interferisce, chiuderlo o convertirlo in superficie modale con focus trap corretto e ritorno focus.
+F10 possiede la risoluzione delle root, listing, lettura/scrittura e rilevamento cambiamenti. F03 possiede organizzazione Space, selezione cartelle, editor e revisione. Le azioni native attraversano un’interface limitata: nessun filesystem generico nel renderer. Definire il contratto comune prima di cambiare shared types/server/preload.
 
-Motion proposta 100–160ms su apertura review/menu, non ad ogni autosave. Reduced motion elimina traslazioni. Nessuno spinner che continua dopo errore e nessun badge Saved temporizzato senza risposta. Tastiera, Cmd+S, undo del testo e focus visibile; evitare scorciatoie che sovrascrivono la composizione IME.
+Per runtime remoto, distinguere root Mac e root host Hermes. Un path del Mac non diventa accessibile al server per essere inserito nel prompt. Se manca il mapping/autorizzazione mostrare Unavailable to agent; mount/sync/import remoto è un incremento esplicito, non requisito implicito di F03.
 
-## Dati e stato del documento
+## Salvataggio e modifiche esterne
 
-Pagina: ID stabile, Space ID, parent opzionale, titolo, contenuto, revision crescente, origine conversazione quando pertinente. Space non equivale a sessione Hermes; un Dot può lavorare in più Spaces.
+Le modifiche restano bozze finché la scrittura sul file non riesce. Verificare la versione letta prima di salvare; una modifica di Obsidian o di uno specialista produce conflitto, non overwrite silenzioso. La strategia concreta (hash/revisione, osservazione directory, scrittura atomica) va scelta in F10 e condivisa con l’editor.
 
-| Stato | Regola |
-|---|---|
-| Modifica locale | Conservare draft; indicazione Modified. |
-| Save/autosave in corso | Snapshot con expectedRevision; nuove modifiche restano dirty. |
-| Save riuscito | Ricevuta ID/revision e testo effettivamente salvato; solo allora Saved. |
-| Save fallito | Draft e errori visibili; nessun reset editor. |
-| Revisione concorrente | Non sovrascrivere. Mostrare conflitto e permettere confronto/ricarica o copia draft. |
-| Navigazione/close dirty | Tentare flush solo se previsto; se fallisce conservare e permettere scelta. Mai perdere testo per aprire altra chat. |
-| File/database illeggibile | Preservare archivio; niente inizializzazione sopra dati esistenti. |
+Refresh esterno non sostituisce una bozza dirty. Permission denied, volume scollegato, file rinominato o non disponibile conservano testo e collegamento. Su file binari/grandi mostrare un limite onesto invece di forzare l’editor. Preservare encoding e newline supportati; dichiarare formati esclusi. Cmd+S, ritorno focus, scroll, IME e Reduced Motion seguono component-system.
 
-Undo editor non annulla una scrittura remota; distingue recupero del testo da cancellazione pagina. Rimozione non fa parte della prima slice: progettare reversibilità e conferma concreta prima di aggiungerla.
+## Lavoro degli specialisti
 
-## Review e ricevuta
+F11/F02 forniscono connessione e conversazione; F04/F05 identità e collaborazione; F16 controlla l’ambito. Lo specialista riceve riferimenti e istruzioni pertinenti alle cartelle selezionate. Collegare uno Space non autorizza tutte le sessioni o tutti i bot alla lettura/scrittura. Il runtime usa i suoi tool file sugli stessi file raggiungibili; il client presenta risultati e revisioni confermati.
 
-L’utente sceglie Review response for Space in F02. Il contenuto è una copia modificabile dell’ultima risposta disponibile; non è ricerca verificata né prova che le fonti siano vere. Destinazioni limitate agli Spaces autorizzati per il Dot, con verifica backend. Nessuna scrittura all’apertura della card; titolo e testo revisionabili, incluso un contenuto troppo lungo che va accorciato prima del salvataggio.
+Prima dell’invio di un documento, salvare o scegliere esplicitamente come trattare la bozza. Lettura/versione/provenienza devono corrispondere al file effettivo; non usare un vecchio snapshot della pagina SQLite come contenuto corrente. Attività parallele sullo stesso file richiedono conflitto rilevabile e responsabilità tracciata.
 
-La baseline usa `/conversations/:threadId/reviewed-page` e un ID stabile `manual-review-UUID` per la ricevuta. Questo identificatore descrive una revisione manuale, non un toolCall eseguito. Verificare contratto attuale: titolo≤160 caratteri, contenuto≤20.000, Space valido. Prima di ripetere un Save incerto, controllare la ricevuta per lo stesso ID; non creare due pagine. Errore conserva draft; una risposta persa può aver già salvato, quindi non affermare “nothing saved” senza verifica. Ricevuta confermata mostra pagina, destinazione e revisione e abilita Open page. Review rifiutata non salva.
+## Revisione di un risultato
 
-## Separazione da memoria e runtime
+La review sceglie Space, cartella, percorso, nome file e comportamento se esiste. La card può modificare la bozza; nessuna scrittura all’apertura. Successo soltanto dopo ricevuta filesystem, con destinazione reale e versione. Dopo risposta persa verificare l’esito prima di ritentare e impedire file duplicati.
 
-Preferenze persistenti di contesto appartengono a [F15](F15-memory.md), non all’editor. Connessione/invio dipendono da F11; le approvazioni del runtime da F16. La review manuale di un documento non è un’approvazione di comando remoto.
+Baseline storica: `/conversations/:threadId/reviewed-page` salva una pagina metadata con receipt `manual-review-UUID`. Non è già un contratto di scrittura file. Va adattato nella slice review, preservando idempotenza e bozze; i limiti storici di titolo/contenuto non diventano automaticamente limiti del filesystem.
 
-Page chat usa solo l’ultima revisione persistente: prima di ogni send flush riuscito, GET pagina aggiornata e `{id,spaceId,revision}` verificati dal backend; errore blocca quell’invio, senza prompt retry. Il runtime inserisce contenuto salvato con limite e indicazione truncation; il client non finge lettura dell’intero documento.
+## Migrazione e compatibilità
 
-## Tastiera, copia, focus e microstati
+Le pagine già esistenti rimangono recuperabili come documenti legacy; nessuna cancellazione o esportazione massiva automatica. Per trasferirle nei folder proporre export esplicito, con destinazione, collisioni e ricevute verificabili. Non aggiungere `.obsidian`, `.git` o metadati Studio dentro un vault esistente senza scelta specifica. Link Markdown e struttura esistenti vanno preservati; non promettere tutte le semantiche Obsidian (plugin, embed, wikilink) dalla sola apertura dei `.md`.
 
-Applicare il contratto normativo nel component-system. Cmd+S salva lo snapshot corrente; focus rimane nel punto di scrittura. Menu e select aprono da tastiera, Escape chiude e restituisce focus al controllo di origine; un errore non sposta automaticamente il cursore altrove. Aprire review porta al titolo della card o primo campo, Cancel torna all’azione che l’ha aperta; durante Save i campi non si possono mutare in modo ambiguo.
+## Dipendenze e incremento
 
-Copy Markdown è opzionale nella slice: copia soltanto il documento visibile o la selezione indicata, senza dati nascosti di runtime. Mostrare Copied soltanto dopo clipboard.writeText riuscito; errore resta leggibile e offre selezione manuale, niente successo ottimistico. Stato idle/hover/focus-visible/disabled/busy/error/success definito nella norma centrale; disabled conserva nome e motivo, Saving non equivale a Saved.
+F01 shell; F10 contratto minimo read-only/cartelle e successivamente salvataggio; F16 scope. F11/F02 servono per il lavoro remoto, non per leggere documenti locali offline. F04/F05/F14 riguardano specialisti, non sono prerequisiti per collegare una cartella.
 
-## Baseline, dipendenze e ownership
+Prima slice: collega folder sintetico → tree → apri testo → riavvia e ritrova binding/file. Seconda: editing, conflitti esterni e review-to-file. Si può concordare F03/F10 come due chat con contratto condiviso; questa scheda non autorizza di implementarle entrambe automaticamente.
 
-Esistono componenti upstream PageDocument/editor, controller autosave e revisioni, SpaceWorkspace, PageConversation, PageReviewCard e SaveToSpaceReview; server metadata/page store separato. Smoke metadata/restart e fixture receipt sono evidenze del prototipo, non conclusione della nuova feature. Un vero research→document live non è provato dalle sole fixture.
+File di ingresso già esistenti: SpaceWorkspace, SpaceLibrary, SpaceNav, WorkspaceDialog, PageDocument/editor, page/store/routes e Electron main/preload. Il vecchio page store è compatibilità, non nuova fonte dei file.
 
-Prerequisiti: F01 e modello persistenza locale; F02 per review, F11 per page chat; F16 soltanto se la conversazione riceve approvazioni runtime. Ownership futura: SpaceWorkspace.tsx, PageDocument.tsx, editor/, SaveToSpaceReview.tsx e relativi test; PageConversation coordinato con F02. Page store/routes server richiedono ownership separata concordata; non modificare shared schema, ponte Hermes, shell o package incidentalmente. Preservare editor/assets/licenza upstream; prima leggere le prove e decidere quali parti mantenere.
+## Definition of done
 
-## Reversibilità e Definition of done
-
-Profilo sintetico vuoto distinto da dati personali; salvare snapshot compatibile prima di migrazioni. Export Markdown esplicito verso destinazione scelta, non scritture personali automatiche. Test di riavvio con nuova porta/origin dimostra persistenza su disco, non solo localStorage.
-
-Gate prima slice: crea Space/pagina, modifica source, autosave/Cmd+S, riapri e riavvia vera.app recuperando stessi byte/revisione; salvataggio fallito e conflitto preservano draft; tastiera/focus/900px/riduzione motion; zero chiamate runtime. Gate review: nessuna scrittura prima del click, titolo/content modificati effettivamente persistiti, accesso Space negato, response loss e receipt retry senza duplicati, Cancel non salva, Open page apre il risultato confermato. Documentare limiti; non chiamare editor universale la slice Markdown.
+Folder sintetico con `.md`, `.txt` e codice: link senza copia; due root distinguibili; lettura dei byte reali; aggiungi/scollega senza distruzione; root spostata/offline recuperabile; salvataggio e riavvio; modifica esterna preserva bozza; symlink/root escape e accesso negato testati tramite F10/F16. Nessun test sul Second Brain personale. Gate specialisti distinto: tool Hermes isolato legge/modifica un file nella root autorizzata, UI riflette il risultato; fuori root negato. Fixture non prova accesso runtime live.
 
 ## Prompt per una nuova chat
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa soltanto la slice scelta di F03 leggendo AGENTS.md, MEMORY/STATUS, GLOSSARY, component-system e questa spec. La prima slice è documenti locali e MVP vuoto; memoria è F15 e non va implementata qui; non aggiungere review/runtime insieme per inerzia. Ispeziona i componenti upstream e i test autosave prima di editarli, preserva provenienza e dati. Lavora nei file documento/editor concordati e coordina PageConversation/schema/server con i loro owner. Usa profilo sintetico, verifica fallimenti/revisioni/riavvio sulla vera.app e nessuna scrittura personale automatica. Per review richiedi azione esplicita e ricevuta idempotente, non un finto tool approval. Aggiorna documenti con prove e limiti; non riprendere il piano notturno globale.
+> Prima segui docs/agents/feature-workflow.md e File e skill della scheda. Implementa soltanto la slice selezionata di F03 aggiornata D25: Spaces collegati a cartelle reali, come vault/progetti. Definisci con F10 root/list/read/save e con F16 scope prima degli edit condivisi. Parti da folder sintetico read-only e persistenza del collegamento; contenuti autorevoli nel filesystem, pagine legacy preservate. Aggiungere/scollegare non copia né elimina file. Non scansionare vault personali o attivare specialisti/remote mapping automaticamente. Prova riavvio, errore e cambi esterni; aggiorna documenti e gate con prove.

@@ -31,15 +31,25 @@ Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflo
 Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
 <!-- feature-guidance:end -->
 
+## D25 — Filesystem condiviso con Spaces
+
+F03 ora collega una o più cartelle reali. F10 fornisce il module File workspace comune per root, listing, read/save, conflitti e provenienza; evitare un secondo store di testi che diverga dai file dello Space. Il pannello Files e l’editor Space usano la stessa risoluzione dei riferimenti. Metadata vecchi restano legacy/export esplicito.
+
+Il client può navigare cartelle locali scelte anche offline tramite operazioni native limitate; Hermes usa i propri tool file soltanto sulle root raggiungibili e autorizzate sul suo host. API native per l’utente e tool runtime per l’agente hanno stesso riferimento file e revisione, non due copie né un executor nuovo. Root Mac ≠ root server remoto; mancanza di mapping va resa visibile.
+
+Leases/grants sono per Space, folder e identità pertinente; i symlink non ampliano lo scope. Cambi esterni di Obsidian o specialisti aggiornano il tree senza sovrascrivere bozze. Scollegare una cartella rimuove il collegamento, non i dati. Nessun import/index/scan personale automatico. Testare più root, annidamenti, volume offline, rename, file grande/binario, conflitti e accesso fuori root con cartelle sintetiche.
+
+Leggere [ADR0007](../adr/0007-folder-backed-spaces.md) e [F03 aggiornata](F03-spaces-documents-memory.md) prima del contratto; coordinare shared types e main/preload/server con i loro owner.
+
 ## Risultato
 
 Pannello Files con albero/ricerca/preview e risultati prodotti da tool Hermes; aprire un Markdown o un documento nello Space senza confondere file del Mac, host Hermes e pagina Studio. Fonte tool registry Hermes: verificare read_file/write_file/search_files e contratti effettivi, nomi esatti da ricercare prima dell'implementation.
 
-File dell’host reale, sandbox root, symlink e ACL sono responsabilità del module File workspace; UI non esegue read/write locali generici. Se il runtime è remoto, mostra host e path remoti. Download/import verso Mac sono azioni esplicite con destinazione chiara. Nessuna scansione personale automatica.
+File dell’host reale, sandbox root, symlink e ACL sono responsabilità del module File workspace; UI usa operazioni native limitate per file dell’utente o tool Hermes per operazioni dell’agente; nessuna read/write generica dal renderer. Se il runtime è remoto, mostra host e path remoti. Download/import verso Mac sono azioni esplicite con destinazione chiara. Nessuna scansione personale automatica.
 
 ## Comportamento
 
-Root scelto → caricamento → albero vuoto/populato → preview → bozza → salvataggio/conflitto/errore. Evidenziare provenienza agent/run/tool e risultato confermato, non supposizione da testo. Modifica dirty resta recuperabile quando cambi file/pannello. Pagina Studio e file indipendenti: export/import con ricevuta, non sync bidirezionale implicita.
+Root scelto → caricamento → albero vuoto/populato → preview → bozza → salvataggio/conflitto/errore. Evidenziare provenienza agent/run/tool e risultato confermato, non supposizione da testo. Modifica dirty resta recuperabile quando cambi file/pannello. Documento dello Space è il file nella cartella collegata; le sole pagine metadata legacy richiedono export/import esplicito con ricevuta.
 
 ## Scope e seam
 
@@ -51,4 +61,4 @@ Uscita dal root, symlink, huge/binary files, stale revision, permesso negato, of
 
 ## Handoff
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F10, partendo da read-only Files sul host runtime autorizzato e root esplicito. Usa tools Hermes reali, non shell/file API generica dal renderer. Definisci module e prove path/symlink/conflitto. Non sviluppare terminale o browser; preserva dati personali.
+> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F10, partendo da una root esplicita read-only sul client locale oppure sull’host runtime autorizzato, secondo l’incremento selezionato. Per l’agente usa tool Hermes reali; per il client locale usa una interface nativa limitata alle root scelte. Condividi riferimenti e revisioni con F03, senza copie dei contenuti. Definisci module e prove path/symlink/conflitto. Non sviluppare terminale o browser; preserva dati personali.

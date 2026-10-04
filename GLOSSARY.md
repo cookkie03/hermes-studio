@@ -37,9 +37,12 @@ _Evitare_: revisione come sinonimo di autorizzazione.
 **Host**: macchina su cui gli agenti eseguono il lavoro. La sua disponibilità determina se gli incarichi possono avanzare quando il client è chiuso.
 
 
-**Space**: spazio che organizza documenti e risultati persistenti. Uno stesso agente può lavorare in più Space; uno Space non equivale a una conversazione.
+**Space**: contesto di progetto collegato a una o più cartelle reali, con documenti su file e conversazioni associate. Uno stesso agente può lavorare in più Space; scollegare una cartella non cancella i file.
 
-**Pagina**: documento modificabile conservato in uno Space, con cronologia di revisione distinta dal thread che lo ha prodotto.
+**Documento dello Space**: file modificabile in una cartella collegata, con origine e revisione distinte dalla chat che lo usa.
+_Evitare_: pagina interna come sinonimo di file reale.
+
+**Pagina legacy**: documento interno del prototipo conservato nei metadata; preservato, non convertito automaticamente in file.
 
 **Computer**: superficie per osservare gli strumenti e l’ambiente operativo di un agente. La disponibilità di browser, file, terminale e presa di controllo dipende dalle capacità reali del runtime.
 
@@ -52,3 +55,9 @@ _Evitare_: revisione come sinonimo di autorizzazione.
 **Plugin**: estensione installabile o configurabile che può rendere disponibili strumenti. Installazione, abilitazione e autorizzazione sono distinte.
 
 **Capacità**: operazione effettivamente supportata dal runtime collegato, entro il suo scope. La presenza di un controllo nell'interfaccia non la dimostra.
+
+**Memoria dello Space**: documento di progetto su file che conserva decisioni e stato verificato; distinto dai ricordi del profilo Hermes.
+
+**Profilo browser**: ambiente di navigazione persistente condiviso tra utente e controllo Hermes autorizzato, distinto dalla memoria del Dot.
+
+**Conversazione vocale**: scambio parlato in-app con un Dot; distinta da una telefonata a un numero.

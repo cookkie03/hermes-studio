@@ -34,6 +34,20 @@ Stato: **documented, not implemented** (2026-10-04). Questa specifica descrive u
 
 Leggere prima `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md` e `desktop/hermes/README.md`. UI OpenDots scelta dall’utente; Hermes resta l’unico executor. Gli endpoint Studio sotto descritti sono **proposte**, non API esistenti.
 
+## D26 — Avatar OpenDots selezionabile
+
+Richiesta confermata: nella finestra Create Dot e Edit Dot scegliere l’avatar desiderato e vedere un’anteprima. Incremento **F04-A**, locale e selezionabile indipendentemente dal binding Hermes F04-B; non richiede connessione, nuovo profilo o credenziali runtime.
+
+Evidenza sorgente Studio: `public/dots/` contiene quattro immagini OpenDots (`blue.png`, `mint.png`, `orange.png`, `purple.png`). Mascot.tsx sceglie oggi il personaggio dall’hash dell’identità; WorkspaceDialog non espone una scelta avatar. Non sono state trovate altre immagini avatar in questo snapshot. Usare il catalogo locale completo degli asset disponibili; icone di navigazione/favicon non sono automaticamente personaggi. Asset extra, upload o avatar generati sono futuri, non richiesti dalla prima slice.
+
+Form: griglia con quattro anteprime e nomi leggibili, selezione visibile anche senza colore, preview accanto a nome/ruolo. Salvataggio esplicito insieme ai dati del Dot; Cancel non persiste. In Edit caricare la scelta già salvata. Sidebar/header/chat/team riusano il medesimo avatar. Se immagine manca, fallback stabile e leggibile, mai cambio casuale a ogni render.
+
+Proposta dati: `avatarId` con allowlist e ID stabile, distinta da dotId, profilo Hermes e stato attività. Non accettare path/URL arbitrari come avatarId. I Dots esistenti senza campo conservano l’attuale personaggio deterministico finché l’utente non sceglie. Cambiare avatar non ricrea sessioni, non cambia ruolo/tool/permessi e non modifica `profiles.set_asset` del runtime implicitamente.
+
+Skill aggiuntive per F04-A: [frontend-design](../../.agents/skills/frontend-design/SKILL.md), [axiom-accessibility](../../.agents/skills/axiom-accessibility/SKILL.md) per tastiera/focus/etichette, React e UI-test già indicati sopra. Leggere [Mascot.tsx](../../desktop/upstream/src/client/Mascot.tsx), [WorkspaceDialog.tsx](../../desktop/upstream/src/client/WorkspaceDialog.tsx), [types.ts](../../desktop/upstream/src/shared/types.ts), [workspace.ts](../../desktop/upstream/src/server/workspace.ts), [workspace-routes.ts](../../desktop/upstream/src/server/workspace-routes.ts) e [PROVENANCE](../../desktop/upstream/PROVENANCE.md). Conservare licenza degli asset.
+
+Gate F04-A: ogni asset selezionabile; create/edit/save/reopen/restart persistono stessa scelta; Cancel e save fallito preservano identità precedente; fallback legacy e asset mancante; keyboard/radiogroup/focus; ID invalido rifiutato server-side. Nessuna chiamata Hermes necessaria. Il completamento di F04-A non completa F04-B.
+
 ## Obiettivo e casi d’uso
 
 Priorità utente: riconoscere bot persistenti, aprire la loro conversazione corretta e utilizzarli nei progetti. Distinguere un Dot locale con role guidance da un vero profilo Hermes; associare un Dot a un bot scelto esplicitamente; riconoscere omonimi su host diversi; ritrovare la Bot Chat dopo compressione o riavvio. Non confondere bot Hermes con bot Telegram o un processo sempre attivo.
@@ -52,7 +66,7 @@ Lista Dots con tipo visibile “Dot locale” o “Bot Hermes”, identità `{co
 
 ## Seam, ownership e dipendenze
 
-Prima implementare adapter read-only identità in nuovi `desktop/hermes/bots.mjs`, contratti `bots.test.mjs` e UI `BotBindingDialog.tsx`; modifiche concordate a bridge/server, shared types e WorkspaceDialog. Mapping Studio separato, versionato, `{dotId,connectionId,installId,profile,kind}`; non sovrascrivere config/profile Hermes. Dipende da F11 connessione/profile routing e da F01 chat; abilita F05/F06. Creazione/configurazione bot è incremento separato dopo roster e canonical resolver.
+Per F04-B implementare adapter read-only identità in nuovi `desktop/hermes/bots.mjs`, contratti `bots.test.mjs` e UI `BotBindingDialog.tsx`; modifiche concordate a bridge/server, shared types e WorkspaceDialog. Mapping Studio separato, versionato, `{dotId,connectionId,installId,profile,kind}`; non sovrascrivere config/profile Hermes. F04-B dipende da F11 connessione/profile routing e F02 conversazioni; F04-A avatar dipende solo dalla base locale e F01; abilita F05/F06. Creazione/configurazione bot è incremento separato dopo roster e canonical resolver.
 
 ## Privacy, migrazione e non-obiettivi
 
@@ -64,4 +78,4 @@ Fixture due host/profili omonimi: nessuna collisione; canonical hidden e lineage
 
 ## Prompt pronto per una nuova chat Codex
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F04 leggendo questa specifica e i documenti iniziali elencati. Parti da roster read-only e canonical chat resolver con fixture isolate. Preserva Dots locali e separa connection/install/profile dai session ID. Riuso dei contratti upstream apps/desktop, nessun prompt o clone credenziali automatico. Concorda ownership di bridge/server/client prima di modificare file. Completa test, migrazione reversibile, smoke dell’app e DoD; aggiorna STATUS/WORKLOG distinguendo sintesi, sorgente e prova live.
+> Prima segui docs/agents/feature-workflow.md e File e skill della scheda. Implementa solo l’incremento scelto: F04-A avatar locali oppure F04-B binding bot. Per F04-A usa tutti i quattro asset OpenDots disponibili, picker in Create/Edit Dot, avatarId validato e persistente, fallback legacy stabile e stessa resa ovunque. Preserva identità/sessioni/permessi e non configurare Hermes per un cambio estetico. Per F04-B segui roster/canonical resolver e prove isolate descritti sotto. Nessun altro incremento automatico; aggiorna gate e documenti.

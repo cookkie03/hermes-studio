@@ -35,3 +35,7 @@ Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. L
 <!-- feature-guidance:end -->
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Lavora soltanto F14 dopo verifica prerequisiti e codice fonte dell'integrazione scelta. Usa una repository test/worktree isolata e autorizzazione esplicita per comunicare con chat Codex. Consegna risultati verificati e limiti; non implementare Bots/routine/voice in questa chat.
+
+## Scope file aggiornato — D25
+
+Space collega cartelle reali F03/F10; specialisti ricevono solo root/file autorizzati e host raggiungibili. Nessuna copia/import del Second Brain o permesso implicito dall'associazione a un team. Revisione/salvataggio e conflitti condivisi con F10; update memoria Space F15 dopo risultati verificati, non diario duplicato nello store.

@@ -101,3 +101,7 @@ Slice locale: vuota al primo avvio, conversazione creabile, bozza ripristinata d
 ## Prompt per una nuova chat
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa soltanto la slice di F02 esplicitamente selezionata, leggendo AGENTS.md, MEMORY/STATUS, GLOSSARY, component-system e questa spec. Prima verifica se il prerequisito runtime è pronto; in caso contrario realizza soltanto conversazioni/bozze locali, senza simulare risposte. Riusa il prototipo dove utile e non riscrivere server o shell fuori ownership. Mantieni Pending, ack, Working e terminale distinti; niente auto retry o approvazioni automatiche. Usa profilo e gateway sintetici, salva le prove dei race test e della vera.app. PageConversation richiede flush e revisione salvata ad ogni invio. Aggiorna documentazione e consegna limiti verificati; non riprendere il piano notturno globale.
+
+## Contesto file, memoria e voce — D25–D29
+
+Contesto Space usa riferimenti a file e revisione/host autorizzati F03/F10, non solo pageId legacy. Memoria Space e snapshot Hermes distinti F15. Un attachment non concede accesso all'intero folder. F13 possiede mic/playback; F02 conserva transcript e identità turno, distinguendo bozza dettata, invio e risposta. Risultati tardivi audio/browser non vengono associati a un Dot nuovo; nessun retry di prompt incerto.

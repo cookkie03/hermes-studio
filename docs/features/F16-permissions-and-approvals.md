@@ -52,3 +52,7 @@ Pending/cancel/stale/disconnect/reconnect/thread in background, doppio clic e ri
 ## Handoff
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Sviluppa esclusivamente F16. Verifica il contratto Hermes della versione corrente, parti dalle fixture esistenti e definisci gli invarianti del decision module. Non aggiungere auto-approve né plugin/browser/computer nuovi. Prova richieste annullate e routing tra conversazioni possedute; aggiorna docs e limiti.
+
+## Ambiti aggiuntivi D25–D29
+
+Grant folder dello Space esplicito per root/host/operazioni, distinto da selezione/membership; unlink preserva dati. Browser profilo e lease condiviso F08, Take over/revoke/resume distinti senza fallback nascosto. Memoria profilo e file Space F15 hanno writer/gates propri; pending non è applied. Voce F13 richiede microfono, routing provider e retention chiari; consenso a vocal chat non autorizza chiamate telefoniche o azioni sensibili senza revisione.

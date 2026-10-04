@@ -17,3 +17,7 @@ L'utente sceglie una feature per chat; ogni chat conosce ambito, dipendenze, fon
 ## Percorso
 
 Leggere docs/project/feature-development-plan.md, STATUS, MEMORY, GLOSSARY, ADR0006 e la scheda selezionata. Nessun refactor globale: candidate review prima, approfondimento di un module solo quando pertinente. Nuove release e chiamate telefoniche richiedono una chat esplicitamente dedicata.
+
+## Revisione D25–D29 dopo F00
+
+F00 completata; implementazione nuove feature ancora non selezionata. Spaces ora folder-backed F03/F10 (ADR0007), avatar scegliibili F04-A, browser unico persistente condiviso utente/Hermes F08, memoria profilo e Markdown Space F15, vocali e vocal chat in-app F13. Telefonate future separate. Fonti memoria ufficiali e confronto sorgente in docs/research/hermes-memory-system.md. Specifiche implementative definitive da delimitare nella singola chat; nessuna migrazione automatica.

@@ -156,3 +156,17 @@ Luca richiede risultato della scheda F00: review del codice, build/test, correzi
 MVP essenziale consolidato: contratti Metadata disaccoppiati da Platform, strict typecheck/build senza --noCheck; cold resume non invia su lavoro attivo/incerto; offline autentico e navigazione annullata preservata. Review Standards (1 finding corretto) e Spec (2 corretti), nessun blocco essenziale residuo. npm test PASS:18 fixture,55 test, typecheck e bootstrap/link. .app arm64 rifatta e smoke finale PASS, firma ad hoc/deep verification; storage failure/conflict/restart e focus/reduced motion/900px verificati con dati sintetici. Baseline SwiftUI storica build e 27 gruppi/check sintetici PASS. Template executor legacy incompatibile e non distribuito; nessun prompt personale, nuova feature o release. Evidenze: docs/architecture/f00-review-2026-10-04.md. Commit locale della baseline tramite index selezionato e scan credenziali, preservando MIT/provenienza.
 
 D24 — Richiesta utente: includere nelle schede skill e file da leggere per sviluppare ciascuna feature, usando ask-matt e includendo progetto/globali. Implementata documentazione: workflow comune docs/agents/feature-workflow.md, sezioni in F00–F17 e catalogo completo docs/agents/skills-catalog.md. Inventario: 39 percorsi progetto, 43 Agents globali, 32 Codex globali, 198 cache plugin e 255 runtime Hermes; 567 percorsi, 469 file risolti distinti. File/cache presenti non equivalgono a skill applicate o tool disponibili; caricare solo ciò che serve alla feature. Nessuna nuova feature o installazione autorizzata da questa richiesta documentale.
+
+## Requisiti aggiornati dopo prova F00 — D25–D29
+
+D25: Spaces collegano una o più cartelle reali (progetti/vault), con file testo/Markdown visibili e specialisti entro scope. Filesystem autoritativo, metadata binding/draft separati; nessuna importazione o migrazione automatica. F03/F10 e ADR0007; pagine legacy preservate.
+
+D26: Create/Edit Dot permette selezione avatar OpenDots. Quattro asset PNG blue/mint/orange/purple verificati nel codice; F04-A locale indipendente da F04-B bot/profilo runtime.
+
+D27: Browser integrato visibile controllato dai tool Hermes, utilizzabile dall'utente sulla stessa pagina/profilo, cookie/storage/history persistenti e takeover. Nessun browser o tool ecosystem parallelo. F08 e ricerca browser distinguono callback desktop, controller browser_* e CDP; trasporto da provare, non scelto né implementato.
+
+D28: memoria Markdown per Space, identità SOUL del profilo, ricordi Hermes e cronologia distinti. Prospetto completo docs/research/hermes-memory-system.md con fonte ufficiale https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/ anche in F15. Review e curator diversi; ricordo totale non garantito. Fonte pubblica SHA e1e82d782f353766c7a22db6e5ac4fa58bbff325, diversa dal precedente pin. Nessun profilo personale letto.
+
+D29: aggiungere messaggi vocali/dettatura, TTS e conversazione vocale in-app alla scheda F13, riusando capacità Hermes. Telefonate PSTN/SIP ancora future, nessuna attivazione mic/provider/runtime.
+
+Questa revisione è documentale; prossime chat scelgono singoli incrementi. Fork annullato, repository indipendente; nessuna ripresa notturna o nuova implementazione automatica.

@@ -21,3 +21,7 @@ La screenshot è riferimento prioritario anche se l'HEAD attuale OpenDots differ
 Obiettivo confermato: app desktop macOS, DMG e release. SwiftUI rewrite è una possibilità, non requisito rigido: scegliere il modo che conserva meglio l'esperienza mostrata. Valutazione corrente: riusare frontend OpenDots e pacchettizzare desktop, adattando il runtime a Hermes. Nessun obbligo di npm run dev per l'utente finale. Conservare precedente lavoro SwiftUI e trasporto come baseline, non eliminarlo.
 
 Repository indipendente: proposta fork e aggiornamenti upstream annullata (D21). Preservare licenza MIT e provenienza del codice riutilizzato. Nessuna telefonata o credenziale voice da configurare in questa milestone.
+
+## Requisiti funzionali aggiornati D25–D29
+
+Layout screenshot resta autorevole, con semantica aggiornata: Spaces collegano cartelle e file reali F03/F10; Create/Edit Dot include scelta fra avatar OpenDots disponibili F04-A; Browser è pagina/profilo visibile condiviso con Hermes F08; Memory distingue profilo Hermes, Markdown Space e legacy Studio F15. Voce in-app e vocali F13 separati dalla telefonata futura: azione Start voice non simula Call disponibile. Componenti/stati restano gated dalla feature effettivamente implementata.

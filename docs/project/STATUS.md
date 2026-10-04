@@ -27,7 +27,7 @@ Prove precedenti: 27 test documenti upstream, 14 fixture renderer e typecheck de
 
 MEMORY e WORKLOG conservano decisioni e prove. Automazione riallineata al lavoro documentale e sospesa alla consegna (stato PAUSED confermato dal tool): nessuna ripresa automatica di nuove feature. Git origin verificato: git@github.com:cookkie03/hermes-studio.git. Modifiche del precedente incremento sono preservate; un commit documentale non equivale alla consegna di tutto il codice o di una release.
 
-Prossimo passo consigliato (non selezionato): F00, perché desktop/ e fixture del precedente incremento risultano ancora non versionati; prima review e commit della baseline verificata, poi chat feature dedicate.
+Indicazione storica prima della consegna F00: consolidare la baseline. Superata dalla consegna F00 sotto; scegliere ora una feature dal catalogo aggiornato.
 
 ## F00 selezionata — 2026-10-04
 
@@ -38,3 +38,9 @@ Luca richiede risultato della scheda F00: review del codice, build/test, correzi
 Review Standards/Spec conclusa: cold resume attivo/incerto, offline iniziale e navigazione annullata corretti. npm test PASS (18 fixture +55 test, due typecheck e bootstrap/link); package:dir e smoke .app PASS su userData sintetico, inclusi persistenza al riavvio, errore salvataggio, conflitto, focus visibile, 900px e Reduced Motion. Baseline SwiftUI conservata: build e runner sintetici PASS. [Review ed evidenze](../architecture/f00-review-2026-10-04.md). Commit locale della baseline; nessuna pubblicazione release. Le feature successive richiedono selezione utente.
 
 Aggiornamento D24: 18 schede corredate di skill principali/condizionali e file da leggere, workflow ask-matt comune e inventario completo delle raccolte. Inventario di percorsi leggibili, non certificazione dei tool attivi; implementazione ancora sospesa.
+
+## Revisione dopo prova utente F00 — D25–D29
+
+Aggiornate specifiche, non codice: Space-folder/file reali F03/F10; picker avatar F04-A; browser integrato stesso profilo/pagina F08; memoria Hermes/Markdown Space F15; messaggi vocali e vocal chat F13. SOUL, MEMORY/USER, cronologia, review e curator analizzati nel prospetto ufficiale con link e sorgente fissato e1e82d7. Gate reali di queste feature ancora aperti. Nessun profilo/vault personale letto, mic/runtime avviato o provider installato. Schede e prompt pronti per selezione in chat dedicate; telefonate future.
+
+Validazione D25–D29:212 link locali e18 guidance/handoff PASS; diff whitespace pulito. Nessuna build richiesta per modifiche soltanto documentali.

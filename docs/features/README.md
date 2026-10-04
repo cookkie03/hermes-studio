@@ -11,23 +11,23 @@ L'app resta una repository indipendente. Il codice MIT OpenDots già riusato con
 | F00 | [MVP e qualità della base](F00-mvp-foundation.md) | nessuna | completata; baseline verificata, limiti dichiarati |
 | F01 | [Shell, sidebar e componenti](F01-workspace-shell.md) | F00 | documentata; UI esistente parziale |
 | F02 | [Conversazioni](F02-conversations.md) | F00, F11 | documentata; bridge parziale |
-| F03 | [Spaces e documenti](F03-spaces-documents-memory.md) | F00, F01 | documentata; metadata verificati parzialmente |
-| F04 | [Bots e identità Dots](F04-bots-and-identities.md) | F11 | documentata, da scegliere |
+| F03 | [Spaces su cartelle e documenti](F03-spaces-documents-memory.md) | F00, F01, F10 per folder | documentata; metadata legacy parziali, folder non implementati |
+| F04 | [Bots e identità Dots](F04-bots-and-identities.md) | F00/F01 per avatar; F11 per bot runtime | documentata, da scegliere |
 | F05 | [Delegazione e collaborazione tra Dots](F05-delegation-and-dot-collaboration.md) | F04, F02, F16 | documentata, da scegliere |
 | F06 | [Routine](F06-routines.md) | F11, F16; F04 se destinatario Bot | priorità prodotto, da scegliere |
 | F07 | [Plugin e capability](F07-plugins-and-capabilities.md) | F11, F16 | documentata, da scegliere |
 | F08 | [Browser integrato](F08-browser.md) | F11, F16 | documentata; nessuno stream/takeover attuale |
 | F09 | [Computer use](F09-computer-use.md) | F11, F16 | documentata, da scegliere |
-| F10 | [File e artefatti](F10-files-and-artifacts.md) | F11, F16 | documentata; UI futura |
+| F10 | [File e artefatti](F10-files-and-artifacts.md) | F00 per file locali; F11/F16 per tool agente | documentata; UI futura |
 | F11 | [Connessione al runtime](F11-runtime-connection.md) | F00 | attach locale parziale; altre modalità da scegliere |
 | F12 | [Software GitHub e release DMG](F12-github-releases-dmg.md) | F00; versione selezionata delle altre feature | documentata; DMG locale di sviluppo esistente |
-| F13 | [Voce e telefonate](F13-voice-and-calls.md) | F11, F16 | futura, solo documentazione |
+| F13 | [Vocali e conversazione vocale](F13-voice-and-calls.md) | F02/F11 per conversazione; F16 | documentata in-app; telefonate future |
 | F14 | [Specialisti Codex](F14-codex-specialists.md) | F05, F16 | futura, solo documentazione |
-| F15 | [Memoria](F15-memory.md) | F11 per memoria runtime | documentata; memoria Studio già parziale |
+| F15 | [Memoria Hermes e Markdown Space](F15-memory.md) | F03/F10 per file Space; F11/F04 per runtime | documentata; memoria Studio legacy parziale |
 | F16 | [Permessi e approvazioni](F16-permissions-and-approvals.md) | F11 | contratto parziale; fixture disponibili |
 | F17 | [Terminale](F17-terminal.md) | F11, F16 | documentata; preview eventi parziale |
 
-L'ordine numerico identifica le schede, non impone l'ordine di sviluppo. Percorso consigliato: F00 → F11/F01 → F02/F03 → F16 → una feature avanzata scelta dall'utente. F06 è importante ma non deve aggirare i prerequisiti su esecuzioni durevoli e autorizzazioni. F12 può distribuire il solo MVP, indicando onestamente le capacità incluse.
+L'ordine numerico identifica le schede, non impone l'ordine di sviluppo. Percorso consigliato: F00 (completata) → F01/F10/F03 per cartelle oppure F11/F02 per chat → F16 → una feature avanzata scelta dall'utente. F06 è importante ma non deve aggirare i prerequisiti su esecuzioni durevoli e autorizzazioni. F12 può distribuire il solo MVP, indicando onestamente le capacità incluse.
 
 ## Letture e skill
 
