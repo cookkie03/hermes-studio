@@ -265,4 +265,8 @@ Registro versionato host/thread, bridge separati, REST/SSE scoped e OpenSSH di s
 
 ## 2026-10-04 — F1 consegna verificata
 
-Package finale arm64/firma ad hoc, smoke offline e smoke connessioni con attach Mac reale PASS; zero errori renderer. Verificati host per due chat, password/fingerprint UI, tastiera, 900/1360px, Reduced Motion, backend sano dopo quit. Suite finale 35 Node + 55 metadata PASS, review Standards/Spec 0 findings aperti. Ticket F1 done per incremento connector selezionato; Minisforum/Linux reale, 24h, turni F2 e routine F10 restano prove distinte non dichiarate. Ricevuta: docs/architecture/f1-review-2026-10-04.md. Commit locale in preparazione; nessun push ritentato dopo precedente rifiuto auto-review. Modifiche documentali D35/D36 concorrenti preservate.
+Package finale arm64/firma ad hoc, smoke offline e smoke connessioni con attach Mac reale PASS; zero errori renderer. Verificati host per due chat, password/fingerprint UI, tastiera, 900/1360px, Reduced Motion, backend sano dopo quit. Suite finale 35 Node + 55 metadata PASS, review Standards/Spec 0 findings aperti. Ticket F1 done per incremento connector selezionato; Minisforum/Linux reale, 24h, turni F2 e routine F10 restano prove distinte non dichiarate. Ricevuta: docs/architecture/f1-review-2026-10-04.md. Commit codice locale 71a5d6a creato; nessun push ritentato dopo precedente rifiuto auto-review. Modifiche documentali D35/D36 concorrenti preservate.
+
+## 2026-10-04 — Git F1
+
+Commit codice locale `71a5d6a` creato: 37 file, solo incremento F1 e persistenza propria. Index controllato: diff-check, 69 link locali e scan pattern credenziali PASS. Modifiche concorrenti D35/D36 escluse dal commit e preservate nel workspace. Nessun push ritentato dopo il precedente rifiuto auto-review della pubblicazione esterna.

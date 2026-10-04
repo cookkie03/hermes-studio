@@ -1,6 +1,6 @@
 # Piano corrente: una feature per chat
 
-Consolidato 2026-10-04. D20/ADR0006: sviluppo globale sospeso; F0 completata. Attività corrente: rinumerazione D31. La sequenza F1–F18 segue l’ordine concordato; F1 è il prossimo incremento consigliato, da selezionare in chat dedicata. [Catalogo](../features/README.md) seleziona le schede, [STATUS](STATUS.md) riporta gate/esiti, [decisioni](decisions.md) preserva la direzione.
+Consolidato 2026-10-04. D20/ADR0006: sviluppo globale sospeso; F0 completata. Rinumerazione D31 consolidata. F1 connessioni locale/SSH implementata e verificata nella chat selezionata; prove e limiti nel STATUS. La sequenza F2–F18 segue l’ordine concordato; ulteriori incrementi richiedono selezione utente in una chat dedicata. [Catalogo](../features/README.md) seleziona le schede, [STATUS](STATUS.md) riporta gate/esiti, [decisioni](decisions.md) preserva la direzione.
 
 ## Percorso della prossima chat
 

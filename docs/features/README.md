@@ -1,6 +1,6 @@
 # Hermes Studio — una integrazione frontend per chat
 
-2026-10-04. F0 completata; F1 selezionata, scelte di prodotto confermate e spec/piano tecnico proposti. Non implementare automaticamente le schede. La baseline esistente è parziale; `documentata` non significa `implementata` o `verificata`.
+2026-10-04. F0 completata; F1 incremento connessioni locale/SSH implementato e verificato: suite, packaged e attach reale Mac PASS; deployment Minisforum/Linux e durata24h non provati. Non implementare automaticamente le schede. La baseline esistente è parziale; `documentata` non significa `implementata` o `verificata`.
 
 Le Fxx sono **moduli di lavoro sulla GUI e sui collegamenti Studio**, non un catalogo di nuove feature da creare in Hermes. Cron/routine, Bots, progetti, memoria, approvazioni, skill/tool, terminale e Computer Use restano native del backend. Studio ne adatta presentazione e interazioni in stile OpenDots. Connessioni/multi-host, design client e packaging hanno responsabilità frontend esplicite e non creano un runtime concorrente.
 
@@ -15,7 +15,7 @@ Capacità e memoria native rimangono nel runtime: Studio deve presentarle con or
 | ID | Scheda da scegliere | Dipendenze principali | Stato |
 |---|---|---|---|
 | F0 | [Baseline MVP e manutenzione](F0-mvp-foundation.md) | nessuna | completata; baseline verificata, limiti dichiarati |
-| F1 | [Connessioni e host del runtime Hermes](F1-runtime-connection.md) | F0 | selezionata D32/D33; locale/SSH e autonomia, spec/piano proposti |
+| F1 | [Connessioni e host del runtime Hermes](F1-runtime-connection.md) | F0 | implementata D32/D33; locale reale, SSH/lifecycle fixture e GUI PASS; limiti nella scheda |
 | F2 | [Chat e presentazione degli eventi Hermes](F2-conversations.md) | F0, F1 | documentata; bridge parziale |
 | F3 | [GUI delle approvazioni e dei permessi Hermes](F3-permissions-and-approvals.md) | F1 | contratto parziale; fixture disponibili |
 | F4 | [Shell, navigazione e componenti di Hermes Studio](F4-workspace-shell.md) | F0 | documentata; UI esistente parziale |
