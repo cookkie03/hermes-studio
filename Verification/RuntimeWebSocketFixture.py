@@ -31,6 +31,8 @@ class Handler(BaseHTTPRequestHandler):
         route = urlparse(self.path)
         if route.path == '/api/health':
             self.respond(json.dumps({'ok': True, 'auth_required': False}))
+        elif route.path == '/fixture/decisions' and self.server.conversations:
+            self.respond(json.dumps(self.server.decisions))
         elif route.path == '/':
             self.respond('window.__HERMES_SESSION_TOKEN__=' + json.dumps(TOKEN) + ';', 'text/html')
         elif route.path == '/api/ws' and parse_qs(route.query).get('token') == [TOKEN]:
@@ -47,12 +49,17 @@ class Handler(BaseHTTPRequestHandler):
             self.send_error(404)
 
     def do_POST(self):
-        if not self.server.conversations or urlparse(self.path).path != '/fixture/review':
+        if not self.server.conversations or urlparse(self.path).path not in ('/fixture/review', '/fixture/approval', '/fixture/cancel'):
             self.send_error(404)
             return
         params = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))))
         state = self.server.sessions[params['session_id']]
-        state['emit']('review.summary', {'text': 'Synthetic review while reading older messages.'})
+        if urlparse(self.path).path == '/fixture/approval':
+            state['send']({'jsonrpc': '2.0', 'id': params['id'], 'method': 'approval', 'params': {'session_id': params['session_id'], 'request_id': 'queue-' + params['id'], 'choices': ['once', 'deny'], 'command': 'synthetic-read fixture.txt', 'description': 'Synthetic F3 request'}})
+        elif urlparse(self.path).path == '/fixture/cancel':
+            state['send']({'jsonrpc': '2.0', 'method': 'event', 'params': {'type': 'request.cancel', 'session_id': params['session_id'], 'payload': {'id': params['id'], 'method': 'approval', 'reason': params.get('reason', 'timeout')}}})
+        else:
+            state['emit']('review.summary', {'text': 'Synthetic review while reading older messages.'})
         self.respond(json.dumps({'ok': True}))
 
     def ws(self):
@@ -149,10 +156,13 @@ class Handler(BaseHTTPRequestHandler):
                     continue
                 request = json.loads(payload)
                 method, request_id = request.get('method'), request.get('id')
-                if self.server.conversations and method in ('session.create', 'session.resume'):
+                if self.server.conversations and method is None and 'result' in request:
+                    self.server.decisions.append({'id': request_id, 'result': request['result']})
+                elif self.server.conversations and method in ('session.create', 'session.resume'):
                     params = request.get('params', {})
                     session_id = params.get('session_id') or 'fixture-' + params['idempotency_key']
                     self.server.sessions.setdefault(session_id, {'running': False, 'messages': [], 'events': []})
+                    self.server.sessions[session_id]['send'] = send
                     result(request_id, snapshot(session_id))
                 elif self.server.conversations and method == 'session.events.since':
                     params = request.get('params', {})
@@ -200,6 +210,7 @@ if __name__ == '__main__':
     server = ThreadingHTTPServer(('127.0.0.1', args.port), Handler)
     server.conversations = args.conversations
     server.sessions = {}
+    server.decisions = []
     server.event_lock = threading.RLock()
     print(server.server_address[1], flush=True)
     server.serve_forever()

@@ -86,9 +86,11 @@ test("two hosts with equal runtime IDs keep conversations, events and approvals 
         params: { session_id: "same-runtime-id", choices: ["deny"] },
       });
     assert.equal(manager.requests.size, 2);
+    await manager.registerHandler({ handlerId: "remote-view", threadId: "b", active: true });
     manager.approval({
       threadId: "b",
       requestId: "same-request",
+      decisionId: [...manager.requests.values()].find(item => item.threadId === "b").decisionId,
       result: { choice: "deny" },
     });
     assert.equal(runtimes.get("local").replies.length, 0);

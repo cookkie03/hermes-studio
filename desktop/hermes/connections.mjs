@@ -531,13 +531,13 @@ export class RuntimeConnections extends EventEmitter {
     this.handlerHosts.set(data.handlerId, id);
     return this.slots.get(id).bridge.registerHandler(data);
   }
-  approval({ threadId, requestId, result }) {
+  approval({ threadId, requestId, decisionId, result }) {
     this.requireThread(threadId);
     const b = this.forThread(threadId),
       request = b.requests.get(JSON.stringify(requestId));
-    if (request?.threadId !== threadId)
+    if (request?.threadId !== threadId || typeof decisionId !== "string" || request.decisionId !== decisionId)
       throw new Error("This decision does not belong to this conversation.");
-    return b.approval(requestId, result);
+    return b.approval(requestId, result, decisionId);
   }
   get requests() {
     return new Map(

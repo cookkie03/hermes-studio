@@ -85,3 +85,7 @@ Le richieste di approvazione/validazione delle operazioni rischiose presenti in 
 ## Handoff
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Sviluppa esclusivamente F3. Verifica il contratto Hermes della versione corrente, parti dalle fixture esistenti e definisci gli invarianti del decision module. Non aggiungere auto-approve né plugin/browser/computer nuovi. Prova richieste annullate e routing tra conversazioni possedute; aggiorna docs e limiti. Segui anche Incarico per la chat implementatrice di F3: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+
+## Incremento 2026-10-05 — decision identity e lifecycle
+
+Implementato e verificato l’incremento decisionId scoped, enum nativo, lease al dispatch e card con invio/cancel/timeout/incertezza. Prove sintetiche packaged e limiti nella [ricevuta F3](../architecture/f3-approval-review-2026-10-05.md). F3 complessiva resta parziale: runtime reale isolato, grants specifici, approvazione proposte memoria e accessibilità completa ancora aperti.

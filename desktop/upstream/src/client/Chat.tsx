@@ -6,14 +6,14 @@ import { api, authHeaders } from './api';
 import { Mascot } from './Mascot';
 import { ChatTranscript } from './ChatTranscript';
 import { SaveToSpaceReview } from './SaveToSpaceReview';
-import { appendAssistant, delivery, pendingMessage, remainingDraft, mergeHistory, projectedText, afterDispatchResponse, removeApproval, restoreDraft, mergeToolEvent, type ToolActivity, type TurnPhase, type TextMessage } from './hermes-display';
+import { appendAssistant, delivery, pendingMessage, remainingDraft, mergeHistory, projectedText, afterDispatchResponse, restoreDraft, mergeToolEvent, type ToolActivity, type TurnPhase, type TextMessage } from './hermes-display';
 
 import type { RuntimeStatus } from './runtime-connections';
 import { ConversationHost } from './ConversationHost';
 import { ConversationSubmission } from './conversation-submission';
 import { NativeReviewNotes, mergeReviewNotes, type NativeReviewNote, type ReviewReplay } from './NativeReviewNotes';
 import { ConversationContext, type NativeSessionInfo, type StudioConversationContext } from './ConversationContext';
-interface Approval { requestId: unknown; params: { command?: string; description?: string; choices?: string[] } }
+interface Approval { requestId: unknown; decisionId: string; state?: 'sending' | 'sent' | 'cancelled' | 'expired' | 'uncertain'; choice?: string; params: { command?: string; description?: string; choices?: string[] } }
 const textOf = (value: unknown) => typeof value === 'string' ? value : '';
 const draftWrites = new Map<string, Promise<unknown>>();
 function persistDraft(threadId: string, draft: string) {
@@ -64,6 +64,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   const [tools, setTools] = useState<ToolActivity[]>([]);
   const [approvals, setApprovals] = useState<Approval[]>([]);
   const [decisionPending, setDecisionPending] = useState(false);
+  const decisionLock = useRef(false);
   const [backgroundApproval, setBackgroundApproval] = useState<string>();
   const assistantId = useRef<string | undefined>(undefined);
   const timeline = useRef<HTMLDivElement>(null);
@@ -137,6 +138,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
       if (frame.type === 'session-context') setSessionInfo(frame.info as NativeSessionInfo | undefined);
       if (frame.type === 'persistence-error') setError(textOf(frame.message) || 'Runtime activity could not be saved to disk.');
       if (frame.type === 'connection' && frame.connected === false) {
+        setApprovals([]);
         setReviewReplay({ state: 'offline', message: 'Saved review notes are available. Notes emitted while disconnected have not been verified.' });
         sendAllowed.current = false; setUncertain(true); setStatus(previous => ({ ...previous, connected: false }));
       }
@@ -155,10 +157,10 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
         const id = typeof frame.clientSubmissionId === 'string' ? frame.clientSubmissionId : submittedId.current;
         if (id) setMessages((previous) => delivery(previous, id, 'acknowledged'));
       }
-      if (frame.type === 'request-resolved' || frame.type === 'cancel') setApprovals((previous) => removeApproval(previous, frame.requestId));
+      if (frame.type === 'request-resolved' || frame.type === 'cancel') setApprovals(previous => previous.map(a => a.decisionId === frame.decisionId ? { ...a, state: frame.type === 'request-resolved' ? 'sent' : (frame.params as { reason?: string })?.reason === 'timeout' ? 'expired' : 'cancelled' } : a));
       if (frame.type === 'request' && frame.method === 'approval') {
-        setApprovals((previous) => previous.some((a) => a.requestId === frame.requestId) ? previous :
-          [...previous, { requestId: frame.requestId, params: (frame.params ?? {}) as Approval['params'] }]);
+        setApprovals((previous) => previous.some((a) => a.decisionId === frame.decisionId) ? previous :
+          [...previous, { requestId: frame.requestId, decisionId: String(frame.decisionId ?? ''), params: (frame.params ?? {}) as Approval['params'] }]);
       }
       if (frame.type !== 'runtime') return;
       window.dispatchEvent(new CustomEvent('hermes-runtime-event', { detail: { dotId: dot.id, threadId: thread.id, connectionId: frame.connectionId, event: frame.event } }));
@@ -205,9 +207,11 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
           if (buffer.length > 2_000_000) throw new Error('Hermes event exceeds the display limit.');
         }
       } catch (cause) {
-        if (!controller.signal.aborted) { sendAllowed.current = false; setStreamConnected(false); setStatus((previous) => ({ ...previous, connected: false })); setReviewReplay({ state: 'offline', message: 'Saved review notes are available. Notes emitted while disconnected have not been verified.' }); setUncertain(true); setError(cause instanceof Error ? cause.message : 'Connection interrupted. The runtime may still be working.'); }
+        if (!controller.signal.aborted) { sendAllowed.current = false; setStreamConnected(false); setStatus((previous) => ({ ...previous, connected: false })); setApprovals([]);
+        setReviewReplay({ state: 'offline', message: 'Saved review notes are available. Notes emitted while disconnected have not been verified.' }); setUncertain(true); setError(cause instanceof Error ? cause.message : 'Connection interrupted. The runtime may still be working.'); }
       }
-      if (!controller.signal.aborted) { sendAllowed.current = false; setStreamConnected(false); setUncertain(true); setReviewReplay({ state: 'offline', message: 'Saved review notes are available. Notes emitted while disconnected have not been verified.' }); }
+      if (!controller.signal.aborted) { sendAllowed.current = false; setStreamConnected(false); setUncertain(true); setApprovals([]);
+        setReviewReplay({ state: 'offline', message: 'Saved review notes are available. Notes emitted while disconnected have not been verified.' }); }
       if (!controller.signal.aborted) timer = setTimeout(() => void stream(), 3000);
     };
     void stream();
@@ -275,12 +279,14 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
     catch (cause) { setError(cause instanceof Error ? cause.message : 'Could not connect Hermes.'); }
   };
   const decide = async (approval: Approval, choice: string) => {
-    setDecisionPending(true);
+    if (decisionLock.current || !status.connected || !streamConnected) return;
+    decisionLock.current = true; setDecisionPending(true);
+    setApprovals(previous => previous.map(a => a === approval ? { ...a, state: 'sending', choice } : a));
     try {
-      await api('/hermes/approval', 'POST', { threadId: thread.id, requestId: approval.requestId, result: { choice } });
-      setApprovals((previous) => previous.filter((a) => a !== approval));
-    } catch (cause) { setError(cause instanceof Error ? cause.message : 'Decision was not delivered.'); }
-    finally { setDecisionPending(false); }
+      await api('/hermes/approval', 'POST', { threadId: thread.id, requestId: approval.requestId, decisionId: approval.decisionId, result: { choice } });
+      setApprovals(previous => previous.map(a => a.decisionId === approval.decisionId && a.state === 'sending' ? { ...a, state: 'sent' } : a));
+    } catch (cause) { setApprovals(previous => previous.map(a => a.decisionId === approval.decisionId && a.state === 'sending' ? { ...a, state: 'uncertain' } : a)); setError(cause instanceof Error ? cause.message : 'Decision delivery is uncertain. Reconnect to inspect the runtime request.'); }
+    finally { decisionLock.current = false; setDecisionPending(false); }
   };
   return <div className="live-chat hermes-chat">
     <header className="chat-persona">
@@ -315,10 +321,12 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
         {tool.result != null && <pre>{(typeof tool.result === 'string' ? tool.result : JSON.stringify(tool.result, null, 2))?.slice(0, 12000)}</pre>}
       </section>)}
       {reviewContent !== undefined && <SaveToSpaceReview threadId={thread.id} dot={dot} initialContent={reviewContent} initialTitle={thread.title || 'Research draft'} onSaved={onSaved} onClose={() => setReviewContent(undefined)} />}
-      {approvals.map((approval, index) => <section className="hermes-approval" key={index}>
-        <header><strong>Review before continuing</strong></header><p>{approval.params.description || approval.params.command || 'Hermes needs your decision.'}</p>
+      {approvals.map(approval => <section className="hermes-approval" key={approval.decisionId} aria-label="Hermes approval">
+        <header><strong>Review before continuing</strong></header>
+        <p>{dot.name} · {status.name ?? status.connectionId ?? 'Hermes host'} · Conversation: {thread.title || thread.id}</p>
+        <p role="status">{approval.state === 'sending' ? 'Sending decision…' : approval.state === 'sent' ? 'Decision sent. Await runtime activity to verify the action.' : approval.state === 'cancelled' ? 'Request withdrawn by Hermes.' : approval.state === 'expired' ? 'Request expired.' : approval.state === 'uncertain' ? 'Delivery unconfirmed. Reconnect to inspect; no automatic retry.' : 'Awaiting your decision.'}</p><p>{approval.params.description || approval.params.command || 'Hermes needs your decision.'}</p>
         {approval.params.command && <pre>{approval.params.command}</pre>}
-        <footer>{(Array.isArray(approval.params.choices) ? approval.params.choices.filter((choice) => typeof choice === 'string' && ['once', 'session', 'always', 'deny'].includes(choice)) : []).map((choice) => <button key={choice} disabled={decisionPending} onClick={() => void decide(approval, choice)}>{choice}</button>)}</footer>
+        <footer>{(!approval.state && Array.isArray(approval.params.choices) ? approval.params.choices.filter((choice) => typeof choice === 'string' && ['once', 'session', 'always', 'deny'].includes(choice)) : []).map((choice) => <button key={choice} disabled={decisionPending || !status.connected || !streamConnected} onClick={() => void decide(approval, choice)}>{choice === 'once' ? 'Allow once' : choice === 'session' ? 'Allow for this session' : choice === 'always' ? 'Allow permanently' : 'Deny'}</button>)}</footer>
       </section>)}
     </div>
     {newActivity && <button className="hermes-new-activity" onClick={() => { followingTimeline.current = true; timeline.current?.scrollTo({ top: timeline.current.scrollHeight }); setNewActivity(false); }}>Show new activity</button>}

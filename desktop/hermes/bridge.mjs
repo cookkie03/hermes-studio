@@ -252,7 +252,7 @@ export class HermesBridge extends EventEmitter {
     const key = JSON.stringify(params?.id);
     this.earlyRequests = this.earlyRequests.filter(frame => JSON.stringify(frame.id) !== key);
     const item = this.requests.get(key); if (!item) return;
-    this.requests.delete(key); this.emit('update', { type: 'cancel', threadId: item.threadId, requestId: params.id, params });
+    this.requests.delete(key); this.emit('update', { type: 'cancel', threadId: item.threadId, requestId: params.id, decisionId: item.decisionId, params });
   }
   serverRequest(frame) {
     if (frame.method !== 'approval') { this.gateway.respond(frame.id, null, { code: -32601, message: 'This client does not support this interaction yet.' }); return; }
@@ -263,16 +263,20 @@ export class HermesBridge extends EventEmitter {
       if (this.sessionJobs.size && this.earlyRequests.length < 100) { this.earlyRequests.push(frame); return; }
       this.gateway.respond(frame.id, null, { code: -32602, message: 'Request is not bound to an owned conversation.' }); return;
     }
-    const item = { type: 'request', threadId, requestId: frame.id, method: frame.method, params: frame.params };
+    const key = JSON.stringify(frame.id);
+    const existing = this.requests.get(key);
+    if (existing) return; // Replay preserves the identity of the currently open card.
+    const item = { type: 'request', threadId, requestId: frame.id, decisionId: randomUUID(), method: frame.method, params: frame.params };
     this.requests.set(JSON.stringify(frame.id), item); this.emit('update', item);
     this.emit('update', { type: 'approval-waiting', threadId, requestId: frame.id });
   }
   drainRequests() { const requests = this.earlyRequests; this.earlyRequests = []; for (const frame of requests) this.serverRequest(frame); }
-  approval(requestId, result) {
+  approval(requestId, result, decisionId) {
     const key = JSON.stringify(requestId); const item = this.requests.get(key);
-    if (!item) throw new Error('This request is no longer open.');
-    if (!result || !item.params?.choices?.includes(result.choice) || (result.all !== undefined && typeof result.all !== 'boolean')) throw new Error('Choose an option offered by this approval request.');
+    if (!item || (decisionId !== undefined && item.decisionId !== decisionId)) throw new Error('This request is no longer open.');
+    if (decisionId !== undefined && ![...this.handlers.values()].some(lease => lease.expiresAt > Date.now())) throw new Error('No approval handler is ready. Reopen the conversation to inspect this request.');
+    if (!result || !['once', 'session', 'always', 'deny'].includes(result.choice) || !Array.isArray(item.params?.choices) || !item.params.choices.includes(result.choice) || (result.all !== undefined && typeof result.all !== 'boolean')) throw new Error('Choose an option offered by this approval request.');
     this.gateway.respond(requestId, result); this.requests.delete(key);
-    this.emit('update', { type: 'request-resolved', threadId: item.threadId, requestId }); return { ok: true };
+    this.emit('update', { type: 'request-resolved', threadId: item.threadId, requestId, decisionId: item.decisionId }); return { ok: true };
   }
 }

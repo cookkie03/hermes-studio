@@ -366,3 +366,37 @@ test('a failed review archive write keeps its text and exposes the failure in co
     assert.equal((await bridge.history('b')).reviewPersistenceError, undefined);
   } finally { bridge.close(); await rm(directory, { recursive: true, force: true }); }
 });
+
+test('an old approval card cannot answer a reused RPC identity after reconnect', async () => {
+  const gateway = new FixtureGateway(), bridge = new HermesBridge({ gateway });
+  try {
+    await bridge.session('a');
+    await bridge.registerHandler({ handlerId: 'fixture-view', threadId: 'a', active: true });
+    const frame = { id: 'reused', method: 'approval', params: { session_id: 'live-id', choices: ['deny'] } };
+    gateway.emit('request', frame);
+    const old = bridge.requests.get(JSON.stringify('reused'));
+    bridge.transportLost({ message: 'synthetic disconnect' });
+    await bridge.session('a'); gateway.emit('request', frame);
+    const fresh = bridge.requests.get(JSON.stringify('reused'));
+    assert.notEqual(old.decisionId, fresh.decisionId);
+    assert.throws(() => bridge.approval('reused', { choice: 'deny' }, old.decisionId), /no longer open/);
+    bridge.approval('reused', { choice: 'deny' }, fresh.decisionId);
+    assert.equal(gateway.replies.length, 1);
+  } finally { bridge.close(); }
+});
+
+test('approval replay keeps card identity, unsupported enum and vanished handler cannot dispatch', async () => {
+  const gateway = new FixtureGateway(), bridge = new HermesBridge({ gateway });
+  try {
+    await bridge.session('a');
+    await bridge.registerHandler({ handlerId: 'view', threadId: 'a', active: true });
+    const frame = { id: 'rpc', method: 'approval', params: { session_id: 'live-id', choices: ['invented', 'deny'] } };
+    gateway.emit('request', frame); const item = bridge.requests.get(JSON.stringify('rpc'));
+    gateway.emit('request', frame);
+    assert.equal(bridge.requests.get(JSON.stringify('rpc')).decisionId, item.decisionId);
+    assert.throws(() => bridge.approval('rpc', { choice: 'invented' }, item.decisionId), /offered/);
+    await bridge.registerHandler({ handlerId: 'view', threadId: 'a', active: false });
+    assert.throws(() => bridge.approval('rpc', { choice: 'deny' }, item.decisionId), /handler/);
+    assert.equal(gateway.replies.length, 0);
+  } finally { bridge.close(); }
+});
