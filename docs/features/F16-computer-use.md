@@ -1,99 +1,99 @@
-# F16 — GUI del Computer Use e del Bot Screen Hermes
+# F16 — Hermes Computer Use and Bot Screen GUI
 
 <!-- implementation-packet:start -->
-## Incarico per la chat implementatrice
+## Assignment for the implementing chat
 
-Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F16**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+When this card is attached as a development assignment, implement and verify **only the F16 frontend/connection**, following the workflow below and the card’s specific sections. The attachment is the entry point: open linked workspace files and SKILL.md files before coding. “Documented/not implemented” labels describe the baseline; they do not require stopping at a plan in the assigned chat.
 
-**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+**Type of work:** GUI adaptation and connection to existing Hermes capabilities, not creation of the feature in the backend. The Fxx separation supports ownership, implementation, and verification in separate chats: the product remains a single OpenDots-style Hermes GUI.
 
-**Risultato:** Usare Computer Use nativo Hermes da Studio con catture/azioni/approvazioni; Bot Screen live come incremento separato.
+**Outcome:** Use native Hermes Computer Use from Studio with captures/actions/approvals; live Bot Screen as a separate increment.
 
-**Backend e confine:** computer_use/cua-driver e lease Bot Screen Hermes; host/display del bot o sandbox, non Mac client implicito. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+**Backend and boundary:** computer_use/cua-driver and Hermes Bot Screen lease; bot host/display or sandbox, not implicitly the client Mac. Studio is a Hermes frontend/adapter: names and GUI may change, while agent capabilities and gates remain native. A missing contract is an explicit gap, not a new backend feature to build.
 
-**Contesto e interazioni pertinenti:** Vista Computer Use dedicata con AX/SOM/vision, target/host/Space/timestamp ed esiti; screen unchanged e capture stale espliciti, takeover solo nativo verificato. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Relevant context and interactions:** Dedicated Computer Use view with AX/SOM/vision, target/host/Space/timestamp and outcomes; explicit screen unchanged and stale capture states, only verified native takeover. You must read the [shared GUI requirements](gui-context-and-references.md); apply the requirements specified here, leaving other functions to their respective owners.
 
-**Dipendenze e letture aggiuntive:** F1/F3/F2/F11 e audit Computer Use; A catture/B uso agente/C Bot Screen, nessun executor CUA/VNC alternativo Studio. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+**Dependencies and additional readings:** F1/F3/F2/F11 and Computer Use audit; A captures/B agent use/C Bot Screen, no alternative Studio CUA/VNC executor. Read [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow and skills](../agents/feature-workflow.md), [boundaries](../architecture/feature-boundaries.md), then this card’s Files and skills and gates. Verify actual files/methods/version; future paths are not existing APIs.
 
-**Prove specifiche obbligatorie per l’incremento pertinente:** Capture→azione approvata→capture postcondizione, diniego/driver/display mancanti, range coordinate stale, payload >64KiB/replay, host sbagliato e human_has_control. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+**Mandatory specific checks for the relevant increment:** Capture→approved action→postcondition capture, denial/missing driver/display, stale coordinate range, payload >64KiB/replay, wrong host, and human_has_control. Use synthetic profiles and data; exercise the real interface. Fixtures, builds, handshakes, and isolated runtime tests are distinct evidence.
 
-**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+**Required delivery:** working increment code, relevant tests with recorded commands/results, typecheck/build of the modified dependency graph, and proportionate .app smoke testing. If the UI changes: verify keyboard/focus, IME where relevant, 900/1360px, accessibility, and Reduced Motion. Review the diff against the specification/principles, fix issues found, and update status/gates in the card and MEMORY/STATUS/WORKLOG. Declare unperformed checks and external blockers; completion requires evidence for the increment’s gates. Git: select only your own files after checking diff/index/secrets; push/publication follows current authorization.
 
-Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+If essential scope is missing, clarify only that; otherwise use confirmed requirements and choose a vertical increment consistent with the card, declaring it before edits. Agree on shared dependencies; do not implement the backlog. F0 remains explicit maintenance of the completed baseline; F18 remains future until selected and supported. For other IDs, proceed with implementation and verification within authorization and actual capabilities, without another general interview.
 <!-- implementation-packet:end -->
 
 
 <!-- feature-guidance:start -->
 
-## File e skill da leggere e usare
+## Files and skills to read and use
 
-Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+First follow the [shared ask-matt-guided workflow](../agents/feature-workflow.md): it contains initial readings, implementation/review skills, and exit criteria. Then read the feature-specific files below. The [complete project and global catalog](../agents/skills-catalog.md) retains all collections; load skill bodies only when relevant.
 
-### Skill specifiche
+### Feature-specific skills
 
-| Skill / percorso | Quando applicarla a questa feature |
+| Skill / path | When to apply it to this feature |
 |---|---|
-| [research](<../../.agents/skills/research/SKILL.md>) | Schema computer use e host supportato |
-| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Target e ricevuta azione distinti |
-| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) — condizionale | Componenti React e stato del renderer |
-| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Verifica UI packaged con dati sintetici e tool realmente disponibili |
-| [security-diff](</Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-diff-scan/SKILL.md>) — condizionale | Se è richiesta review del diff sui privilegi o targeting |
+| [research](<../../.agents/skills/research/SKILL.md>) | Computer use schema and supported host |
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Distinct target and action receipt |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) — conditional | React components and renderer state |
+| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — conditional | Verify packaged UI with synthetic data and actually available tools |
+| [security-diff](</Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-diff-scan/SKILL.md>) — conditional | If a diff review of privileges or targeting is requested |
 
-### Punti di ingresso da leggere
+### Entry points to read
 
-- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Approvazioni.
-- [desktop/upstream/src/client/ComputerPanel.tsx](<../../desktop/upstream/src/client/ComputerPanel.tsx>): Superficie condivisa.
-- [desktop/electron/preload.cjs](<../../desktop/electron/preload.cjs>): Privilegi esposti.
-- [Hermes: tools/computer_use/schema.py](</Users/luca/.hermes/hermes-agent/tools/computer_use/schema.py>): Target e azioni; lettura sorgente alla versione fissata, non prova live.
-- [Hermes: tools/computer_use_tool.py](</Users/luca/.hermes/hermes-agent/tools/computer_use_tool.py>): Registrazione del tool; lettura sorgente alla versione fissata, non prova live.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Approvals.
+- [desktop/upstream/src/client/ComputerPanel.tsx](<../../desktop/upstream/src/client/ComputerPanel.tsx>): Shared surface.
+- [desktop/electron/preload.cjs](<../../desktop/electron/preload.cjs>): Exposed privileges.
+- [Hermes: tools/computer_use/schema.py](</Users/luca/.hermes/hermes-agent/tools/computer_use/schema.py>): Target and actions; source reading at the pinned version, not a live test.
+- [Hermes: tools/computer_use_tool.py](</Users/luca/.hermes/hermes-agent/tools/computer_use_tool.py>): Tool registration; source reading at the pinned version, not a live test.
 
-Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+Verify paths and version before working; coordinate shared files. These readings do not authorize other features or changes to the personal runtime.
 <!-- feature-guidance:end -->
 
-## Confine delle prove
+## Evidence boundary
 
-Stato: **documented, not implemented** (2026-10-04). Questa specifica descrive una futura slice di Hermes Studio; codice upstream disponibile non significa capability collegata nell’app. Evidenze: lettura del checkout sorgente `/Users/luca/.hermes/hermes-agent`, non esecuzione live, nessun prompt/configurazione/database personale. Riferimento autorevole: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). La versione remota può cambiare: prima di implementare fissare SHA e ripetere i contract test.
+Status: **documented, not implemented** (2026-10-04). This specification describes a future Hermes Studio slice; available upstream code does not mean a capability is connected in the app. Evidence: reading the source checkout `/Users/luca/.hermes/hermes-agent`, not live execution, no personal prompt/configuration/database. Authoritative reference: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). The remote version may change: pin the SHA and repeat contract tests before implementing.
 
-Leggere prima `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md` e `desktop/hermes/README.md`. UI OpenDots scelta dall’utente; Hermes resta l’unico executor. Gli endpoint Studio sotto descritti sono **proposte**, non API esistenti.
+First read `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md`, and `desktop/hermes/README.md`. The user chose the OpenDots UI; Hermes remains the only executor. The Studio endpoints described below are **proposals**, not existing APIs.
 
-## Obiettivo e casi d’uso
+## Goal and use cases
 
-Osservare e autorizzare azioni reali su applicazioni, finestre, file e terminale attraverso Hermes, mantenendo chiaro host/destinazione e modo foreground/background. Un pannello strumenti non equivale a una desktop session remota o a una presa di controllo disponibile.
+Observe and authorize real actions on applications, windows, files, and terminal through Hermes, keeping host/destination and foreground/background mode clear. A tools panel does not imply a remote desktop session or available takeover.
 
-## Requisito esplicito — Computer Use nativo utilizzabile da Studio
+## Explicit requirement — Native Computer Use usable from Studio
 
-Il tool `computer_use` già presente in Hermes deve essere utilizzabile dai Dots nelle chat Studio sul rispettivo host/display autorizzato, con catture, azioni, approvazioni e risultati visibili. Non basta elencarlo tra le capability. [Verifica sorgente e gap Studio](../research/hermes-computer-use-integration.md), SHA e1e82d7; [documentazione ufficiale](https://hermes-agent.nousresearch.com/docs/user-guide/features/computer-use/).
+The `computer_use` tool already in Hermes must be usable by Dots in Studio chats on their respective authorized host/display, with visible captures, actions, approvals, and results. Listing it among capabilities is not enough. [Source verification and Studio gaps](../research/hermes-computer-use-integration.md), SHA e1e82d7; [official documentation](https://hermes-agent.nousresearch.com/docs/user-guide/features/computer-use/).
 
-### Incrementi selezionabili
+### Selectable increments
 
-- **F16-A — Osservazione:** superficie Computer Use nel pannello, target/host/sandbox, capture SOM/vision/AX, screenshot e timestamp, azioni ed esiti nella chat. Il pannello attuale Browser/Files/Terminal non la implementa. Supportare JSON e risultati multimodali; verificare grandi payload e replay, perché il bridge archivia solo fallback testuale oltre 64 KiB.
-- **F16-B — Percorso agente completo:** toolset e driver sul backend scelto, richiesta in chat → capture → azione approvata → capture di verifica. Hermes esegue l’azione e applica la policy; Studio rende visibili scelta e risultato, anche quando negati/uncertain. Probe disponibile non equivale a driver/display/permessi operativi.
-- **F16-C — Bot Screen live e controllo umano:** riuso della funzione nativa [Bot Screen](https://hermes-agent.nousresearch.com/docs/user-guide/features/bot-screen/), dopo verifica dei contratti stream/input/lease della versione collegata. Nessuno stream promesso dal solo screenshot; nessun secondo executor o desktop parallelo. Rispetto `human_has_control`, takeover e restituzione controllo reali, con prove isolate.
+- **F16-A — Observation:** Computer Use surface in the panel, target/host/sandbox, SOM/vision/AX capture, screenshot and timestamp, actions and outcomes in the chat. The current Browser/Files/Terminal panel does not implement it. Support JSON and multimodal results; verify large payloads and replay, because the bridge archives only a textual fallback above 64 KiB.
+- **F16-B — Complete agent path:** toolset and driver on the selected backend, chat request → capture → approved action → verification capture. Hermes executes the action and applies policy; Studio displays the choice and result, including denied/uncertain outcomes. An available probe does not imply an operational driver/display/permissions.
+- **F16-C — Live Bot Screen and human control:** reuse the native [Bot Screen](https://hermes-agent.nousresearch.com/docs/user-guide/features/bot-screen/) feature after verifying stream/input/lease contracts for the connected version. A screenshot alone does not promise a stream; no second executor or parallel desktop. Respect `human_has_control`, actual takeover and return of control, with isolated tests.
 
-Il computer è quello del bot: gateway locale o sandbox/display del terminal backend. Collegare un host SSH non dà accesso al Mac di Studio. Per macOS verificare permessi del driver, distinti da quelli Electron. Browser web/profili autenticati rimangono F12 e tool browser Hermes; F16 non li rimpiazza.
+The computer belongs to the bot: local gateway or terminal backend sandbox/display. Connecting an SSH host does not grant access to the Studio Mac. On macOS, verify driver permissions, distinct from Electron permissions. Web browser/authenticated profiles remain F12 and Hermes browser tools; F16 does not replace them.
 
-## Contratto runtime verificato
+## Verified runtime contract
 
-`computer_use` è registrato da `tools/computer_use_tool.py` e schema in `tools/computer_use/schema.py`. Azioni capture/click/double_click/right_click/middle_click/drag/scroll/type/key/set_value/wait/list_apps/list_windows/focus_app; modes som/vision/ax. Parametri targeting includono app/window/element/coordinate e delivery foreground/background secondo schema. Capture è read-only. Lo schema descrive genericamente approvazioni per le altre azioni, ma l’handler applica il gate condiviso alle mutazioni/focus, mentre wait/list sono read-only: preservare la policy effettiva, hard-block e lease Hermes senza inventare whitelist o autoapproval Studio.
+`computer_use` is registered by `tools/computer_use_tool.py`, with its schema in `tools/computer_use/schema.py`. Actions capture/click/double_click/right_click/middle_click/drag/scroll/type/key/set_value/wait/list_apps/list_windows/focus_app; modes som/vision/ax. Targeting parameters include app/window/element/coordinates and foreground/background delivery according to the schema. Capture is read-only. The schema generally describes approvals for other actions, but the handler applies the shared gate to mutations/focus, while wait/list are read-only: preserve actual policy, Hermes hard-block and lease without inventing Studio whitelists or autoapproval.
 
-Output accessibility/screenshot e capacità variano da host e backend. Toolstartcomplete passano già bridge owned; Studio non possiede ancora computer backend/live desktop stream, takeover o ACL per Dot. Prima integrare eventi/risultati con scope, poi valutare controller se API ufficiale esiste e testata; non chiamare API arbitrarie dal renderer. Fonti `tools/computer_use/schema.py:18–203`, `tools/computer_use_tool.py:1–20`, package `tools/computer_use/`; `apps/desktop` UI/bridge come riferimento, senza attribuire feature non lette a questa build.
+Accessibility/screenshot output and capabilities vary by host and backend. Tool start/complete already pass through the owned bridge; Studio does not yet have a computer backend/live desktop stream, takeover, or per-Dot ACL. First integrate scoped events/results, then consider a controller if an official API exists and is tested; do not call arbitrary APIs from the renderer. Sources `tools/computer_use/schema.py:18–203`, `tools/computer_use_tool.py:1–20`, package `tools/computer_use/`; `apps/desktop` UI/bridge as reference, without attributing unread features to this build.
 
-## Dominio, UX e stati
+## Domain, UX, and states
 
-ComputerTarget {connection,host,profile,app?,window?}, CaptureReceipt, ActionRequest e Approval distinti. UI mostra target sempre prima di mutazione e differenzia capture ricevuta da action accepted/working/succeeded/failed/uncertain. Modal esplicita comando/destinazione/offeredchoice esatta; annullamento request rimuove pulsanti. Snapshot vecchia ha timestamp e non diventa stato corrente. “Prendi controllo” resta disabled finché contratto disponibile. Foreground focus visibile; pause Studio non implica runtimeinterrupt.
+ComputerTarget {connection,host,profile,app?,window?}, CaptureReceipt, ActionRequest, and Approval are distinct. The UI always shows the target before mutation and distinguishes a received capture from action accepted/working/succeeded/failed/uncertain. The modal explicitly shows command/destination/exact offered choice; request cancellation removes buttons. An old snapshot has a timestamp and does not become current state. “Take control” remains disabled until the contract is available. Foreground focus is visible; pausing Studio does not imply a runtime interrupt.
 
-## Seam, ownership e dipendenze
+## Seam, ownership, and dependencies
 
-Dipende F1 routing/identità, F11 capability e F3 approval, con F2 per interruzione del turno. Nuovi `desktop/hermes/computer.mjs`, fixtures, client `ComputerActivityView.tsx`; ComputerPanel condiviso con F12, ownership concordata prima parallelwork. Nessun secondo executor shell/osautomation. Prima slice visualizza capture e target/approvals da Hermes; azioni dirette UI solo tramite API ufficiale comprovata, non via toolname string generico.
+Depends on F1 routing/identity, F11 capability, and F3 approval, with F2 for turn interruption. New `desktop/hermes/computer.mjs`, fixtures, client `ComputerActivityView.tsx`; ComputerPanel shared with F12, ownership agreed before parallel work. No second shell/OS automation executor. First slice displays captures and target/approvals from Hermes; direct UI actions only through a proven official API, not a generic toolname string.
 
-## Privacy, migrazione e non-obiettivi
+## Privacy, migration, and non-goals
 
-Test in profilo isolato e app sintetica; non richiedere/abilitare Accessibility o Screen Recording sul Mac personale durante docs/tests. Permission macOS è separata dal consenso azione e dall’authorizationruntime. Retention captures opt-in, niente full-frame archivio perpetuo per default. File e Terminal tooloutputs bounded con provenance; accesso filesystem editor distinto da computeruse. Non migrare permissionspill locali in ACL effettive. Bot Screen/takeover nativo è incremento F16-C separato, da verificare; registrazione continua, desktop remoti arbitrari e controllo iPhone fuori scope iniziale.
+Test in an isolated profile and synthetic app; do not request/enable Accessibility or Screen Recording on the personal Mac during documentation/tests. macOS permission is separate from action consent and runtime authorization. Capture retention is opt-in, no perpetual full-frame archive by default. Bounded File and Terminal tool outputs with provenance; editor filesystem access distinct from computer use. Do not migrate local permission pills into effective ACLs. Native Bot Screen/takeover is a separate F16-C increment to verify; continuous recording, arbitrary remote desktops, and iPhone control are outside initial scope.
 
-## Accettazione e DoD
+## Acceptance and DoD
 
-Fixture capture AX/vision/SOM, app/window mismatch, coordinatesobsolete, permissionsdenied, staleapproval, runtimecancel, nativeclose preserva lavoro e revoca leasesUI, foregroundfocus notification, uncertaindelivery no autoretry. Prova isolata actualhost esegue capture→azione approvata→capture conferma postcondizione; ack non prova successo. DoD: backendcapabilityprobe, UI target/provenance, meaningfulintegrationfixture+actualisolatedtest, screenshot/accessibility review e docs limiti.
+Fixtures: AX/vision/SOM capture, app/window mismatch, obsolete coordinates, denied permissions, stale approval, runtime cancellation, native close preserves work and revokes UI leases, foreground focus notification, uncertain delivery with no automatic retry. Isolated test on the actual host executes capture→approved action→capture confirming the postcondition; an ack does not prove success. DoD: backend capability probe, UI target/provenance, meaningful integration fixture + actual isolated test, screenshot/accessibility review, and documented limitations.
 
-## Prompt nuova chat
+## Prompt for a new chat
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa soltanto F16-A/B/C selezionato, leggendo docs/research/hermes-computer-use-integration.md e Computer Use/Bot Screen ufficiali, usando computer_use schema runtime e bridge owned, prima receipts/capture/approval target. Non aggiungere executor diretto o assumere takeover. Verifica supporto reale host+permissions e deliverymode; prova soltanto app/profilo sintetici autorizzati. Implementa failclosed scope/staleapproval e postconditionverification, completa DoD e persisti risultati senza screenshot personali. Segui anche Incarico per la chat implementatrice di F16: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+> First follow docs/agents/feature-workflow.md and this card’s Files and skills section, reading SKILL.md files before applying them. Implement only the selected F16-A/B/C, reading docs/research/hermes-computer-use-integration.md and official Computer Use/Bot Screen documentation, using the computer_use runtime schema and owned bridge, starting with receipts/capture/approval target. Do not add a direct executor or assume takeover. Verify actual host+permissions support and delivery mode; test only authorized synthetic apps/profiles. Implement fail-closed scope/stale approval and postcondition verification, complete DoD, and persist results without personal screenshots. Also follow F16’s Assignment for the implementing chat: deliver verified code and evidence, with the specified GUI/backend context, not just a plan. Capability gates and F0/F18 exceptions remain valid.

@@ -1,88 +1,88 @@
-# F13 — Packaging macOS e release GitHub DMG
+# F13 — macOS packaging and GitHub DMG releases
 
 <!-- implementation-packet:start -->
-## Incarico per la chat implementatrice
+## Assignment for the implementing chat
 
-Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F13**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+When this card is attached as a development assignment, implement and verify **only the frontend/integration F13**, following the workflow below and the card-specific sections. The attachment is the entry point: open the linked workspace files and SKILL.md files before coding. The “documented/not implemented” labels describe the baseline; they do not require the assigned chat to stop at a plan.
 
-**Tipo di lavoro:** distribuzione del client, distinta dalle capacità del backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+**Type of work:** client distribution, separate from backend capabilities. The Fxx separation establishes ownership, implementation and testing in separate chats: the product remains a single Hermes GUI in the OpenDots style.
 
-**Risultato:** Produrre release installabile della versione selezionata con .app/DMG, manifest/checksum e limiti verificabili.
+**Outcome:** Produce an installable release of the selected version with .app/DMG, manifest/checksum and verifiable limitations.
 
-**Backend e confine:** Packaging di Studio e compatibilità con Hermes scelto; nessun nuovo backend o installazione runtime personale implicita. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+**Backend and boundary:** Studio packaging and compatibility with the selected Hermes version; no new backend or implicit personal runtime installation. Studio is a Hermes frontend/adapter: names and GUI may change, but agent capabilities and gates remain native. A missing contract is an explicit gap, not a new backend feature to build.
 
-**Contesto e interazioni pertinenti:** Primo avvio, stato connessione/host e capability onesti; funzionalità non incluse dichiarate, non demo del backlog. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Relevant context and interactions:** Honest first launch, connection/host status and capabilities; declare functionality not included, rather than demonstrating the backlog. You must read the [shared GUI requirements](gui-context-and-references.md); apply the requirements identified here and leave other functionality to its respective owners.
 
-**Dipendenze e letture aggiuntive:** Distribuire solo feature già verificate; pubblicazione/firma/credenziali segue autorizzazione della chat. DMG storico non prova release nuova. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+**Dependencies and additional reading:** Distribute only already-verified features; publication/signing/credentials follow chat authorization. A historical DMG does not prove a new release. Read [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow and skills](../agents/feature-workflow.md), [boundaries](../architecture/feature-boundaries.md), then this card’s Files and skills and gates. Verify actual files/methods/version; future paths are not existing APIs.
 
-**Prove specifiche obbligatorie per l’incremento pertinente:** Build shipped graph, installazione pulita, avvio senza npm devserver, checksum/firma/notarizzazione dichiarata, upgrade/dati preservati e nessun segreto nel bundle. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+**Required specific tests for the relevant increment:** Shipped-graph build, clean installation, launch without an npm devserver, declared checksum/signing/notarization, upgrade/preserved data and no secrets in the bundle. Use synthetic profiles and data; exercise the actual interface. Fixtures, builds, handshakes and isolated runtime tests are distinct evidence.
 
-**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+**Required delivery:** working increment code, relevant tests with recorded commands/results, typecheck/build of the modified graph and proportionate .app smoke testing. If the UI changes: verify keyboard/focus, IME where relevant, 900/1360px, accessibility and Reduced Motion. Review the diff against the spec/principles, fix discovered issues, and update status/gates in the card and MEMORY/STATUS/WORKLOG. Declare tests not performed and external blockers; completion requires proven increment gates. Git: select only your own files after checking diff/index/secrets; push/publication follows current authorization.
 
-Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+If essential scope is missing, clarify only that; otherwise use confirmed requirements and choose a vertical increment consistent with the card, declaring it before edits. Agree on shared dependencies; do not implement the backlog. F0 remains explicit maintenance of the completed baseline; F18 remains future work until selected and supported. For other IDs, proceed with implementation and verification within actual authorizations and capabilities, without another general interview.
 <!-- implementation-packet:end -->
 
 
-Stato: documentata, da sviluppare in una chat dedicata. Un DMG locale ad-hoc esiste; pipeline e release pubbliche non sono completate. Questo è il documento di handoff richiesto dall'utente.
+Status: documented, to be developed in a dedicated chat. A local ad-hoc DMG exists; pipeline and public releases are not complete. This is the handoff document requested by the user.
 
 
 <!-- feature-guidance:start -->
-## File e skill da leggere e usare
+## Files and skills to read and use
 
-Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+First follow the [shared ask-matt-guided workflow](../agents/feature-workflow.md): it contains initial reading, implementation/review skills and exit criteria. Then read the specific files below. The [complete project and global catalog](../agents/skills-catalog.md) retains all collections; load skill bodies only when relevant.
 
-### Skill specifiche
+### Feature-specific skills
 
-| Skill / percorso | Quando applicarla a questa feature |
+| Skill / path | When to apply it to this feature |
 |---|---|
-| [writing-plans](<../../.agents/skills/writing-plans/SKILL.md>) | Pipeline con gate build/verifica/pubblicazione |
-| [documentation-and-adrs](<../../.agents/skills/documentation-and-adrs/SKILL.md>) | Versione, prerequisiti e limiti release |
-| [wizard](<../../.agents/skills/wizard/SKILL.md>) — condizionale | Solo credenziali di firma o CI da fornire da parte dell’utente |
-| [pr](<../../.agents/skills/pr/SKILL.md>) — condizionale | Se si crea una PR |
-| [security-diff](</Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-diff-scan/SKILL.md>) — condizionale | Se è richiesta review del workflow/diff di packaging |
+| [writing-plans](<../../.agents/skills/writing-plans/SKILL.md>) | Pipeline with build/verification/publication gates |
+| [documentation-and-adrs](<../../.agents/skills/documentation-and-adrs/SKILL.md>) | Release version, prerequisites and limitations |
+| [wizard](<../../.agents/skills/wizard/SKILL.md>) — conditional | Only signing or CI credentials to be supplied by the user |
+| [pr](<../../.agents/skills/pr/SKILL.md>) — conditional | If creating a PR |
+| [security-diff](</Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-diff-scan/SKILL.md>) — conditional | If a review of the packaging workflow/diff is requested |
 
-### Punti di ingresso da leggere
+### Entry points to read
 
-- [desktop/package.json](<../../desktop/package.json>): Comandi e versione.
+- [desktop/package.json](<../../desktop/package.json>): Commands and version.
 - [desktop/electron-builder.config.cjs](<../../desktop/electron-builder.config.cjs>): Packaging.
-- [desktop/scripts/sign-development.cjs](<../../desktop/scripts/sign-development.cjs>): Firma ad hoc di sviluppo.
-- [desktop/scripts/verify-package.cjs](<../../desktop/scripts/verify-package.cjs>): Manifest e verifiche.
-- [docs/releases/development-artifacts.md](<../../docs/releases/development-artifacts.md>): Evidenze storiche.
-- [Hermes: apps/desktop/BUILDING.md](</Users/luca/.hermes/hermes-agent/apps/desktop/BUILDING.md>): Reference distribuzione Hermes; lettura sorgente alla versione fissata, non prova live.
+- [desktop/scripts/sign-development.cjs](<../../desktop/scripts/sign-development.cjs>): Ad-hoc development signing.
+- [desktop/scripts/verify-package.cjs](<../../desktop/scripts/verify-package.cjs>): Manifest and checks.
+- [docs/releases/development-artifacts.md](<../../docs/releases/development-artifacts.md>): Historical evidence.
+- [Hermes: apps/desktop/BUILDING.md](</Users/luca/.hermes/hermes-agent/apps/desktop/BUILDING.md>): Hermes distribution reference; source reading at the pinned version, not a live test.
 
-Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+Verify paths and version before working; coordinate shared files. Reading does not authorize other features or changes to the personal runtime.
 <!-- feature-guidance:end -->
 
-## Obiettivo
+## Goal
 
-Dalla repository `cookkie03/hermes-studio` ottenere release versionate con DMG installabile, checksum, note chiare e istruzioni per utenti. L'utente scarica, apre DMG e trascina .app in Applications; non deve installare Node/npm né lanciare npm run dev. Il runtime Hermes è prerequisito esplicito finché una feature separata non ne gestisce l'installazione.
+Produce versioned releases from the `cookkie03/hermes-studio` repository with an installable DMG, checksum, clear notes and user instructions. The user downloads, opens the DMG and drags .app into Applications; they must not need to install Node/npm or launch npm run dev. The Hermes runtime is an explicit prerequisite until a separate feature handles its installation.
 
-## Base concreta e scelta di versione
+## Concrete baseline and version selection
 
-`desktop/package.json`, package-lock, electron-builder.config.cjs, scripts/sign-development.cjs, electron/main.cjs e README contengono packaging arm64. Fonte build/prove ../releases/development-artifacts.md. Il SHA256 storico non deve essere riutilizzato dopo un rebuild. Sources SwiftUI storico non è il prodotto principale da impacchettare per questa release.
+`desktop/package.json`, package-lock, electron-builder.config.cjs, scripts/sign-development.cjs, electron/main.cjs and README contain arm64 packaging. Build/test source ../releases/development-artifacts.md. Historical SHA256 must not be reused after a rebuild. Historical SwiftUI Sources is not the main product to package for this release.
 
-Scegliere il tag/versione e insieme di feature realmente inclusi. Nessun repository derivato, nessun cambio origin o merge automatico da progetti esterni. Preservare LICENSE/PROVENANCE e notice delle dipendenze. Licenza del codice nuovo e branding/icon devono essere definite prima di dichiarare una release pubblica definitiva.
+Choose the tag/version and set of features actually included. No derived repository, origin changes or automatic merges from external projects. Preserve LICENSE/PROVENANCE and dependency notices. New-code licensing and branding/icon must be defined before declaring a final public release.
 
-## Scope della chat
+## Chat scope
 
-1. Verificare remote/GH CLI e branch/commit; working tree pulito o snapshot esplicito. Confermare versione, architetture supportate e baseline delle feature.
-2. Script riproducibili install lock→typecheck shipped→fixture→build production→verify package→app→DMG→manifest checksum/size/commit/version/arch.
-3. CI macOS con cache versionata, permessi minimi, workflow source-reviewed; separare build/verify e publish. Node/npm sono strumenti dello sviluppatore/CI, inclusi nel prodotto dove necessari.
-4. DMG contiene .app e collegamento Applications; Electron/Node embedded e servizio UI posseduto. Nessun devserver/localhost hardcoded, secret/config/runtime/database personali incluso.
-5. Firma: canale sviluppo ad-hoc dichiarato; release Apple Developer/notarization/stapling solo con account/credenziali forniti in secureCI. Non inventare identità o aggirare Gatekeeper. Se manca account, mantenere draft/devrelease chiaramente etichettata e spiegare prerequisito.
-6. Generare release notes con supporto macOS/arch, feature incluse, runtime setup, limiti, install/upgrade/uninstall con dati preservati. Repo README orientato a download utente, CONTRIBUTING orientato allo sviluppo.
-7. Preparare GitHub release draft associata al tag/commit verificato, allegare DMG+SHA256+manifest. Pubblicazione solo se autorizzata nella chat F13 e tutti i gate passano; non pubblicare semplicemente perché builder exit0.
+1. Verify remotes/GH CLI and branch/commit; clean working tree or explicit snapshot. Confirm version, supported architectures and feature baseline.
+2. Reproducible scripts install lock→typecheck shipped→fixture→build production→verify package→app→DMG→manifest checksum/size/commit/version/arch.
+3. macOS CI with versioned cache, minimal permissions and source-reviewed workflow; separate build/verify from publish. Node/npm are developer/CI tools, included in the product where necessary.
+4. DMG contains .app and an Applications link; embedded Electron/Node and an owned UI service. No devserver/hardcoded localhost or included personal secrets/configuration/runtime/database.
+5. Signing: declared ad-hoc development channel; Apple Developer/notarization/stapling release only with account/credentials provided through secureCI. Do not invent identities or bypass Gatekeeper. If the account is missing, keep a clearly labeled draft/devrelease and explain the prerequisite.
+6. Generate release notes with macOS/architecture support, included features, runtime setup, limitations, installation/upgrade/uninstall with preserved data. Repository README targets user downloads, CONTRIBUTING targets development.
+7. Prepare a GitHub release draft tied to the verified tag/commit, attaching DMG+SHA256+manifest. Publish only if authorized in the F13 chat and all gates pass; do not publish merely because the builder exits 0.
 
-Auto-updater non è obbligatorio per prima release; non aggiungere account backend/certificati o feed di aggiornamento come deviazione. Intel/universal vanno provati nativamente prima di prometterli; arm64 attuale non prova x64.
+An auto-updater is not mandatory for the first release; do not add backend accounts/certificates or an update feed as a diversion. Intel/universal must be tested natively before being promised; current arm64 does not prove x64.
 
-## Gate e prove
+## Gates and tests
 
-Fresh build sul commit scelto e runner pulito; firma effettiva ispezionata, codesign deep strict, integrità DMG e mount in sola lettura; .app da mount/copiata avviata senza toolchain di sviluppo esterno; userData sintetico nuovo e runtime assente significativo, poi fixture isolata per chat/error/persistenza. Richieste di permessi comprensibili e upgrade metadata senza perdita di dati. Audit di segreti e artefatti, licenza/notice/icon/privacy docs. Release assets scaricati dal draft/pubblicato e hash comparato ai locali; tag remoto e GitHub API confermano identità. Non confondere upload avviato con asset completo o release creata con pubblicata.
+Fresh build on the chosen commit and clean runner; inspect actual signature, codesign deep strict, DMG integrity and read-only mount; launch .app from the mount/after copying without an external development toolchain; new synthetic userData and a meaningful absent-runtime state, then isolated fixtures for chat/error/persistence. Understandable permission requests and metadata upgrades without data loss. Audit secrets and artifacts, license/notices/icon/privacy docs. Download release assets from the draft/published release and compare hashes with local files; remote tag and GitHub API confirm identity. Do not confuse an initiated upload with a complete asset or a created release with a published one.
 
-## Ownership e dipendenze
+## Ownership and dependencies
 
-F0 gate della base e versione selezionata delle feature; ownership packaging/CI/docs release. Non modificare browser, Bots, routine o chat per completare F13. Se gate app fallisce, registrare blocker e correzione delimitata, non ampliare il prodotto. In questa chat di preparazione non sono creati tag, Actions o release.
+F0 baseline gates and selected feature versions; ownership of packaging/CI/release docs. Do not modify browser, Bots, routines or chat to complete F13. If an app gate fails, record the blocker and a bounded fix, rather than expanding the product. No tags, Actions or releases are created in this preparation chat.
 
-## Prompt da passare a Codex
+## Prompt to pass to Codex
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Trasforma la repository GitHub cookkie03/hermes-studio in software macOS distribuibile seguendo esclusivamente docs/features/F13-github-releases-dmg.md. Leggi AGENTS.md, MEMORY/STATUS, ADR0006 e principles.md; verifica stato, remote e artifact reali. Prepara build riproducibile e CI, .app+DMG+checksums+note, installazione senza npm per utenti e GitHub release draft. Preserva dati, licenze e credenziali; non implementare altre feature o repository derivate. Non dichiarare notarizzazione senza prova. Prima di pubblicare verifica tutti i gate e l'autorizzazione esplicita della chat. Consegna URL release/commit e checksum confermati oppure prerequisiti precisi. Segui anche Incarico per la chat implementatrice di F13: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+> First follow docs/agents/feature-workflow.md and this card’s Files and skills section, reading SKILL.md files before applying them. Turn the GitHub repository cookkie03/hermes-studio into distributable macOS software by following only docs/features/F13-github-releases-dmg.md. Read AGENTS.md, MEMORY/STATUS, ADR0006 and principles.md; verify status, remotes and actual artifacts. Prepare reproducible builds and CI, .app+DMG+checksums+notes, npm-free installation for users and a GitHub release draft. Preserve data, licenses and credentials; do not implement other features or derived repositories. Do not claim notarization without evidence. Before publication, verify all gates and explicit chat authorization. Deliver confirmed release/commit URLs and checksums or precise prerequisites. Also follow the Assignment for the implementing chat for F13: deliver verified code and evidence, with the specified GUI/backend context, not just a plan. Capability gates and F0/F18 exceptions still apply.

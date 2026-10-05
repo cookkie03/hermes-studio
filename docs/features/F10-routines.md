@@ -1,95 +1,95 @@
-# F10 — GUI delle routine e del cron Hermes
+# F10 — Hermes routines and cron GUI
 
 <!-- implementation-packet:start -->
-## Incarico per la chat implementatrice
+## Assignment for the implementing chat
 
-Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F10**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+When this card is attached as a development assignment, implement and verify **only the frontend/integration F10**, following the workflow below and the card-specific sections. The attachment is the entry point: open the linked workspace files and SKILL.md files before coding. The “documented/not implemented” labels describe the baseline; they do not require the assigned chat to stop at a plan.
 
-**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+**Type of work:** GUI adaptation and integration with existing Hermes capabilities, rather than creating the feature in the backend. The Fxx separation establishes ownership, implementation and testing in separate chats: the product remains a single Hermes GUI in the OpenDots style.
 
-**Risultato:** Configurare e osservare routine native Hermes con run/delivery/risultati dopo chiusura di Studio.
+**Outcome:** Configure and observe native Hermes routines with runs/delivery/results after Studio closes.
 
-**Backend e confine:** Cron/heartbeat/scheduler Hermes: client presenta configurazione e esiti, nessun timer/executor sostitutivo. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+**Backend and boundary:** Hermes cron/heartbeat/scheduler: the client presents configuration and outcomes, without replacement timers/executors. Studio is a Hermes frontend/adapter: names and GUI may change, but agent capabilities and gates remain native. A missing contract is an explicit gap, not a new backend feature to build.
 
-**Contesto e interazioni pertinenti:** Routine mostra Space/progetto se realmente associato, host/profilo/destinatario e configurazione modello/effort effettiva del job; nessun valore ereditato dalla chat aperta. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Relevant context and interactions:** A routine shows its Space/project if actually associated, host/profile/recipient and the job’s effective model/effort configuration; no values inherited from the open chat. You must read the [shared GUI requirements](gui-context-and-references.md); apply the requirements identified here and leave other functionality to its respective owners.
 
-**Dipendenze e letture aggiuntive:** F1 lifecycle, F3 permessi, F7 se Bot destinatario; 24/7 è requisito, prova durata distinta da health/creazione job. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+**Dependencies and additional reading:** F1 lifecycle, F3 permissions, F7 if a Bot is the recipient; 24/7 is a requirement, with duration testing distinct from health/job creation. Read [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow and skills](../agents/feature-workflow.md), [boundaries](../architecture/feature-boundaries.md), then this card’s Files and skills and gates. Verify actual files/methods/version; future paths are not existing APIs.
 
-**Prove specifiche obbligatorie per l’incremento pertinente:** Client chiuso, host offline/sospeso, run tardivo, job/run/delivery distinti, prossimo evento/timezone, duplicati/replay, errore consegna e stop esplicito. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+**Required specific tests for the relevant increment:** Closed client, offline/suspended host, late run, distinct job/run/delivery, next event/timezone, duplicates/replay, delivery error and explicit stop. Use synthetic profiles and data; exercise the actual interface. Fixtures, builds, handshakes and isolated runtime tests are distinct evidence.
 
-**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+**Required delivery:** working increment code, relevant tests with recorded commands/results, typecheck/build of the modified graph and proportionate .app smoke testing. If the UI changes: verify keyboard/focus, IME where relevant, 900/1360px, accessibility and Reduced Motion. Review the diff against the spec/principles, fix discovered issues, and update status/gates in the card and MEMORY/STATUS/WORKLOG. Declare tests not performed and external blockers; completion requires proven increment gates. Git: select only your own files after checking diff/index/secrets; push/publication follows current authorization.
 
-Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+If essential scope is missing, clarify only that; otherwise use confirmed requirements and choose a vertical increment consistent with the card, declaring it before edits. Agree on shared dependencies; do not implement the backlog. F0 remains explicit maintenance of the completed baseline; F18 remains future work until selected and supported. For other IDs, proceed with implementation and verification within actual authorizations and capabilities, without another general interview.
 <!-- implementation-packet:end -->
 
 
-## Continuità autonoma richiesta in F1 — D33
+## Autonomous continuity required in F1 — D33
 
-Principio utente: Hermes lavora 24/7 indipendentemente da Studio aperto; Studio facilita e visualizza il backend Hermes completo. Routine/cron, heartbeat, bots, strumenti e memoria mantengono ownership native Hermes. Configurazione, stato host/servizio e risultati devono restare osservabili dopo riapertura, con esiti reali. Nessun timer/heartbeat/executor alternativo nel client e nessun arresto del backend alla chiusura. Il requisito non è ancora una verifica di durata o di esecuzione dopo riavvio; riprendere [F1/D33](F1-runtime-connection.md#principio-cardine--hermes-autonomo-studio-facilitatore-d33) e i gate specifici della scheda prima di implementare.
+User principle: Hermes works 24/7 regardless of whether Studio is open; Studio facilitates and visualizes the full Hermes backend. Routines/cron, heartbeat, bots, tools and memory retain native Hermes ownership. Configuration, host/service status and results must remain observable after reopening, with actual outcomes. No alternative timer/heartbeat/executor in the client and no backend shutdown on closing. This requirement is not yet a duration or post-restart execution verification; revisit [F1/D33](F1-runtime-connection.md#principio-cardine--hermes-autonomo-studio-facilitatore-d33) and the card-specific gates before implementation.
 
 <!-- feature-guidance:start -->
 
-## File e skill da leggere e usare
+## Files and skills to read and use
 
-Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+First follow the [shared ask-matt-guided workflow](../agents/feature-workflow.md): it contains initial reading, implementation/review skills and exit criteria. Then read the specific files below. The [complete project and global catalog](../agents/skills-catalog.md) retains all collections; load skill bodies only when relevant.
 
-### Skill specifiche
+### Feature-specific skills
 
-| Skill / percorso | Quando applicarla a questa feature |
+| Skill / path | When to apply it to this feature |
 |---|---|
-| [research](<../../.agents/skills/research/SKILL.md>) | Se schema/eventi upstream sono incerti: ricerca primaria documentata |
-| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | Quando cambiano identità, stato o termini del dominio |
-| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — condizionale | Se emerge un errore riproducibile di connessione o lifecycle |
-| [wizard](<../../.agents/skills/wizard/SKILL.md>) — condizionale | Solo per prerequisiti host/account che richiedono davvero il contributo umano |
+| [research](<../../.agents/skills/research/SKILL.md>) | If upstream schema/events are uncertain: documented primary-source research |
+| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | When domain identities, states or terms change |
+| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — conditional | If a reproducible connection or lifecycle error arises |
+| [wizard](<../../.agents/skills/wizard/SKILL.md>) — conditional | Only for host/account prerequisites that genuinely require human input |
 
-### Punti di ingresso da leggere
+### Entry points to read
 
-- [docs/features/F1-runtime-connection.md](<../../docs/features/F1-runtime-connection.md>): Host e profilo.
-- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Autorizzazioni.
-- [desktop/hermes/server.mjs](<../../desktop/hermes/server.mjs>): Route tasks attuale non equivale a scheduler.
-- [Hermes: tools/cronjob_tools.py](</Users/luca/.hermes/hermes-agent/tools/cronjob_tools.py>): Azioni pianificazione; lettura sorgente alla versione fissata, non prova live.
-- [Hermes: apps/desktop/src/api/cron.ts](</Users/luca/.hermes/hermes-agent/apps/desktop/src/api/cron.ts>): REST client desktop; lettura sorgente alla versione fissata, non prova live.
-- [Hermes: hermes_cli/web_routers/cron.py](</Users/luca/.hermes/hermes-agent/hermes_cli/web_routers/cron.py>): Owner, run e delivery; lettura sorgente alla versione fissata, non prova live.
+- [docs/features/F1-runtime-connection.md](<../../docs/features/F1-runtime-connection.md>): Host and profile.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Authorizations.
+- [desktop/hermes/server.mjs](<../../desktop/hermes/server.mjs>): The current tasks route is not a scheduler.
+- [Hermes: tools/cronjob_tools.py](</Users/luca/.hermes/hermes-agent/tools/cronjob_tools.py>): Scheduling actions; source reading at the pinned version, not a live test.
+- [Hermes: apps/desktop/src/api/cron.ts](</Users/luca/.hermes/hermes-agent/apps/desktop/src/api/cron.ts>): Desktop REST client; source reading at the pinned version, not a live test.
+- [Hermes: hermes_cli/web_routers/cron.py](</Users/luca/.hermes/hermes-agent/hermes_cli/web_routers/cron.py>): Owner, run and delivery; source reading at the pinned version, not a live test.
 
-Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+Verify paths and version before working; coordinate shared files. Reading does not authorize other features or changes to the personal runtime.
 <!-- feature-guidance:end -->
 
-## Confine delle prove
+## Evidence boundary
 
-Stato: **documented, not implemented** (2026-10-04). Questa specifica descrive una futura slice di Hermes Studio; codice upstream disponibile non significa capability collegata nell’app. Evidenze: lettura del checkout sorgente `/Users/luca/.hermes/hermes-agent`, non esecuzione live, nessun prompt/configurazione/database personale. Riferimento autorevole: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). La versione remota può cambiare: prima di implementare fissare SHA e ripetere i contract test.
+Status: **documented, not implemented** (2026-10-04). This spec describes a future Hermes Studio slice; available upstream code does not mean the capability is integrated into the app. Evidence: reading the source checkout `/Users/luca/.hermes/hermes-agent`, not live execution, with no personal prompts/configuration/database used. Authoritative reference: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). The remote version may change: pin the SHA and repeat contract tests before implementation.
 
-Leggere prima `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md` e `desktop/hermes/README.md`. UI OpenDots scelta dall’utente; Hermes resta l’unico executor. Gli endpoint Studio sotto descritti sono **proposte**, non API esistenti.
+First read `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md` and `desktop/hermes/README.md`. The user selected the OpenDots UI; Hermes remains the only executor. The Studio endpoints described below are **proposals**, not existing APIs.
 
-## Obiettivo e casi d’uso
+## Goal and use cases
 
-Priorità utente: routine affidabili associate a un bot/progetto. Creare “ogni mattina ricerca e prepara una pagina”, pausa/riprendi, esegui ora, controlla run e delivery, recupera risultato dopo chiusura dell’app. La routine è persistente; ogni run ha propria sessione/esito. Il client chiuso non deve determinare la cancellazione, ma la disponibilità dell’host/scheduler sì.
+User priority: reliable routines associated with a bot/project. Create “research and prepare a page every morning”, pause/resume, run now, inspect runs and delivery, and retrieve results after closing the app. The routine is persistent; each run has its own session/outcome. Closing the client must not cause cancellation, but host/scheduler availability does affect execution.
 
-## Contratto runtime verificato
+## Verified runtime contract
 
-Tool `cronjob_manage`, azioni create/list/update/pause/resume/remove/run; create richiede schedule e prompt. Schedule distingue `30m` ricorrente da `in 30m` one-shot e supporta natural day/time, cron e timestamp ISO. `deliver` può essere local, bot-chat[:profile], all o platform:chat:thread; failure_deliver distinto. Ogni run parte in sessione fresca: niente contesto implicito della chat. Pin modello solo se esplicitamente richiesto. Fonte `tools/cronjob_tools.py:1047–1137`.
+Tool `cronjob_manage`, actions create/list/update/pause/resume/remove/run; create requires schedule and prompt. Schedule distinguishes recurring `30m` from one-shot `in 30m` and supports natural day/time, cron and ISO timestamps. `deliver` can be local, bot-chat[:profile], all or platform:chat:thread; failure_deliver is separate. Each run starts in a fresh session: no implicit chat context. Pin the model only if explicitly requested. Source `tools/cronjob_tools.py:1047–1137`.
 
-Desktop usa REST: GET/POST `/api/cron/jobs`, GET/PUT/DELETE `/api/cron/jobs/:job_id`, POST pause/resume/trigger, GET runs?limit, GET `/api/cron/delivery-targets`; create/update typed payload, update `{updates}`. Trigger è operazione sincrona lunga nell’upstream (timeout24h nel client): la risposta HTTP iniziale non va reinterpretata come run concluso. Profilo è owner, list può defaultare ad all: Studio deve passare scope concreto inizialmente. `cron.changed` è segnale refetch. Fonti `apps/desktop/src/api/cron.ts`, `hermes_cli/web_routers/cron.py:668–739`, `hermes_cli/web_server_cron.py`, `tui_gateway/contracts/events.py:727`.
+Desktop uses REST: GET/POST `/api/cron/jobs`, GET/PUT/DELETE `/api/cron/jobs/:job_id`, POST pause/resume/trigger, GET runs?limit, GET `/api/cron/delivery-targets`; create/update use typed payloads, update `{updates}`. Trigger is a long synchronous upstream operation (24h timeout in the client): the initial HTTP response must not be reinterpreted as a completed run. The profile is the owner, and list may default to all: Studio must initially pass a concrete scope. `cron.changed` signals a refetch. Sources `apps/desktop/src/api/cron.ts`, `hermes_cli/web_routers/cron.py:668–739`, `hermes_cli/web_server_cron.py`, `tui_gateway/contracts/events.py:727`.
 
-## Dominio, UX e stati
+## Domain, UX and states
 
-Routine `{connectionId,profile,jobId}` e Run `{sessionId,runId?,startedAt,status,result,delivery}` distinti. Form: nome, bot, istruzione autonoma, schedule/timezone leggibile, destinazione e failure policy; preview next run verificata dal backend. Lista planned/paused/host unavailable; run queued/running/interrupted/failed/succeeded/unknown e delivery separata. Avviso concreto se scheduler non attivo; esito senza run authoritative non passa a succeeded. Operazione elimina con scope chiaro, non confonderla con pausa.
+Routine `{connectionId,profile,jobId}` and Run `{sessionId,runId?,startedAt,status,result,delivery}` are distinct. Form: name, bot, self-contained instruction, readable schedule/timezone, destination and failure policy; next-run preview verified by the backend. List states planned/paused/host unavailable; run states queued/running/interrupted/failed/succeeded/unknown, with delivery separate. Show a concrete warning if the scheduler is inactive; an outcome without an authoritative run does not become succeeded. Delete operations have clear scope and must not be confused with pause.
 
-## Seam, ownership e dipendenze
+## Seam, ownership and dependencies
 
-Dipende da F1 per connessione e host, F3 per autorizzazioni; F7 soltanto per destinazioni Bot e F6 se il risultato diventa documento. La cronologia delle esecuzioni appartiene a questa feature. Nuovi `desktop/hermes/routines.mjs`, `.test.mjs`, client `RoutinesView.tsx`/`RoutineEditor.tsx`; sostituire route Studio tasks501 soltanto dopo contratto confermato. Non creare cron macOS o timer Electron parallelo; Hermes scheduler unico. Configurazione del gateway/scheduler deve avere gate separato, nessuna modifica in questa specifica.
+Depends on F1 for connection and host, F3 for authorizations; F7 only for Bot destinations and F6 if the result becomes a document. Run history belongs to this feature. New `desktop/hermes/routines.mjs`, `.test.mjs`, client `RoutinesView.tsx`/`RoutineEditor.tsx`; replace the Studio tasks501 route only after confirming the contract. Do not create a parallel macOS cron or Electron timer; Hermes is the only scheduler. Gateway/scheduler configuration requires a separate gate, with no changes in this spec.
 
-## Privacy, migrazione e non-obiettivi
+## Privacy, migration and non-goals
 
-Default destinazione local/app se supportata; all/shared platform richiede scelta esplicita. Inserire solo riferimenti/fonti autorizzati nel prompt autonomo; segreti restano vault runtime. Nessun import automatico di tutte le routine personali. Metadata task OpenDots non diventa cronjob reale; mapping nullable finché confermato. Non garantire funzionamento24h o wake del Mac senza prova durata e politica host.
+Default destination local/app if supported; all/shared platform requires explicit selection. Include only authorized references/sources in the self-contained prompt; secrets remain in the runtime vault. No automatic import of all personal routines. OpenDots task metadata does not become an actual cronjob; mapping remains nullable until confirmed. Do not guarantee 24h operation or waking the Mac without duration testing and a host policy.
 
-## Accettazione e DoD
+## Acceptance and DoD
 
-Fixture create/update/pause/resume/remove, one-shot vs recurring, timezone/DST, collisione stesso jobId su profili diversi, stale refresh, trigger timeout senza retry automatico, failed delivery distinta da run, reopen run sulla connessione proprietaria. Prova isolata breve esegue due riattivazioni e recupera run/result con client chiuso; non dichiarare durata24h. DoD: backend adapter scoped, UI e schema reversibile, run/delivery logs reali, scheduler ownership verificata e packaged smoke; STATUS/WORKLOG aggiornati.
+Fixtures for create/update/pause/resume/remove, one-shot versus recurring, timezone/DST, identical jobId collisions across profiles, stale refresh, trigger timeout without automatic retry, failed delivery distinct from run, and reopening runs on the owning connection. A brief isolated test performs two reactivations and retrieves runs/results with the client closed; do not claim 24h duration. DoD: scoped backend adapter, UI and reversible schema, real run/delivery logs, verified scheduler ownership and packaged smoke; updated STATUS/WORKLOG.
 
-## Destinazione file e memoria — D25/D28
+## File destination and memory — D25/D28
 
-Routine può riferire un documento del folder Space con root/host/path e grant durevole verificati; metadato Space non garantisce folder disponibile quando client chiuso. File update confermato da revisione/esito F5; memoria Space F9 aggiornata solo entro policy selezionata. Memoria runtime/skill curator non sono il scheduler; nessun salvataggio al vault da sola consegna testuale.
+A routine can reference a document in the Space folder with verified root/host/path and durable grant; Space metadata does not guarantee folder availability when the client is closed. File updates are confirmed by F5 revision/outcome; F9 Space memory is updated only within the selected policy. Runtime memory/skill curator are not the scheduler; textual delivery alone does not save to the vault.
 
-## Prompt pronto nuova chat
+## Ready-to-use prompt for a new chat
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F10 leggendo spec e riferimento upstream apps/desktop/api/cron.ts. Priorità routine: partire da list scoped+run history, poi creazione/pause/trigger con fixture e scheduler Hermes isolato. Nessun timer alternativo, messaggio esterno o modifica delle routine personali. Mostra next run e disponibilità host verificati, separa run da delivery e non ritentare esiti incerti. Completa test schedule/timezone/relaunch, DoD e documentazione. Segui anche Incarico per la chat implementatrice di F10: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+> First follow docs/agents/feature-workflow.md and this card’s Files and skills section, reading SKILL.md files before applying them. Implement F10 by reading the spec and upstream reference apps/desktop/api/cron.ts. Routine priority: start with scoped list+run history, then creation/pause/trigger with fixtures and an isolated Hermes scheduler. No alternative timers, external messages or changes to personal routines. Show verified next run and host availability, separate run from delivery and do not retry uncertain outcomes. Complete schedule/timezone/relaunch tests, DoD and documentation. Also follow the Assignment for the implementing chat for F10: deliver verified code and evidence, with the specified GUI/backend context, not just a plan. Capability gates and F0/F18 exceptions still apply.

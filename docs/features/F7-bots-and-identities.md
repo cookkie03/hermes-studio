@@ -1,126 +1,140 @@
-# F7 — Dots collegati ai Bots Hermes e avatar
+# F7 — Dots linked to Hermes Bots and avatars
 
 <!-- implementation-packet:start -->
-## Incarico per la chat implementatrice
+## Assignment for the implementation chat
 
-Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F7**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+When this feature card is attached as a development assignment, implement and verify **only the F7 frontend/integration**, following the workflow below and this card’s specific sections. The attachment is the entry point: open the linked workspace files and SKILL.md files before writing code. “Documented/not implemented” statements describe the baseline; they do not require the assigned chat to stop at a plan.
 
-**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+**Type of work:** GUI adaptation and integration with existing Hermes capabilities, not creation of the backend feature. The Fxx split provides ownership, implementation and testing in separate chats: the product remains a single Hermes GUI in the OpenDots style.
 
-**Risultato:** Modificare avatar dei Dots e collegare identità UI a Bot/profilo Hermes tramite binding verificato.
+**Outcome:** Change Dot avatars and link UI identities to Hermes Bots/profiles through verified bindings.
 
-**Backend e confine:** Avatar è metadata UI; Bot, conversazione canonica e profilo sono runtime Hermes, distinti da delegati temporanei. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+**Backend and boundary:** Avatars are UI metadata; Bots, canonical conversations and profiles belong to the Hermes runtime and are distinct from temporary delegates. Studio is a Hermes frontend/adapter: names and GUI may change, but agent capabilities and gates remain native. A missing contract is an explicit gap, not a new backend feature to build.
 
-**Contesto e interazioni pertinenti:** D37: ogni runtime collegato presenta i propri Bots come Dots tramite roster nativo, senza ricreazione manuale; ownership F7. Applicare anche D36 qui sotto: pannello laterale per figli temporanei; Dots persistenti nella propria chat, messaggi attribuiti e attività confermata dal runtime. Create/Edit Dot include picker quattro avatar OpenDots; header mostra Bot/Space/host/modello/effort senza attribuire default globale al singolo bot. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Relevant context and interactions:** D38: a shared Space linked to the chosen specialist’s profile project; individual memory and no implicit changes to active work. D37: each connected runtime presents its own Bots as Dots through the native roster, without manual recreation; F7 owns this. Also apply D36 below: a side panel for temporary children; persistent Dots in their own chat, attributed messages and runtime-confirmed activity. Create/Edit Dot includes a picker for the four OpenDots avatars; the header shows Bot/Space/host/model/effort without attributing a global default to an individual bot. Reading the [shared GUI requirements](gui-context-and-references.md) is mandatory; apply the requirements assigned here and leave other functions to their respective owners.
 
-**Dipendenze e letture aggiuntive:** A avatar locale indipendente; B binding richiede F1 e roster verificato. F6/F2 possiedono contesto Space/sessione, non derivarlo dal nome Dot. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+**Dependencies and additional reading:** A: independent local avatars; B: bindings require F1 and a verified roster. F6/F2 own Space/session context; do not derive it from the Dot name. Read [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow and skills](../agents/feature-workflow.md), [boundaries](../architecture/feature-boundaries.md), then this card’s Files and skills section and gates. Verify actual files, methods and version; future paths are not already existing APIs.
 
-**Prove specifiche obbligatorie per l’incremento pertinente:** Avatar invalido/legacy/restart, omonimi, roster stale, bot offline, profili differenti, cambio selezione con eventi tardivi e nessuna copia delle memorie personali. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+**Mandatory specific tests for the relevant increment:** Invalid/legacy/restart avatars, namesakes, stale roster, offline bots, different profiles, selection changes with late events and no copies of personal memories. Use synthetic profiles and data; exercise the actual interface. Fixtures, builds, handshakes and isolated runtime tests are distinct evidence.
 
-**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+**Required delivery:** Working increment code, relevant tests with recorded commands/results, typecheck/build of the changed dependency graph and a proportionate .app smoke test. If the UI changes: verify keyboard/focus, IME where relevant, 900/1360px, accessibility and Reduced Motion. Review the diff against the specification/principles, fix identified issues, and update status/gates in this card and MEMORY/STATUS/WORKLOG. Declare unperformed tests and external blockers; completion requires proven increment gates. Git: select only your own files after inspecting diff/index/secrets; push/publish according to current authorization.
 
-Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+If essential scope is missing, clarify only that; otherwise use confirmed requirements and choose a vertical increment consistent with this card, declaring it before edits. Agree on shared dependencies; do not implement the backlog. F0 remains explicit maintenance of the completed baseline; F18 remains future work until selected and supported. For other IDs, proceed with implementation and verification within authorization and actual capabilities, without another general interview.
 <!-- implementation-packet:end -->
 
 
 <!-- feature-guidance:start -->
-## File e skill da leggere e usare
+## Files and skills to read and use
 
-Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+First follow the [shared ask-matt-guided workflow](../agents/feature-workflow.md): it contains initial reading, implementation/review skills and exit criteria. Then read the specific files below. The [complete project and global catalog](../agents/skills-catalog.md) preserves all collections; load skill bodies only when relevant.
 
-### Skill specifiche
+### Specific skills
 
-| Skill / percorso | Quando applicarla a questa feature |
+| Skill / path | When to apply it to this feature |
 |---|---|
-| [research](<../../.agents/skills/research/SKILL.md>) | Se schema/eventi upstream sono incerti: ricerca primaria documentata |
-| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | Quando cambiano identità, stato o termini del dominio |
-| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — condizionale | Se emerge un errore riproducibile di connessione o lifecycle |
-| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) — condizionale | Componenti React e stato del renderer |
+| [research](<../../.agents/skills/research/SKILL.md>) | If upstream schemas/events are uncertain: documented primary-source research |
+| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | When domain identities, states or terms change |
+| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — conditional | If a reproducible connection or lifecycle error emerges |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) — conditional | React components and renderer state |
 
-### Punti di ingresso da leggere
+### Entry points to read
 
-- [docs/research/hermes-desktop-reference.md](<../../docs/research/hermes-desktop-reference.md>): Mappa identità e runtime.
-- [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Binding owned attuale.
-- [desktop/upstream/src/server/workspace.ts](<../../desktop/upstream/src/server/workspace.ts>): Dot locali.
-- [desktop/upstream/src/client/WorkspaceDialog.tsx](<../../desktop/upstream/src/client/WorkspaceDialog.tsx>): Configurazione locale.
-- [Hermes: tools/bot_mode_dm.py](</Users/luca/.hermes/hermes-agent/tools/bot_mode_dm.py>): Bot canonici e gating; lettura sorgente alla versione fissata, non prova live.
-- [docs/features/F1-runtime-connection.md](<../../docs/features/F1-runtime-connection.md>): Scope connessione.
+- [docs/research/hermes-desktop-reference.md](<../../docs/research/hermes-desktop-reference.md>): Identity and runtime map.
+- [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Current owned binding.
+- [desktop/upstream/src/server/workspace.ts](<../../desktop/upstream/src/server/workspace.ts>): Local Dots.
+- [desktop/upstream/src/client/WorkspaceDialog.tsx](<../../desktop/upstream/src/client/WorkspaceDialog.tsx>): Local configuration.
+- [Hermes: tools/bot_mode_dm.py](</Users/luca/.hermes/hermes-agent/tools/bot_mode_dm.py>): Canonical Bots and gating; source reading at the pinned version, not a live test.
+- [docs/features/F1-runtime-connection.md](<../../docs/features/F1-runtime-connection.md>): Connection scope.
 
-Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+Verify paths and version before working; coordinate shared files. Reading does not authorize other features or changes to the personal runtime.
 <!-- feature-guidance:end -->
 
-## Confine delle prove
+## Evidence boundary
 
-Stato: **documented, not implemented** (2026-10-04). Questa specifica descrive una futura slice di Hermes Studio; codice upstream disponibile non significa capability collegata nell’app. Evidenze: lettura del checkout sorgente `/Users/luca/.hermes/hermes-agent`, non esecuzione live, nessun prompt/configurazione/database personale. Riferimento autorevole: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). La versione remota può cambiare: prima di implementare fissare SHA e ripetere i contract test.
+Status: **documented, not implemented** (2026-10-04). This specification describes a future Hermes Studio slice; available upstream code does not mean the capability is connected in the app. Evidence: source checkout reading at `/Users/luca/.hermes/hermes-agent`, not live execution, with no personal prompts/configuration/databases. Authoritative reference: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). The remote version may change: pin the SHA and repeat contract tests before implementation.
 
-Leggere prima `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md` e `desktop/hermes/README.md`. UI OpenDots scelta dall’utente; Hermes resta l’unico executor. Gli endpoint Studio sotto descritti sono **proposte**, non API esistenti.
+First read `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md` and `desktop/hermes/README.md`. The user chose OpenDots UI; Hermes remains the only executor. The Studio endpoints described below are **proposals**, not existing APIs.
 
-## D26 — Avatar OpenDots selezionabile
+## D26 — Selectable OpenDots avatar
 
-Richiesta confermata: nella finestra Create Dot e Edit Dot scegliere l’avatar desiderato e vedere un’anteprima. Incremento **F7-A**, locale e selezionabile indipendentemente dal binding Hermes F7-B; non richiede connessione, nuovo profilo o credenziali runtime.
+Confirmed request: choose the desired avatar and see a preview in the Create Dot and Edit Dot dialogs. **F7-A** increment, local and selectable independently of the F7-B Hermes binding; it does not require a connection, a new profile or runtime credentials.
 
-Evidenza sorgente Studio: `public/dots/` contiene quattro immagini OpenDots (`blue.png`, `mint.png`, `orange.png`, `purple.png`). Mascot.tsx sceglie oggi il personaggio dall’hash dell’identità; WorkspaceDialog non espone una scelta avatar. Non sono state trovate altre immagini avatar in questo snapshot. Usare il catalogo locale completo degli asset disponibili; icone di navigazione/favicon non sono automaticamente personaggi. Asset extra, upload o avatar generati sono futuri, non richiesti dalla prima slice.
+Studio source evidence: `public/dots/` contains four OpenDots images (`blue.png`, `mint.png`, `orange.png`, `purple.png`). Mascot.tsx currently selects the character from an identity hash; WorkspaceDialog does not expose avatar selection. No other avatar images were found in this snapshot. Use the complete local catalog of available assets; navigation icons/favicons are not automatically characters. Extra assets, uploads or generated avatars are future work, not required by the first slice.
 
-Form: griglia con quattro anteprime e nomi leggibili, selezione visibile anche senza colore, preview accanto a nome/ruolo. Salvataggio esplicito insieme ai dati del Dot; Cancel non persiste. In Edit caricare la scelta già salvata. Sidebar/header/chat/team riusano il medesimo avatar. Se immagine manca, fallback stabile e leggibile, mai cambio casuale a ogni render.
+Form: grid with four previews and readable names, selection visible without color, preview alongside name/role. Explicit save together with Dot data; Cancel does not persist. In Edit, load the previously saved choice. Sidebar/header/chat/team reuse the same avatar. If an image is missing, use a stable, readable fallback, never a random change on every render.
 
-Proposta dati: `avatarId` con allowlist e ID stabile, distinta da dotId, profilo Hermes e stato attività. Non accettare path/URL arbitrari come avatarId. I Dots esistenti senza campo conservano l’attuale personaggio deterministico finché l’utente non sceglie. Cambiare avatar non ricrea sessioni, non cambia ruolo/tool/permessi e non modifica `profiles.set_asset` del runtime implicitamente.
+Data proposal: `avatarId` with an allowlist and stable ID, distinct from dotId, Hermes profile and activity state. Do not accept arbitrary paths/URLs as avatarId. Existing Dots without the field retain their current deterministic character until the user chooses. Changing the avatar does not recreate sessions, change role/tools/permissions or implicitly modify runtime `profiles.set_asset`.
 
-Skill aggiuntive per F7-A: [frontend-design](../../.agents/skills/frontend-design/SKILL.md), [axiom-accessibility](../../.agents/skills/axiom-accessibility/SKILL.md) per tastiera/focus/etichette, React e UI-test già indicati sopra. Leggere [Mascot.tsx](../../desktop/upstream/src/client/Mascot.tsx), [WorkspaceDialog.tsx](../../desktop/upstream/src/client/WorkspaceDialog.tsx), [types.ts](../../desktop/upstream/src/shared/types.ts), [workspace.ts](../../desktop/upstream/src/server/workspace.ts), [workspace-routes.ts](../../desktop/upstream/src/server/workspace-routes.ts) e [PROVENANCE](../../desktop/upstream/PROVENANCE.md). Conservare licenza degli asset.
+Additional skills for F7-A: [frontend-design](../../.agents/skills/frontend-design/SKILL.md), [axiom-accessibility](../../.agents/skills/axiom-accessibility/SKILL.md) for keyboard/focus/labels, React and UI-test already listed above. Read [Mascot.tsx](../../desktop/upstream/src/client/Mascot.tsx), [WorkspaceDialog.tsx](../../desktop/upstream/src/client/WorkspaceDialog.tsx), [types.ts](../../desktop/upstream/src/shared/types.ts), [workspace.ts](../../desktop/upstream/src/server/workspace.ts), [workspace-routes.ts](../../desktop/upstream/src/server/workspace-routes.ts) and [PROVENANCE](../../desktop/upstream/PROVENANCE.md). Preserve asset licensing.
 
-Gate F7-A: ogni asset selezionabile; create/edit/save/reopen/restart persistono stessa scelta; Cancel e save fallito preservano identità precedente; fallback legacy e asset mancante; keyboard/radiogroup/focus; ID invalido rifiutato server-side. Nessuna chiamata Hermes necessaria. Il completamento di F7-A non completa F7-B.
+F7-A gates: every asset selectable; create/edit/save/reopen/restart persist the same choice; Cancel and failed saves preserve the previous identity; legacy fallback and missing assets; keyboard/radiogroup/focus; invalid IDs rejected server-side. No Hermes call required. Completing F7-A does not complete F7-B.
 
-## Obiettivo e casi d’uso
+## Goal and use cases
 
-Priorità utente: riconoscere bot persistenti, aprire la loro conversazione corretta e utilizzarli nei progetti. Distinguere un Dot locale con role guidance da un vero profilo Hermes; associare un Dot a un bot scelto esplicitamente; riconoscere omonimi su host diversi; ritrovare la Bot Chat dopo compressione o riavvio. Non confondere bot Hermes con bot Telegram o un processo sempre attivo.
+User priority: recognize persistent bots, open their correct conversation and use them in projects. Distinguish a local Dot with role guidance from an actual Hermes profile; associate a Dot with an explicitly chosen bot; recognize namesakes on different hosts; recover Bot Chat after compression or restart. Do not confuse Hermes bots with Telegram bots or an always-running process.
 
-## Dominio e contratto runtime verificato
+## Domain and verified runtime contract
 
-`profiles.list {include_sessions:true}` restituisce `profiles`, `bot_mode_protocol`, `install_id`; ogni riga può avere `canonical_session`, `worker_session`, asset e metadata. `profiles.describe`, `profiles.configure`, `profiles.create`, `profiles.get_asset/set_asset` sono RPC distinti. Creare un profilo può copiare credenziali per default (`mirror_credentials`): non usare la creazione come innocuo cambio avatar.
+`profiles.list {include_sessions:true}` returns `profiles`, `bot_mode_protocol`, `install_id`; each row may have `canonical_session`, `worker_session`, assets and metadata. `profiles.describe`, `profiles.configure`, `profiles.create`, `profiles.get_asset/set_asset` are distinct RPCs. Creating a profile may copy credentials by default (`mirror_credentials`): do not treat creation as a harmless avatar change.
 
-Upstream desktop definisce la Bot Chat canonica mediante **profilo + titolo esatto `Bot Chat`**, ricerca `session.list {title,include_hidden:true}` e registry canonicale; non sceglie la sessione più recente e non mantiene un semplice ID pin come autorità. Compressione può cambiare il tip. Una chat laterale non sostituisce la Bot Chat. La modalità Bot deve essere confermata dal runtime, non attivata rinominando una conversazione Studio.
+The upstream desktop defines canonical Bot Chat by **profile + exact title `Bot Chat`**, searches `session.list {title,include_hidden:true}` and the canonical registry; it does not choose the most recent session or maintain a simple pinned ID as authority. Compression may change the tip. A side chat does not replace Bot Chat. Bot Mode must be confirmed by the runtime, not activated by renaming a Studio conversation.
 
-Fonti primarie: `tui_gateway/contracts/profiles_vault_complete_foreign_subagents.py:150–225`; `apps/desktop/src/AGENTS.md` sezione Bot Mode; `apps/desktop/src/plugins/hermes-bots/routing.ts`, `roster-actions.ts`, test `bot-row-opens-canonical-chat.test.ts` e `reclaim-refresh-in-place.test.ts`. Contratto di connessione/profilo: `apps/desktop/src/sdk/profile-routing.test.ts`.
+Primary sources: `tui_gateway/contracts/profiles_vault_complete_foreign_subagents.py:150–225`; `apps/desktop/src/AGENTS.md` Bot Mode section; `apps/desktop/src/plugins/hermes-bots/routing.ts`, `roster-actions.ts`, tests `bot-row-opens-canonical-chat.test.ts` and `reclaim-refresh-in-place.test.ts`. Connection/profile contract: `apps/desktop/src/sdk/profile-routing.test.ts`.
 
-## UX e stati
+## UX and states
 
-Lista Dots con tipo visibile “Dot locale” o “Bot Hermes”, identità `{connectionId,installId,profile}`, ruolo/avatar e stato documentato. “Collega bot” mostra roster autorizzato; preview non apre/transmette cronologia. Stati: disconnected, discovering, available, resolving canonical chat, connected, capability unavailable, stale route, identity conflict. Click ripetuti adottano la stessa chat; nessun intro prompt automatico Studio durante discovery.
+Dots list with visible type “Local Dot” or “Hermes Bot”, identity `{connectionId,installId,profile}`, role/avatar and documented state. “Connect bot” shows the authorized roster; preview does not open/transmit history. States: disconnected, discovering, available, resolving canonical chat, connected, capability unavailable, stale route, identity conflict. Repeated clicks adopt the same chat; no automatic Studio intro prompt during discovery.
 
-## Seam, ownership e dipendenze
+## Seam, ownership and dependencies
 
-Per F7-B implementare adapter read-only identità in nuovi `desktop/hermes/bots.mjs`, contratti `bots.test.mjs` e UI `BotBindingDialog.tsx`; modifiche concordate a bridge/server, shared types e WorkspaceDialog. Mapping Studio separato, versionato, `{dotId,connectionId,installId,profile,kind}`; non sovrascrivere config/profile Hermes. F7-B dipende da F1 connessione/profile routing e F2 conversazioni; F7-A avatar dipende solo dalla base locale e F4; abilita F14/F10. Creazione/configurazione bot è incremento separato dopo roster e canonical resolver.
+For F7-B, implement a read-only identity adapter in new `desktop/hermes/bots.mjs`, contracts in `bots.test.mjs` and UI in `BotBindingDialog.tsx`; agreed changes to bridge/server, shared types and WorkspaceDialog. Separate, versioned Studio mapping, `{dotId,connectionId,installId,profile,kind}`; do not overwrite Hermes config/profile. F7-B depends on F1 connection/profile routing and F2 conversations; F7-A avatars depend only on the local baseline and F4; enables F14/F10. Bot creation/configuration is a separate increment after the roster and canonical resolver.
 
-## Privacy, migrazione e non-obiettivi
+## Privacy, migration and non-goals
 
-Mostrare il roster non autorizza import di tutte le chat o clonazione credenziali. Migrare Dots esistenti come locali, senza conversione automatica. Una binding non confermata resta inattiva; import esplicito di chat esterne richiede gate diverso dall’attuale whitelist owned. Non gestire canali Telegram, copie SOUL/MEMORY o cancellazione profili in questa slice.
+Showing the roster does not authorize importing all chats or cloning credentials. Migrate existing Dots as local, without automatic conversion. An unconfirmed binding remains inactive; explicit import of external chats requires a different gate from the current owned whitelist. Do not manage Telegram channels, SOUL/MEMORY copies or profile deletion in this slice.
 
-## Accettazione e DoD
+## Acceptance and DoD
 
-Fixture due host/profili omonimi: nessuna collisione; canonical hidden e lineage corrette; side-chat più recente non adottata; backend disconnect mantiene metadata; race doppio click non crea due chat; profilo sconosciuto rifiutato. Prova isolata successiva dimostra canonical resume senza lettura di altri archivi. DoD: UI+adapter+schema migration reversibile, test proprietà/routing, build packaged, documentazione e STATUS/WORKLOG aggiornati; capability mostrata soltanto dopo risposta runtime.
+Fixture with two hosts/namesake profiles: no collisions; correct hidden canonical session and lineage; newer side chat not adopted; backend disconnect preserves metadata; double-click race does not create two chats; unknown profile rejected. A subsequent isolated test demonstrates canonical resume without reading other archives. DoD: UI+adapter+reversible schema migration, ownership/routing tests, packaged build, documentation and updated STATUS/WORKLOG; capability shown only after a runtime response.
 
-## Requisito condiviso: contesto e composer Hermes
+## Shared requirement: Hermes context and composer
 
-Leggere [contesto visibile, Spaces/progetti, @ file/righe e / skill/tool](gui-context-and-references.md). Header identifica Space, host, modello ed effort effettivi della chat/bot. Capacità e mutazioni rimangono nel backend Hermes; non simulare valori o azioni non supportati. Ownership specifica nella scheda trasversale.
+Read [visible context, Spaces/projects, @ files/lines and / skills/tools](gui-context-and-references.md). The header identifies the chat/bot’s actual Space, host, model and effort. Capabilities and mutations remain in the Hermes backend; do not simulate unsupported values or actions. Specific ownership is in the cross-feature card.
 
-## D36 — Attività e messaggi nella conversazione del Dot
+## D36 — Activity and messages in the Dot’s conversation
 
-Ogni Dot persistente mostra attività nella sidebar e nel proprio header quando Hermes conferma che sta lavorando. Separare inattivo, in coda, in esecuzione, in attesa di approvazione, completato, fallito e stato sconosciuto/stale nei limiti dei dati effettivamente esposti. Non dedurre Working dall’invio di un messaggio o da un ack queued.
+Each persistent Dot shows activity in the sidebar and its own header when Hermes confirms it is working. Distinguish inactive, queued, running, awaiting approval, completed, failed and unknown/stale states within the limits of actually exposed data. Do not infer Working from sending a message or a queued ack.
 
-Quando un altro Bot gli manda un messaggio, il destinatario conserva la sua conversazione canonica: selezionando quel Dot si vede il messaggio ricevuto, attribuito al mittente, e il lavoro del destinatario. Il badge non letto segnala il messaggio effettivamente disponibile e resta indipendente dall’attività. Identità scoped a connessione/profilo/sessione, non al nome dell’avatar. Non trasformare un figlio delegate_task in Dot persistente e non mostrare Dots nel pannello sub-agent.
+When another Bot sends it a message, the recipient retains its canonical conversation: selecting that Dot shows the incoming message, attributed to the sender, and the recipient’s work. The unread badge indicates an actually available message and remains independent of activity. Identity is scoped to connection/profile/session, not avatar name. Do not turn a delegate_task child into a persistent Dot or show Dots in the sub-agent panel.
 
-Gate: A manda a B, B riceve e lavora; passando a B messaggio e stato sono corretti, senza eventi di A o di un Bot omonimo su altro host. Se la ricezione o l’esecuzione non sono confermate, mostrare il limite; un Dot attivo non viene marcato letto solo perché ha iniziato a lavorare.
+Gates: A sends to B, B receives and works; switching to B shows the correct message and state, without events from A or a namesake Bot on another host. If receipt or execution is unconfirmed, show the limitation; an active Dot is not marked read merely because it started working.
 
-## D37 — Ogni runtime porta i propri Bots in Studio
+## D37 — Each runtime brings its own Bots into Studio
 
-Quando si collega un runtime Hermes, Studio ne scopre e presenta tutti i Bots autorizzati come Dots, conservando l’identità nativa. Non richiedere di ricreare manualmente ogni Bot o di creare un Dot locale prima di poterlo vedere. La scoperta usa il roster nativo verificato (vedi contratti e fonti in [F7](F7-bots-and-identities.md)), non una lista inventata dal frontend. Un profilo non confermato come Bot non viene automaticamente promosso a Bot.
+When a Hermes runtime is connected, Studio discovers and presents all its authorized Bots as Dots, preserving native identity. Do not require manual recreation of every Bot or creation of a local Dot before it can be seen. Discovery uses the verified native roster (see contracts and sources in [F7](F7-bots-and-identities.md)), not a list invented by the frontend. A profile not confirmed as a Bot is not automatically promoted to Bot.
 
-Identità scoped a connessione/runtime, installazione e profilo: Bots omonimi su host diversi restano distinti, con host/origine riconoscibili. Selezionare un Dot apre la Bot Chat canonica di quel runtime secondo F7/F2, preservando sessione e continuità native; non crea una chat sostitutiva né invia prompt introduttivi. Space, modello ed effort mostrano il contesto effettivo disponibile, senza associazioni dedotte dal nome.
+Identity is scoped to connection/runtime, installation and profile: namesake Bots on different hosts remain distinct, with recognizable host/origin. Selecting a Dot opens that runtime’s canonical Bot Chat according to F7/F2, preserving native session and continuity; it does not create a substitute chat or send introductory prompts. Space, model and effort show the actual available context without associations inferred from names.
 
-Discovery del roster non importa tutte le conversazioni, non clona Bots, credenziali o memorie e non avvia lavoro. Metadata/avatar locali restano presentazione. Riconnessione aggiorna il roster senza duplicati; backend offline mostra Bots già noti come offline/stale, senza nasconderne l’origine o attribuire attività. Aggiunte/rimozioni seguono i dati confermati dal runtime; scollegare Studio non cancella Bots o lavoro backend. Figli temporanei delegate_task restano nel pannello sub-agent D36, non nel roster persistente.
+Roster discovery does not import all conversations, clone Bots, credentials or memories, or start work. Local metadata/avatars remain presentation. Reconnection refreshes the roster without duplicates; an offline backend shows known Bots as offline/stale, without hiding their origin or attributing activity. Additions/removals follow runtime-confirmed data; disconnecting Studio does not delete Bots or backend work. Temporary delegate_task children remain in the D36 sub-agent panel, not the persistent roster.
 
-**Ownership:** F1 fornisce connessione e identità del runtime; F7 scopre/mappa/presenta roster e risolve Bot Chat; F2 presenta conversazione ed eventi; F4 rende navigabili Dots e host; F14 collega messaggi e attività native. Verificare capability/schema nel runtime collegato; assenza di contratto è un limite visibile, non autorizza backend alternativo.
+**Ownership:** F1 supplies connection and runtime identity; F7 discovers/maps/presents the roster and resolves Bot Chat; F2 presents conversations and events; F4 makes Dots and hosts navigable; F14 connects native messages and activity. Verify capabilities/schema in the connected runtime; a missing contract is a visible limitation, not authorization for an alternative backend.
 
-**Gate:** collegare due runtime sintetici con Bots omonimi e roster differenti; tutti i Bots autorizzati compaiono senza creazione manuale, identità e chat canonica corrette. Refresh/reconnect non duplicano righe; aggiunta/rimozione, profilo non-Bot, scope negato, offline e cambio host durante discovery non contaminano il roster. Nessun prompt, clonazione o import globale di cronologia per la sola connessione. Contratti sorgente sono evidenza documentale, non prova live.
+**Gates:** connect two synthetic runtimes with namesake Bots and different rosters; all authorized Bots appear without manual creation, with correct identities and canonical chats. Refresh/reconnect does not duplicate rows; additions/removals, non-Bot profiles, denied scope, offline and host changes during discovery do not contaminate the roster. No prompts, cloning or global history import merely from connecting. Source contracts are documentary evidence, not live proof.
 
-## Prompt pronto per una nuova chat Codex
+## D38 — One shared Space, multiple specialists and profile projects
 
-> Prima segui docs/agents/feature-workflow.md e File e skill della scheda. Implementa solo l’incremento scelto: F7-A avatar locali oppure F7-B binding bot. Per F7-A usa tutti i quattro asset OpenDots disponibili, picker in Create/Edit Dot, avatarId validato e persistente, fallback legacy stabile e stessa resa ovunque. Preserva identità/sessioni/permessi e non configurare Hermes per un cambio estetico. Per F7-B segui roster/canonical resolver e prove isolate descritti sotto. Nessun altro incremento automatico; aggiorna gate e documenti. Segui anche Incarico per la chat implementatrice di F7: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+Vision confirmed by the user on 2026-10-05: Studio shows a single Finance Space; choosing Product Manager or CTO resolves the Hermes project of the respective profile. Specialists are not permanently tied to one Space: specialist + Space selection concerns the current work/chat. The same specialist retains identity and memory when switching to Maintenance.
+
+A Hermes project is scoped to its profile (`HERMES_HOME/projects.db`), not a global project shared by all Bots. The Studio Space stores explicit associations to native projects identified by connection/runtime, profile and projectId; multiple associations may point to the same files on the same host. Do not merge projects by name, duplicate files or create a distributed backend.
+
+If the chosen specialist has no link, propose selecting an existing project from their profile or registering the folders through supported Hermes APIs, after an explicit choice. Present profile/host/folders before confirmation; no hidden creation/configuration. The link is confirmed only after the runtime result. The catalog may be partial/offline: show the limitation rather than recreating projects.
+
+SOUL, MEMORY and USER remain owned by each Hermes profile; a shared USER is not required. Personal memory and procedures are not merged on entering a Space. Shared project files and project skills discovered by the runtime in the actual context are distinct from Bot memories; membership or a message does not grant access to other profiles’ files, memories or tools.
+
+F6 owns Space/project associations; F7 Bot identities; F2 chat selection and context; F14 cross-profile collaboration. For the canonical Bot Chat, verify how to apply project/cwd while preserving Bot Mode capabilities: do not promise independent parallel sessions of the same Bot or change an active turn’s context. If necessary, block/defer the switch with an explicit state. Calling the CTO does not automatically assign the PM’s Space: resolve the CTO’s link and verify context/grants before declaring shared work. Different hosts do not imply a shared filesystem.
+
+**Gates:** one Finance Space and two PM/CTO profiles, distinct native projects pointing to the same files; both open the correct context with their own memory and confirmed Space/host/model/effort headers. The CTO switches to Maintenance without losing identity or moving ongoing Finance work. Missing links with explicit proposals, unsupported APIs, namesake projects, offline/reconnect, denied grants, switching during fetch/turns and collaboration without implicit access. No file copies, no profile merges, no Hermes changes solely from UI selection. Accepted requirement; implementation and runtime tests remain pending.
+
+## Ready-to-use prompt for a new Codex chat
+
+> First follow docs/agents/feature-workflow.md and this card’s Files and skills section. Implement only the selected increment: F7-A local avatars or F7-B bot binding. For F7-A, use all four available OpenDots assets, a picker in Create/Edit Dot, validated and persistent avatarId, a stable legacy fallback and consistent rendering everywhere. Preserve identities/sessions/permissions and do not configure Hermes for a cosmetic change. For F7-B, follow the roster/canonical resolver and isolated tests described below. No other automatic increment; update gates and documentation. Also follow the F7 Assignment for the implementation chat: deliver verified code and evidence, with the specified GUI/backend context, not just a plan. Capability gates and F0/F18 exceptions remain valid.

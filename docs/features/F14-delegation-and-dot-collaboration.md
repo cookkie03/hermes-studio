@@ -1,102 +1,116 @@
-# F14 — GUI della delegazione e collaborazione tra Bots Hermes
+# F14 — GUI for delegation and collaboration between Hermes Bots
 
 <!-- implementation-packet:start -->
-## Incarico per la chat implementatrice
+## Assignment for the implementing chat
 
-Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F14**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+When this card is attached as a development assignment, implement and verify **only the F14 frontend/connection**, following the workflow below and the card’s specific sections. The attachment is the entry point: open linked workspace files and SKILL.md files before coding. “Documented/not implemented” labels describe the baseline; they do not require stopping at a plan in the assigned chat.
 
-**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+**Type of work:** GUI adaptation and connection to existing Hermes capabilities, not creation of the feature in the backend. The Fxx separation supports ownership, implementation, and verification in separate chats: the product remains a single OpenDots-style Hermes GUI.
 
-**Risultato:** Presentare deleghe e messaggi tra bot Hermes con mittente/destinatario, ricevute e risultati tracciabili.
+**Outcome:** Present delegations and messages between Hermes bots with sender/recipient, receipts, and traceable results.
 
-**Backend e confine:** delegate_task, message_agent/bot relay/gruppi solo se realmente supportati; bot persistente distinto da subagent temporaneo. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+**Backend and boundary:** delegate_task, message_agent/bot relay/groups only if actually supported; persistent bot distinct from temporary subagent. Studio is a Hermes frontend/adapter: names and GUI may change, while agent capabilities and gates remain native. A missing contract is an explicit gap, not a new backend feature to build.
 
-**Contesto e interazioni pertinenti:** Applicare anche D36 qui sotto: pannello laterale per figli temporanei; Dots persistenti nella propria chat, messaggi attribuiti e attività confermata dal runtime. Mostrare Space e host della consegna e di ogni collaboratore; contesto condiviso esplicito e file/range scoped, non accesso all’intero progetto per membership. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Relevant context and interactions:** D38: shared Space linked to the project in the selected specialist’s profile; individual memory and no implicit change to active work. Also apply D36 below: side panel for temporary children; persistent Dots in their own chat, attributed messages and runtime-confirmed activity. Show Space and host for delivery and each collaborator; explicit shared context and scoped files/ranges, not access to the entire project through membership. You must read the [shared GUI requirements](gui-context-and-references.md); apply the requirements specified here, leaving other functions to their respective owners.
 
-**Dipendenze e letture aggiuntive:** F7 bot/F2 transcript/F3 grants/F5-F6 riferimenti. Nessun orchestratore o messaging backend alternativo in Studio. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+**Dependencies and additional readings:** F7 bot/F2 transcript/F3 grants/F5-F6 references. No alternative orchestrator or messaging backend in Studio. Read [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow and skills](../agents/feature-workflow.md), [boundaries](../architecture/feature-boundaries.md), then this card’s Files and skills and gates. Verify actual files/methods/version; future paths are not existing APIs.
 
-**Prove specifiche obbligatorie per l’incremento pertinente:** Due bot/profili, omonimi, ack contro risposta, recall, offline/timeout, duplicato/replay, delega cancellata e accesso file/memoria negato. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+**Mandatory specific checks for the relevant increment:** Two bots/profiles, identical names, ack versus reply, recall, offline/timeout, duplicate/replay, canceled delegation, and denied file/memory access. Use synthetic profiles and data; exercise the real interface. Fixtures, builds, handshakes, and isolated runtime tests are distinct evidence.
 
-**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+**Required delivery:** working increment code, relevant tests with recorded commands/results, typecheck/build of the modified dependency graph, and proportionate .app smoke testing. If the UI changes: verify keyboard/focus, IME where relevant, 900/1360px, accessibility, and Reduced Motion. Review the diff against the specification/principles, fix issues found, and update status/gates in the card and MEMORY/STATUS/WORKLOG. Declare unperformed checks and external blockers; completion requires evidence for the increment’s gates. Git: select only your own files after checking diff/index/secrets; push/publication follows current authorization.
 
-Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+If essential scope is missing, clarify only that; otherwise use confirmed requirements and choose a vertical increment consistent with the card, declaring it before edits. Agree on shared dependencies; do not implement the backlog. F0 remains explicit maintenance of the completed baseline; F18 remains future until selected and supported. For other IDs, proceed with implementation and verification within authorization and actual capabilities, without another general interview.
 <!-- implementation-packet:end -->
 
 
 <!-- feature-guidance:start -->
 
-## File e skill da leggere e usare
+## Files and skills to read and use
 
-Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+First follow the [shared ask-matt-guided workflow](../agents/feature-workflow.md): it contains initial readings, implementation/review skills, and exit criteria. Then read the feature-specific files below. The [complete project and global catalog](../agents/skills-catalog.md) retains all collections; load skill bodies only when relevant.
 
-### Skill specifiche
+### Feature-specific skills
 
-| Skill / percorso | Quando applicarla a questa feature |
+| Skill / path | When to apply it to this feature |
 |---|---|
-| [research](<../../.agents/skills/research/SKILL.md>) | Se schema/eventi upstream sono incerti: ricerca primaria documentata |
-| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | Quando cambiano identità, stato o termini del dominio |
-| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) — condizionale | Separare Delega, Messaggio e Gruppo |
-| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — condizionale | Se emerge un errore riproducibile di connessione o lifecycle |
+| [research](<../../.agents/skills/research/SKILL.md>) | If upstream schema/events are uncertain: documented primary-source research |
+| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | When identity, state, or domain terms change |
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) — conditional | Separate Delegation, Message, and Group |
+| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — conditional | If a reproducible connection or lifecycle error emerges |
 
-### Punti di ingresso da leggere
+### Entry points to read
 
-- [docs/features/F7-bots-and-identities.md](<../../docs/features/F7-bots-and-identities.md>): Identità canonica.
-- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Autorizzazione e richieste stale.
-- [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Trasporto owned.
-- [Hermes: tools/delegate_tool.py](</Users/luca/.hermes/hermes-agent/tools/delegate_tool.py>): Delega temporanea; lettura sorgente alla versione fissata, non prova live.
-- [Hermes: tools/bot_mode_dm.py](</Users/luca/.hermes/hermes-agent/tools/bot_mode_dm.py>): Messaggi tra bot; lettura sorgente alla versione fissata, non prova live.
-- [Hermes: tools/session_search_tool.py](</Users/luca/.hermes/hermes-agent/tools/session_search_tool.py>): Recupero cronologia; lettura sorgente alla versione fissata, non prova live.
-- [Hermes: tui_gateway/contracts/groups_bot_relay.py](</Users/luca/.hermes/hermes-agent/tui_gateway/contracts/groups_bot_relay.py>): Relay/gruppi e scope; lettura sorgente alla versione fissata, non prova live.
+- [docs/features/F7-bots-and-identities.md](<../../docs/features/F7-bots-and-identities.md>): Canonical identity.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Authorization and stale requests.
+- [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Owned transport.
+- [Hermes: tools/delegate_tool.py](</Users/luca/.hermes/hermes-agent/tools/delegate_tool.py>): Temporary delegation; source reading at the pinned version, not a live test.
+- [Hermes: tools/bot_mode_dm.py](</Users/luca/.hermes/hermes-agent/tools/bot_mode_dm.py>): Messages between bots; source reading at the pinned version, not a live test.
+- [Hermes: tools/session_search_tool.py](</Users/luca/.hermes/hermes-agent/tools/session_search_tool.py>): History retrieval; source reading at the pinned version, not a live test.
+- [Hermes: tui_gateway/contracts/groups_bot_relay.py](</Users/luca/.hermes/hermes-agent/tui_gateway/contracts/groups_bot_relay.py>): Relay/groups and scope; source reading at the pinned version, not a live test.
 
-Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+Verify paths and version before working; coordinate shared files. These readings do not authorize other features or changes to the personal runtime.
 <!-- feature-guidance:end -->
 
-## Confine delle prove
+## Evidence boundary
 
-Stato: **documented, not implemented** (2026-10-04). Questa specifica descrive una futura slice di Hermes Studio; codice upstream disponibile non significa capability collegata nell’app. Evidenze: lettura del checkout sorgente `/Users/luca/.hermes/hermes-agent`, non esecuzione live, nessun prompt/configurazione/database personale. Riferimento autorevole: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). La versione remota può cambiare: prima di implementare fissare SHA e ripetere i contract test.
+Status: **documented, not implemented** (2026-10-04). This specification describes a future Hermes Studio slice; available upstream code does not mean a capability is connected in the app. Evidence: reading the source checkout `/Users/luca/.hermes/hermes-agent`, not live execution, no personal prompt/configuration/database. Authoritative reference: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). The remote version may change: pin the SHA and repeat contract tests before implementing.
 
-Leggere prima `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md` e `desktop/hermes/README.md`. UI OpenDots scelta dall’utente; Hermes resta l’unico executor. Gli endpoint Studio sotto descritti sono **proposte**, non API esistenti.
+First read `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md`, and `desktop/hermes/README.md`. The user chose the OpenDots UI; Hermes remains the only executor. The Studio endpoints described below are **proposals**, not existing APIs.
 
-## Obiettivo e casi d’uso
+## Goal and use cases
 
-Priorità utente: bot che collaborano, si inviano messaggi e recuperano conversazioni pertinenti. Esporre destinatario, responsabilità, scope e provenienza: chiedere un risultato a un collega persistente, seguire una delega temporanea, riprendere un confronto precedente, coordinare un gruppo senza duplicare lavoro dopo una disconnessione.
+User priority: bots that collaborate, exchange messages, and retrieve relevant conversations. Expose recipient, responsibility, scope, and provenance: ask a persistent colleague for a result, follow a temporary delegation, resume a previous discussion, coordinate a group without duplicating work after a disconnection.
 
-## Tre contratti distinti verificati
+## Three distinct verified contracts
 
-1. `delegate_task`: figli con contesti isolati, `tasks:[{goal,context?,output_schema?,images?,group?}]`; `action` spawn/list/steer/stop, `subagent_id`, `message`. Richiede parent agent context e limiti runtime di profondità/concorrenza. RPC `subagent.list`, `.tail`, `.interrupt` richiedono sessione proprietaria; tail max16KB. Questi figli **non sono automaticamente Dots o Bot Chat durevoli**. Fonte `tools/delegate_tool.py:474,683–760`, `tui_gateway/contracts/profiles_vault_complete_foreign_subagents.py:642–674`.
-2. `message_agent {target,message}`: tool **iniettato soltanto** nella Bot Chat canonica gestita, non toolset globale. Target validato sul roster: profilo locale, peer/agent, handle@connection. Corpo max16.000 caratteri; attribution aggiunta server-side. Ack `queued`+delivery_id è handoff, non ricevuta; reply/failure arriva dal processo asincrono, con eventuale `reply_delivery=poll` da rispettare. Il runtime verifica nuovamente il gate; UI non deve abilitarlo in una normale chat cambiando titolo. Fonte `tools/bot_mode_dm.py:1–130`. Cross-connection `bot_relay.roster.sync`, `.outbox.drain`, `.deliver {profile,message,from_*?}` (blocking reply), `.reply {id,reply?,error?,reason?}` richiedono un relay posseduto, non fanout browser improvvisato. Fonte contracts `groups_bot_relay.py:508–570` e `methods_bot_relay.py`.
-3. Gruppi persistenti: `groups.capabilities`, `.create {room_id,name,members}`, `.send {room_id,event_id?,payload}`, `.log {room_id,since_seq?,limit?}`, `.state`, `.stop`, `.approve`, `.retry`. Log contiene seq/event_id e authority gateway/epoch; retry esplicito, tombstone disband, non ricreare task incerti. Fonte `tui_gateway/contracts/groups_bot_relay.py:150–360`.
+1. `delegate_task`: children with isolated contexts, `tasks:[{goal,context?,output_schema?,images?,group?}]`; `action` spawn/list/steer/stop, `subagent_id`, `message`. Requires parent agent context and runtime depth/concurrency limits. RPC `subagent.list`, `.tail`, `.interrupt` require the owning session; tail max16KB. These children **are not automatically Dots or durable Bot Chats**. Sources `tools/delegate_tool.py:474,683–760`, `tui_gateway/contracts/profiles_vault_complete_foreign_subagents.py:642–674`.
+2. `message_agent {target,message}`: tool **injected only** into the managed canonical Bot Chat, not a global toolset. Target validated against the roster: local profile, peer/agent, handle@connection. Body max16,000 characters; attribution added server-side. Ack `queued`+delivery_id is a handoff, not a receipt; reply/failure arrives from the asynchronous process, with any `reply_delivery=poll` respected. The runtime checks the gate again; the UI must not enable it in an ordinary chat by changing its title. Source `tools/bot_mode_dm.py:1–130`. Cross-connection `bot_relay.roster.sync`, `.outbox.drain`, `.deliver {profile,message,from_*?}` (blocking reply), `.reply {id,reply?,error?,reason?}` require an owned relay, not improvised browser fanout. Contract sources `groups_bot_relay.py:508–570` and `methods_bot_relay.py`.
+3. Persistent groups: `groups.capabilities`, `.create {room_id,name,members}`, `.send {room_id,event_id?,payload}`, `.log {room_id,since_seq?,limit?}`, `.state`, `.stop`, `.approve`, `.retry`. The log contains seq/event_id and gateway/epoch authority; explicit retry, disband tombstone, do not recreate uncertain tasks. Source `tui_gateway/contracts/groups_bot_relay.py:150–360`.
 
-Recall: `session_search` cerca/legge messaggi reali (FTS5), non riassunti inventati: query/limit/sort/detail, oppure session_id/around_message_id/window; `profile` opzionale permette lettura di altro profilo. Il link `@session:<profile>/<id>` preserva scope. Non è un tool chiamato “bot_recall” verificato. La descrizione e il campo session_id hanno formulazioni parzialmente diverse: testare read-alone e scroll con anchor sulla versione fissata. Fonte `tools/session_search_tool.py:651–779`.
+Recall: `session_search` searches/reads real messages (FTS5), not invented summaries: query/limit/sort/detail, or session_id/around_message_id/window; optional `profile` allows reading another profile. The `@session:<profile>/<id>` link preserves scope. This is not a verified tool named “bot_recall”. The description and session_id field have partially different wording: test read-alone and scrolling with an anchor on the pinned version. Source `tools/session_search_tool.py:651–779`.
 
-## Dominio, UX e stati
+## Domain, UX, and states
 
-Separare DelegationRun, BotMessageDelivery, HostedRoom e RecallResult. Stati UI: composing, queued, admitted, working, awaiting reply, reply received, declined, failed, delivery uncertain; “inviato” soltanto con ricevuta. Un pannello laterale Sub-agent mostra i figli temporanei della chat padre; la timeline della conversazione di ciascun Dot mostra i messaggi tra bot persistenti e un risultato recall mostra profile/thread/message anchor. Scope recall iniziale: chat propria + fonti condivise selezionate; estendere a profili personali solo con scelta esplicita. Notifica approvazione su thread diverso deve consentire navigazione.
+Separate DelegationRun, BotMessageDelivery, HostedRoom, and RecallResult. UI states: composing, queued, admitted, working, awaiting reply, reply received, declined, failed, delivery uncertain; “sent” only with a receipt. A Sub-agent side panel shows temporary children of the parent chat; each Dot’s conversation timeline shows messages between persistent bots, and a recall result shows profile/thread/message anchor. Initial recall scope: own chat + selected shared sources; extend to personal profiles only upon explicit choice. An approval notification on another thread must allow navigation.
 
-## Seam, ownership e dipendenze
+## Seam, ownership, and dependencies
 
-Dipende da F7/F1 per identità e connessione, F2 per cronologia e F3 per approvazioni. F11 è pertinente solo se si amplia il registro delle capacità. Nuovi `desktop/hermes/collaboration.mjs`, `collaboration.test.mjs`, `CollaborationPanel.tsx`, `RecallResults.tsx`; accordare bridge/server/shared types. Prima slice osserva deleghe reali e messaggi di due bot isolati. Seconda introduce relay con single-owner claim e ricevute; terza gruppi/log replay. Nessun executor OpenDots parallelo. Endpoints Studio proposti scoped `/bots/:identity/messages`, `/collaboration/:room/log`, `/recall`; nessuno esiste attualmente.
+Depends on F7/F1 for identity and connection, F2 for history, and F3 for approvals. F11 is relevant only if the capability registry is expanded. New `desktop/hermes/collaboration.mjs`, `collaboration.test.mjs`, `CollaborationPanel.tsx`, `RecallResults.tsx`; agree on bridge/server/shared types. First slice observes real delegations and messages from two isolated bots. Second introduces a relay with single-owner claim and receipts; third groups/log replay. No parallel OpenDots executor. Proposed scoped Studio endpoints `/bots/:identity/messages`, `/collaboration/:room/log`, `/recall`; none currently exists.
 
-## Privacy, migrazione e non-obiettivi
+## Privacy, migration, and non-goals
 
-Mai inoltrare intera chat privata o spoofare sender; target/author runtime authoritative. Scope e grants precedono lettura cross-profile. Conservare event_id/cursor/authority, receipts e origin link senza confondere pin sessione. Non convertire toolEvents storici in messaggi inviati. Non promettere exactly-once con sola dedupe HTTP; rete remota e failover gruppi avanzato sono successivi.
+Never forward an entire private chat or spoof the sender; runtime target/author is authoritative. Scope and grants precede cross-profile reading. Preserve event_id/cursor/authority, receipts, and origin links without confusing session pins. Do not convert historical toolEvents into sent messages. Do not promise exactly-once with HTTP deduplication alone; remote networking and advanced group failover come later.
 
-## Scope degli Spaces su cartelle — D25
+## Folder-based Space scope — D25
 
-Collaboratori lavorano su file reali autorizzati dello Space F6/F5, con host/root/revisione nelle consegne. Membership non concede accesso al vault o profilo di memoria di altri bot; messaggio/delega non crea mount o copia folder. Scritture concorrenti usano writer e conflitti condivisi F5. Memoria progetto F9 distinta da USER/MEMORY del singolo profilo.
+Collaborators work on real authorized F6/F5 Space files, with host/root/revision in handoffs. Membership does not grant access to other bots’ vaults or memory profiles; a message/delegation does not create a mount or copy a folder. Concurrent writes use the shared F5 writer and conflict handling. F9 project memory is distinct from each profile’s USER/MEMORY.
 
-## D36 — Due superfici distinte: sub-agent e Dots
+## D36 — Two distinct surfaces: subagents and Dots
 
-**Sub-agent temporanei:** controllo nella chat padre e pannello laterale in stile Codex, con elenco dei figli della sessione e dettaglio selezionabile. Mostrare identità/incarico, stato reale, Space/host/modello/effort quando forniti dal runtime, attività/output autorizzati e risultati. `subagent.list`/`subagent.tail`/`subagent.interrupt` sono contratti sorgente già citati, da verificare nel backend collegato; tail limitato non equivale a transcript completo o ragionamento nascosto. Steer/stop solo tramite capability nativa supportata e gate pertinenti. Figli temporanei non diventano Dots persistenti.
+**Temporary subagents:** control in the parent chat and a Codex-style side panel, with a list of session children and selectable detail. Show identity/assignment, actual state, Space/host/model/effort when supplied by runtime, authorized activity/output, and results. `subagent.list`/`subagent.tail`/`subagent.interrupt` are already cited source contracts, to verify in the connected backend; a bounded tail does not imply a full transcript or hidden reasoning. Steer/stop only through a supported native capability and relevant gates. Temporary children do not become persistent Dots.
 
-**Dots persistenti:** restano nella sidebar e nella propria conversazione, senza finestra o sezione nel pannello sub-agent. Nella chat mittente mostrare evento «messaggio a [Dot]», contenuto consentito, destinatario, delivery ID e stato reale. Sul destinatario distinguere badge di messaggio non letto e segnale di lavoro. Aprendo quel Dot si vede il messaggio ricevuto con attribuzione e l’attività della sua sessione canonica. `message_agent` è disponibile solo nei Bot Chat gestiti che lo espongono; niente chat parallela creata dal frontend.
+**Persistent Dots:** remain in the sidebar and their own conversation, without a window or section in the subagent panel. In the sender’s chat, show a “message to [Dot]” event, permitted content, recipient, delivery ID, and actual state. On the recipient, distinguish the unread-message badge from the working indicator. Opening that Dot shows the received message with attribution and its canonical session’s activity. `message_agent` is available only in managed Bot Chats that expose it; no parallel chat created by the frontend.
 
-**Semantica:** queued/ack non conferma ricezione, attivazione o risposta. Accendere il segnale Working soltanto con stato/evento Hermes comprovato; se manca il contratto, documentare il gap e mostrare stato non verificato. In attesa di approvazione, fallito, interrotto e completato hanno etichette distinte. Nessun retry automatico su consegna incerta. Indicatori sintetici con testo accessibile; movimento discreto solo durante attività confermata e alternativa Reduced Motion.
+**Semantics:** queued/ack does not confirm receipt, activation, or reply. Enable the Working indicator only with a proven Hermes state/event; if the contract is missing, document the gap and show an unverified state. Awaiting approval, failed, interrupted, and completed have distinct labels. No automatic retry on uncertain delivery. Concise indicators with accessible text; subtle motion only during confirmed activity and a Reduced Motion alternative.
 
-**Gate UI/runtime:** due Bot sintetici A→B→risposta, verifica timeline mittente, messaggio nella chat destinatario e segnale Working da evento effettivo; ack senza esecuzione non accende Working. Più figli e più Dots attivi senza mescolarli; apertura/chiusura del pannello, tastiera/focus, approvazione, fallimento/interruzione, riconnessione/replay e cambio chat/host durante tail senza contaminazione. Il non letto cambia dopo visione effettiva, non dopo esecuzione. Verificare nel runtime i contratti degli stati prima di dichiarare il percorso funzionante.
+**UI/runtime gates:** two synthetic Bots A→B→reply; verify sender timeline, message in recipient chat, and Working indicator from an actual event; ack without execution does not enable Working. Multiple children and multiple active Dots without mixing them; panel open/close, keyboard/focus, approval, failure/interruption, reconnect/replay, and chat/host switching during tail without contamination. Unread changes after actual viewing, not after execution. Verify state contracts in runtime before declaring the path working.
 
-## Accettazione, DoD e prompt nuova chat
+## D38 — One shared Space, multiple specialists and profile projects
 
-Due bot isolati: ack ≠ reply, ritardo/errore/offline, omonimi e peer route corretti, replay senza duplicati, cancel stale, callback dopo chiusura UI, recall con anchor e scope negato; delegato temporaneo non appare come bot durevole. DoD: ownership transport e permissions espliciti, fixture e prova isolata di DM+reply+recall, persisted receipts/reopen, packaged UI, nessuna fuga personal data; aggiornare docs.
+Vision confirmed by the user on 2026-10-05: Studio shows one Finance Space; selecting Product Manager or CTO resolves the Hermes project in the respective profile. Specialists are not permanently bound to a Space: specialist + Space selection concerns the current work/chat. The same specialist retains identity and memory when moving to Maintenance.
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F14 per priorità collaborazione e messaggi/recall. Verifica prima sulla versione fissata delegate_task, message_agent canonico, bot_relay e groups.* nel sorgente Hermes apps/desktop. Scegli una slice tracciabile (due bot isolati DM→reply→recall), non unirli in un falso tool generico. Definisci scope/identity/receipts e ownership, testa incerto/offline/replay, completa DoD e persisti esiti. Non usare archivi personali o inviare messaggi reali senza autorizzazione specifica. Segui anche Incarico per la chat implementatrice di F14: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+A Hermes project is profile-scoped (`HERMES_HOME/projects.db`), not a global project shared by all Bots. A Studio Space retains explicit associations with native projects identified by connection/runtime, profile, and projectId; multiple associations may point to the same files on the same host. Do not merge projects by name, duplicate files, or create a distributed backend.
+
+If the selected specialist’s link is missing, propose selecting an existing project in that profile or registering folders through supported Hermes APIs, after explicit choice. Present profile/host/folders before confirmation; no hidden creation/configuration. The link is confirmed only after a runtime outcome. The catalog may be partial/offline: show the limitation rather than recreating projects.
+
+SOUL, MEMORY, and USER remain specific to each Hermes profile; a shared USER is not required. Personal memory and procedures are not merged upon entering a Space. Shared project files and project skills discovered by runtime in the actual context are distinct from Bot memories; membership or a message does not grant access to other profiles’ files, memories, or tools.
+
+F6 owns Space/project associations; F7 Bot identities; F2 chat selection and context; F14 collaboration between profiles. For the canonical Bot Chat, verify how to apply project/cwd while preserving Bot Mode capabilities: do not promise independent parallel sessions of the same Bot or change an active turn’s context. If necessary, block/defer the change with explicit status. Calling the CTO does not automatically assign the PM’s Space to it: resolve its link and verify context/grants before declaring shared work. Different hosts do not imply a shared filesystem.
+
+**Gates:** one Finance Space and two PM/CTO profiles, distinct native projects on the same files; both open the correct context with their own memory and a confirmed Space/host/model/effort header. CTO moves to Maintenance without losing identity or shifting ongoing Finance work. Missing link with explicit proposal, unsupported API, identical project names, offline/reconnect, denied grant, switching during fetch/turn, and collaboration without implicit access. No file copying, no profile merging, no Hermes changes solely from UI selection. Requirement accepted; implementation and runtime tests still pending.
+
+## Acceptance, DoD, and prompt for a new chat
+
+Two isolated bots: ack ≠ reply, delay/error/offline, identical names and correct peer routes, replay without duplicates, stale cancellation, callback after UI closure, recall with anchor and denied scope; a temporary delegate does not appear as a durable bot. DoD: explicit transport ownership and permissions, fixture and isolated DM+reply+recall test, persisted receipts/reopen, packaged UI, no personal data leakage; update docs.
+
+> First follow docs/agents/feature-workflow.md and this card’s Files and skills section, reading SKILL.md files before applying them. Implement F14 with collaboration and messages/recall as priorities. First verify delegate_task, canonical message_agent, bot_relay, and groups.* in Hermes apps/desktop source at the pinned version. Choose a traceable slice (two isolated bots DM→reply→recall), rather than combining them into a false generic tool. Define scope/identity/receipts and ownership, test uncertain/offline/replay, complete DoD, and persist outcomes. Do not use personal archives or send real messages without specific authorization. Also follow F14’s Assignment for the implementing chat: deliver verified code and evidence, with the specified GUI/backend context, not just a plan. Capability gates and F0/F18 exceptions remain valid.

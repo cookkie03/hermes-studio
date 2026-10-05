@@ -1,67 +1,67 @@
-# F18 — Specialisti Codex tramite integrazione Hermes — futura
+# F18 — Codex specialists through Hermes integration — future
 
 <!-- implementation-packet:start -->
-## Incarico per la chat implementatrice
+## Assignment for the implementing chat
 
-Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F18**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+When this card is attached as a development assignment, implement and verify **only the F18 frontend/connection**, following the workflow below and the card’s specific sections. The attachment is the entry point: open linked workspace files and SKILL.md files before coding. “Documented/not implemented” labels describe the baseline; they do not require stopping at a plan in the assigned chat.
 
-**Tipo di lavoro:** idea futura di integrazione esterna, subordinata a contratto Hermes disponibile. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+**Type of work:** future external integration idea, subject to an available Hermes contract. The Fxx separation supports ownership, implementation, and verification in separate chats: the product remains a single OpenDots-style Hermes GUI.
 
-**Risultato:** Mantenere l’idea futura di specialisti Codex e, solo su selezione esplicita, verificare un percorso Hermes nativo supportato.
+**Outcome:** Retain the future idea of Codex specialists and, only upon explicit selection, verify a supported native Hermes path.
 
-**Backend e confine:** Backend Hermes rimane responsabile dell’incarico; integrazione esterna e autorizzazione account/comunicazioni devono già avere contratto verificato. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+**Backend and boundary:** The Hermes backend remains responsible for the assignment; external integration and account/communication authorization must already have a verified contract. Studio is a Hermes frontend/adapter: names and GUI may change, while agent capabilities and gates remain native. A missing contract is an explicit gap, not a new backend feature to build.
 
-**Contesto e interazioni pertinenti:** Task/result/Space/host/provenienza distinti dal bot e dalla chat umana Codex; nessuna finta collaborazione da thread creato senza esito. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Relevant context and interactions:** Task/result/Space/host/provenance distinct from the bot and human Codex chat; no fabricated collaboration inferred from a thread created without an outcome. You must read the [shared GUI requirements](gui-context-and-references.md); apply the requirements specified here, leaving other functions to their respective owners.
 
-**Dipendenze e letture aggiuntive:** F14/F3 e docs/future; se manca integrazione Hermes supportata consegnare gap e non creare nuovo servizio/backend per implementare l’idea. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+**Dependencies and additional readings:** F14/F3 and docs/future; if supported Hermes integration is missing, deliver the gap and do not create a new service/backend to implement the idea. Read [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow and skills](../agents/feature-workflow.md), [boundaries](../architecture/feature-boundaries.md), then this card’s Files and skills and gates. Verify actual files/methods/version; future paths are not existing APIs.
 
-**Prove specifiche obbligatorie per l’incremento pertinente:** Repository sintetica, ownership cambiamenti, timeout/uncertain, risultati/diff verificati, no fuga credenziali e scope dei messaggi rispettato. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+**Mandatory specific checks for the relevant increment:** Synthetic repository, change ownership, timeout/uncertain, verified results/diffs, no credential leaks, and respected message scope. Use synthetic profiles and data; exercise the real interface. Fixtures, builds, handshakes, and isolated runtime tests are distinct evidence.
 
-**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+**Required delivery:** working increment code, relevant tests with recorded commands/results, typecheck/build of the modified dependency graph, and proportionate .app smoke testing. If the UI changes: verify keyboard/focus, IME where relevant, 900/1360px, accessibility, and Reduced Motion. Review the diff against the specification/principles, fix issues found, and update status/gates in the card and MEMORY/STATUS/WORKLOG. Declare unperformed checks and external blockers; completion requires evidence for the increment’s gates. Git: select only your own files after checking diff/index/secrets; push/publication follows current authorization.
 
-Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+If essential scope is missing, clarify only that; otherwise use confirmed requirements and choose a vertical increment consistent with the card, declaring it before edits. Agree on shared dependencies; do not implement the backlog. F0 remains explicit maintenance of the completed baseline; F18 remains future until selected and supported. For other IDs, proceed with implementation and verification within authorization and actual capabilities, without another general interview.
 <!-- implementation-packet:end -->
 
 
-Stato: futura/documentata. Leggere ../future/codex-specialists.md. Non creare task/thread o usare credenziali per questa feature ora.
+Status: future/documented. Read ../future/codex-specialists.md. Do not create tasks/threads or use credentials for this feature now.
 
-Obiettivo: un Dot può affidare un incarico delimitato a uno specialista Codex tramite contratto esplicito e riportare risultato/provenienza, non confondere agenti interni Hermes e chat umane Codex. F14 delegazione/routing + F3 autorizzazioni sono prerequisiti.
+Goal: a Dot can assign a bounded task to a Codex specialist through an explicit contract and report result/provenance, without confusing internal Hermes agents with human Codex chats. F14 delegation/routing + F3 authorization are prerequisites.
 
-Definire perimetrorepository/worktree, proprietà delle modifiche, quota/modello/config, eventi e artifact receipts, cleanup e cancellazione. La ricezione di un messaggio da un agente non autorizza messaggi verso altre chat/app. Non introdurre integrazione account o CLI generica privilegiata nel renderer.
+Define repository/worktree scope, change ownership, quota/model/config, events and artifact receipts, cleanup, and cancellation. Receiving a message from an agent does not authorize messages to other chats/apps. Do not introduce account integration or a generic privileged CLI in the renderer.
 
-Gate: tasksyntheticisolato, ownershipmerge/conflicts, timeout/uncertain/resultverified, nessun push/pubblicazione non autorizzata e credenziali fuori log. Avvio/running/success devono venire dalla capacità reale; approvazione non è completamento.
+Gates: isolated synthetic task, merge/conflict ownership, timeout/uncertain/verified result, no unauthorized push/publication, and credentials excluded from logs. Start/running/success must come from the actual capability; approval is not completion.
 
 
 <!-- feature-guidance:start -->
 
-## File e skill da leggere e usare
+## Files and skills to read and use
 
-Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+First follow the [shared ask-matt-guided workflow](../agents/feature-workflow.md): it contains initial readings, implementation/review skills, and exit criteria. Then read the feature-specific files below. The [complete project and global catalog](../agents/skills-catalog.md) retains all collections; load skill bodies only when relevant.
 
-### Skill specifiche
+### Feature-specific skills
 
-| Skill / percorso | Quando applicarla a questa feature |
+| Skill / path | When to apply it to this feature |
 |---|---|
-| [research](<../../.agents/skills/research/SKILL.md>) | Verificare contratti dei delegati esterni |
-| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | Identità e responsabilità tra runtime |
-| [cdx](</Users/luca/.codex/skills/personal/cdx/SKILL.md>) — condizionale | Se si autorizza delega al CLI Codex |
-| [hermes](</Users/luca/.codex/skills/personal/hermes/SKILL.md>) — condizionale | Se si autorizza delega a Hermes CLI |
-| [agy](</Users/luca/.codex/skills/personal/agy/SKILL.md>) — condizionale | Soltanto se si seleziona esplicitamente Antigravity |
+| [research](<../../.agents/skills/research/SKILL.md>) | Verify external delegate contracts |
+| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | Identity and responsibility across runtimes |
+| [cdx](</Users/luca/.codex/skills/personal/cdx/SKILL.md>) — conditional | If delegation to Codex CLI is authorized |
+| [hermes](</Users/luca/.codex/skills/personal/hermes/SKILL.md>) — conditional | If delegation to Hermes CLI is authorized |
+| [agy](</Users/luca/.codex/skills/personal/agy/SKILL.md>) — conditional | Only if Antigravity is explicitly selected |
 
-### Punti di ingresso da leggere
+### Entry points to read
 
-- [docs/future/codex-specialists.md](<../../docs/future/codex-specialists.md>): Idea futura e limiti.
-- [docs/features/F14-delegation-and-dot-collaboration.md](<../../docs/features/F14-delegation-and-dot-collaboration.md>): Delega vs bot durevole.
-- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Autorizzazione.
-- [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Binding e provenance del runtime corrente.
+- [docs/future/codex-specialists.md](<../../docs/future/codex-specialists.md>): Future idea and limitations.
+- [docs/features/F14-delegation-and-dot-collaboration.md](<../../docs/features/F14-delegation-and-dot-collaboration.md>): Delegation vs durable bot.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Authorization.
+- [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Current runtime binding and provenance.
 
-Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+Verify paths and version before working; coordinate shared files. These readings do not authorize other features or changes to the personal runtime.
 <!-- feature-guidance:end -->
 
-## Scope file aggiornato — D25
+## Updated file scope — D25
 
-Space collega cartelle reali F6/F5; specialisti ricevono solo root/file autorizzati e host raggiungibili. Nessuna copia/import del Second Brain o permesso implicito dall'associazione a un team. Revisione/salvataggio e conflitti condivisi con F5; update memoria Space F9 dopo risultati verificati, non diario duplicato nello store.
+A Space links real F6/F5 folders; specialists receive only authorized roots/files and reachable hosts. No Second Brain copy/import or implicit permission from team membership. Review/save and conflicts shared with F5; update F9 Space memory after verified results, not as a duplicate journal in the store.
 
-## Prompt per una nuova chat
+## Prompt for a new chat
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Lavora soltanto F18 dopo verifica prerequisiti e codice fonte dell'integrazione scelta. Usa una repository test/worktree isolata e autorizzazione esplicita per comunicare con chat Codex. Consegna risultati verificati e limiti; non implementare Bots/routine/voice in questa chat. Segui anche Incarico per la chat implementatrice di F18: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+> First follow docs/agents/feature-workflow.md and this card’s Files and skills section, reading SKILL.md files before applying them. Work only on F18 after verifying prerequisites and source code for the selected integration. Use an isolated test repository/worktree and explicit authorization to communicate with Codex chats. Deliver verified results and limitations; do not implement Bots/routines/voice in this chat. Also follow F18’s Assignment for the implementing chat: deliver verified code and evidence, with the specified GUI/backend context, not just a plan. Capability gates and F0/F18 exceptions remain valid.

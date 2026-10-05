@@ -1,96 +1,96 @@
-# F12 — Browser integrato con i tool Hermes
+# F12 — Browser integrated with Hermes tools
 
 <!-- implementation-packet:start -->
-## Incarico per la chat implementatrice
+## Assignment for the implementing chat
 
-Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F12**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+When this card is attached as a development assignment, implement and verify **only the frontend/integration F12**, following the workflow below and the card-specific sections. The attachment is the entry point: open the linked workspace files and SKILL.md files before coding. The “documented/not implemented” labels describe the baseline; they do not require the assigned chat to stop at a plan.
 
-**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+**Type of work:** GUI adaptation and integration with existing Hermes capabilities, rather than creating the feature in the backend. The Fxx separation establishes ownership, implementation and testing in separate chats: the product remains a single Hermes GUI in the OpenDots style.
 
-**Risultato:** Collegare la stessa pagina/profilo browser a utente e tool browser Hermes, con persistenza e controllo verificato.
+**Outcome:** Connect the same browser page/profile to the user and Hermes browser tools, with verified persistence and control.
 
-**Backend e confine:** Controller/callback/CDP/tool browser nativi secondo audit; browser_exec e Computer Use F16 restano capacità distinte. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+**Backend and boundary:** Native browser controller/callback/CDP/tools according to the audit; browser_exec and F16 Computer Use remain distinct capabilities. Studio is a Hermes frontend/adapter: names and GUI may change, but agent capabilities and gates remain native. A missing contract is an explicit gap, not a new backend feature to build.
 
-**Contesto e interazioni pertinenti:** Pannello mostra URL/tab/profilo/host/owner e Space della chat; navigazione manuale/agente e takeover solo quando supportati dal contratto reale. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Relevant context and interactions:** The panel shows URL/tab/profile/host/owner and the chat’s Space; manual/agent navigation and takeover only when supported by the actual contract. You must read the [shared GUI requirements](gui-context-and-references.md); apply the requirements identified here and leave other functionality to its respective owners.
 
-**Dipendenze e letture aggiuntive:** F1 routing/F3 grants e audit browser; non aggiungere secondo ecosistema tool per ottenere una preview che sembra live. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+**Dependencies and additional reading:** F1 routing/F3 grants and browser audit; do not add a second tool ecosystem to obtain a preview that looks live. Read [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow and skills](../agents/feature-workflow.md), [boundaries](../architecture/feature-boundaries.md), then this card’s Files and skills and gates. Verify actual files/methods/version; future paths are not existing APIs.
 
-**Prove specifiche obbligatorie per l’incremento pertinente:** Cookie/storage/history al restart, tab sbagliata, takeover/revoke, lease scaduto, login/profilo isolato, cambio host e nessun fallback a browser parallelo. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+**Required specific tests for the relevant increment:** Cookies/storage/history across restart, wrong tab, takeover/revoke, expired lease, isolated login/profile, host change and no fallback to a parallel browser. Use synthetic profiles and data; exercise the actual interface. Fixtures, builds, handshakes and isolated runtime tests are distinct evidence.
 
-**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+**Required delivery:** working increment code, relevant tests with recorded commands/results, typecheck/build of the modified graph and proportionate .app smoke testing. If the UI changes: verify keyboard/focus, IME where relevant, 900/1360px, accessibility and Reduced Motion. Review the diff against the spec/principles, fix discovered issues, and update status/gates in the card and MEMORY/STATUS/WORKLOG. Declare tests not performed and external blockers; completion requires proven increment gates. Git: select only your own files after checking diff/index/secrets; push/publication follows current authorization.
 
-Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+If essential scope is missing, clarify only that; otherwise use confirmed requirements and choose a vertical increment consistent with the card, declaring it before edits. Agree on shared dependencies; do not implement the backlog. F0 remains explicit maintenance of the completed baseline; F18 remains future work until selected and supported. For other IDs, proceed with implementation and verification within actual authorizations and capabilities, without another general interview.
 <!-- implementation-packet:end -->
 
 
-Stato: specifica aggiornata D27, 2026-10-04; non implementata né provata nel client. Obiettivo finale: un browser visibile dentro Hermes Studio, controllato dagli strumenti esistenti di Hermes e utilizzabile direttamente dall'utente, con profilo, cookie, storage e cronologia persistenti. Ricevute, URL e screenshot sono incrementi intermedi e non completano questa feature.
+Status: spec updated D27, 2026-10-04; neither implemented nor tested in the client. Final goal: a visible browser inside Hermes Studio, controlled by existing Hermes tools and directly usable by the user, with persistent profile, cookies, storage and history. Receipts, URLs and screenshots are intermediate increments and do not complete this feature.
 
 <!-- feature-guidance:start -->
-## File e skill da leggere e usare
+## Files and skills to read and use
 
-Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+First follow the [shared ask-matt-guided workflow](../agents/feature-workflow.md): it contains initial reading, implementation/review skills and exit criteria. Then read the specific files below. The [complete project and global catalog](../agents/skills-catalog.md) retains all collections; load skill bodies only when relevant.
 
-### Skill specifiche
+### Feature-specific skills
 
-| Skill / percorso | Quando applicarla a questa feature |
+| Skill / path | When to apply it to this feature |
 |---|---|
-| [research](<../../.agents/skills/research/SKILL.md>) | Verificare browser tool vs controller |
-| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Lease e scope del browser |
-| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) — condizionale | Componenti React e stato del renderer |
-| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Verifica UI packaged con dati sintetici e tool realmente disponibili |
-| [ux-extract](<../../.agents/skills/ux-extract/SKILL.md>) — condizionale | Solo osservazioni del browser panel che mancano |
+| [research](<../../.agents/skills/research/SKILL.md>) | Verify browser tools versus controller |
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Browser lease and scope |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) — conditional | React components and renderer state |
+| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — conditional | Packaged UI verification with synthetic data and actually available tools |
+| [ux-extract](<../../.agents/skills/ux-extract/SKILL.md>) — conditional | Only missing browser-panel observations |
 
-### Punti di ingresso da leggere
+### Entry points to read
 
-- [docs/features/F1-runtime-connection.md](<../../docs/features/F1-runtime-connection.md>): Autenticazione necessaria al controller.
-- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Permessi.
-- [desktop/upstream/src/client/ComputerPanel.tsx](<../../desktop/upstream/src/client/ComputerPanel.tsx>): Pannello corrente.
-- [desktop/electron/external-links.cjs](<../../desktop/electron/external-links.cjs>): Apertura URL protetta.
-- [Hermes: tools/browser_tool.py](</Users/luca/.hermes/hermes-agent/tools/browser_tool.py>): Tool browser; lettura sorgente alla versione fissata, non prova live.
-- [Hermes: tui_gateway/methods_browser_control.py](</Users/luca/.hermes/hermes-agent/tui_gateway/methods_browser_control.py>): Controller e gates; lettura sorgente alla versione fissata, non prova live.
+- [docs/features/F1-runtime-connection.md](<../../docs/features/F1-runtime-connection.md>): Authentication required by the controller.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Permissions.
+- [desktop/upstream/src/client/ComputerPanel.tsx](<../../desktop/upstream/src/client/ComputerPanel.tsx>): Current panel.
+- [desktop/electron/external-links.cjs](<../../desktop/electron/external-links.cjs>): Protected URL opening.
+- [Hermes: tools/browser_tool.py](</Users/luca/.hermes/hermes-agent/tools/browser_tool.py>): Browser tools; source reading at the pinned version, not a live test.
+- [Hermes: tui_gateway/methods_browser_control.py](</Users/luca/.hermes/hermes-agent/tui_gateway/methods_browser_control.py>): Controller and gates; source reading at the pinned version, not a live test.
 
-Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+Verify paths and version before working; coordinate shared files. Reading does not authorize other features or changes to the personal runtime.
 <!-- feature-guidance:end -->
 
-## Fonti e scelta tecnica da verificare
+## Sources and technical choice to verify
 
-Leggere [ricerca del browser integrato](../research/hermes-integrated-browser.md) e [desktop ufficiale Hermes](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). Checkout studiato: `e1e82d782f353766c7a22db6e5ac4fa58bbff325`; capacità sorgente, non test live. Ulteriori ingressi pubblici: `apps/desktop/src/app/chat/right-rail/preview-pane.tsx`, `tools/drive_preview_tool.py`, `tools/read_preview_tool.py`, `tools/browser_extension_router.py`, `tools/browser_tool_cdp.py`, `gateway/browser_control_broker.py` e `tui_gateway/methods_browser_control.py`.
+Read the [integrated browser research](../research/hermes-integrated-browser.md) and [official Hermes desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). Studied checkout: `e1e82d782f353766c7a22db6e5ac4fa58bbff325`; source capabilities, not live tests. Additional public entry points: `apps/desktop/src/app/chat/right-rail/preview-pane.tsx`, `tools/drive_preview_tool.py`, `tools/read_preview_tool.py`, `tools/browser_extension_router.py`, `tools/browser_tool_cdp.py`, `gateway/browser_control_broker.py` and `tui_gateway/methods_browser_control.py`.
 
-L'upstream ha già un webview persistente (`persist:hermes-preview`) con callback `read_preview`/`drive_preview`. Il controller `browser_*` e la connessione CDP sono altri percorsi esistenti. La stessa pagina controllata dai tool `browser_*` non è dimostrata dalla sola presenza del webview. Prima implementare una prova verticale e scegliere il percorso supportato più integrato; non aggiungere un secondo catalogo di tool o un browser parallelo. Endpoint/adapter Studio da definire dopo la prova, non inventare API già disponibili.
+Upstream already has a persistent webview (`persist:hermes-preview`) with `read_preview`/`drive_preview` callbacks. The `browser_*` controller and CDP connection are other existing paths. The webview’s presence alone does not demonstrate that `browser_*` tools control the same page. First implement a vertical test and choose the most integrated supported path; do not add a second tool catalog or a parallel browser. Define Studio endpoints/adapters after the test; do not invent already-available APIs.
 
-## Esperienza richiesta
+## Required experience
 
-- Pannello Browser affiancato alla chat: schede, URL, indietro/avanti/ricarica, pagina reale, attività e proprietario visibili. Aprire un risultato della ricerca Hermes può navigare questa stessa superficie su azione esplicita.
-- Utente e agente vedono e modificano **la stessa pagina e le stesse schede**, senza copie o screenshot spacciati per browser interattivo. Web search e browser use sono capacità distinte del backend.
-- Profilo dedicato persistente: cookie, login, localStorage e cronologia devono sopravvivere al riavvio. La history persistente va implementata/verificata: non è garantita dal solo partition persistente.
-- Take over assegna il controllo all'utente e sospende/revoca i comandi browser dell'agente. Resume esplicito; nessuna gara su click/typing e nessuna cancellazione implicita dell'intero incarico.
-- Chiudere il pannello non cancella profilo o lavoro. Cambiare Dot/sessione mantiene associazioni verificabili e impedisce che il vecchio owner controlli il nuovo browser.
-- Una disconnessione mostra browser non controllabile e conserva la pagina; nessuna ripetizione automatica di click o passaggio nascosto a headless/cloud/altro browser.
+- Browser panel beside the chat: tabs, URL, back/forward/reload, real page, activity and owner are visible. Opening a Hermes search result can navigate this same surface through an explicit action.
+- User and agent see and modify **the same page and tabs**, without copies or screenshots presented as an interactive browser. Web search and browser use are distinct backend capabilities.
+- Dedicated persistent profile: cookies, login, localStorage and history must survive restart. Persistent history must be implemented/verified: a persistent partition alone does not guarantee it.
+- Take over assigns control to the user and suspends/revokes the agent’s browser commands. Explicit Resume; no click/typing races and no implicit cancellation of the entire assignment.
+- Closing the panel does not delete the profile or work. Switching Dot/session preserves verifiable associations and prevents the old owner from controlling the new browser.
+- A disconnection shows an uncontrollable browser and preserves the page; no automatic repetition of clicks or hidden switch to headless/cloud/another browser.
 
-## Contratto e architettura
+## Contract and architecture
 
-Separare BrowserProfile, schede/navigation, BrowserController e lease di controllo da ricevute/tool activity. Proposte di responsabilità, non tipi già implementati. Riutilizzare la famiglia browser Hermes o i callback desktop già esistenti secondo la modalità verificata; nessun executor OpenDots alternativo.
+Separate BrowserProfile, tabs/navigation, BrowserController and control lease from receipts/tool activity. These are proposed responsibilities, not already-implemented types. Reuse the Hermes browser family or existing desktop callbacks according to the verified mode; no alternative OpenDots executor.
 
-Il controller RPC richiede identità autenticata non-internal, derivata dal server, oltre a protocollo, flag e capability supportati. L'attach anonimo attuale Studio non concede register automaticamente. Lease legato a principal/profilo/sessione/controller/browser_profile/trasporto; heartbeat, scadenza e risultato da owner esatto. Raw CDP/evaluate richiedono gates distinti: un viewer non concede Developer Mode.
+The RPC controller requires authenticated non-internal server-derived identity, in addition to supported protocol, flags and capabilities. Studio’s current anonymous attach does not automatically grant register. The lease is tied to principal/profile/session/controller/browser_profile/transport; heartbeat, expiration and result come from the exact owner. Raw CDP/evaluate require distinct gates: a viewer does not grant Developer Mode.
 
-CDP configurato tramite `BROWSER_CDP_URL`/`browser.cdp_url` evita avvio di un altro browser, ma compatibilità del guest Electron e isolamento devono essere provati. Non modificare config globale o runtime personale per collegare una finestra. Il percorso scelto deve preservare scope per profilo; remoto Hermes non vede automaticamente il browser del Mac.
+CDP configured through `BROWSER_CDP_URL`/`browser.cdp_url` avoids launching another browser, but Electron guest compatibility and isolation must be tested. Do not modify global configuration or the personal runtime to connect a window. The chosen path must preserve per-profile scope; remote Hermes does not automatically see the Mac’s browser.
 
-F1 possiede connessione/autenticazione; F12 profilo browser, controller e superficie; F3 grant/takeover; F11 discovery delle capacità. ComputerPanel.tsx è condiviso con F16/F5/F15: concordare ownership prima del codice. Nessun refactor globale necessario solo per mostrare una scheda.
+F1 owns connection/authentication; F12 owns browser profile, controller and surface; F3 grants/takeover; F11 capability discovery. ComputerPanel.tsx is shared with F16/F5/F15: agree on ownership before coding. No global refactor is necessary merely to display a tab.
 
-## Privacy e stati
+## Privacy and states
 
-Dedicated profile Studio come default proposto; nessuna copia automatica di cookie Chrome/Safari o import dei profili personali. Conservare dati browser fuori Git/log; retention e clear history/data sono operazioni esplicite, non azioni al lancio. Mantenere sandbox, context isolation, CSP, policy navigazione, pop-up e download. Nessun iframe arbitrario nella UI privilegiata.
+A dedicated Studio profile is the proposed default; no automatic copying of Chrome/Safari cookies or importing personal profiles. Keep browser data outside Git/logs; retention and clear history/data are explicit operations, not startup actions. Maintain sandbox, context isolation, CSP and navigation, pop-up and download policies. No arbitrary iframe in the privileged UI.
 
-Stati: manuale, collegamento controller, controllo agente, controllo utente, scollegato, errore. Successo tool solo dopo esito; storico tool non è controller ancora attivo. Indicatore discreto e testo comprensibile, no viewport fittizio. Reference componenti: [component-system](../design/component-system.md).
+States: manual, connecting controller, agent control, user control, disconnected, error. Tool success only after an outcome; tool history does not mean the controller is still active. Discreet indicator and understandable text, no fake viewport. Component reference: [component-system](../design/component-system.md).
 
-## Gate e Definition of done
+## Gates and Definition of done
 
-1. Prova sintetica packaged: comando Hermes naviga → snapshot → click/type → esito sulla stessa pagina mostrata; azione manuale modifica DOM visibile al tool. Dimostrare binding profilo/sessione e modalità scelta.
-2. Sito locale sintetico: cookie/login fittizio, storage, due schede e history; quit/restart ripristina secondo contratto documentato. Nessun account reale.
-3. Takeover durante comandi in volo, resume, session switch, lease scaduto, connessione persa e risultato tardivo: nessun comando al nuovo owner o retry di azioni incerte.
-4. Permesso negato/controller anonimo/stale principal/profilo remoto non compatibile restano indisponibili; nessun fallback nascosto. Navigation/download/URL non sicuri gestiti senza allentare sandbox.
-5. Test tastiera/focus/900px/Reduced Motion, privacy screenshot e assenza credenziali nei log. Receipt-only resta parziale finché controllo e persistenza non superano questi gate.
+1. Packaged synthetic test: Hermes command navigates → snapshot → click/type → outcome on the same displayed page; manual action modifies the DOM visible to the tool. Demonstrate profile/session binding and the chosen mode.
+2. Synthetic local site: fake cookie/login, storage, two tabs and history; quit/restart restores according to the documented contract. No real accounts.
+3. Takeover during in-flight commands, resume, session switch, expired lease, lost connection and late result: no commands sent to the new owner or retries of uncertain actions.
+4. Denied permission/anonymous controller/stale principal/incompatible remote profile remain unavailable; no hidden fallback. Unsafe navigation/downloads/URLs handled without weakening the sandbox.
+5. Keyboard/focus/900px/Reduced Motion tests, screenshot privacy and no credentials in logs. Receipt-only remains partial until control and persistence pass these gates.
 
-## Prompt per una nuova chat
+## Prompt for a new chat
 
-> Prima segui docs/agents/feature-workflow.md e File e skill di F12. Implementa solo l'incremento selezionato del browser condiviso, leggendo la ricerca browser e verificando SHA/contratti Hermes. Parti dalla prova stessa-pagina manuale + tool e scegli fra percorsi Hermes esistenti; nessun browser/tool parallelo o config personale mutata. Mantieni autenticazione, owner e permessi. Verifica persistenza, takeover e nessun retry incerto su dati sintetici nella .app. Ricevute/screenshot non completano F12. Aggiorna scheda, prove e memoria di progetto; non implementare F16 o altre feature incidentalmente. Segui anche Incarico per la chat implementatrice di F12: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+> First follow docs/agents/feature-workflow.md and F12 Files and skills. Implement only the selected shared-browser increment, reading browser research and verifying Hermes SHA/contracts. Start with the manual + tool same-page test and choose among existing Hermes paths; no parallel browser/tools or personal configuration changes. Preserve authentication, owner and permissions. Verify persistence, takeover and no uncertain retries with synthetic data in the .app. Receipts/screenshots do not complete F12. Update the card, evidence and project memory; do not incidentally implement F16 or other features. Also follow the Assignment for the implementing chat for F12: deliver verified code and evidence, with the specified GUI/backend context, not just a plan. Capability gates and F0/F18 exceptions still apply.

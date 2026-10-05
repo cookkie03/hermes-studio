@@ -1,91 +1,91 @@
-# F9 — Memoria Markdown degli Spaces e integrazione memoria
+# F9 — Space Markdown memory and memory integration
 
 <!-- implementation-packet:start -->
-## Incarico per la chat implementatrice
+## Assignment for the implementing chat
 
-Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F9**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+When this card is attached as a development assignment, implement and verify **only the frontend/integration F9**, following the workflow below and the card-specific sections. The attachment is the entry point: open the linked workspace files and SKILL.md files before coding. The “documented/not implemented” labels describe the baseline; they do not require the assigned chat to stop at a plan.
 
-**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+**Type of work:** GUI adaptation and integration with existing Hermes capabilities, rather than creating the feature in the backend. The Fxx separation establishes ownership, implementation and testing in separate chats: the product remains a single Hermes GUI in the OpenDots style.
 
-**Risultato:** Mostrare preferenze legacy e memoria Markdown dello Space; eventuali mutazioni built-in solo tramite Hermes supportato.
+**Outcome:** Show legacy preferences and Space Markdown memory; any built-in mutations must use supported Hermes interfaces.
 
-**Backend e confine:** File progetto e memoria Hermes distinti; nessun secondo archivio reiniettato, review/curator/scheduler restano runtime. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+**Backend and boundary:** Project files and Hermes memory are separate; no second store is reinjected, and review/curator/scheduler remain runtime-owned. Studio is a Hermes frontend/adapter: names and GUI may change, but agent capabilities and gates remain native. A missing contract is an explicit gap, not a new backend feature to build.
 
-**Contesto e interazioni pertinenti:** Origine Space/profilo/file, revisione e stato aggiornamento visibili; @ può citare il file/range con lo stesso contratto F5. F8 possiede viewer runtime. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Relevant context and interactions:** Space/profile/file origin, revision and update status are visible; @ can reference the file/range using the same F5 contract. F8 owns the runtime viewer. You must read the [shared GUI requirements](gui-context-and-references.md); apply the requirements identified here and leave other functionality to its respective owners.
 
-**Dipendenze e letture aggiuntive:** F5 writer/F6 progetti/F3 gate; aggiornamento automatico richiede un percorso Hermes già supportato e scelta esplicita, non un worker learning Studio. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+**Dependencies and additional reading:** F5 writer/F6 projects/F3 gates; automatic updates require an already-supported Hermes path and explicit selection, not a Studio learning worker. Read [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow and skills](../agents/feature-workflow.md), [boundaries](../architecture/feature-boundaries.md), then this card’s Files and skills and gates. Verify actual files/methods/version; future paths are not existing APIs.
 
-**Prove specifiche obbligatorie per l’incremento pertinente:** Legacy corrotto preservato, update file/range stale, sezioni manuali, restart, pending/overflow/session snapshot, profili isolati e assenza di import implicito. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+**Required specific tests for the relevant increment:** Preservation of corrupt legacy data, stale file/range updates, manual sections, restart, pending/overflow/session snapshots, isolated profiles and absence of implicit imports. Use synthetic profiles and data; exercise the actual interface. Fixtures, builds, handshakes and isolated runtime tests are distinct evidence.
 
-**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+**Required delivery:** working increment code, relevant tests with recorded commands/results, typecheck/build of the modified graph and proportionate .app smoke testing. If the UI changes: verify keyboard/focus, IME where relevant, 900/1360px, accessibility and Reduced Motion. Review the diff against the spec/principles, fix discovered issues, and update status/gates in the card and MEMORY/STATUS/WORKLOG. Declare tests not performed and external blockers; completion requires proven increment gates. Git: select only your own files after checking diff/index/secrets; push/publication follows current authorization.
 
-Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+If essential scope is missing, clarify only that; otherwise use confirmed requirements and choose a vertical increment consistent with the card, declaring it before edits. Agree on shared dependencies; do not implement the backlog. F0 remains explicit maintenance of the completed baseline; F18 remains future work until selected and supported. For other IDs, proceed with implementation and verification within actual authorizations and capabilities, without another general interview.
 <!-- implementation-packet:end -->
 
 
-Stato: documentata, non completa; aggiornamento D28/D30, 2026-10-04. Contenuti locali MVP preservati. [F8](F8-hermes-native-features-and-observability.md) possiede visualizzazione della memoria Hermes e note native; questa scheda non crea un secondo archivio runtime.
+Status: documented, not complete; D28/D30 update, 2026-10-04. Local MVP content is preserved. [F8](F8-hermes-native-features-and-observability.md) owns Hermes memory visualization and native notes; this card does not create a second runtime store.
 
 <!-- feature-guidance:start -->
 
-## File e skill da leggere e usare
+## Files and skills to read and use
 
-Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+First follow the [shared ask-matt-guided workflow](../agents/feature-workflow.md): it contains initial reading, implementation/review skills and exit criteria. Then read the specific files below. The [complete project and global catalog](../agents/skills-catalog.md) retains all collections; load skill bodies only when relevant.
 
-### Skill specifiche
+### Feature-specific skills
 
-| Skill / percorso | Quando applicarla a questa feature |
+| Skill / path | When to apply it to this feature |
 |---|---|
-| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | Memoria Studio distinta da memoria Hermes |
-| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) | Componenti React e stato del renderer |
-| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Verifica UI packaged con dati sintetici e tool realmente disponibili |
-| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) — condizionale | Scope e persistenza locale |
-| [research](<../../.agents/skills/research/SKILL.md>) — condizionale | Solo se si seleziona integrazione con memoria runtime |
+| [domain-modeling](<../../.agents/skills/domain-modeling/SKILL.md>) | Studio memory separate from Hermes memory |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) | React components and renderer state |
+| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — conditional | Packaged UI verification with synthetic data and actually available tools |
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) — conditional | Scope and local persistence |
+| [research](<../../.agents/skills/research/SKILL.md>) — conditional | Only if runtime memory integration is selected |
 
-### Punti di ingresso da leggere
+### Entry points to read
 
-- [desktop/upstream/src/client/WorkspaceDialog.tsx](<../../desktop/upstream/src/client/WorkspaceDialog.tsx>): Superficie memoria.
-- [desktop/upstream/src/server/workspace.ts](<../../desktop/upstream/src/server/workspace.ts>): Metadata locali.
-- [desktop/upstream/src/server/store.ts](<../../desktop/upstream/src/server/store.ts>): Persistenza.
-- [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Inclusione nel contesto.
-- [Hermes: tools/memory_tool.py](</Users/luca/.hermes/hermes-agent/tools/memory_tool.py>): Riferimento distinto dal client Studio; lettura sorgente alla versione fissata, non prova live.
+- [desktop/upstream/src/client/WorkspaceDialog.tsx](<../../desktop/upstream/src/client/WorkspaceDialog.tsx>): Memory surface.
+- [desktop/upstream/src/server/workspace.ts](<../../desktop/upstream/src/server/workspace.ts>): Local metadata.
+- [desktop/upstream/src/server/store.ts](<../../desktop/upstream/src/server/store.ts>): Persistence.
+- [desktop/hermes/bridge.mjs](<../../desktop/hermes/bridge.mjs>): Context inclusion.
+- [Hermes: tools/memory_tool.py](</Users/luca/.hermes/hermes-agent/tools/memory_tool.py>): Reference separate from the Studio client; source reading at the pinned version, not a live test.
 
-Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+Verify paths and version before working; coordinate shared files. Reading does not authorize other features or changes to the personal runtime.
 <!-- feature-guidance:end -->
 
-## Risultato e incrementi
+## Outcome and increments
 
-**F9-A — Ambiti locali/legacy:** mostrare preferenze Studio già presenti con origine chiara e collegamenti alle sezioni Space/runtime. Nessuna importazione/migrazione implicita; archivio illeggibile preservato. Non reiniettare copie della memoria Hermes.
+**F9-A — Local/legacy scopes:** show existing Studio preferences with clear origin and links to Space/runtime sections. No implicit import/migration; preserve unreadable stores. Do not reinject copies of Hermes memory.
 
-**F9-B — Memoria Markdown Space:** scegliere/creare un file nella cartella autorizzata, con percorso, revisione, ultimo esito e stato leggibili. Prerequisiti F6/F5; filesystem autoritativo. `MEMORY.md` è nome possibile, non capacità di discovery automatica Hermes. Evitare collisioni col file esistente.
+**F9-B — Space Markdown memory:** select/create a file in the authorized folder, with readable path, revision, latest outcome and status. Prerequisites F6/F5; the filesystem is authoritative. `MEMORY.md` is a possible name, not an automatic Hermes discovery capability. Avoid collisions with existing files.
 
-**F9-C — Gestione built-in opzionale:** eventuali add/replace/remove/pending/approve/reject sulle memorie del profilo Hermes tramite contratto backend supportato, solo se questo incremento viene selezionato. F8-B rimane viewer read-only. Non usare `/api/memory` status come CRUD né scritture dirette che aggirano gate/lock/formato; prove e permessi F1/F3 richiesti.
+**F9-C — Optional built-in management:** any add/replace/remove/pending/approve/reject operations on Hermes profile memories must use a supported backend contract, only if this increment is selected. F8-B remains a read-only viewer. Do not use `/api/memory` status as CRUD or direct writes that bypass gates/locks/format; F1/F3 tests and permissions are required.
 
-La precedente F9-D (learning/curator) è ricondotta a **F11 per gestione skill/manutenzione** e **F8 per visibilità**. Restano future selezioni autonome, non attività implicite di F9.
+The former F9-D (learning/curator) is assigned to **F11 for skill management/maintenance** and **F8 for visibility**. These remain separate future selections, not implicit F9 activities.
 
-## File Space aggiornato durante il lavoro
+## Space file updated during work
 
-Eventi significativi: decisione confermata, risultato salvato, milestone verificata e chiusura incarico. Modalità da definire nella chat feature: manuale con diff/Save oppure automatica entro file/ambito scelti. L'agente prepara cambiamenti con fonte/chat/esecuzione, decisioni, stato/prossimo passo e link ai risultati. Mostrare policy, revisione ed esito applicato; testo «ricordato» non prova scrittura.
+Significant events: confirmed decision, saved result, verified milestone and assignment closure. Define the mode in the feature chat: manual with diff/Save or automatic within selected files/scope. The agent prepares changes with source/chat/execution, decisions, status/next step and result links. Show policy, revision and applied outcome; “remembered” text does not prove a write.
 
-Usare writer/revision/conflict F5; preservare sezioni manuali e bozza, rileggere versione prima di salvare. Cambi esterni non vengono sovrascritti. Nessun diario infinito: sintesi corrente con link alla storia. Un file salvato non prova che un incarico attivo lo abbia letto; inclusione/lettura per incarico esplicita e versionata. Host remoto richiede root raggiungibile/grant, non semplice path Mac nel prompt.
+Use F5 writer/revision/conflict; preserve manual sections and drafts, and reread the version before saving. External changes are not overwritten. No endless journal: a current summary with links to history. A saved file does not prove an active assignment read it; inclusion/reading per assignment is explicit and versioned. A remote host requires a reachable root/grant, not merely a Mac path in the prompt.
 
-Creazione e aggiornamento di file in un vault personale richiedono destinazione scelta nell'app: niente seed/import/scan personale al lancio, nessuna scrittura automatica su file omonimo esistente o istruzioni AGENTS/SOUL.
+Creating and updating files in a personal vault requires a destination selected in the app: no personal seed/import/scan at startup, no automatic writes to existing files with the same name or AGENTS/SOUL instructions.
 
-## Contratti runtime da consultare per F9-C
+## Runtime contracts to consult for F9-C
 
-[Persistent Memory ufficiale](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/) e [prospetto completo](../research/hermes-memory-system.md) sono il riferimento tecnico per USER/MEMORY, snapshot congelato, budget, pending, tool format, provider, recall e compaction. [Curator](https://hermes-agent.nousresearch.com/docs/user-guide/features/curator/) e [Memory Providers](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers/) sono approfondimenti, non prerequisiti per file Space locale.
+[Official Persistent Memory](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/) and the [complete overview](../research/hermes-memory-system.md) are the technical references for USER/MEMORY, frozen snapshots, budgets, pending changes, tool format, providers, recall and compaction. [Curator](https://hermes-agent.nousresearch.com/docs/user-guide/features/curator/) and [Memory Providers](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers/) are further reading, not prerequisites for a local Space file.
 
-Preservare contenuti/profili Hermes senza migrazione: memoria profilo, identità SOUL, cronologia e file progetto distinti. I gates backend decidono staged/applied; una nuova sessione è distinta dal resume. Il viewer è F8; skill/provider management non si implementa per rendere attiva una checkbox Studio.
+Preserve Hermes content/profiles without migration: profile memory, SOUL identity, history and project files are separate. Backend gates determine staged/applied; a new session is distinct from resume. The viewer belongs to F8; do not implement skill/provider management merely to activate a Studio checkbox.
 
-## UI, ownership e privacy
+## UI, ownership and privacy
 
-Memory locale/Space mostra origine e percorso, policy, bozza, errore/conflitto e ultima scrittura confermata. Viewer Profilo e note post-turn sono destinazioni F8, identità del Dot F7. Loading, vuoto, offline/stale e errore diversi. Save/Cancel/focus/tastiera/Reduced Motion seguono [component-system](../design/component-system.md).
+Local/Space memory shows origin and path, policy, draft, error/conflict and latest confirmed write. The Profile viewer and post-turn notes belong to F8, and Dot identity to F7. Loading, empty, offline/stale and error states are distinct. Save/Cancel/focus/keyboard/Reduced Motion follow [component-system](../design/component-system.md).
 
-F9 possiede workflow memoria Space/legacy ed eventuali mutazioni built-in selezionate; F5 writer, F6 editor, F7 binding, F1 trasporto, F3 grants. [Confini condivisi](../architecture/feature-boundaries.md). Niente testo ricordi/prompt completi nei log/Git; dati inviati al runtime possono arrivare al provider scelto. Nessun reset, purge o provider installato all'apertura.
+F9 owns the Space/legacy memory workflow and any selected built-in mutations; F5 owns the writer, F6 the editor, F7 binding, F1 transport and F3 grants. [Shared boundaries](../architecture/feature-boundaries.md). No memory text/full prompts in logs/Git; data sent to the runtime may reach the selected provider. No reset, purge or provider installation on opening.
 
-## Definition of done per incremento
+## Definition of done per increment
 
-A: origini/scope visibili, legacy preservato al restart e su errori, nessuna inclusione doppia o import. B: folder sintetico, creazione/update/restart, conflitto esterno e evento significativo provati; contenuti manuali preservati; lettura per incarico/versione dimostrata. C: mutazione realmente applicata o pending, approve/reject/stale target/overflow, fresh session contro resume, isolamento profili e file illeggibile senza reset. Ogni incremento: packaged UI, focus/tastiera/900px, privacy e nessun dato personale modificato dalle prove.
+A: visible origins/scopes, legacy data preserved across restart and errors, no duplicate inclusion or import. B: synthetic folder, creation/update/restart, external conflict and significant event tested; manual content preserved; reading per assignment/version demonstrated. C: mutation actually applied or pending, approve/reject/stale target/overflow, fresh session versus resume, profile isolation and unreadable file without reset. Every increment: packaged UI, focus/keyboard/900px, privacy and no personal data modified by tests.
 
-## Prompt per una nuova chat
+## Prompt for a new chat
 
-> Prima segui docs/agents/feature-workflow.md e File e skill F9. Implementa solo F9-A/B/C selezionato; viewer e note Hermes sono F8, manutenzione skill F11. Per Space usa root/revision/writer F5 ed editor F6, senza copie dei file in un nuovo store. Per eventuali mutazioni runtime leggi Persistent Memory e docs/research/hermes-memory-system.md, verifica contratto/gates del profilo isolato, non scrivere direttamente i built-in. Prova esito/restart/conflitto e aggiornamenti significativi su dati sintetici. Aggiorna scheda, STATUS, MEMORY/decisioni se cambia direzione e WORKLOG; review prima del commit. Segui anche Incarico per la chat implementatrice di F9: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+> First follow docs/agents/feature-workflow.md and F9 Files and skills. Implement only the selected F9-A/B/C; Hermes viewers and notes belong to F8, skill maintenance to F11. For Spaces use F5 root/revision/writer and the F6 editor, without copying files into a new store. For any runtime mutations read Persistent Memory and docs/research/hermes-memory-system.md, verify the isolated profile contract/gates, and do not write built-ins directly. Test outcomes/restart/conflict and significant updates with synthetic data. Update the card, STATUS, MEMORY/decisions if direction changes, and WORKLOG; review before committing. Also follow the Assignment for the implementing chat for F9: deliver verified code and evidence, with the specified GUI/backend context, not just a plan. Capability gates and F0/F18 exceptions still apply.

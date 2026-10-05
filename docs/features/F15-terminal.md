@@ -1,78 +1,78 @@
-# F15 — Vista degli output e del terminale Hermes
+# F15 — Hermes output and terminal view
 
 <!-- implementation-packet:start -->
-## Incarico per la chat implementatrice
+## Assignment for the implementing chat
 
-Terminale significa la superficie Studio per output dei comandi eseguiti da Hermes e, quando il backend offre il contratto, una sessione interattiva sul suo host. Prima slice: output/tool card nella chat o pannello. Non è un nuovo tool terminale, una shell indipendente o un executor locale alternativo.
+Terminal means the Studio surface for output from commands executed by Hermes and, when the backend provides the contract, an interactive session on its host. First slice: output/tool cards in the chat or panel. It is not a new terminal tool, an independent shell, or an alternative local executor.
 
-Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F15**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+When this card is attached as a development assignment, implement and verify **only the F15 frontend/connection**, following the workflow below and the card’s specific sections. The attachment is the entry point: open linked workspace files and SKILL.md files before coding. “Documented/not implemented” labels describe the baseline; they do not require stopping at a plan in the assigned chat.
 
-**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+**Type of work:** GUI adaptation and connection to existing Hermes capabilities, not creation of the feature in the backend. The Fxx separation supports ownership, implementation, and verification in separate chats: the product remains a single OpenDots-style Hermes GUI.
 
-**Risultato:** Mostrare e, se supportato, interagire con il terminale Hermes della sessione/host corretti.
+**Outcome:** Display and, if supported, interact with the Hermes terminal for the correct session/host.
 
-**Backend e confine:** Output, stdin/resize/interrupt/PTY soltanto via contratti native Hermes comprovati; nessuna shell parallela nel renderer. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+**Backend and boundary:** Output, stdin/resize/interrupt/PTY only through proven native Hermes contracts; no parallel shell in the renderer. Studio is a Hermes frontend/adapter: names and GUI may change, while agent capabilities and gates remain native. A missing contract is an explicit gap, not a new backend feature to build.
 
-**Contesto e interazioni pertinenti:** Output/codice/stato ed esito reali, host/cwd/Space visibili; link di file/righe condivisi F5 dove supportati. Working non equivale a comando riuscito. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Relevant context and interactions:** Actual output/code/status and outcome, visible host/cwd/Space; shared F5 file/line links where supported. Working does not mean a command succeeded. You must read the [shared GUI requirements](gui-context-and-references.md); apply the requirements specified here, leaving other functions to their respective owners.
 
-**Dipendenze e letture aggiuntive:** F1/F3/F2; slice output-only distinta da terminale interattivo, capability disponibile prima di attivare controlli. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+**Dependencies and additional readings:** F1/F3/F2; output-only slice distinct from an interactive terminal, with capability availability confirmed before enabling controls. Read [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow and skills](../agents/feature-workflow.md), [boundaries](../architecture/feature-boundaries.md), then this card’s Files and skills and gates. Verify actual files/methods/version; future paths are not existing APIs.
 
-**Prove specifiche obbligatorie per l’incremento pertinente:** Output incrementale/grande, ANSI/contenuto non attendibile, comando nonzero, disconnect/reconnect, resize, sessione diversa e consegna input incerta. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+**Mandatory specific checks for the relevant increment:** Incremental/large output, ANSI/untrusted content, nonzero command exit, disconnect/reconnect, resize, different session, and uncertain input delivery. Use synthetic profiles and data; exercise the real interface. Fixtures, builds, handshakes, and isolated runtime tests are distinct evidence.
 
-**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+**Required delivery:** working increment code, relevant tests with recorded commands/results, typecheck/build of the modified dependency graph, and proportionate .app smoke testing. If the UI changes: verify keyboard/focus, IME where relevant, 900/1360px, accessibility, and Reduced Motion. Review the diff against the specification/principles, fix issues found, and update status/gates in the card and MEMORY/STATUS/WORKLOG. Declare unperformed checks and external blockers; completion requires evidence for the increment’s gates. Git: select only your own files after checking diff/index/secrets; push/publication follows current authorization.
 
-Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+If essential scope is missing, clarify only that; otherwise use confirmed requirements and choose a vertical increment consistent with the card, declaring it before edits. Agree on shared dependencies; do not implement the backlog. F0 remains explicit maintenance of the completed baseline; F18 remains future until selected and supported. For other IDs, proceed with implementation and verification within authorization and actual capabilities, without another general interview.
 <!-- implementation-packet:end -->
 
 
-Stato: documentata; output di tool in UI non è una sessione PTY interattiva.
+Status: documented; tool output in the UI is not an interactive PTY session.
 
 
 <!-- feature-guidance:start -->
-## File e skill da leggere e usare
+## Files and skills to read and use
 
-Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+First follow the [shared ask-matt-guided workflow](../agents/feature-workflow.md): it contains initial readings, implementation/review skills, and exit criteria. Then read the feature-specific files below. The [complete project and global catalog](../agents/skills-catalog.md) retains all collections; load skill bodies only when relevant.
 
-### Skill specifiche
+### Feature-specific skills
 
-| Skill / percorso | Quando applicarla a questa feature |
+| Skill / path | When to apply it to this feature |
 |---|---|
-| [research](<../../.agents/skills/research/SKILL.md>) | Contratto PTY distinto da tool shell |
-| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Sessione, backpressure e processo posseduto |
-| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) — condizionale | Componenti React e stato del renderer |
-| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Verifica UI packaged con dati sintetici e tool realmente disponibili |
-| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — condizionale | Se output/lifecycle falliscono |
+| [research](<../../.agents/skills/research/SKILL.md>) | PTY contract distinct from a shell tool |
+| [codebase-design](<../../.agents/skills/codebase-design/SKILL.md>) | Session, backpressure, and owned process |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) — conditional | React components and renderer state |
+| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — conditional | Verify packaged UI with synthetic data and actually available tools |
+| [diagnosing-bugs](<../../.agents/skills/diagnosing-bugs/SKILL.md>) — conditional | If output/lifecycle fails |
 
-### Punti di ingresso da leggere
+### Entry points to read
 
-- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Autorizzazioni.
-- [desktop/upstream/src/client/ComputerToolCard.tsx](<../../desktop/upstream/src/client/ComputerToolCard.tsx>): Output tool attuale.
-- [desktop/upstream/src/client/ComputerPanel.tsx](<../../desktop/upstream/src/client/ComputerPanel.tsx>): Destinazione Terminal.
-- [desktop/electron/preload.cjs](<../../desktop/electron/preload.cjs>): Privilegi.
-- [Hermes: tools/terminal_tool.py](</Users/luca/.hermes/hermes-agent/tools/terminal_tool.py>): Tool terminale; lettura sorgente alla versione fissata, non prova live.
-- [Hermes: tools/read_terminal_tool.py](</Users/luca/.hermes/hermes-agent/tools/read_terminal_tool.py>): Output e continuità; lettura sorgente alla versione fissata, non prova live.
-- [Hermes: tools/close_terminal_tool.py](</Users/luca/.hermes/hermes-agent/tools/close_terminal_tool.py>): Chiusura distinta da display; lettura sorgente alla versione fissata, non prova live.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Authorizations.
+- [desktop/upstream/src/client/ComputerToolCard.tsx](<../../desktop/upstream/src/client/ComputerToolCard.tsx>): Current tool output.
+- [desktop/upstream/src/client/ComputerPanel.tsx](<../../desktop/upstream/src/client/ComputerPanel.tsx>): Terminal destination.
+- [desktop/electron/preload.cjs](<../../desktop/electron/preload.cjs>): Privileges.
+- [Hermes: tools/terminal_tool.py](</Users/luca/.hermes/hermes-agent/tools/terminal_tool.py>): Terminal tool; source reading at the pinned version, not a live test.
+- [Hermes: tools/read_terminal_tool.py](</Users/luca/.hermes/hermes-agent/tools/read_terminal_tool.py>): Output and continuity; source reading at the pinned version, not a live test.
+- [Hermes: tools/close_terminal_tool.py](</Users/luca/.hermes/hermes-agent/tools/close_terminal_tool.py>): Closing distinct from display; source reading at the pinned version, not a live test.
 
-Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+Verify paths and version before working; coordinate shared files. These readings do not authorize other features or changes to the personal runtime.
 <!-- feature-guidance:end -->
 
-## Scopo
+## Scope
 
-Mostrare comandi e output Hermes associati a un'esecuzione; opzionale PTY interattiva solo dopo verifica del contratto desktop ufficiale. Separare risultato tool-shell e terminal session; non inventare una console che invia testo al modello come fosse una shell.
+Display Hermes commands and output associated with an execution; optional interactive PTY only after verifying the official desktop contract. Separate tool-shell results from a terminal session; do not invent a console that sends text to the model as though it were a shell.
 
-Host/session/cwd/stato/permessi sempre chiari. Console vuota, apertura, collegata, comando avviato, output, codice di uscita, interrotta, offline. Uscita0 non equivale a obiettivo completato; cancellare display non cancella processo. Input per nuovo comando disabilitato senza capability/authorization.
+Host/session/cwd/status/permissions always clear. Empty console, opening, connected, command started, output, exit code, interrupted, offline. Exit 0 does not mean the goal is complete; clearing the display does not cancel the process. New-command input is disabled without capability/authorization.
 
-Module Terminal owns PTY/identità tool, transport/backpressure, resize, detach/attach e ownership del processo. Renderer mostra stream; preload non offre exec generico. Sessioni personali esistenti non importate per default. Output può contenere segreti: limitare log persistenti e clipboard/export espliciti.
+Module Terminal owns PTY/tool identity, transport/backpressure, resize, detach/attach, and process ownership. The renderer displays the stream; preload does not provide generic exec. Existing personal sessions are not imported by default. Output may contain secrets: limit persistent logs and require explicit clipboard/export actions.
 
-Dipendenze F1+F3. Verificare source desktop Hermes terminal adapters e endpoint reali prima di progettare interface. Primo incremento output confermato dei tool e cronologia; PTY interattiva è slice separata scelta nella chat, con dichiarazione host locale/remoto.
+Dependencies F1+F3. Verify Hermes desktop terminal adapter source and actual endpoints before designing the interface. First increment: confirmed tool output and history; interactive PTY is a separate slice selected in the chat, with local/remote host explicitly stated.
 
-Gate: stdout/stderr ordering, output voluminoso/backpressure, codice di uscita, disconnect senza terminazione automatica, resize, interruzione esplicita e restart. Test processi sintetici isolati, nessun comando personale/distruttivo. Tastiera/focus e accessibilità del pannello; distinguere CtrlC terminale e cancellazione composer.
+Gates: stdout/stderr ordering, large output/backpressure, exit code, disconnect without automatic termination, resize, explicit interruption, and restart. Test isolated synthetic processes, no personal/destructive commands. Panel keyboard/focus and accessibility; distinguish terminal CtrlC from composer cancellation.
 
-## D34 — Codice e comandi visibili dalla chat
+## D34 — Code and commands visible from the chat
 
-La chat deve poter presentare codice/comandi realmente eseguiti e output ricevuti da Hermes, con host, tool/sessione e stato. F2 possiede la timeline e F15 la superficie terminale; snippet della risposta e comando eseguito hanno provenienze distinte. Interattività/PTY non è dimostrata dalla sola tool card. Gating ed esito runtime restano necessari.
+The chat must be able to present actually executed code/commands and output received from Hermes, with host, tool/session, and status. F2 owns the timeline and F15 the terminal surface; response snippets and executed commands have distinct provenance. A tool card alone does not demonstrate interactivity/PTY. Gating and runtime outcome remain necessary.
 
 
 ## Handoff
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Lavora soltanto F15; scegli output tool oppure PTY e verifica il contratto Hermes ufficiale. Usa processi test isolati, ownership esplicita e permessi F3. Non aggiungere una shell generica Electron e non sviluppare Files/browser. Documenta esito e limiti. Segui anche Incarico per la chat implementatrice di F15: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+> First follow docs/agents/feature-workflow.md and this card’s Files and skills section, reading SKILL.md files before applying them. Work only on F15; choose tool output or PTY and verify the official Hermes contract. Use isolated test processes, explicit ownership, and F3 permissions. Do not add a generic Electron shell or develop Files/browser. Document outcomes and limitations. Also follow F15’s Assignment for the implementing chat: deliver verified code and evidence, with the specified GUI/backend context, not just a plan. Capability gates and F0/F18 exceptions remain valid.

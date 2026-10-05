@@ -1,132 +1,144 @@
-# F8 — Visibilità delle capacità e della memoria Hermes
+# F8 — Hermes capability and memory visibility
 
 <!-- implementation-packet:start -->
-## Incarico per la chat implementatrice
+## Assignment for the implementation chat
 
-Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F8**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+When this feature card is attached as a development assignment, implement and verify **only the F8 frontend/integration**, following the workflow below and this card’s specific sections. The attachment is the entry point: open the linked workspace files and SKILL.md files before writing code. “Documented/not implemented” statements describe the baseline; they do not require the assigned chat to stop at a plan.
 
-**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+**Type of work:** GUI adaptation and integration with existing Hermes capabilities, not creation of the backend feature. The Fxx split provides ownership, implementation and testing in separate chats: the product remains a single Hermes GUI in the OpenDots style.
 
-**Risultato:** Esporre capacità, memoria e aggiornamenti nativi Hermes preservando autorità e ambiti del backend.
+**Outcome:** Expose native Hermes capabilities, memory and updates while preserving backend authority and scopes.
 
-**Backend e confine:** review.summary e contratti read-only memory/capability alla versione verificata; memoria/procedure rimangono Hermes. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+**Backend and boundary:** review.summary and read-only memory/capability contracts at the verified version; memory/procedures remain in Hermes. Studio is a Hermes frontend/adapter: names and GUI may change, but agent capabilities and gates remain native. A missing contract is an explicit gap, not a new backend feature to build.
 
-**Contesto e interazioni pertinenti:** Note post-turn persistenti nella chat corretta; viewer scoped; coverage di Computer Use F16, browser F12, comandi/skill F11 e settings reali con gap espliciti. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Relevant context and interactions:** Persistent post-turn notes in the correct chat; scoped viewer; coverage of Computer Use F16, browser F12, commands/skills F11 and actual settings with explicit gaps. Reading the [shared GUI requirements](gui-context-and-references.md) is mandatory; apply the requirements assigned here and leave other functions to their respective owners.
 
-**Dipendenze e letture aggiuntive:** A note, B viewer, C mappa: selezionare uno; F2 timeline/F1 routing/F7 profile. Le funzioni native scoperte si assegnano agli owner, non si implementano tutte in F8. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+**Dependencies and additional reading:** A notes, B viewer, C map: select one; F2 timeline/F1 routing/F7 profile. Assign discovered native functions to their owners rather than implementing all of them in F8. Read [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow and skills](../agents/feature-workflow.md), [boundaries](../architecture/feature-boundaries.md), then this card’s Files and skills section and gates. Verify actual files, methods and version; future paths are not already existing APIs.
 
-**Prove specifiche obbligatorie per l’incremento pertinente:** Review dopo fine turno, pending contro applied, notifiche off, dedup/replay/restart, evento di altra sessione, profilo cambiato e API status senza contenuti. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+**Mandatory specific tests for the relevant increment:** Review after turn completion, pending versus applied, notifications off, dedup/replay/restart, events from another session, changed profile and a status API without content. Use synthetic profiles and data; exercise the actual interface. Fixtures, builds, handshakes and isolated runtime tests are distinct evidence.
 
-**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+**Required delivery:** Working increment code, relevant tests with recorded commands/results, typecheck/build of the changed dependency graph and a proportionate .app smoke test. If the UI changes: verify keyboard/focus, IME where relevant, 900/1360px, accessibility and Reduced Motion. Review the diff against the specification/principles, fix identified issues, and update status/gates in this card and MEMORY/STATUS/WORKLOG. Declare unperformed tests and external blockers; completion requires proven increment gates. Git: select only your own files after inspecting diff/index/secrets; push/publish according to current authorization.
 
-Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+If essential scope is missing, clarify only that; otherwise use confirmed requirements and choose a vertical increment consistent with this card, declaring it before edits. Agree on shared dependencies; do not implement the backlog. F0 remains explicit maintenance of the completed baseline; F18 remains future work until selected and supported. For other IDs, proceed with implementation and verification within authorization and actual capabilities, without another general interview.
 <!-- implementation-packet:end -->
 
 
-Stato: documentata D30, 2026-10-04; nuova scheda per chat dedicata, nessuna implementazione selezionata. L'utente vuole preservare tutte le funzioni del backend Hermes e poterle vedere/usare da Studio, come nel desktop ufficiale. La memoria rimane Hermes: qui si progetta la sua presentazione, non un nuovo motore o archivio di ricordi.
+Status: documented D30, 2026-10-04; new card for a dedicated chat, no implementation selected. The user wants to preserve all Hermes backend functions and see/use them from Studio, as in the official desktop. Memory remains in Hermes: this feature designs its presentation, not a new engine or memory archive.
 
-## Continuità autonoma richiesta in F1 — D33
+## Autonomous continuity requested in F1 — D33
 
-Principio utente: Hermes lavora 24/7 indipendentemente da Studio aperto; Studio facilita e visualizza il backend Hermes completo. Routine/cron, heartbeat, bots, strumenti e memoria mantengono ownership native Hermes. Configurazione, stato host/servizio e risultati devono restare osservabili dopo riapertura, con esiti reali. Nessun timer/heartbeat/executor alternativo nel client e nessun arresto del backend alla chiusura. Il requisito non è ancora una verifica di durata o di esecuzione dopo riavvio; riprendere [F1/D33](F1-runtime-connection.md#principio-cardine--hermes-autonomo-studio-facilitatore-d33) e i gate specifici della scheda prima di implementare.
+User principle: Hermes works 24/7 independently of whether Studio is open; Studio facilitates and displays the complete Hermes backend. Routines/cron, heartbeat, bots, tools and memory retain native Hermes ownership. Configuration, host/service state and results must remain observable after reopening, with actual outcomes. No alternative timer/heartbeat/executor in the client and no backend shutdown on closing. This requirement is not yet a duration or post-restart execution test; revisit [F1/D33](F1-runtime-connection.md#principio-cardine--hermes-autonomo-studio-facilitatore-d33) and this card’s specific gates before implementation.
 
 <!-- feature-guidance:start -->
-## File e skill da leggere e usare
+## Files and skills to read and use
 
-Prima seguire il [workflow ask-matt comune](../agents/feature-workflow.md), i [principi](../architecture/principles.md), [F1](F1-runtime-connection.md) e questa sola scheda. Il [catalogo skill progetto/globali](../agents/skills-catalog.md) contiene gli strumenti di sviluppo; non è il catalogo delle skill del profilo Hermes dell'utente.
+First follow the [shared ask-matt workflow](../agents/feature-workflow.md), the [principles](../architecture/principles.md), [F1](F1-runtime-connection.md) and only this card. The [project/global skills catalog](../agents/skills-catalog.md) contains development tools; it is not the user’s Hermes profile skill catalog.
 
-| Skill | Applicazione |
+| Skill | Application |
 |---|---|
-| [ask-matt](../../.agents/skills/ask-matt/SKILL.md) | Selezionare il singolo incremento e le letture |
-| [codebase-design](../../.agents/skills/codebase-design/SKILL.md) | Contratto di eventi/proiezione piccolo, invarianti di ownership e ripresa |
-| [documentation-and-adrs](../../.agents/skills/documentation-and-adrs/SKILL.md) | Mappa capacità, versione, gap e prove |
-| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) | UI e aggiornamenti dopo fine turno |
-| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Prova .app/renderer con dati sintetici |
-| [research](../../.agents/skills/research/SKILL.md) — condizionale | Gap di contratto non risolvibile dai sorgenti fissati |
-| [diagnosing-bugs](../../.agents/skills/diagnosing-bugs/SKILL.md) — condizionale | Perdita/duplicazione/associazione errata di eventi riproducibile |
+| [ask-matt](../../.agents/skills/ask-matt/SKILL.md) | Select the single increment and reading |
+| [codebase-design](../../.agents/skills/codebase-design/SKILL.md) | Small event/projection contract, ownership and resume invariants |
+| [documentation-and-adrs](../../.agents/skills/documentation-and-adrs/SKILL.md) | Capability map, version, gaps and evidence |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) | UI and updates after turn completion |
+| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — conditional | .app/renderer tests with synthetic data |
+| [research](../../.agents/skills/research/SKILL.md) — conditional | Contract gaps not resolvable from pinned sources |
+| [diagnosing-bugs](../../.agents/skills/diagnosing-bugs/SKILL.md) — conditional | Reproducible lost/duplicated/misattributed events |
 
-Punti di ingresso Studio: [gateway.mjs](../../desktop/hermes/gateway.mjs), [bridge.mjs](../../desktop/hermes/bridge.mjs), [Chat.tsx](../../desktop/upstream/src/client/Chat.tsx), [App.tsx](../../desktop/upstream/src/client/App.tsx), [WorkspaceDialog.tsx](../../desktop/upstream/src/client/WorkspaceDialog.tsx), [workspace.ts](../../desktop/upstream/src/server/workspace.ts). Concordare ownership con F2/F11/F1/F9 prima del codice.
+Studio entry points: [gateway.mjs](../../desktop/hermes/gateway.mjs), [bridge.mjs](../../desktop/hermes/bridge.mjs), [Chat.tsx](../../desktop/upstream/src/client/Chat.tsx), [App.tsx](../../desktop/upstream/src/client/App.tsx), [WorkspaceDialog.tsx](../../desktop/upstream/src/client/WorkspaceDialog.tsx), [workspace.ts](../../desktop/upstream/src/server/workspace.ts). Agree on ownership with F2/F11/F1/F9 before coding.
 
-Punti di ingresso Hermes, solo sorgente pubblico: `tui_gateway/contracts/events.py`, `tui_gateway/server.py::_wire_session_agent`, `agent/background_review.py`, `apps/desktop/src/app/session/hooks/use-message-stream/gateway-event/status.ts`, `apps/desktop/src/components/assistant-ui/thread/system-message.tsx`, `apps/desktop/src/api/system.ts`, `apps/desktop/src/api/skills.ts`, `apps/desktop/src/types/hermes.ts`, `hermes_cli/web_routers/ops.py` e contratti `tools_mcp_plugins.py`. Fonti fissate e limiti sotto; non leggere home/database/skill personali per preparare la feature.
+Hermes entry points, public source only: `tui_gateway/contracts/events.py`, `tui_gateway/server.py::_wire_session_agent`, `agent/background_review.py`, `apps/desktop/src/app/session/hooks/use-message-stream/gateway-event/status.ts`, `apps/desktop/src/components/assistant-ui/thread/system-message.tsx`, `apps/desktop/src/api/system.ts`, `apps/desktop/src/api/skills.ts`, `apps/desktop/src/types/hermes.ts`, `hermes_cli/web_routers/ops.py` and `tools_mcp_plugins.py` contracts. Pinned sources and limitations below; do not read personal homes/databases/skills to prepare the feature.
 <!-- feature-guidance:end -->
 
-## Regola di prodotto
+## Product rule
 
-Studio adatta le superfici OpenDots/Unsloth/Codex al runtime Hermes, preservandone strumenti, memoria, apprendimento, profili, scheduler e approvazioni. Non limita deliberatamente il runtime al sottoinsieme previsto dal template OpenDots. Una funzione backend supportata deve avere una destinazione UI o un gap esplicito nella mappa, non sparire silenziosamente.
+Studio adapts OpenDots/Unsloth/Codex surfaces to the Hermes runtime, preserving its tools, memory, learning, profiles, scheduler and approvals. It does not deliberately restrict the runtime to the subset provided by the OpenDots template. A supported backend function must have a UI destination or an explicit gap in the map, rather than silently disappear.
 
-Questo è obiettivo di parità **funzionale**, non promessa che tutte le capacità siano già implementate né obbligo di copiarne la UI. Progressive disclosure ammessa; assenza dal composer non deve diventare disabilitazione Hermes. Non alterare config/tools/memory/curator per semplificare la schermata. Nessuna importazione o duplicazione automatica della memoria in metadata Studio.
+This is a **functional** parity goal, not a promise that all capabilities are already implemented or an obligation to copy their UI. Progressive disclosure is allowed; absence from the composer must not disable Hermes. Do not alter config/tools/memory/curator to simplify the screen. No automatic memory import or duplication into Studio metadata.
 
-## Mappa iniziale di ownership, non inventario completo del runtime
+## Initial ownership map, not a complete runtime inventory
 
-| Capacità Hermes | Destinazione Studio | Scheda proprietaria |
+| Hermes capability | Studio destination | Owning card |
 |---|---|---|
-| Sessioni, modello/effort, contesto, streaming, comandi, tool results, interruzione/ripresa | Chat/composer/dettagli attività | F2/F1; F8 conserva segnali e copertura |
-| Memoria built-in e provider, identità e learning | Memory del profilo, dettagli origine/budget/pending; identità nel Dot | F8 viewer, F7 identità, F9 solo aggiunte Space/legacy |
-| Review memoria/skill post-turn | Riga discreta nella conversazione, dettagli e link al contenuto interessato quando risolvibile | F8 adapter/ricevute; F2 renderer |
-| Skills, curator, plugin, MCP/toolsets/deferred tools | Capabilities/Skills, stato e manutenzione del profilo | F11 gestione; F8 visibilità notifiche/stato |
-| Bots, messaging, delegate task | Dots/chat/team e ricevute distinte | F7/F14 |
-| Scheduler/routine, esecuzioni e delivery | Routine, storico e stato host | F10 |
-| Browser/search, computer use, file/artifacts, terminale | Computer e risultati con origine | F12/F16/F5/F15 |
-| STT/TTS e voice conversation | Composer/voce/playback | F17 |
-| Approvazioni, richieste input, grants | Controlli associati a owner/azione reale | F3 |
+| Sessions, model/effort, context, streaming, commands, tool results, interruption/resume | Chat/composer/activity details | F2/F1; F8 preserves signals and coverage |
+| Built-in memory and providers, identity and learning | Profile Memory, origin/budget/pending details; identity in the Dot | F8 viewer, F7 identity, F9 only Space/legacy additions |
+| Post-turn memory/skill review | Discreet conversation row, details and link to affected content when resolvable | F8 adapter/receipts; F2 renderer |
+| Skills, curator, plugins, MCP/toolsets/deferred tools | Capabilities/Skills, profile state and maintenance | F11 management; F8 notification/state visibility |
+| Bots, messaging, delegate task | Dots/chat/team and distinct receipts | F7/F14 |
+| Scheduler/routines, executions and delivery | Routines, history and host state | F10 |
+| Browser/search, computer use, files/artifacts, terminal | Computer and results with origin | F12/F16/F5/F15 |
+| STT/TTS and voice conversation | Composer/voice/playback | F17 |
+| Approvals, input requests, grants | Controls associated with actual owner/action | F3 |
 
-Nella chat implementativa costruire una matrice per la **versione/profilo collegati**: feature/tool/evento → contratto → superficie → stato (supportato backend, collegato, verificato, indisponibile/gap) → prova. Discovery dinamica più mappa versionata; non certificare tutto dal conteggio endpoint. Ogni famiglia resta alla sua scheda; F8 non implementa incidentalmente browser, routine o plugin.
+In the implementation chat, build a matrix for the **connected version/profile**: feature/tool/event → contract → surface → state (backend-supported, connected, verified, unavailable/gap) → evidence. Dynamic discovery plus a versioned map; do not certify everything from endpoint counts. Each family remains with its card; F8 does not incidentally implement browsers, routines or plugins.
 
-## Memoria runtime da osservare, senza copiarla
+## Runtime memory to observe without copying
 
-L'utente apre Memory e sceglie il Dot/profilo/host associato. Mostrare contenuto effettivamente leggibile, provenienza, aggiornamento noto e budget verificato di USER/MEMORY; identità SOUL distinta, provider attivo e stato recall/skill/curator dove supportati. Nessun ricordo creato al primo avvio e nessun seed personale letto implicitamente. Un nuovo Dot non crea un archivio runtime proprio senza binding F7.
+The user opens Memory and chooses the associated Dot/profile/host. Show actually readable content, provenance, known updates and verified USER/MEMORY budgets; separate SOUL identity, active provider and recall/skill/curator state where supported. No memories created on first launch and no personal seed read implicitly. A new Dot does not create its own runtime archive without an F7 binding.
 
-Fonte autoritativa: profilo Hermes. Cache/snapshot UI eventuali sono dati derivati con provenienza e freshness, non memorie reiniettate nell'agente o un secondo writer. Ripresa offline indica ultima osservazione, non dati attuali. File Space F9 e preferenze legacy hanno sezioni/ambiti distinti.
+Authoritative source: Hermes profile. Any UI caches/snapshots are derived data with provenance and freshness, not memories reinjected into the agent or a second writer. Offline resume indicates the last observation, not current data. F9 Space files and legacy preferences have distinct sections/scopes.
 
-**Gap verificato:** `/api/memory` restituisce provider e dimensioni file **in byte**, non testo completo, budget in caratteri o lista mutazioni. Non usarlo come CRUD o percentuale del limite 2.200/1.375 caratteri. Il viewer deve trovare un percorso read-only scoped supportato (ad esempio learning/detail o surface ufficiale compatibile), oppure documentare un adapter necessario; accesso diretto remoto ai file non è implicito. Nessuna esposizione generica filesystem del profilo al renderer.
+**Verified gap:** `/api/memory` returns provider and file sizes **in bytes**, not full text, character budgets or a mutation list. Do not use it as CRUD or a percentage of the 2,200/1,375-character limit. The viewer must find a supported scoped read-only path (such as learning/detail or a compatible official surface), or document a required adapter; direct remote file access is not implicit. No generic profile filesystem exposure to the renderer.
 
-Preservare memoria di tutti i profili senza aggregarla: una selezione UI non concede lettura globale di chat/profili non autorizzati. Snapshot built-in in uso e memoria attuale su disco sono distinti. F8 non resetta, migra, cancella o cambia provider; eventuale gestione runtime sta in F9-C/F11 con contratto e selezione separati.
+Preserve every profile’s memory without aggregation: a UI selection does not grant global reads of unauthorized chats/profiles. The built-in snapshot in use and current memory on disk are distinct. F8 does not reset, migrate, delete or change providers; any runtime management belongs to F9-C/F11 with separate contracts and selection.
 
-## Esempio richiesto: aggiornamenti dopo una risposta
+## Requested example: updates after a response
 
-Evidenza sorgente pubblico SHA `e1e82d782f353766c7a22db6e5ac4fa58bbff325`, 2026-10-04, nessuna prova live:
+Public-source evidence SHA `e1e82d782f353766c7a22db6e5ac4fa58bbff325`, 2026-10-04, no live test:
 
-- Gateway emette **`review.summary`** tramite `background_review_callback`. Payload tipizzato **`{text: string}`** nell'envelope sessione; non include un elenco strutturato delle mutazioni o un message/turn ID garantito.
-- Desktop ufficiale intercetta l'evento in `status.ts` e lo aggiunge come messaggio system con marker `review:`; `system-message.tsx` lo presenta come nota memoria/apprendimento. Il codice evita una sola toast fugace. Questa intenzione non prova da sola replay durevole dopo restart: verificarlo.
-- `background_review.py` riassume risultati tool riusciti, distingue proposte staged e operations applicate, evita risultati ereditati già presenti. `display.memory_notifications` governa emissione (off/on/verbose), non l'apprendimento in sé.
-- Il riepilogo post-turn riguarda **background review/self-improvement**. Il curator è manutenzione skill separata: non chiamare ogni aggiornamento «Curator» e non inventare `curator.updated` come evento. Run/status/report del curator hanno percorso e prove propri.
+- The gateway emits **`review.summary`** through `background_review_callback`. Typed payload **`{text: string}`** in the session envelope; it does not include a structured mutation list or guaranteed message/turn ID.
+- The official desktop intercepts the event in `status.ts` and adds it as a system message with the `review:` marker; `system-message.tsx` presents it as a memory/learning note. The code avoids relying on a single fleeting toast. This intention alone does not prove durable replay after restart: verify it.
+- `background_review.py` summarizes successful tool results, distinguishes staged proposals from applied operations, and avoids inherited results already present. `display.memory_notifications` controls emission (off/on/verbose), not learning itself.
+- The post-turn summary concerns **background review/self-improvement**. The curator is separate skill maintenance: do not call every update “Curator” or invent a `curator.updated` event. Curator run/status/report have their own paths and evidence.
 
-UX: dopo il testo della risposta, mostrare una riga come «Skills aggiornate» **solo se questo è l'esito ricevuto**, oppure «Modifica proposta: da approvare». Il riepilogo generico deve restare generico se non contiene nomi/azioni. Dettagli espandibili con testo runtime, origine/profilo e link al contenuto solo con target risolto. Non dedurre nomi/file/rollback da prose localizzata.
+UX: after the response text, show a row such as “Skills updated” **only if that is the received outcome**, or “Proposed change: awaiting approval”. A generic summary must remain generic if it contains no names/actions. Expandable details with runtime text, origin/profile and content links only for resolved targets. Do not infer names/files/rollback from localized prose.
 
-Un evento tardivo resta nella chat del suo owner anche dopo fine turno o cambio selezione. Agganciare a una risposta esatta soltanto con correlazione supportata; altrimenti nota di sessione con timestamp, non badge all'ultimo messaggio arbitrario. Non riaprire Working per una notifica post-turn e non creare una risposta dell'agente aggiuntiva. Se gli avvisi runtime sono off, indicare la disponibilità della vista memoria; non inventare aggiornamenti o riattivarli di nascosto.
+A late event remains in its owner’s chat even after turn completion or a selection change. Attach it to an exact response only with supported correlation; otherwise show a timestamped session note, not a badge on an arbitrary latest message. Do not reopen Working for a post-turn notification or create another agent response. If runtime notifications are off, indicate that the memory view is available; do not invent updates or secretly reactivate notifications.
 
-## Contratto Studio proposto e resilienza
+## Proposed Studio contract and resilience
 
-F1 consegna eventi autenticati/scoped alla proiezione F8; F2 visualizza ricevute e note, F11/F9 refresh delle viste pertinenti. Proposta di record derivato con origine, connection/profile/session, tipo, payload consentito, timestamp e correlazione/revisione quando realmente presenti. Non è uno schema backend già esistente. Conservare il testo originale come testo, non HTML/link/file-action arbitraria.
+F1 delivers authenticated/scoped events to the F8 projection; F2 displays receipts and notes, F11/F9 refresh relevant views. Proposed derived record with origin, connection/profile/session, type, permitted payload, timestamp and correlation/revision when actually present. This is not an existing backend schema. Preserve original text as text, not arbitrary HTML/links/file actions.
 
-Subscription non termina quando arriva fine risposta: review può completare dopo. Nessun ascolto globale che inoltra eventi di sessioni personali non associate. Persistere note/ricevute UI quando previsto; non scrivere ricordi Hermes per conservare una notifica. Dedup/replay usa ID/checkpoint del backend se disponibili; senza identità affidabile definire limiti e non promettere exactly-once. Recovery deve riconciliare stato/snapshot, non rilanciare review, skill writes o prompt.
+The subscription does not end when the response ends: review may finish later. No global listener forwarding events from unassociated personal sessions. Persist UI notes/receipts where specified; do not write Hermes memories to retain a notification. Dedup/replay uses backend IDs/checkpoints when available; without reliable identity, define limitations and do not promise exactly-once. Recovery must reconcile state/snapshots, not rerun reviews, skill writes or prompts.
 
-Eventi nuovi non riconosciuti: diagnostica redatta/contatore per la mappa, non dump privato o render automatico di payload arbitrario. Versioni incompatibili mostrano gap, senza perdere le capacità già collegate. Nulla nella parità autorizza chiamate RPC generiche, reset memory, run curator, installazioni o gestione provider automatici.
+Unrecognized new events: redacted diagnostics/counters for the map, not private dumps or automatic rendering of arbitrary payloads. Incompatible versions show gaps without losing already connected capabilities. Nothing in parity authorizes generic RPC calls, memory resets, curator runs, installations or automatic provider management.
 
-## Incrementi da scegliere
+## Increments to select
 
-- **F8-A — Riepiloghi post-turn:** adattare `review.summary` scoped, nota nella chat, dettaglio e persistenza/ripresa verificati; non richiede un nuovo archivio memoria.
-- **F8-B — Viewer memoria Hermes:** lettura read-only profilo/contenuti supportati, freshness/budget/origine e refresh dopo eventi; gap adapter esplicito.
-- **F8-C — Copertura feature native:** matrice versione/profilo, discovery e destinazioni; passare i gap alle schede proprietarie invece di implementarle tutte.
+- **F8-A — Post-turn summaries:** adapt scoped `review.summary`, chat note, details and verified persistence/resume; no new memory archive required.
+- **F8-B — Hermes memory viewer:** supported read-only profile/content access, freshness/budget/origin and refresh after events; explicit adapter gaps.
+- **F8-C — Native feature coverage:** version/profile matrix, discovery and destinations; pass gaps to owning cards instead of implementing them all.
 
-Dipendenze A: F1 eventi + F2 timeline/owner; B: F1/F7 e contratto read-only, con link F11/F9; C: capability discovery F11/F1. UI component-system; tastiera/focus/dettagli/Reduced Motion. Nessun incremento selezionato dalla sola creazione della scheda.
+Dependencies A: F1 events + F2 timeline/owner; B: F1/F7 and a read-only contract, with F11/F9 links; C: F11/F1 capability discovery. UI component-system; keyboard/focus/details/Reduced Motion. Creating this card alone selects no increment.
 
 ## Definition of done
 
-A: fixture emette riepilogo dopo fine risposta e dopo switch chat; nota nel solo owner, non persa alla chiusura pannello/reopen/restart secondo contratto; duplicato/replay/late event/disconnect/malformed gestiti. Prova isolata Hermes di review riuscita distinta da staging/fallimento; notifiche off senza falsi aggiornamenti. Mancanza di id/turn spiegata nei limiti.
+A: a fixture emits a summary after response completion and after switching chats; note only in its owner, not lost on panel closing/reopen/restart according to the contract; duplicate/replay/late event/disconnect/malformed handled. Isolated Hermes test of successful review distinguished from staging/failure; notifications off without false updates. Missing id/turn explained in limitations.
 
-B: mostrare memoria sintetica già presente nel backend senza modificarla, con due profili e isolamento; refresh/fresh session contro snapshot, byte contro caratteri, offline stale e permesso negato. Verificare file/provider non alterati dall'apertura di Studio e assenza di seconda iniezione/memoria duplicata. Fonti esterne non lette senza accesso supportato.
+B: show synthetic memory already present in the backend without changing it, using two profiles and isolation; refresh/fresh session versus snapshot, bytes versus characters, offline stale and permission denied. Verify that opening Studio does not alter files/providers and that there is no second injection/duplicated memory. External sources not read without supported access.
 
-C: ogni capacità in scope ha superficie o gap tracciato e ownership; strumenti deferred non esclusi soltanto perché assenti dal composer. Stato disponibile provato, non dedotto dal nome. Gate read-only non prova management. Ogni incremento: UI packaged, focus/accessibilità, privacy, zero log di ricordi/credenziali e prova distinta da build/handshake.
+C: every in-scope capability has a surface or tracked gap and ownership; deferred tools are not excluded merely because they are absent from the composer. Availability is proven, not inferred from names. A read-only gate does not prove management. Each increment: packaged UI, focus/accessibility, privacy, zero memory/credential logging, and evidence distinct from build/handshake.
 
-## Fonti
+## Sources
 
-[Persistent Memory](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/), [Curator](https://hermes-agent.nousresearch.com/docs/user-guide/features/curator/), [analisi memoria](../research/hermes-memory-system.md). Sorgente fissato: [eventi](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/tui_gateway/contracts/events.py#L247), [gateway wiring](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/tui_gateway/server.py#L1042), [review](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/agent/background_review.py#L730), [desktop handler](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/apps/desktop/src/app/session/hooks/use-message-stream/gateway-event/status.ts#L175), [riga UI](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/apps/desktop/src/components/assistant-ui/thread/system-message.tsx), [memory status](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/hermes_cli/web_routers/ops.py#L491).
+[Persistent Memory](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/), [Curator](https://hermes-agent.nousresearch.com/docs/user-guide/features/curator/), [memory analysis](../research/hermes-memory-system.md). Pinned source: [events](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/tui_gateway/contracts/events.py#L247), [gateway wiring](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/tui_gateway/server.py#L1042), [review](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/agent/background_review.py#L730), [desktop handler](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/apps/desktop/src/app/session/hooks/use-message-stream/gateway-event/status.ts#L175), [UI row](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/apps/desktop/src/components/assistant-ui/thread/system-message.tsx), [memory status](https://github.com/NousResearch/hermes-agent/blob/e1e82d782f353766c7a22db6e5ac4fa58bbff325/hermes_cli/web_routers/ops.py#L491).
 
-## D34 — Copertura chat e impostazioni native
+## D34 — Chat coverage and native settings
 
-Mappare esplicitamente tutte le componenti chat Hermes/TUI: streaming, thinking esposto, tool, codice/comandi/output, changes, approvals/validation e controlli chat. Per ciascuna voce indicare contratto/versione, destinazione owner e prova/gap. Mappare inoltre tutte le impostazioni Hermes nella sezione dedicata Settings Hermes, per host/profilo, distinta da Settings Hermes Studio. F4 possiede contenitore e navigazione; F8 copertura/provenienza, non un writer generico di configurazione. Ogni mutazione passa dalla feature proprietaria e policy F3. Nessuna funzione nativa eliminata per adattare il template.
+Explicitly map all Hermes/TUI chat components: streaming, exposed thinking, tools, code/commands/output, changes, approvals/validation and chat controls. For each item, indicate contract/version, owning destination and evidence/gap. Also map all Hermes settings in the dedicated Hermes Settings section, per host/profile, distinct from Hermes Studio Settings. F4 owns the container and navigation; F8 coverage/provenance, not a generic configuration writer. Each mutation passes through the owning feature and F3 policy. No native function removed to adapt the template.
 
 
-## Prompt per una nuova chat
+## User screenshot 2026-10-05 — Self-improvement review
 
-> Prima segui docs/agents/feature-workflow.md e File e skill F8. Implementa soltanto F8-A/B/C selezionato: preservare capacità e memoria Hermes e presentarle in Studio, senza secondo archivio/motore. Verifica contratti/versione e confronta handler desktop ufficiale. Per A usa review.summary scoped anche dopo fine turno, nota persistente e correlazione solo quando provata; non chiamare tutto curator o applied. Per B sola lettura supportata del profilo scelto, nessun import/reset/config change o reiniezione. Mappa gap alle feature proprietarie, non implementarle incidentalmente. Prove sintetiche/isolate e UI packaged; aggiorna scheda, MEMORY/STATUS/WORKLOG e fai review prima del commit. Segui anche Incarico per la chat implementatrice di F8: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+Visual evidence supplied by the user: a persistent “Self-improvement review” notice beneath the response, with a proposed but unapplied memory replacement and `/memory pending` instruction for approve/discard. The screenshot proves the surface in Hermes desktop, not Studio integration or the proposal’s outcome. Local source verified at e1e82d782f: `apps/desktop/src/app/session/hooks/use-message-stream/gateway-event/status.ts` handler for `review.summary`, `components/assistant-ui/thread/system-message.tsx` renderer. F8-A adapts this native event; it does not build frontend self-improvement.
+
+Studio must show a persistent note in the originating conversation, readable even if it arrives after turn completion or while another chat is selected. Present the original summary and runtime/profile/session scope; link to a turn only if proven by the contract. Do not rely only on toasts. Do not reactivate Working for the note.
+
+Required cases: proposed memory **awaiting approval**, applied memory, a created or updated skill when confirmed by Hermes data. `review.summary` exposes text and does not guarantee structured mutations: preserve text without inferring success from keywords, tool names or a proposal. Do not label every review Skill Curator: curator and background review are distinct.
+
+For pending, show the native `/memory pending` instruction. A “Review proposal” GUI action may open the F3/F8 surface only when the connected backend exposes a supported path; approve/discard require an explicit choice and runtime receipt, with no automatic application. Do not invent RPCs or treat notice text as authorization. If the command is not integrated, preserve the instruction and declare the limitation.
+
+Gates: late note in the correct session, pending distinguished from applied, confirmed skill creation/updates, discarded/failed proposals, offline/replay without duplicates, restart with verified persistence and no arbitrary correlation to the latest response. Accessible, discreet UI with text in addition to color. This request updates specifications; selected F8-A implementation remains to be built/verified.
+
+## Prompt for a new chat
+
+> First follow docs/agents/feature-workflow.md and F8 Files and skills. Implement only selected F8-A/B/C: preserve Hermes capabilities and memory and present them in Studio, without a second archive/engine. Verify contracts/version and compare the official desktop handler. For A, use scoped review.summary even after turn completion, a persistent note and correlation only when proven; do not call everything curator or applied. For B, only supported reading of the selected profile, no import/reset/config change or reinjection. Map gaps to owning features rather than implementing them incidentally. Synthetic/isolated tests and packaged UI; update the card, MEMORY/STATUS/WORKLOG and review before committing. Also follow the F8 Assignment for the implementation chat: deliver verified code and evidence, with the specified GUI/backend context, not just a plan. Capability gates and F0/F18 exceptions remain valid.

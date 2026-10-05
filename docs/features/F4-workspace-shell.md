@@ -1,162 +1,162 @@
-# F4 — Shell, navigazione e componenti di Hermes Studio
+# F4 — Shell, navigation and Hermes Studio components
 
 <!-- implementation-packet:start -->
-## Incarico per la chat implementatrice
+## Assignment for the implementation chat
 
-Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F4**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+When this feature card is attached as a development assignment, implement and verify **only the F4 frontend/integration**, following the workflow below and this card’s specific sections. The attachment is the entry point: open the linked workspace files and SKILL.md files before writing code. “Documented/not implemented” statements describe the baseline; they do not require the assigned chat to stop at a plan.
 
-**Tipo di lavoro:** design e implementation delle superfici Studio. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+**Type of work:** Design and implementation of Studio surfaces. The Fxx split provides ownership, implementation and testing in separate chats: the product remains a single Hermes GUI in the OpenDots style.
 
-**Risultato:** Realizzare shell/sidebar/header/composer/popover coerenti con OpenDots e contesto Hermes sempre riconoscibile.
+**Outcome:** Implement shell/sidebar/header/composer/popovers consistent with OpenDots and keep the Hermes context recognizable at all times.
 
-**Backend e confine:** Consumare progetti/sessioni/modelli/effort/capability forniti dagli adapter owner; Settings Hermes usa backend scoped, Settings Studio stato app. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+**Backend and boundary:** Consume projects/sessions/models/effort/capabilities provided by the owning adapters; Hermes Settings uses the scoped backend, Studio Settings uses app state. Studio is a Hermes frontend/adapter: names and GUI may change, but agent capabilities and gates remain native. A missing contract is an explicit gap, not a new backend feature to build.
 
-**Contesto e interazioni pertinenti:** D37: ogni runtime collegato presenta i propri Bots come Dots tramite roster nativo, senza ricreazione manuale; ownership F7. Applicare anche D36 qui sotto: pannello laterale per figli temporanei; Dots persistenti nella propria chat, messaggi attribuiti e attività confermata dal runtime. Space/host/modello/effort leggibili; sidebar Space attivo, popover @ e /, selettori pending/esito reale. Stato offline/stale/non supportato distinto. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Relevant context and interactions:** D37: each connected runtime presents its own Bots as Dots through the native roster, without manual recreation; F7 owns this. Also apply D36 below: a side panel for temporary children; persistent Dots in their own chat, attributed messages and runtime-confirmed activity. Readable Space/host/model/effort; active Space in the sidebar, @ and / popovers, selectors showing pending/actual outcomes. Distinct offline/stale/unsupported states. Reading the [shared GUI requirements](gui-context-and-references.md) is mandatory; apply the requirements assigned here and leave other functions to their respective owners.
 
-**Dipendenze e letture aggiuntive:** F2/F6/F7/F11 forniscono contratti/dati; F4 implementa presentazione e interazioni, non una nuova connessione/executor. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+**Dependencies and additional reading:** F2/F6/F7/F11 supply contracts/data; F4 implements presentation and interactions, not a new connection/executor. Read [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow and skills](../agents/feature-workflow.md), [boundaries](../architecture/feature-boundaries.md), then this card’s Files and skills section and gates. Verify actual files, methods and version; future paths are not already existing APIs.
 
-**Prove specifiche obbligatorie per l’incremento pertinente:** 900/1360px, nomi lunghi e omonimi, cambio chat mentre carica, IME/Enter nel menu, Escape/focus, zoom/VoiceOver/Reduced Motion, contenuto non coperto dal pannello. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+**Mandatory specific tests for the relevant increment:** 900/1360px, long names and namesakes, switching chats while loading, IME/Enter in menus, Escape/focus, zoom/VoiceOver/Reduced Motion, content not obscured by the panel. Use synthetic profiles and data; exercise the actual interface. Fixtures, builds, handshakes and isolated runtime tests are distinct evidence.
 
-**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+**Required delivery:** Working increment code, relevant tests with recorded commands/results, typecheck/build of the changed dependency graph and a proportionate .app smoke test. If the UI changes: verify keyboard/focus, IME where relevant, 900/1360px, accessibility and Reduced Motion. Review the diff against the specification/principles, fix identified issues, and update status/gates in this card and MEMORY/STATUS/WORKLOG. Declare unperformed tests and external blockers; completion requires proven increment gates. Git: select only your own files after inspecting diff/index/secrets; push/publish according to current authorization.
 
-Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+If essential scope is missing, clarify only that; otherwise use confirmed requirements and choose a vertical increment consistent with this card, declaring it before edits. Agree on shared dependencies; do not implement the backlog. F0 remains explicit maintenance of the completed baseline; F18 remains future work until selected and supported. For other IDs, proceed with implementation and verification within authorization and actual capabilities, without another general interview.
 <!-- implementation-packet:end -->
 
 
-Stato: specifica per una chat futura; baseline esistente parziale, feature non completa. Aggiornamento: 2026-10-04. La nuova richiesta dell’utente è documentare il progetto per feature e partire da un MVP quasi vuoto. Questo documento non autorizza a riprendere il piano notturno né a eliminare il prototipo.
+Status: specification for a future chat; partial existing baseline, feature incomplete. Updated: 2026-10-04. The user’s new request is to document the project by feature and start from a nearly empty MVP. This document does not authorize resuming the overnight plan or deleting the prototype.
 
 
 <!-- feature-guidance:start -->
 
-## File e skill da leggere e usare
+## Files and skills to read and use
 
-Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+First follow the [shared ask-matt-guided workflow](../agents/feature-workflow.md): it contains initial reading, implementation/review skills and exit criteria. Then read the specific files below. The [complete project and global catalog](../agents/skills-catalog.md) preserves all collections; load skill bodies only when relevant.
 
-### Skill specifiche
+### Specific skills
 
-| Skill / percorso | Quando applicarla a questa feature |
+| Skill / path | When to apply it to this feature |
 |---|---|
-| [frontend-design](<../../.agents/skills/frontend-design/SKILL.md>) | Direzione visiva conforme al riferimento e anatomia dei componenti |
-| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) | Componenti React e stato del renderer |
-| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — condizionale | Verifica UI packaged con dati sintetici e tool realmente disponibili |
-| [ux-extract](<../../.agents/skills/ux-extract/SKILL.md>) — condizionale | Se manca evidenza su un componente o una microinterazione |
-| [axiom-design](<../../.agents/skills/axiom-design/SKILL.md>) — condizionale | Gerarchia e convenzioni macOS, applicate allo stack Electron |
-| [axiom-accessibility](<../../.agents/skills/axiom-accessibility/SKILL.md>) — condizionale | Criteri tastiera/focus/contrasto; API native solo nel ramo nativo |
+| [frontend-design](<../../.agents/skills/frontend-design/SKILL.md>) | Visual direction consistent with the reference and component anatomy |
+| [react](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/react-best-practices/SKILL.md>) | React components and renderer state |
+| [ui-test](</Users/luca/.codex/plugins/cache/openai-curated-remote/build-web-apps/0.1.2/skills/frontend-testing-debugging/SKILL.md>) — conditional | Packaged UI verification with synthetic data and actually available tools |
+| [ux-extract](<../../.agents/skills/ux-extract/SKILL.md>) — conditional | If evidence is missing for a component or microinteraction |
+| [axiom-design](<../../.agents/skills/axiom-design/SKILL.md>) — conditional | macOS hierarchy and conventions, applied to the Electron stack |
+| [axiom-accessibility](<../../.agents/skills/axiom-accessibility/SKILL.md>) — conditional | Keyboard/focus/contrast criteria; native APIs only in the native branch |
 
-### Punti di ingresso da leggere
+### Entry points to read
 
-- [docs/design/component-system.md](<../../docs/design/component-system.md>): Token, stati e motion proposti.
-- [docs/design/opendots-target.md](<../../docs/design/opendots-target.md>): Composizione autorevole.
-- [docs/ux-extracts/desktop-components/pattern-library.md](<../../docs/ux-extracts/desktop-components/pattern-library.md>): Osservazioni live vs screenshot.
-- [desktop/upstream/src/client/App.tsx](<../../desktop/upstream/src/client/App.tsx>): Navigazione shell.
+- [docs/design/component-system.md](<../../docs/design/component-system.md>): Proposed tokens, states and motion.
+- [docs/design/opendots-target.md](<../../docs/design/opendots-target.md>): Authoritative composition.
+- [docs/ux-extracts/desktop-components/pattern-library.md](<../../docs/ux-extracts/desktop-components/pattern-library.md>): Live observations versus screenshots.
+- [desktop/upstream/src/client/App.tsx](<../../desktop/upstream/src/client/App.tsx>): Shell navigation.
 - [desktop/upstream/src/client/ThreadList.tsx](<../../desktop/upstream/src/client/ThreadList.tsx>): Sidebar.
-- [desktop/upstream/src/client/style.css](<../../desktop/upstream/src/client/style.css>): Stili condivisi da coordinare.
+- [desktop/upstream/src/client/style.css](<../../desktop/upstream/src/client/style.css>): Shared styles to coordinate.
 
-Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+Verify paths and version before working; coordinate shared files. Reading does not authorize other features or changes to the personal runtime.
 <!-- feature-guidance:end -->
 
-## Risultato e confini
+## Outcome and boundaries
 
-Aprire Hermes Studio e capire dove si trovano agenti, conversazioni, documenti e strumenti, anche quando non esiste ancora alcun dato. La shell organizza il lavoro; non crea un agente, avvia una sessione o collega Hermes da sola.
+Open Hermes Studio and understand where agents, conversations, documents and tools are, even when no data exists yet. The shell organizes work; it does not create an agent, start a session or connect Hermes by itself.
 
-MVP: finestra macOS, sidebar, destinazione selezionata, area principale, inspector apribile, empty state e stato di connessione. L’installazione e il packaging hanno una specifica separata. Chiamate, scheduling, team automatici, terminale eseguibile e computer use non appartengono a questa feature.
+MVP: macOS window, sidebar, selected destination, main area, openable inspector, empty state and connection status. Installation and packaging have a separate specification. Calls, scheduling, automatic teams, executable terminal and computer use do not belong to this feature.
 
-## Riferimenti e confine delle prove
+## References and evidence boundary
 
-- Norma visiva centrale: [component-system](../design/component-system.md). Prima di implementare verificare che il documento sia disponibile e leggere le sue evidenze Unsloth/Codex; questo file non sostituisce quella estrazione.
-- Riferimento osservato: [screenshot OpenDots dell’utente](../design/references/opendots-user-reference-2026-10-04.png), descritto in [opendots-target](../design/opendots-target.md): una sidebar, chat centrale e Computer a destra; avatar illustrati, superfici chiare, selezione lavanda, accenti verde acqua.
-- Circa 19%/53%/28% è una stima dalla screenshot, non un layout responsive misurato upstream. Sono proposte i numeri CSS riportati sotto.
-- Unsloth e Codex forniscono reference di componenti e stati attraverso il documento centrale; la loro presenza non autorizza rail aggiuntive, task fittizi o menu non supportati. Nessuna animazione è stata verificata da una screenshot statica.
+- Central visual standard: [component-system](../design/component-system.md). Before implementation, verify that the document is available and read its Unsloth/Codex evidence; this file does not replace that extraction.
+- Observed reference: [user’s OpenDots screenshot](../design/references/opendots-user-reference-2026-10-04.png), described in [opendots-target](../design/opendots-target.md): one sidebar, central chat and Computer on the right; illustrated avatars, light surfaces, lavender selection, teal accents.
+- Approximately 19%/53%/28% is an estimate from the screenshot, not a measured upstream responsive layout. CSS figures below are proposals.
+- Unsloth and Codex provide component and state references through the central document; their presence does not authorize extra rails, fictional tasks or unsupported menus. No animation has been verified from a static screenshot.
 
-## Anatomia dei componenti
+## Component anatomy
 
-| Componente | Parti e comportamento |
+| Component | Parts and behavior |
 |---|---|
-| Finestra | Titolo Hermes Studio, controlli macOS, contenuto ridimensionabile. Non imitare i traffic light nel DOM. |
-| Sidebar | Logo, azione New chat con nome accessibile, ricerca, sezioni Spaces e Dots, conversazioni recenti se presenti, Memory e Settings in basso. Una sola colonna, nessuna seconda rail. |
-| Riga Space | Cartella, nome, espansione quando ha figli; conteggio solo se reale. Selezione distinta dal focus. |
-| Riga Dot | Avatar illustrato, nome e riassunto reale o ruolo configurato. Ellissi, mai overflow; stato operativo distinto dall’identità. Nessun timestamp inventato. |
-| Header | Avatar e nome allineati a sinistra; ruolo/stato sotto; azioni a destra. Stato leggibile anche senza colore. |
-| Area principale | Destinazione selezionata o istruzione breve per creare il primo elemento. Nessun esempio Acme/Scout precaricato per sembrare funzionante. |
-| Inspector | Titolo Computer, chiusura, tab Browser/Files/Terminal solo con contenuti/stati onesti. L’apertura non crea una capability. |
-| Settings | Connessione e preferenze locali. Nessuna schermata credenziali CopilotKit nel percorso Hermes. |
+| Window | Hermes Studio title, macOS controls, resizable content. Do not imitate traffic lights in the DOM. |
+| Sidebar | Logo, New chat action with an accessible name, search, Spaces and Dots sections, recent conversations if present, Memory and Settings at the bottom. One column only, no second rail. |
+| Space row | Folder, name, expansion when it has children; counts only if real. Selection distinct from focus. |
+| Dot row | Illustrated avatar, name and actual summary or configured role. Ellipsis, never overflow; operational state distinct from identity. No invented timestamp. |
+| Header | Avatar and name aligned left; role/state below; actions right. State readable without color. |
+| Main area | Selected destination or brief instruction to create the first item. No preloaded Acme/Scout examples to appear functional. |
+| Inspector | Computer title, close control, Browser/Files/Terminal tabs only with honest content/states. Opening it does not create a capability. |
+| Settings | Connection and local preferences. No CopilotKit credentials screen in the Hermes flow. |
 
-## Geometria e token
+## Geometry and tokens
 
-Proposta da validare rispetto alla norma centrale: base spacing 4px, padding shell 16–24px, righe sidebar 56–68px con avatar 36–40px, header 64–72px, separatori 1px, raggi 8px per controlli e 12–16px per superfici. Font di sistema macOS: corpo 14px/20px, testo secondario 12px/18px, titolo header 16px/22px. Questi valori sono proposti, non misurazioni Unsloth/Codex.
+Proposal to validate against the central standard: 4px base spacing, 16–24px shell padding, 56–68px sidebar rows with 36–40px avatars, 64–72px header, 1px separators, 8px control radii and 12–16px surface radii. macOS system font: body 14px/20px, secondary text 12px/18px, header title 16px/22px. These values are proposals, not Unsloth/Codex measurements.
 
-A 1360px: sidebar circa 258px, inspector circa 381px, centro circa 721px. Inspector non deve ereditare 40vw da upstream. Dimensione minima proposta della finestra 880×640, da testare prima di fissarla. A 900px privilegiare area principale: inspector sovrapposto solo su apertura esplicita, chiusura accessibile; passando a Memory/Spaces/Settings chiuderlo se intercetta contenuti. Non bloccare Add memory o i controlli di documento con un overlay invisibile. Sidebar collassabile da tastiera, focus restituito al suo pulsante.
+At 1360px: sidebar approximately 258px, inspector approximately 381px, center approximately 721px. The inspector must not inherit 40vw from upstream. Proposed minimum window size 880×640, to test before fixing it. At 900px, prioritize the main area: inspector overlays only on explicit opening, with accessible closing; when switching to Memory/Spaces/Settings, close it if it intercepts content. Do not block Add memory or document controls with an invisible overlay. Sidebar collapsible by keyboard, with focus returned to its button.
 
-Colori e tipografia definitivi appartengono al component-system; niente gradienti decorativi o card annidate per ogni riga. Le superfici operative hanno gerarchia attraverso spazio, bordo e selezione.
+Final colors and typography belong to component-system; no decorative gradients or nested cards for every row. Operational surfaces establish hierarchy through spacing, borders and selection.
 
-## Stati e contratti
+## States and contracts
 
-| Stato | UI e conseguenza |
+| State | UI and consequence |
 |---|---|
-| Prima apertura vuota | Nessun Dot/Space/conversazione automatico. Indicazioni Create Space/Create Dot, nessuno stato Working. |
-| Metadata in caricamento | Stato breve e annuncio accessibile; non mostrare un archivio vuoto come se fosse già verificato. |
-| Archivio illeggibile | Errore e recupero esplicito; preservare i byte e non inizializzare sopra il file. |
-| Runtime scollegato | Documenti locali accessibili. Invio e azioni remote non attivi. |
-| Inspector non disponibile | Spiegare la capacità assente, non mostrare screenshot o prompt terminale finti. |
-| Selezione rimossa | Tornare a destinazione valida senza modificare altri dati. |
+| Empty first launch | No automatic Dot/Space/conversation. Create Space/Create Dot guidance, no Working state. |
+| Loading metadata | Brief state and accessible announcement; do not show an empty archive as if already verified. |
+| Unreadable archive | Error and explicit recovery; preserve bytes and do not initialize over the file. |
+| Disconnected runtime | Local documents accessible. Sending and remote actions inactive. |
+| Unavailable inspector | Explain the missing capability; do not show fake screenshots or terminal prompts. |
+| Removed selection | Return to a valid destination without changing other data. |
 
-Aprire/chiudere l’app è distinto da cancellare lavoro del runtime. I dati personali Hermes non sono un seed della shell. Dots configurati localmente non dimostrano processi avviati.
+Opening/closing the app is distinct from deleting runtime work. Personal Hermes data is not a shell seed. Locally configured Dots do not prove processes have started.
 
-## Motion e accessibilità
+## Motion and accessibility
 
-Proposta: panel enter/exit 120–180ms solo per spiegare il cambiamento; focus ring immediato; nessun bob infinito degli avatar. Con reduced motion usare cambio immediato o sola dissolvenza breve senza traslazione. La navigazione deve funzionare senza animazione, hover o drag. Nome accessibile obbligatorio per New chat, ricerca, Computer, Close e Settings. Ridimensionamento e zoom 200% non devono eliminare i controlli essenziali. Contrasto/focus vanno verificati nel prodotto, non dedotti dai colori della screenshot.
+Proposal: panel enter/exit 120–180ms only to explain the change; immediate focus ring; no endless avatar bobbing. With reduced motion, use immediate changes or only a brief fade without translation. Navigation must work without animation, hover or drag. Accessible names are mandatory for New chat, search, Computer, Close and Settings. Resizing and 200% zoom must not remove essential controls. Verify contrast/focus in the product rather than infer them from screenshot colors.
 
-## Tastiera, focus e microstati
+## Keyboard, focus and microstates
 
-Applicare il contratto normativo nel component-system. La ricerca mantiene focus mentre filtra; risultati vuoti non diventano un errore di connessione. Enter seleziona un risultato soltanto quando ha focus esplicito. Tab segue logo/azioni/ricerca/navigazione/contenuto; Escape chiude menu o inspector, restituendo focus al pulsante che li ha aperti. Collassare sidebar non lascia il focus in un nodo nascosto. Ogni icona conserva nome e motivo di disabled.
+Apply the normative contract in component-system. Search retains focus while filtering; empty results do not become a connection error. Enter selects a result only when it has explicit focus. Tab follows logo/actions/search/navigation/content; Escape closes menus or inspector, restoring focus to the opening button. Collapsing the sidebar does not leave focus in a hidden node. Each icon retains a name and reason for being disabled.
 
-Le righe hanno stati idle/hover/focus-visible/selected/disabled distinti; selezione non equivale a Running. Busy riguarda solo l’azione effettivamente in attesa. Copy non è un’azione della shell MVP: verrà definito nel componente che contiene il dato, senza un comando globale che copi contesto privato.
+Rows have distinct idle/hover/focus-visible/selected/disabled states; selection does not mean Running. Busy applies only to the action actually pending. Copy is not an MVP shell action: it will be defined in the component containing the data, without a global command that copies private context.
 
-## Dipendenze e ownership
+## Dependencies and ownership
 
-Prerequisiti: MEMORY/STATUS/GLOSSARY correnti, ADR0005 e ADR0006, component-system e spec aggiornata dell’MVP vuoto. Dipendenza F2 per contenuto conversazioni e F6 per documenti e F9 per memoria; F4 può mostrare destinazioni vuote senza implementarle.
+Prerequisites: current MEMORY/STATUS/GLOSSARY, ADR0005 and ADR0006, component-system and the updated empty-MVP specification. Depends on F2 for conversation content, F6 for documents and F9 for memory; F4 may show empty destinations without implementing them.
 
-Ownership futura: `desktop/upstream/src/client/App.tsx`, `ThreadList.tsx`, stile della shell e componenti dedicati eventualmente estratti. Condividere `style.css` solo con accordo esplicito per evitare sovrascritture. Non modificare bridge/runtime, modelli server, packaging o editor. Preservare sorgente/asset/provenienza MIT. La baseline contiene già sidebar e inspector: controllare lo stato reale prima di decidere riuso o sostituzione.
+Future ownership: `desktop/upstream/src/client/App.tsx`, `ThreadList.tsx`, shell styles and dedicated components if extracted. Share `style.css` only by explicit agreement to avoid overwrites. Do not change bridge/runtime, server models, packaging or editor. Preserve source/assets/MIT provenance. The baseline already contains a sidebar and inspector: inspect actual state before deciding reuse or replacement.
 
-## Dati reversibili e verifiche
+## Reversible data and verification
 
-Nuovo profilo di sviluppo separato, inizialmente vuoto. Non cancellare dati dell’attuale prototipo o profili Hermes; migrazione/seed di demo sono azioni separate ed esplicite. Impostazioni selezione/inspector possono essere ripristinate; nessuna scrittura fuori dal profilo di sviluppo.
+New, separate development profile, initially empty. Do not delete current prototype data or Hermes profiles; migration/demo seeding are separate, explicit actions. Selection/inspector settings can be reset; no writes outside the development profile.
 
-Definition of done: avvio con zero dati senza chiamate runtime; navigazione da tastiera; screenshot 1360 e 900px con rapporti/overflow misurati; inspector apri/chiudi e passaggio Memory senza intercettazioni; zoom e reduced motion; errore archivio preserva dati; nomi accessibili verificati nell’albero UI. Registrare screenshot e misure, non dichiarare identico sulla sola base del CSS. Typecheck/build pertinenti e smoke della vera.app, senza prompt personali.
+Definition of done: zero-data startup without runtime calls; keyboard navigation; 1360 and 900px screenshots with measured proportions/overflow; inspector open/close and switching to Memory without interception; zoom and reduced motion; archive errors preserve data; accessible names verified in the UI tree. Record screenshots and measurements, not claims of identical appearance based only on CSS. Relevant typecheck/build and smoke test of the actual .app, without personal prompts.
 
-## Allineamento D25–D29
+## D25–D29 alignment
 
-La destinazione Space presenta folder e documenti reali (F6/F5), preservando pagine legacy; non è soltanto elenco pagine metadata. Identità Dot usa avatar scelto F7-A in ogni superficie. Browser Computer è stesso profilo/pagina di utente e Hermes (F12), non preview statica. Memory distingue Space/profilo/legacy F9; composer offre voce soltanto quando F17 readiness/permesso provati. Questi controlli restano indisponibili finché feature implementate; F4 non le implementa incidentalmente.
+The Space destination presents actual folders and documents (F6/F5), preserving legacy pages; it is not merely a list of metadata pages. Dot identity uses the selected F7-A avatar on every surface. The Computer browser is the same profile/page for the user and Hermes (F12), not a static preview. Memory distinguishes Space/profile/legacy F9; the composer offers voice only when F17 readiness/permission is proven. These controls remain unavailable until the features are implemented; F4 does not implement them incidentally.
 
-## D34 — Settings Hermes e Settings Hermes Studio
+## D34 — Hermes Settings and Hermes Studio Settings
 
-L'app deve avere una sezione Settings dedicata con due ambiti distinguibili: **Hermes**, tutte le impostazioni del runtime disponibili per la versione/host/profilo selezionati; **Hermes Studio**, preferenze dell'app standalone. Nome host/profilo, origine e limiti devono restare visibili per i settings Hermes. Configurazione della connessione è F1; F4 possiede navigazione/gerarchia; F8 inventario/copertura; feature specifiche possiedono letture/mutazioni. Le preferenze client non modificano tacitamente il backend. Le impostazioni Hermes non sono una copia locale divergente della sua config. Un gap resta esplicito finché il contratto non è collegato/verificato. Prima implementazione completa in chat F4 e feature proprietarie; F1 aggiunge solo la superficie connessioni concordata.
+The app must have a dedicated Settings section with two distinguishable scopes: **Hermes**, all runtime settings available for the selected version/host/profile; **Hermes Studio**, standalone app preferences. Host/profile name, origin and limitations must remain visible for Hermes settings. Connection configuration belongs to F1; F4 owns navigation/hierarchy; F8 inventory/coverage; specific features own reads/mutations. Client preferences do not silently modify the backend. Hermes settings are not a divergent local copy of its config. A gap remains explicit until the contract is connected/verified. First complete implementation in the F4 chat and owning features; F1 adds only the agreed connection surface.
 
 
-## Requisito condiviso: contesto e composer Hermes
+## Shared requirement: Hermes context and composer
 
-Leggere [contesto visibile, Spaces/progetti, @ file/righe e / skill/tool](gui-context-and-references.md). Header identifica Space, host, modello ed effort effettivi della chat/bot. Capacità e mutazioni rimangono nel backend Hermes; non simulare valori o azioni non supportati. Ownership specifica nella scheda trasversale.
+Read [visible context, Spaces/projects, @ files/lines and / skills/tools](gui-context-and-references.md). The header identifies the chat/bot’s actual Space, host, model and effort. Capabilities and mutations remain in the Hermes backend; do not simulate unsupported values or actions. Specific ownership is in the cross-feature card.
 
-## D36 — Sidebar Dots e pannello sub-agent
+## D36 — Dots sidebar and sub-agent panel
 
-La sidebar mantiene i Dots persistenti, ognuno con segnale di attività derivato da Hermes e badge non letto indipendente. Il Dot selezionato mostra la propria chat; selezione, attività e non letto sono stati separati. Space/host/modello/effort della chat attiva restano riconoscibili anche con un pannello aperto.
+The sidebar retains persistent Dots, each with a Hermes-derived activity signal and independent unread badge. The selected Dot shows its own chat; selection, activity and unread are separate states. Space/host/model/effort of the active chat remain recognizable even with a panel open.
 
-Il controllo «Sub-agent» nella chat apre un pannello laterale per i soli figli temporanei della sessione padre (F14). Elenco, selezione del figlio, dettaglio, chiusura e ritorno focus devono funzionare con tastiera e lettore di schermo. Coordinare questa superficie con browser/file/strumenti già affiancati: a 900px il composer e il contesto rimangono accessibili; non creare finestre separate per Dots né inserire Dots nel pannello dei figli.
+The “Sub-agent” chat control opens a side panel only for temporary children of the parent session (F14). Listing, child selection, details, closing and focus restoration must work with keyboard and screen readers. Coordinate this surface with the already adjacent browser/files/tools: at 900px, composer and context remain accessible; do not create separate windows for Dots or put Dots in the children panel.
 
-Gate: più Dots attivi, uno non letto ma inattivo, figlio temporaneo attivo e pannello aperto; nessuna confusione di identità o copertura del composer. Reduced Motion mantiene etichette di stato senza pulsazioni continue.
+Gates: multiple active Dots, one unread but inactive Dot, an active temporary child and open panel; no identity confusion or composer obstruction. Reduced Motion retains status labels without continuous pulsing.
 
-## D37 — Ogni runtime porta i propri Bots in Studio
+## D37 — Each runtime brings its own Bots into Studio
 
-Quando si collega un runtime Hermes, Studio ne scopre e presenta tutti i Bots autorizzati come Dots, conservando l’identità nativa. Non richiedere di ricreare manualmente ogni Bot o di creare un Dot locale prima di poterlo vedere. La scoperta usa il roster nativo verificato (vedi contratti e fonti in [F7](F7-bots-and-identities.md)), non una lista inventata dal frontend. Un profilo non confermato come Bot non viene automaticamente promosso a Bot.
+When a Hermes runtime is connected, Studio discovers and presents all its authorized Bots as Dots, preserving native identity. Do not require manual recreation of every Bot or creation of a local Dot before it can be seen. Discovery uses the verified native roster (see contracts and sources in [F7](F7-bots-and-identities.md)), not a list invented by the frontend. A profile not confirmed as a Bot is not automatically promoted to Bot.
 
-Identità scoped a connessione/runtime, installazione e profilo: Bots omonimi su host diversi restano distinti, con host/origine riconoscibili. Selezionare un Dot apre la Bot Chat canonica di quel runtime secondo F7/F2, preservando sessione e continuità native; non crea una chat sostitutiva né invia prompt introduttivi. Space, modello ed effort mostrano il contesto effettivo disponibile, senza associazioni dedotte dal nome.
+Identity is scoped to connection/runtime, installation and profile: namesake Bots on different hosts remain distinct, with recognizable host/origin. Selecting a Dot opens that runtime’s canonical Bot Chat according to F7/F2, preserving native session and continuity; it does not create a substitute chat or send introductory prompts. Space, model and effort show the actual available context without associations inferred from names.
 
-Discovery del roster non importa tutte le conversazioni, non clona Bots, credenziali o memorie e non avvia lavoro. Metadata/avatar locali restano presentazione. Riconnessione aggiorna il roster senza duplicati; backend offline mostra Bots già noti come offline/stale, senza nasconderne l’origine o attribuire attività. Aggiunte/rimozioni seguono i dati confermati dal runtime; scollegare Studio non cancella Bots o lavoro backend. Figli temporanei delegate_task restano nel pannello sub-agent D36, non nel roster persistente.
+Roster discovery does not import all conversations, clone Bots, credentials or memories, or start work. Local metadata/avatars remain presentation. Reconnection refreshes the roster without duplicates; an offline backend shows known Bots as offline/stale, without hiding their origin or attributing activity. Additions/removals follow runtime-confirmed data; disconnecting Studio does not delete Bots or backend work. Temporary delegate_task children remain in the D36 sub-agent panel, not the persistent roster.
 
-**Ownership:** F1 fornisce connessione e identità del runtime; F7 scopre/mappa/presenta roster e risolve Bot Chat; F2 presenta conversazione ed eventi; F4 rende navigabili Dots e host; F14 collega messaggi e attività native. Verificare capability/schema nel runtime collegato; assenza di contratto è un limite visibile, non autorizza backend alternativo.
+**Ownership:** F1 supplies connection and runtime identity; F7 discovers/maps/presents the roster and resolves Bot Chat; F2 presents conversations and events; F4 makes Dots and hosts navigable; F14 connects native messages and activity. Verify capabilities/schema in the connected runtime; a missing contract is a visible limitation, not authorization for an alternative backend.
 
-**Gate:** collegare due runtime sintetici con Bots omonimi e roster differenti; tutti i Bots autorizzati compaiono senza creazione manuale, identità e chat canonica corrette. Refresh/reconnect non duplicano righe; aggiunta/rimozione, profilo non-Bot, scope negato, offline e cambio host durante discovery non contaminano il roster. Nessun prompt, clonazione o import globale di cronologia per la sola connessione. Contratti sorgente sono evidenza documentale, non prova live.
+**Gates:** connect two synthetic runtimes with namesake Bots and different rosters; all authorized Bots appear without manual creation, with correct identities and canonical chats. Refresh/reconnect does not duplicate rows; additions/removals, non-Bot profiles, denied scope, offline and host changes during discovery do not contaminate the roster. No prompts, cloning or global history import merely from connecting. Source contracts are documentary evidence, not live proof.
 
-## Prompt per una nuova chat
+## Prompt for a new chat
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa solo F4 leggendo AGENTS.md, docs/project/MEMORY.md, STATUS.md, GLOSSARY.md, ADR0005 e ADR0006, docs/design/component-system.md e questa specifica. La direzione attuale è MVP quasi vuoto e sviluppo per feature; non riattivare il piano notturno. Ispeziona la shell esistente prima di editarla, preserva asset/provenienza e dati. Lavora soltanto sui file client della shell concordati; coordina gli stili condivisi. Non collegare Hermes né creare dati dimostrativi automaticamente. Verifica 1360/900px, tastiera, nomi accessibili, reduced motion e overlay su profilo sintetico. Aggiorna prove e stato nei documenti; non dichiarare completa una capability remota assente. Se il component-system non è disponibile, completa l’analisi e segnala il prerequisito prima del codice visivo. Segui anche Incarico per la chat implementatrice di F4: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+> First follow docs/agents/feature-workflow.md and this card’s Files and skills section, reading SKILL.md files before applying them. Implement only F4 after reading AGENTS.md, docs/project/MEMORY.md, STATUS.md, GLOSSARY.md, ADR0005 and ADR0006, docs/design/component-system.md and this specification. The current direction is a nearly empty MVP and feature-based development; do not reactivate the overnight plan. Inspect the existing shell before editing it, preserve assets/provenance and data. Work only on agreed shell client files; coordinate shared styles. Do not connect Hermes or automatically create demo data. Verify 1360/900px, keyboard, accessible names, reduced motion and overlays using a synthetic profile. Update evidence and status in documentation; do not declare an absent remote capability complete. If component-system is unavailable, complete the analysis and report the prerequisite before visual code. Also follow the F4 Assignment for the implementation chat: deliver verified code and evidence, with the specified GUI/backend context, not just a plan. Capability gates and F0/F18 exceptions remain valid.

@@ -1,97 +1,97 @@
-# F11 — GUI di plugin, skill e capabilities Hermes
+# F11 — Hermes plugins, skills and capabilities GUI
 
 <!-- implementation-packet:start -->
-## Incarico per la chat implementatrice
+## Assignment for the implementing chat
 
-Quando questa scheda viene allegata come incarico di sviluppo, realizza e verifica **soltanto il frontend/collegamento F11**, seguendo il percorso sotto e le sezioni specifiche della scheda. L’allegato è il punto di ingresso: apri i file e i SKILL.md linkati nel workspace prima del codice. Le indicazioni «documentata/non implementata» descrivono la baseline, non impongono di fermarsi a un piano nella chat incaricata.
+When this card is attached as a development assignment, implement and verify **only the frontend/integration F11**, following the workflow below and the card-specific sections. The attachment is the entry point: open the linked workspace files and SKILL.md files before coding. The “documented/not implemented” labels describe the baseline; they do not require the assigned chat to stop at a plan.
 
-**Tipo di lavoro:** adattamento GUI e collegamento a capacità Hermes esistenti, non creazione della feature nel backend. La separazione Fxx serve a ownership, implementazione e prove in chat distinte: il prodotto rimane una sola GUI Hermes in stile OpenDots.
+**Type of work:** GUI adaptation and integration with existing Hermes capabilities, rather than creating the feature in the backend. The Fxx separation establishes ownership, implementation and testing in separate chats: the product remains a single Hermes GUI in the OpenDots style.
 
-**Risultato:** Rendere visibili e gestibili cataloghi skill, comandi, toolset/plugin/MCP effettivamente esposti da Hermes.
+**Outcome:** Make the skills, commands, toolset/plugin/MCP catalogs actually exposed by Hermes visible and manageable.
 
-**Backend e confine:** Registri/API Hermes scoped; commands.catalog letto nel sorgente, catalogo tool/esecuzione diretta da verificare, non inventare RPC generici. Studio è frontend/adapter di Hermes: nome/GUI possono cambiare, le capacità dell’agente e i gate restano native. Un contratto mancante è un gap esplicito, non una nuova feature backend da costruire.
+**Backend and boundary:** Scoped Hermes registries/APIs; commands.catalog read in the source, tool catalog/direct execution to be verified, no invented generic RPCs. Studio is a Hermes frontend/adapter: names and GUI may change, but agent capabilities and gates remain native. A missing contract is an explicit gap, not a new backend feature to build.
 
-**Contesto e interazioni pertinenti:** / apre categorie Comandi/Skill/Strumenti con filtro progressivo, descrizione, disponibilità e scope. Selezione inserisce contesto o invoca azione supportata, comportamento esplicito. Leggi obbligatoriamente [requisiti GUI condivisi](gui-context-and-references.md); applica qui i requisiti indicati, lasciando le altre funzioni ai rispettivi owner.
+**Relevant context and interactions:** / opens Commands/Skills/Tools categories with progressive filtering, description, availability and scope. Selection inserts context or invokes a supported action, with explicit behavior. You must read the [shared GUI requirements](gui-context-and-references.md); apply the requirements identified here and leave other functionality to its respective owners.
 
-**Dipendenze e letture aggiuntive:** F1/F3, F2 composer, F4 popover/F8 note. Catalogo Hermes non è il catalogo skill Codex di questa chat. Leggi [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow e skill](../agents/feature-workflow.md), [confini](../architecture/feature-boundaries.md), poi File e skill e gate di questa scheda. Verifica file/metodi/versione effettivi; i percorsi futuri non sono API già esistenti.
+**Dependencies and additional reading:** F1/F3, F2 composer, F4 popover/F8 notes. The Hermes catalog is not this chat’s Codex skill catalog. Read [MEMORY](../project/MEMORY.md), [STATUS](../project/STATUS.md), [workflow and skills](../agents/feature-workflow.md), [boundaries](../architecture/feature-boundaries.md), then this card’s Files and skills and gates. Verify actual files/methods/version; future paths are not existing APIs.
 
-**Prove specifiche obbligatorie per l’incremento pertinente:** Host/profilo cambiato durante fetch, catalogo stale/offline, skill aggiornata dopo turno, disabled/read-only, parametri invalidi e nessuna installazione/enable per sola selezione. Usa profili e dati sintetici; esercita l’interface reale. Fixture, build, handshake e test runtime isolati sono evidenze distinte.
+**Required specific tests for the relevant increment:** Host/profile changes during fetch, stale/offline catalog, skill updated after the turn, disabled/read-only, invalid parameters and no installation/enabling through selection alone. Use synthetic profiles and data; exercise the actual interface. Fixtures, builds, handshakes and isolated runtime tests are distinct evidence.
 
-**Consegna richiesta:** codice dell’incremento funzionante, test pertinenti con comandi/esiti registrati, typecheck/build del grafo modificato e smoke della .app proporzionato. Se cambia la UI: verifica tastiera/focus, IME quando pertinente, 900/1360px, accessibilità e Reduced Motion. Review del diff contro spec/principi, fix dei problemi trovati, stato/gate aggiornati nella scheda e MEMORY/STATUS/WORKLOG. Dichiarare prove non eseguite e blocchi esterni; completata solo quando i gate dell’incremento sono provati. Git: selezionare solo file propri dopo diff/index/segreti; push/pubblicazione secondo autorizzazione corrente.
+**Required delivery:** working increment code, relevant tests with recorded commands/results, typecheck/build of the modified graph and proportionate .app smoke testing. If the UI changes: verify keyboard/focus, IME where relevant, 900/1360px, accessibility and Reduced Motion. Review the diff against the spec/principles, fix discovered issues, and update status/gates in the card and MEMORY/STATUS/WORKLOG. Declare tests not performed and external blockers; completion requires proven increment gates. Git: select only your own files after checking diff/index/secrets; push/publication follows current authorization.
 
-Se manca uno scope essenziale, chiarisci solo quello; altrimenti usa requisiti confermati e scegli un incremento verticale coerente con la scheda, dichiarandolo prima degli edit. Dipendenze condivise si concordano, non si implementa il backlog. F0 resta manutenzione esplicita della baseline completata; F18 resta futura finché selezionata e supportata. Per gli altri ID procedi con implementazione e verifica entro autorizzazioni e capability reali, senza una nuova intervista generale.
+If essential scope is missing, clarify only that; otherwise use confirmed requirements and choose a vertical increment consistent with the card, declaring it before edits. Agree on shared dependencies; do not implement the backlog. F0 remains explicit maintenance of the completed baseline; F18 remains future work until selected and supported. For other IDs, proceed with implementation and verification within actual authorizations and capabilities, without another general interview.
 <!-- implementation-packet:end -->
 
 
 <!-- feature-guidance:start -->
 
-## File e skill da leggere e usare
+## Files and skills to read and use
 
-Prima seguire il [workflow comune guidato da ask-matt](../agents/feature-workflow.md): contiene le letture iniziali, le skill di implementazione/review e i criteri di uscita. Leggere poi i file specifici qui sotto. Il [catalogo completo di progetto e globali](../agents/skills-catalog.md) conserva tutte le raccolte; caricare il corpo delle skill soltanto quando pertinente.
+First follow the [shared ask-matt-guided workflow](../agents/feature-workflow.md): it contains initial reading, implementation/review skills and exit criteria. Then read the specific files below. The [complete project and global catalog](../agents/skills-catalog.md) retains all collections; load skill bodies only when relevant.
 
-### Skill specifiche
+### Feature-specific skills
 
-| Skill / percorso | Quando applicarla a questa feature |
+| Skill / path | When to apply it to this feature |
 |---|---|
-| [research](<../../.agents/skills/research/SKILL.md>) | Contratti tool/plugin/skill distinti |
-| [find-skills](<../../.agents/skills/find-skills/SKILL.md>) | Discovery di skill necessarie al lavoro, se manca una capacità |
-| [skill-installer](</Users/luca/.codex/skills/.system/skill-installer/SKILL.md>) — condizionale | Solo installazione delle skill di sviluppo necessarie e autorizzate; non installer plugin Hermes |
-| [skill-creator](</Users/luca/.codex/skills/.system/skill-creator/SKILL.md>) — condizionale | Se viene richiesta una nuova skill di sviluppo |
-| [security-diff](</Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-diff-scan/SKILL.md>) — condizionale | Se la chat richiede review di un diff che cambia privilegi/installazione |
+| [research](<../../.agents/skills/research/SKILL.md>) | Separate tool/plugin/skill contracts |
+| [find-skills](<../../.agents/skills/find-skills/SKILL.md>) | Discovery of skills needed for the work, if a capability is missing |
+| [skill-installer](</Users/luca/.codex/skills/.system/skill-installer/SKILL.md>) — conditional | Only installation of necessary, authorized development skills; not a Hermes plugin installer |
+| [skill-creator](</Users/luca/.codex/skills/.system/skill-creator/SKILL.md>) — conditional | If a new development skill is requested |
+| [security-diff](</Users/luca/.codex/plugins/cache/openai-curated-remote/codex-security/0.1.31/skills/security-diff-scan/SKILL.md>) — conditional | If the chat requests review of a diff that changes privileges/installation |
 
-### Punti di ingresso da leggere
+### Entry points to read
 
-- [docs/agents/skills-catalog.md](<../../docs/agents/skills-catalog.md>): Inventario skill di sviluppo vs runtime Hermes.
-- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Gate autorizzazioni.
-- [desktop/hermes/gateway.mjs](<../../desktop/hermes/gateway.mjs>): Allowlist e trasporto.
-- [Hermes: tui_gateway/contracts/tools_mcp_plugins.py](</Users/luca/.hermes/hermes-agent/tui_gateway/contracts/tools_mcp_plugins.py>): Registro, plugin e MCP; lettura sorgente alla versione fissata, non prova live.
-- [Hermes: apps/desktop/src/contrib/plugins.ts](</Users/luca/.hermes/hermes-agent/apps/desktop/src/contrib/plugins.ts>): Reference desktop; lettura sorgente alla versione fissata, non prova live.
-- [Hermes: apps/desktop/src/contrib/plugins-store.ts](</Users/luca/.hermes/hermes-agent/apps/desktop/src/contrib/plugins-store.ts>): Store plugin ufficiale; lettura sorgente alla versione fissata, non prova live.
+- [docs/agents/skills-catalog.md](<../../docs/agents/skills-catalog.md>): Inventory of development skills versus Hermes runtime skills.
+- [docs/features/F3-permissions-and-approvals.md](<../../docs/features/F3-permissions-and-approvals.md>): Authorization gates.
+- [desktop/hermes/gateway.mjs](<../../desktop/hermes/gateway.mjs>): Allowlist and transport.
+- [Hermes: tui_gateway/contracts/tools_mcp_plugins.py](</Users/luca/.hermes/hermes-agent/tui_gateway/contracts/tools_mcp_plugins.py>): Registry, plugins and MCP; source reading at the pinned version, not a live test.
+- [Hermes: apps/desktop/src/contrib/plugins.ts](</Users/luca/.hermes/hermes-agent/apps/desktop/src/contrib/plugins.ts>): Desktop reference; source reading at the pinned version, not a live test.
+- [Hermes: apps/desktop/src/contrib/plugins-store.ts](</Users/luca/.hermes/hermes-agent/apps/desktop/src/contrib/plugins-store.ts>): Official plugin store; source reading at the pinned version, not a live test.
 
-Verificare percorsi e versione prima di lavorare; coordinare i file condivisi. Le letture non autorizzano altre feature o modifiche al runtime personale.
+Verify paths and version before working; coordinate shared files. Reading does not authorize other features or changes to the personal runtime.
 <!-- feature-guidance:end -->
 
-## Confine delle prove
+## Evidence boundary
 
-Stato: **documented, not implemented** (2026-10-04). Questa specifica descrive una futura slice di Hermes Studio; codice upstream disponibile non significa capability collegata nell’app. Evidenze: lettura del checkout sorgente `/Users/luca/.hermes/hermes-agent`, non esecuzione live, nessun prompt/configurazione/database personale. Riferimento autorevole: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). La versione remota può cambiare: prima di implementare fissare SHA e ripetere i contract test.
+Status: **documented, not implemented** (2026-10-04). This spec describes a future Hermes Studio slice; available upstream code does not mean the capability is integrated into the app. Evidence: reading the source checkout `/Users/luca/.hermes/hermes-agent`, not live execution, with no personal prompts/configuration/database used. Authoritative reference: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). The remote version may change: pin the SHA and repeat contract tests before implementation.
 
-Leggere prima `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md` e `desktop/hermes/README.md`. UI OpenDots scelta dall’utente; Hermes resta l’unico executor. Gli endpoint Studio sotto descritti sono **proposte**, non API esistenti.
+First read `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md` and `desktop/hermes/README.md`. The user selected the OpenDots UI; Hermes remains the only executor. The Studio endpoints described below are **proposals**, not existing APIs.
 
-## Obiettivo e casi d’uso
+## Goal and use cases
 
-Sapere quali strumenti il bot può usare ora, perché un plugin manca e cosa cambia abilitandolo. Scoprire strumenti deferiti e skill senza configurare un secondo ecosistema CopilotKit. Gestione plugin inizialmente read-only; install/update/remove sono incrementi espliciti.
+Know which tools the bot can use now, why a plugin is missing and what changes when it is enabled. Discover deferred tools and skills without configuring a second CopilotKit ecosystem. Plugin management is initially read-only; install/update/remove are explicit increments.
 
-## Contratto runtime verificato
+## Verified runtime contract
 
-RPC `tools.list {session_id?}` restituisce toolsets con tools/enabled; `toolsets.list` summary, `tools.show` include tool_search deferred. `tools.configure {action:enable|disable,names,session_id?,profile?}` **persiste config e ricostruisce agent**, non semplice preferenza UI. `plugins.list` e `plugins.manage {profile?,action,key?,name?,...}`: azioni list/toggle/install/update/remove/settings/onboarding. Update può richiedere `accept_capabilities` per delta autorizzazioni; settings values sono schema non-secret. `skills.manage`, `skills.reload` e MCP catalog/server contracts restano distinti. Fonte `tui_gateway/contracts/tools_mcp_plugins.py:1–100,203–235,566–771`; implementation `methods_tools.py`.
+RPC `tools.list {session_id?}` returns toolsets with tools/enabled; `toolsets.list` summary, `tools.show` includes deferred tool_search. `tools.configure {action:enable|disable,names,session_id?,profile?}` **persists configuration and rebuilds the agent**, rather than being a simple UI preference. `plugins.list` and `plugins.manage {profile?,action,key?,name?,...}`: actions list/toggle/install/update/remove/settings/onboarding. Update may require `accept_capabilities` for an authorization delta; settings values use a non-secret schema. `skills.manage`, `skills.reload` and MCP catalog/server contracts remain distinct. Source `tui_gateway/contracts/tools_mcp_plugins.py:1–100,203–235,566–771`; implementation `methods_tools.py`.
 
-Desktop riusa `apps/desktop/src/contrib/plugins.ts`, `contrib/plugins-store.ts`, profile routing SDK e UI plugin Hermes Bots. Slash discovery upstream `commands.catalog` e `complete.slash` include skill/user quick commands; non hide tutte le estensioni per curare la palette. Fonte `apps/desktop/src/AGENTS.md` Slash commands.
+Desktop reuses `apps/desktop/src/contrib/plugins.ts`, `contrib/plugins-store.ts`, the profile routing SDK and Hermes Bots plugin UI. Upstream slash discovery `commands.catalog` and `complete.slash` includes skill/user quick commands; do not hide all extensions to curate the palette. Source `apps/desktop/src/AGENTS.md` Slash commands.
 
-## Dominio e UX
+## Domain and UX
 
-CapabilitySnapshot identificato da connessione/profilo/sessione/revisione; PluginInstall, PluginActivation e SecretRequirement distinti. Stati unavailable/discovering/installed/disabled/activating/active/needs credentials/restart required/update requires review/failed. “Installato” non significa server MCP attivo o tool enabled. Dialog cambiamento mostra destinatario reale, delta e effetto sulle sessioni; apply solo dopo conferma concreta. Credenziali non nel renderer o metadata.
+CapabilitySnapshot identified by connection/profile/session/revision; PluginInstall, PluginActivation and SecretRequirement are distinct. States unavailable/discovering/installed/disabled/activating/active/needs credentials/restart required/update requires review/failed. “Installed” does not mean an active MCP server or enabled tool. The change dialog shows the actual recipient, delta and effect on sessions; apply only after concrete confirmation. Credentials do not belong in the renderer or metadata.
 
-## Seam, ownership e dipendenze
+## Seam, ownership and dependencies
 
-Nuovi `desktop/hermes/capabilities.mjs`, `capabilities.test.mjs`, `CapabilitiesPanel.tsx`; bridge permette solo RPC allowlist scoped, mai endpoint arbitario request(method). Dipende F1 per scope/connessione, F7 se associato a Bot e F3 per approvazioni; sblocca F12/F16 e diagnostica F14. Prima read-only snapshot+refresh+errorreason; poi gestione persistente con serializzazione per profilo e rollback/outcome. Riutilizzare manifest upstream, non cataloghi generici non verificati.
+New `desktop/hermes/capabilities.mjs`, `capabilities.test.mjs`, `CapabilitiesPanel.tsx`; the bridge allows only scoped allowlisted RPCs, never an arbitrary request(method) endpoint. Depends on F1 for scope/connection, F7 if associated with a Bot and F3 for approvals; unlocks F12/F16 and F14 diagnostics. Start with read-only snapshot+refresh+errorreason; then persistent management with per-profile serialization and rollback/outcome. Reuse upstream manifests, not unverified generic catalogs.
 
-## Privacy, migrazione e non-obiettivi
+## Privacy, migration and non-goals
 
-Non leggere `.env`, token o vault plaintext per popolare UI. Non trasferire toggle Dot locali a tools.configure: i campi researchAllowed/memoryAllowed non erano ACL runtime. Migrazione li etichetta come contesto o dismette con scelta, senza modificare Hermes. Non installare aggiornamenti automaticamente, non interpretare documenti/risultati tool come autorizzazioni.
+Do not read `.env`, tokens or plaintext vaults to populate the UI. Do not transfer local Dot toggles to tools.configure: researchAllowed/memoryAllowed fields were not runtime ACLs. Migration labels them as context or retires them through a choice, without changing Hermes. Do not install updates automatically or interpret documents/tool results as authorization.
 
-## Accettazione e DoD
+## Acceptance and DoD
 
-Fixture tool enabled vs serverinactive, unknown/deferredtools, profile collision, capability update denial, widened update delta, secretsetting reject, stale session rebuild, restart failure. DoD read-only: UI capability gating usata da altre feature, contracttests scoped e packaged smoke; management DoD ulteriore include installisolato/reversibilità e consentoruntime. Registrare provenienza/versione, niente label available prima livecheck.
+Fixtures for enabled tool versus inactive server, unknown/deferred tools, profile collision, capability update denial, widened update delta, rejected secret settings, stale session rebuild and restart failure. Read-only DoD: UI capability gating used by other features, scoped contract tests and packaged smoke; additional management DoD includes isolated installation/reversibility and runtime consent. Record provenance/version; no available label before a live check.
 
-## D30 — Parità del catalogo Hermes e visibilità apprendimento
+## D30 — Hermes catalog parity and learning visibility
 
-[F8](F8-hermes-native-features-and-observability.md) mappa capacità/esiti native alla UI. F11 conserva catalogo skill/plugin/toolsets del profilo Hermes e gestione autorizzata; nessuna libreria parallela Studio. Aggiornamenti di skill/review/curator ricevuti possono aggiornare la vista con freshness e origine, non attivare installazioni/run. Non occultare deferred tools per aderire al template OpenDots. Segnali post-turn in chat sono F8-A/F2.
+[F8](F8-hermes-native-features-and-observability.md) maps native capabilities/outcomes to the UI. F11 preserves the Hermes profile’s skill/plugin/toolsets catalog and authorized management; no parallel Studio library. Received skill/review/curator updates can refresh the view with freshness and origin, rather than triggering installations/runs. Do not hide deferred tools to match the OpenDots template. Post-turn chat signals belong to F8-A/F2.
 
-## D34 — Impostazioni runtime nella sezione Hermes
+## D34 — Runtime settings in the Hermes section
 
-Toolsets, plugin, skill e MCP devono essere raggiungibili dai settings Hermes del corretto host/profilo quando supportati. F11 mantiene schema, autorizzazione e ricevuta di queste mutazioni; F4 organizza la sezione dedicata, F8 documenta copertura/gap. Non mescolare impostazioni Hermes e preferenze standalone Studio né duplicare config nel client.
+Toolsets, plugins, skills and MCP must be reachable from Hermes settings for the correct host/profile when supported. F11 maintains schema, authorization and receipts for these mutations; F4 organizes the dedicated section, F8 documents coverage/gaps. Do not mix Hermes settings with standalone Studio preferences or duplicate configuration in the client.
 
 
-## Prompt nuova chat
+## New chat prompt
 
-> Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Implementa F11 read-only capabilities con allowlist scoped, usando contracts/tools_mcp_plugins e desktop contrib/plugins. Parti da toolsets/tools/plugins e stati installato≠attivo. Non installare plugin né modificare config personale durante test. Se estendi a management, prepara diff concreto/review per capabilitydelta, vault-safe settings e rollback. Completa DoD e aggiorna docs; preserva strumenti Hermes deferiti. Segui anche Incarico per la chat implementatrice di F11: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.
+> First follow docs/agents/feature-workflow.md and this card’s Files and skills section, reading SKILL.md files before applying them. Implement F11 read-only capabilities with a scoped allowlist, using contracts/tools_mcp_plugins and desktop contrib/plugins. Start with toolsets/tools/plugins and installed≠active states. Do not install plugins or modify personal configuration during tests. If extending to management, prepare a concrete diff/review for capability deltas, vault-safe settings and rollback. Complete DoD and update docs; preserve deferred Hermes tools. Also follow the Assignment for the implementing chat for F11: deliver verified code and evidence, with the specified GUI/backend context, not just a plan. Capability gates and F0/F18 exceptions still apply.
