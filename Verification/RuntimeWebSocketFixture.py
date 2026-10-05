@@ -46,6 +46,15 @@ class Handler(BaseHTTPRequestHandler):
         else:
             self.send_error(404)
 
+    def do_POST(self):
+        if not self.server.conversations or urlparse(self.path).path != '/fixture/review':
+            self.send_error(404)
+            return
+        params = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))))
+        state = self.server.sessions[params['session_id']]
+        state['emit']('review.summary', {'text': 'Synthetic review while reading older messages.'})
+        self.respond(json.dumps({'ok': True}))
+
     def ws(self):
         lock = threading.Lock()
 
@@ -76,7 +85,9 @@ class Handler(BaseHTTPRequestHandler):
             state = self.server.sessions[session_id]
             return {'session_id': session_id, 'stored_session_id': session_id,
                     'running': state['running'], 'status': 'streaming' if state['running'] else 'idle',
-                    'messages': list(state['messages'])}
+                    'messages': list(state['messages']),
+                    'info': {'profile_name': 'synthetic-specialist', 'model': 'synthetic-model', 'reasoning_effort': 'high',
+                             'cwd': '/synthetic/finance', 'project': {'id': 'synthetic-profile-project', 'name': 'Finance'}}}
 
         def prompt(request_id, params):
             session_id = params['session_id']
@@ -84,8 +95,10 @@ class Handler(BaseHTTPRequestHandler):
             state['running'] = True
             state['messages'].append({'role': 'user', 'content': params['text']})
             def emit(name, payload):
-                send({'jsonrpc': '2.0', 'method': 'event', 'params': {
-                    'type': name, 'session_id': session_id, 'payload': payload}})
+                with self.server.event_lock:
+                    frame = {'type': name, 'session_id': session_id, 'payload': payload, 'seq': len(state['events']) + 1}
+                    state['events'].append(frame)
+                send({'jsonrpc': '2.0', 'method': 'event', 'params': frame})
             state['emit'] = emit
             emit('message.delta', {'text': 'Synthetic streaming response'})
             emit('tool.start', {'tool_id': 'synthetic-tool', 'name': 'synthetic_read', 'args': {'path': 'fixture.txt'}})
@@ -98,6 +111,11 @@ class Handler(BaseHTTPRequestHandler):
             emit('tool.complete', {'tool_id': 'synthetic-tool', 'name': 'synthetic_read', 'result_text': 'Late synthetic tool result'})
             time.sleep(0.3)
             result(request_id, {'admitted': True})
+            time.sleep(0.3)
+            emit('review.summary', {'text': 'Memory replacement proposed, not applied. Use /memory pending to approve or discard.'})
+            emit('review.summary', {'text': 'Skill creation confirmed by synthetic Hermes.'})
+            # Repeat the exact sequenced envelope: a reconnect/live overlap must not duplicate its note.
+            send({'jsonrpc': '2.0', 'method': 'event', 'params': state['events'][-1]})
 
         def slow(request_id):
             time.sleep(0.15)
@@ -134,8 +152,14 @@ class Handler(BaseHTTPRequestHandler):
                 if self.server.conversations and method in ('session.create', 'session.resume'):
                     params = request.get('params', {})
                     session_id = params.get('session_id') or 'fixture-' + params['idempotency_key']
-                    self.server.sessions.setdefault(session_id, {'running': False, 'messages': []})
+                    self.server.sessions.setdefault(session_id, {'running': False, 'messages': [], 'events': []})
                     result(request_id, snapshot(session_id))
+                elif self.server.conversations and method == 'session.events.since':
+                    params = request.get('params', {})
+                    with self.server.event_lock:
+                        events = list(self.server.sessions[params['session_id']]['events'])
+                    result(request_id, {'epoch': 'fixture', 'truncated': False, 'latest_seq': len(events),
+                                        'events': [frame for frame in events if frame['seq'] > params.get('last_seen', 0)]})
                 elif self.server.conversations and method == 'prompt.submit':
                     threading.Thread(target=prompt, args=(request_id, request.get('params', {})), daemon=True).start()
                 elif self.server.conversations and method == 'session.interrupt':
@@ -176,5 +200,6 @@ if __name__ == '__main__':
     server = ThreadingHTTPServer(('127.0.0.1', args.port), Handler)
     server.conversations = args.conversations
     server.sessions = {}
+    server.event_lock = threading.RLock()
     print(server.server_address[1], flush=True)
     server.serve_forever()

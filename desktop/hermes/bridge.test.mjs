@@ -239,3 +239,130 @@ test('stale HTTP handshake cannot disconnect or overwrite a newer gateway connec
     assert.equal(gateway.connected, true); assert.equal(gateway.version, 'new'); assert.equal(gateway.endpoint, 'http://127.0.0.1:8402');
   } finally { gateway.disconnect(); }
 });
+
+
+test('late native review notes are scoped, durable offline and replayed once without restarting work', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'hermes-reviews-'));
+  const bindingPath = join(directory, 'bindings.json'), gateway = new FixtureGateway();
+  gateway.capabilities = { replay_epoch: 'fixture-epoch' };
+  const bridge = new HermesBridge({ gateway, bindingPath, requireThread: ownThread }), updates = [];
+  bridge.on('update', event => updates.push(event));
+  let reopened;
+  try {
+    await bridge.send('a', 'Synthetic question');
+    gateway.emit('event', { type: 'message.complete', session_id: 'live-id', payload: { text: 'Done' } });
+    const note = { type: 'review.summary', session_id: 'live-id', seq: 12, payload: { text: 'Memory replacement pending. Use /memory pending to approve or discard.' } };
+    gateway.emit('event', note); gateway.emit('event', note);
+    gateway.emit('event', { ...note, session_id: 'private', payload: { text: 'Private text' } });
+    gateway.emit('event', { ...note, seq: 13 }); // Identical text from a different event is a distinct note.
+    gateway.emit('event', { ...note, seq: 14, payload: { text: 'Skill updated, confirmed by Hermes.' } });
+    await bridge.writeQueue;
+    const history = await bridge.history('a');
+    assert.equal(history.reviewNotes.length, 3);
+    assert.equal(history.reviewNotes[0].text, note.payload.text);
+    assert.equal(history.reviewNotes[0].storedSessionId, 'saved-id');
+    assert.equal(history.reviewNotes[0].runtimeSessionId, 'live-id');
+    assert.equal(history.running, false);
+    assert.equal(updates.filter(event => event.type === 'turn').at(-1).status, 'completed');
+    assert.equal(updates.filter(event => event.type === 'review-note').length, 3);
+    assert.equal((await bridge.history('b')).reviewNotes.length, 0);
+    bridge.close();
+    const offline = new FixtureGateway(); offline.connected = false;
+    reopened = new HermesBridge({ gateway: offline, bindingPath, requireThread: ownThread }); await reopened.initialize();
+    assert.deepEqual((await reopened.history('a')).reviewNotes, history.reviewNotes);
+    assert.doesNotMatch(await readFile(bindingPath, 'utf8'), /Private text/);
+  } finally { bridge.close(); reopened?.close(); await rm(directory, { recursive: true, force: true }); }
+});
+
+
+test('native review replay uses the owned session and epoch, tolerates gaps and deduplicates live overlap', async () => {
+  const gateway = new FixtureGateway(); gateway.capabilities = { replay_epoch: 'epoch-1' };
+  const request = gateway.request.bind(gateway);
+  const note = { type: 'review.summary', session_id: 'live-id', seq: 7, payload: { text: 'Proposal discarded by Hermes.' } };
+  gateway.request = async (method, params) => method === 'session.events.since'
+    ? { epoch: 'epoch-1', truncated: true, events: [note, { ...note, session_id: 'private' }] } : request(method, params);
+  const bridge = new HermesBridge({ gateway, connectionId: 'host-2' });
+  try {
+    await bridge.session('a'); gateway.emit('event', note);
+    const history = await bridge.history('a', { refresh: true });
+    assert.equal(history.reviewNotes.length, 1); assert.equal(history.reviewNotes[0].connectionId, 'host-2');
+    assert.equal(history.reviewReplay.state, 'partial');
+    gateway.capabilities.replay_epoch = 'epoch-2';
+    gateway.request = async (method, params) => method === 'session.events.since'
+      ? { epoch: 'epoch-2', truncated: false, events: [note] } : request(method, params);
+    assert.equal((await bridge.history('a', { refresh: true })).reviewNotes.length, 2);
+    gateway.request = async (method, params) => { if (method === 'session.events.since') throw new Error('Method not supported'); return request(method, params); };
+    assert.equal((await bridge.history('a', { refresh: true })).reviewReplay.state, 'unavailable');
+    assert.equal(gateway.calls.some(call => call.method === 'prompt.submit'), false);
+  } finally { bridge.close(); }
+});
+
+
+test('an idle resume cannot erase live work arriving during delayed review replay', async () => {
+  const gateway = new FixtureGateway(); gateway.capabilities = { replay_epoch: 'epoch' };
+  const request = gateway.request.bind(gateway);
+  gateway.request = async (method, params) => method === 'session.events.since' ? { epoch: 'epoch', events: [], truncated: false } : request(method, params);
+  const bridge = new HermesBridge({ gateway }); let release, started;
+  try {
+    await bridge.session('a');
+    const replayStarted = new Promise(resolve => started = resolve);
+    gateway.request = async (method, params) => {
+      if (method === 'session.events.since') { started(); return new Promise(resolve => release = () => resolve({ epoch: 'epoch', events: [], truncated: false })); }
+      return request(method, params);
+    };
+    const refreshing = bridge.history('a', { refresh: true });
+    await replayStarted;
+    gateway.emit('event', { type: 'message.delta', session_id: 'live-id', payload: { text: 'New live work' } });
+    release(); const history = await refreshing;
+    assert.equal(history.running, true); assert.equal(history.session.running, true);
+    await assert.rejects(bridge.send('a', 'Must not overlap'), /active or uncertain/);
+    assert.equal(gateway.calls.some(call => call.method === 'prompt.submit'), false);
+  } finally { release?.(); bridge.close(); }
+});
+
+test('oversized background reviews leave a durable scoped archive warning', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'hermes-review-limit-'));
+  const bindingPath = join(directory, 'bindings.json'), gateway = new FixtureGateway(), bridge = new HermesBridge({ gateway, bindingPath }); let reopened;
+  try {
+    await bridge.session('a');
+    gateway.emit('event', { type: 'review.summary', session_id: 'live-id', payload: { text: 'x'.repeat(1000001) } });
+    await bridge.writeQueue;
+    bridge.close(); const offline = new FixtureGateway(); offline.connected = false;
+    reopened = new HermesBridge({ gateway: offline, bindingPath }); await reopened.initialize();
+    assert.match((await reopened.history('a')).reviewPersistenceError, /archive limit/);
+    assert.equal((await reopened.history('b')).reviewPersistenceError, undefined);
+  } finally { bridge.close(); reopened?.close(); await rm(directory, { recursive: true, force: true }); }
+});
+
+
+test('cold send keeps its reservation while native review replay is pending', async () => {
+  const gateway = new FixtureGateway(), bridge = new HermesBridge({ gateway }); let release, started;
+  try {
+    await bridge.session('a'); bridge.disconnect(); await bridge.connect({ endpoint: 'http://127.0.0.1:8400' });
+    gateway.capabilities = { replay_epoch: 'epoch' }; const request = gateway.request.bind(gateway);
+    const replayStarted = new Promise(resolve => started = resolve);
+    gateway.request = async (method, params) => {
+      if (method === 'session.events.since') { started(); return new Promise(resolve => release = () => resolve({ epoch: 'epoch', events: [], truncated: false })); }
+      return request(method, params);
+    };
+    const sending = bridge.send('a', 'Synthetic first request', 'one'); await replayStarted;
+    await assert.rejects(bridge.send('a', 'Must not overlap', 'two'), /active or uncertain/);
+    release(); await sending;
+    assert.equal(gateway.calls.filter(call => call.method === 'prompt.submit').length, 1);
+  } finally { release?.(); bridge.close(); }
+});
+
+test('a failed review archive write keeps its text and exposes the failure in conversation history', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'hermes-review-write-')), bindingPath = join(directory, 'archive', 'bindings.json');
+  const gateway = new FixtureGateway(), bridge = new HermesBridge({ gateway, bindingPath });
+  try {
+    await bridge.session('a');
+    await rm(join(directory, 'archive'), { recursive: true }); await writeFile(join(directory, 'archive'), 'Synthetic write barrier');
+    gateway.emit('event', { type: 'review.summary', session_id: 'live-id', payload: { text: 'Memory replacement pending.' } });
+    await bridge.writeQueue; await new Promise(resolve => setImmediate(resolve));
+    const history = await bridge.history('a');
+    assert.equal(history.reviewNotes[0].text, 'Memory replacement pending.');
+    assert.equal(typeof history.reviewPersistenceError, 'string');
+    assert.equal((await bridge.history('b')).reviewPersistenceError, undefined);
+  } finally { bridge.close(); await rm(directory, { recursive: true, force: true }); }
+});

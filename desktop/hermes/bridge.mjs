@@ -5,8 +5,9 @@ import { dirname } from 'node:path';
 import { HermesGateway, candidates } from './gateway.mjs';
 
 export class HermesBridge extends EventEmitter {
-  constructor({ gateway = new HermesGateway(), bindingPath, requireThread = () => {}, prepareText = (_threadId, text) => text } = {}) {
-    super(); this.gateway = gateway; this.bindingPath = bindingPath; this.requireThread = requireThread;
+  constructor({ gateway = new HermesGateway(), bindingPath, connectionId = 'local', requireThread = () => {}, prepareText = (_threadId, text) => text } = {}) {
+    super(); this.gateway = gateway; this.bindingPath = bindingPath; this.connectionId = connectionId; this.requireThread = requireThread;
+    this.reviewReplay = new Map(); this.reviewPersistenceErrors = new Map();
     this.transportGeneration = 0; this.prepareText = prepareText; this.sessionJobs = new Map(); this.earlyRequests = [];
     this.handlers = new Map(); this.capabilityQueue = Promise.resolve(); this.approvalEnabled = false;
     this.handlerExpiry = setInterval(() => {
@@ -91,12 +92,17 @@ export class HermesBridge extends EventEmitter {
     this.bindings.set(threadId, { ...this.bindings.get(threadId), storedId: result.storedId, ...(profile ? { profile } : {}) }); await this.persistBindings();
     check();
     result.messages = this.projectHistory(threadId, result.messages); this.sessions.set(threadId, result);
+    this.emit('update', { type: 'session-context', threadId, info: result.info });
     this.drainRequests();
     for (const request of result.openRequests) this.serverRequest(request);
     if (saved) {
-      if (result.running === false && !result.hydrating && !['resuming', 'hydrating'].includes(result.status)) this.turns.delete(threadId);
+      if (result.running === false && !result.hydrating && !['resuming', 'hydrating'].includes(result.status)) {
+        if (!this.turns.get(threadId)?.preparing) this.turns.delete(threadId);
+      }
       else this.turns.set(threadId, { runtimeId: result.runtimeId, resumed: true, uncertain: result.running !== true });
     }
+    await this.recoverReviews(threadId, result, check);
+    check();
     return result;
   }
   projectHistory(threadId, messages) {
@@ -120,7 +126,51 @@ export class HermesBridge extends EventEmitter {
       }
       session = await this.sessionJobs.get(threadId);
     } else if (!session && this.bindings.has(threadId) && this.gateway.connected) session = await this.session(threadId, this.bindings.get(threadId));
-    return { messages: session?.messages ?? [], toolEvents: this.bindings.get(threadId)?.toolEvents ?? [], session, running: this.turns.has(threadId), pendingRequests: [...this.requests.values()].filter(item => item.threadId === threadId) };
+    return { messages: session?.messages ?? [], toolEvents: this.bindings.get(threadId)?.toolEvents ?? [], reviewNotes: this.bindings.get(threadId)?.reviewNotes ?? [],
+      reviewReplay: this.gateway.connected ? this.reviewReplay.get(threadId) ?? { state: 'unavailable', message: 'Native review replay has not been verified for this conversation.' } : { state: 'offline', message: 'Saved review notes are available. Notes emitted while disconnected have not been verified.' },
+      reviewPersistenceError: this.reviewPersistenceErrors.get(threadId) ?? this.bindings.get(threadId)?.reviewArchiveError, session, running: this.turns.has(threadId), pendingRequests: [...this.requests.values()].filter(item => item.threadId === threadId) };
+  }
+  archiveReview(threadId, event, epoch = this.gateway.capabilities?.replay_epoch) {
+    const binding = this.bindings.get(threadId), session = this.sessions.get(threadId);
+    const text = event.payload?.text;
+    if (!binding || !session || typeof text !== 'string' || !text.trim()) return;
+    if (Buffer.byteLength(text) > 1000000) {
+      binding.reviewArchiveError = 'A native review exceeded the archive limit and was not saved. Inspect the original summary in Hermes.';
+      void this.persistBindings().catch(error => this.reviewPersistenceErrors.set(threadId, error.message));
+      this.emit('update', { type: 'persistence-error', threadId, message: binding.reviewArchiveError }); return;
+    }
+    // The native contract has text, not mutation receipts or a guaranteed turn ID.
+    // Epoch/session/seq distinguishes identical summaries from different events.
+    const sequenced = typeof epoch === 'string' && Number.isSafeInteger(event.seq) && event.seq > 0;
+    const identity = [binding.storedId, event.session_id, epoch ?? null, sequenced ? event.seq : text];
+    const id = createHash('sha256').update(JSON.stringify(identity)).digest('hex');
+    if ((binding.reviewNotes ?? []).some(note => note.id === id)) return;
+    const note = { id, text, connectionId: this.connectionId, storedSessionId: binding.storedId,
+      runtimeSessionId: event.session_id, profile: typeof session.info?.profile_name === 'string' ? session.info.profile_name : binding.profile ?? null,
+      receivedAt: new Date().toISOString(), identity: sequenced ? 'sequence' : 'text-fallback' };
+    binding.reviewNotes = [...(binding.reviewNotes ?? []), note];
+    void this.persistBindings().then(() => this.reviewPersistenceErrors.delete(threadId)).catch(error => {
+      this.reviewPersistenceErrors.set(threadId, error.message);
+      this.emit('update', { type: 'persistence-error', threadId, message: 'The native review could not be saved to disk. It is retained in this app session.' });
+    });
+    this.emit('update', { type: 'review-note', threadId, note });
+  }
+  async recoverReviews(threadId, session, check) {
+    const epoch = this.gateway.capabilities?.replay_epoch;
+    if (typeof epoch !== 'string' || !epoch) {
+      this.reviewReplay.set(threadId, { state: 'unavailable', message: 'Native review replay is not advertised by this runtime.' }); return;
+    }
+    try {
+      const replay = await this.gateway.request('session.events.since', { session_id: session.runtimeId, last_seen: 0 });
+      check();
+      if (replay?.epoch !== epoch || !Array.isArray(replay.events)) throw new Error('Native review replay returned an unverified snapshot.');
+      for (const event of replay.events) if (event?.type === 'review.summary' && event.session_id === session.runtimeId) this.archiveReview(threadId, event, epoch);
+      this.reviewReplay.set(threadId, replay.truncated === true
+        ? { state: 'partial', message: 'The runtime replay window is incomplete. Older notes may be missing.' }
+        : { state: 'available', message: 'Review notes recovered from the native runtime replay window.' });
+    } catch (error) {
+      check(); this.reviewReplay.set(threadId, { state: 'unavailable', message: `Native review replay is unavailable: ${error.message}` });
+    }
   }
   async send(threadId, text, clientSubmissionId, pageReference) {
     this.requireThread(threadId);
@@ -139,7 +189,7 @@ export class HermesBridge extends EventEmitter {
     let session; try { session = await this.session(threadId); } catch (error) { this.turns.delete(threadId); throw error; }
     // A cold resume may discover work after send reserved a local preparation turn.
     // Keep that authoritative runtime state; only an idle snapshot permits dispatch.
-    if (this.turns.get(threadId)?.resumed) throw new Error('This session has an active or uncertain turn; reconnect and inspect it before sending again.');
+    if (this.turns.get(threadId)?.resumed || this.turns.get(threadId)?.running) throw new Error('This session has an active or uncertain turn; reconnect and inspect it before sending again.');
     this.turns.set(threadId, { requestId, runtimeId: session.runtimeId });
     const userMessage = { id: clientSubmissionId ?? randomUUID(), role: 'user', content: text, metadata: { delivery: 'pending' } };
     const binding = this.bindings.get(threadId);
@@ -173,6 +223,8 @@ export class HermesBridge extends EventEmitter {
     // A shared Hermes backend may emit events for personal sessions: never relay them.
     if (event?.session_id && !threadId) return;
     if (!event?.session_id && event?.type !== 'gateway.ready') return;
+    if (threadId && event.type === 'session.info') this.sessions.get(threadId).info = event.payload;
+    if (threadId && event.type === 'review.summary') this.archiveReview(threadId, event);
     if (threadId && ['tool.start', 'tool.complete'].includes(event.type)) {
       const binding = this.bindings.get(threadId);
       if (binding) {
@@ -182,13 +234,16 @@ export class HermesBridge extends EventEmitter {
         void this.persistBindings().catch(error => this.emit('update', { type: 'persistence-error', threadId, message: error.message }));
       }
     }
-    if (threadId && this.turns.has(threadId) && ['message.delta', 'message.interim', 'tool.start'].includes(event.type)) {
-      this.turns.get(threadId).running = true;
+    if (threadId && ['message.delta', 'message.interim', 'tool.start'].includes(event.type)) {
+      const session = this.sessions.get(threadId);
+      session.running = true; session.status = 'streaming';
+      this.turns.set(threadId, { ...this.turns.get(threadId), runtimeId: session.runtimeId, running: true });
       this.emit('update', { type: 'turn', threadId, status: 'running' });
     }
     this.emit('update', { type: 'runtime', threadId, event });
     if (event?.type === 'message.complete' && threadId) {
       const session = this.sessions.get(threadId); session.messages.push({ id: randomUUID(), role: 'assistant', content: event.payload?.text ?? '' });
+      session.running = false; session.status = event.payload?.status ?? 'completed';
       this.turns.delete(threadId);
       this.emit('update', { type: 'turn', threadId, status: event.payload?.status === 'interrupted' ? 'interrupted' : event.payload?.status === 'error' ? 'error' : 'completed', message: event.payload?.error });
     }

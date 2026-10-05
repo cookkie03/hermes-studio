@@ -52,6 +52,7 @@ export class RuntimeConnections extends EventEmitter {
     if (existing) return existing;
     const bridge = new HermesBridge({
       gateway: gateway ?? this.gatewayFactory(connection),
+      connectionId: connection.id,
       bindingPath:
         connection.id === "local"
           ? join(this.dataDir, "hermes-sessions.json")

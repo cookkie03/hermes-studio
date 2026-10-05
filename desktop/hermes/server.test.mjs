@@ -102,3 +102,29 @@ test('local metadata/pages/drafts work with no provider keys; unsafe API calls a
     assert.equal(gateway.calls.at(-1).params.server_requests, false);
   } finally { service.close(); await rm(dataDir, { recursive: true, force: true }); }
 });
+
+
+test('chat context distinguishes a page Space from native profile/project and never injects shared memories', async () => {
+  const dataDir = await mkdtemp(join(tmpdir(), 'hermes-chat-context-')), ownerToken = 'synthetic-owner-token-with-enough-length';
+  const gateway = new NoRuntime(), service = await createStudioApp({ dataDir, ownerToken, gateway });
+  const request = (path, method = 'GET', body) => service.app.request(`http://127.0.0.1/api${path}`, { method, headers: { Authorization: `Bearer ${ownerToken}`, 'Content-Type': 'application/json' }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
+  try {
+    const workspace = await (await request('/workspace')).json(), dot = workspace.dots[0], spaceId = dot.spaceIds[0];
+    const page = await (await request(`/spaces/${spaceId}/pages`, 'POST', { title: 'Finance', content: 'Explicit document context' })).json();
+    const thread = await (await request(`/spaces/${spaceId}/pages/${page.id}/conversation`, 'POST', { dotId: dot.id })).json();
+    const plain = await (await request('/conversations', 'POST', { dotId: dot.id, title: 'No Space selected' })).json();
+    await request('/memories', 'POST', { text: 'SHARED MEMORY MUST NOT BECOME SPECIALIST MEMORY' });
+    const info = { profile_name: 'synthetic-cto', model: 'synthetic-model', reasoning_effort: 'high', cwd: '/synthetic/finance', project: { id: 'profile-local-project', name: 'Finance' } };
+    service.bridge.sessions.set(thread.id, { runtimeId: 'synthetic-live', storedId: 'synthetic-stored', messages: [], info });
+    service.bridge.bindings.set(thread.id, { storedId: 'synthetic-stored' });
+    const history = await (await request(`/hermes/history?threadId=${thread.id}`)).json();
+    assert.equal(history.context.studioSpace.id, spaceId);
+    assert.equal(history.context.nativeProjectLink, 'unavailable');
+    assert.equal(history.session.info.profile_name, 'synthetic-cto');
+    assert.equal((await (await request(`/hermes/history?threadId=${plain.id}`)).json()).context.studioSpace, null);
+    await request('/hermes/send', 'POST', { threadId: thread.id, text: 'Inspect selected document', pageReference: { id: page.id, spaceId, revision: page.revision } });
+    const wire = gateway.calls.find(call => call.method === 'prompt.submit').params.text;
+    assert.match(wire, /Explicit document context/); assert.doesNotMatch(wire, /SHARED MEMORY MUST NOT/);
+    assert.equal(gateway.calls.some(call => /projects\.|workspace.move|profile/.test(call.method)), false);
+  } finally { service.close(); await rm(dataDir, { recursive: true, force: true }); }
+});

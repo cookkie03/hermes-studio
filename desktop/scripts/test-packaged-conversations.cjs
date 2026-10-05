@@ -66,6 +66,23 @@ const assert = require('node:assert/strict');
     await page.getByText('Synthetic streaming response', { exact: true }).waitFor();
     await page.getByText('Synthetic confirmed response', { exact: true }).waitFor();
     await page.getByText('Late synthetic tool result', { exact: true }).waitFor();
+    await page.getByText('Memory replacement proposed, not applied. Use /memory pending to approve or discard.', { exact: true }).waitFor();
+    await page.getByText('Skill creation confirmed by synthetic Hermes.', { exact: true }).waitFor();
+    assert.equal(await page.locator('.hermes-review-note').count(), 2, 'Native replay overlap duplicated a note');
+    assert.equal(await page.getByRole('button', { name: 'Interrupt current turn' }).count(), 0, 'Review note restarted Working');
+    await page.getByRole('region', { name: 'Conversation context', exact: true }).getByText('synthetic-specialist', { exact: true }).waitFor();
+    assert.equal(await page.locator('.conversation-context').getByText('None selected', { exact: true }).count(), 1, 'Native Finance project was mistaken for a selected Studio Space');
+    // A late note must not pull the reader away from older content.
+    await page.evaluate(() => { const log = document.querySelector('.hermes-timeline'); log.style.height = '130px'; log.style.flex = '0 0 130px'; log.scrollTop = 0; log.dispatchEvent(new Event('scroll')); });
+    const scrollBefore = await page.locator('.hermes-timeline').evaluate(element => element.scrollTop);
+    const ownedSession = await page.evaluate(async id => (await (await fetch(`/api/hermes/history?threadId=${id}`)).json()).session.runtimeId, ids[0]);
+    const reviewResponse = await fetch(`http://127.0.0.1:${port}/fixture/review`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ session_id: ownedSession }) });
+    assert.equal(reviewResponse.ok, true);
+    await page.getByText('Synthetic review while reading older messages.', { exact: true }).waitFor();
+    await page.getByRole('button', { name: 'Show new activity', exact: true }).waitFor();
+    assert.equal(await page.locator('.hermes-timeline').evaluate(element => element.scrollTop), scrollBefore);
+    await page.getByRole('button', { name: 'Show new activity', exact: true }).click();
+    await page.evaluate(() => { const log = document.querySelector('.hermes-timeline'); log.style.removeProperty('height'); log.style.removeProperty('flex'); log.scrollTop = log.scrollHeight; log.dispatchEvent(new Event('scroll')); });
     assert.equal(await page.evaluate(() => window.fixtureSends), 1, 'Double send escaped the submission lock');
     assert.equal(await composer.inputValue(), 'New draft during dispatch');
     assert.equal(await page.locator('.chat-bubble.user').count(), 1);
@@ -82,6 +99,7 @@ const assert = require('node:assert/strict');
     await composer.fill('Saved beta draft');
     await page.waitForFunction(async id => (await (await fetch(`/api/conversations/${id}/draft`)).json()).draft === 'Saved beta draft', ids[1]);
     assert.equal(await page.locator('.chat-bubble').count(), 0, 'Previous conversation leaked');
+    assert.equal(await page.locator('.hermes-review-note').count(), 0, 'Previous review notes leaked');
     await select('F2 alpha');
     assert.equal(await composer.inputValue(), 'Saved alpha draft');
     await page.getByText('Synthetic confirmed response', { exact: true }).waitFor();
@@ -89,6 +107,14 @@ const assert = require('node:assert/strict');
       await app.evaluate(({ BrowserWindow }, width) => BrowserWindow.getAllWindows()[0].setSize(width, 800), width);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
       await page.screenshot({ path: path.join(data, `chat-${width}.png`) });
+      if (width === 900) {
+        await page.getByRole('button', { name: 'Close result panel', exact: true }).click();
+        await page.locator('.conversation-context').getByText('synthetic-model', { exact: true }).waitFor();
+        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+        await page.locator('.hermes-review-note').first().scrollIntoViewIfNeeded();
+        await page.screenshot({ path: path.join(data, 'reviews-900.png') });
+        await page.getByRole('button', { name: 'Show computer', exact: true }).click();
+      }
     }
     await composer.focus(); await page.keyboard.press('Tab');
     assert.equal(await page.evaluate(() => document.activeElement.matches(':focus-visible') && parseFloat(getComputedStyle(document.activeElement).outlineWidth) >= 2), true);
@@ -120,6 +146,38 @@ const assert = require('node:assert/strict');
     await page.evaluate(() => { window.fetch = window.fixtureOriginalFetch; });
     await select('F2 alpha');
     await page.getByText('Synthetic confirmed response', { exact: true }).first().waitFor();
+    await page.waitForFunction(() => document.querySelectorAll('.hermes-review-note').length === 5);
+    // Disconnect and inspect archived notes offline, then reconnect and deduplicate native replay.
+    await page.evaluate(async () => { await fetch('/api/hermes/disconnect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ connectionId: 'local' }) }); });
+    await page.getByText('Saved review notes are available. Notes emitted while disconnected have not been verified.', { exact: true }).waitFor();
+    assert.equal(await page.locator('.hermes-review-note').count(), 5);
+    await page.getByRole('button', { name: 'Connect Hermes', exact: true }).click();
+    await page.waitForFunction(() => !document.querySelector('[aria-label="Send message"]').disabled);
+    assert.equal(await page.locator('.hermes-review-note').count(), 5, 'Reconnect replay duplicated reviews');
+    // A clean SSE EOF must invalidate replay confidence, even without a thrown error.
+    await select('F2 beta');
+    await page.evaluate(id => {
+      const original = window.fetch; window.fixtureOriginalFetch = original;
+      let ended = false;
+      window.fetch = async (...args) => {
+        const response = await original(...args);
+        if (!ended && String(args[0]).includes('/hermes/events?threadId=' + id)) {
+          ended = true;
+          const reader = response.body.getReader();
+          return new Response(new ReadableStream({ async start(controller) {
+            const chunk = await reader.read(); if (!chunk.done) controller.enqueue(chunk.value);
+            await new Promise(resolve => setTimeout(resolve, 800));
+            await reader.cancel(); controller.close();
+          } }), { headers: response.headers });
+        }
+        return response;
+      };
+    }, ids[0]);
+    await select('F2 alpha');
+    await page.getByText('Saved review notes are available. Notes emitted while disconnected have not been verified.', { exact: true }).waitFor();
+    await page.evaluate(() => { window.fetch = window.fixtureOriginalFetch; });
+    await page.getByRole('button', { name: 'Connect Hermes', exact: true }).click();
+    await page.waitForFunction(() => !document.querySelector('[aria-label="Send message"]').disabled);
     // Intentional clearing survives navigation even before the debounce fires.
     await composer.fill(''); await select('F2 beta');
     await page.waitForFunction(async id => (await (await fetch(`/api/conversations/${id}/draft`)).json()).draft === '', ids[0]);
@@ -221,11 +279,12 @@ const assert = require('node:assert/strict');
     await select('F2 alpha');
     composer = page.getByRole('textbox', { name: 'Message Hermes', exact: true });
     await page.waitForFunction(() => document.querySelector('[aria-label="Message Hermes"]')?.value === 'Saved alpha draft');
+    await page.waitForFunction(() => document.querySelectorAll('.hermes-review-note').length === 5);
     assert.notEqual(await page.evaluate(() => location.origin), origin, 'Restart did not exercise a new origin');
     await select('F2 beta');
     await page.waitForFunction(() => document.querySelector('[aria-label="Message Hermes"]')?.value === 'Beta survives late alpha response');
     assert.deepEqual(errors, []);
-    console.log(JSON.stringify({ pass: true, syntheticRuntime: true, streamingBeforeHttp: true, doubleSend: true, lateToolResult: true, draftDuringSend: true, chatIsolation: true, navigationDuringDispatch: true, pagePreparationCancelled: true, hostPreparationCancelled: true, savedRevision: true, restartNewOrigin: true, ime: true, keyboard: true, reducedMotion: true, widths: [1360, 900], dataDirectory: data }));
+    console.log(JSON.stringify({ pass: true, syntheticRuntime: true, nativeReviewNotes: true, backgroundReviews: true, reviewReplayDeduplication: true, reviewOfflineRestart: true, cleanStreamClosure: true, scrollPreserved: true, truthfulContext: true, streamingBeforeHttp: true, doubleSend: true, lateToolResult: true, draftDuringSend: true, chatIsolation: true, navigationDuringDispatch: true, pagePreparationCancelled: true, hostPreparationCancelled: true, savedRevision: true, restartNewOrigin: true, ime: true, keyboard: true, reducedMotion: true, widths: [1360, 900], dataDirectory: data }));
   } catch (error) {
     console.error('Synthetic data directory: ' + data);
     if (page) { console.error((await page.locator('body').innerText()).slice(-7000)); await page.screenshot({ path: path.join(data, 'failure.png') }); }

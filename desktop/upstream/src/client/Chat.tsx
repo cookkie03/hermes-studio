@@ -11,6 +11,8 @@ import { appendAssistant, delivery, pendingMessage, remainingDraft, mergeHistory
 import type { RuntimeStatus } from './runtime-connections';
 import { ConversationHost } from './ConversationHost';
 import { ConversationSubmission } from './conversation-submission';
+import { NativeReviewNotes, mergeReviewNotes, type NativeReviewNote, type ReviewReplay } from './NativeReviewNotes';
+import { ConversationContext, type NativeSessionInfo, type StudioConversationContext } from './ConversationContext';
 interface Approval { requestId: unknown; params: { command?: string; description?: string; choices?: string[] } }
 const textOf = (value: unknown) => typeof value === 'string' ? value : '';
 const draftWrites = new Map<string, Promise<unknown>>();
@@ -30,6 +32,12 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   onOpenConversation?: (threadId: string) => void;
 }) {
   const [messages, setMessages] = useState<TextMessage[]>([]);
+  const [reviewNotes, setReviewNotes] = useState<NativeReviewNote[]>([]);
+  const [reviewReplay, setReviewReplay] = useState<ReviewReplay>();
+  const [context, setContext] = useState<StudioConversationContext>();
+  const [sessionInfo, setSessionInfo] = useState<NativeSessionInfo>();
+  const [newActivity, setNewActivity] = useState(false);
+  const followingTimeline = useRef(true);
   const [reviewContent, setReviewContent] = useState<string>();
   const [preparing, setPreparing] = useState(false);
   const submission = useRef(new ConversationSubmission());
@@ -90,7 +98,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
 
   const loadHistory = useCallback(async (signal?: AbortSignal) => {
     try {
-      const history = await api<{ messages: Array<{ role: string; content?: unknown; text?: string; id?: string; row_id?: string; metadata?: Record<string, unknown> }>; running?: boolean; session?: { running?: boolean; hydrating?: boolean; status?: string }; pendingRequests?: Approval[]; toolEvents?: Array<{ type?: string; payload?: Record<string, unknown> }> }>(
+      const history = await api<{ messages: Array<{ role: string; content?: unknown; text?: string; id?: string; row_id?: string; metadata?: Record<string, unknown> }>; running?: boolean; session?: { running?: boolean; hydrating?: boolean; status?: string; info?: NativeSessionInfo }; context?: StudioConversationContext; reviewNotes?: NativeReviewNote[]; reviewReplay?: ReviewReplay; reviewPersistenceError?: string; pendingRequests?: Approval[]; toolEvents?: Array<{ type?: string; payload?: Record<string, unknown> }> }>(
         `/hermes/history?threadId=${encodeURIComponent(thread.id)}&refresh=1`, 'GET', undefined, signal);
       if (signal?.aborted) return;
       const rows: TextMessage[] = history.messages.filter((m) => ['user', 'assistant'].includes(m.role)).map((m, i) => ({
@@ -98,6 +106,9 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
         content: projectedText(m.content ?? m.text), metadata: m.metadata?.delivery ? { ...m.metadata, hermesDelivery: m.metadata.delivery } : m.metadata,
       }));
       setMessages((previous) => mergeHistory(previous, rows));
+      setReviewNotes(previous => mergeReviewNotes(previous, history.reviewNotes ?? []));
+      setReviewReplay(history.reviewReplay); setContext(history.context); setSessionInfo(history.session?.info);
+      if (history.reviewPersistenceError) setError(history.reviewPersistenceError);
       setTools((previous) => (history.toolEvents ?? []).reduce((items, event) => mergeToolEvent(items, event), previous));
       setRunning(history.session?.running === true);
       if (history.session?.running === false && !history.session.hydrating && !['resuming', 'hydrating'].includes(history.session.status ?? '')) setUncertain(false);
@@ -122,7 +133,11 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
     void loadHistory(controller.signal).finally(() => { if (!controller.signal.aborted) setLoading(false); });
     const receive = (frame: Record<string, unknown>) => {
       if (controller.signal.aborted) return;
+      if (frame.type === 'review-note') setReviewNotes(previous => mergeReviewNotes(previous, [frame.note as NativeReviewNote]));
+      if (frame.type === 'session-context') setSessionInfo(frame.info as NativeSessionInfo | undefined);
+      if (frame.type === 'persistence-error') setError(textOf(frame.message) || 'Runtime activity could not be saved to disk.');
       if (frame.type === 'connection' && frame.connected === false) {
+        setReviewReplay({ state: 'offline', message: 'Saved review notes are available. Notes emitted while disconnected have not been verified.' });
         sendAllowed.current = false; setUncertain(true); setStatus(previous => ({ ...previous, connected: false }));
       }
       if (frame.type === 'approval-waiting' && typeof frame.threadId === 'string' && frame.threadId !== thread.id) setBackgroundApproval(frame.threadId);
@@ -149,6 +164,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
       window.dispatchEvent(new CustomEvent('hermes-runtime-event', { detail: { dotId: dot.id, threadId: thread.id, connectionId: frame.connectionId, event: frame.event } }));
       const event = frame.event as { type?: string; payload?: Record<string, unknown> } | undefined;
       const payload = event?.payload ?? {};
+      if (event?.type === 'session.info') setSessionInfo(payload);
       if (['message.delta', 'message.interim', 'tool.start'].includes(event?.type ?? '')) {
         sendAllowed.current = false; turnPhase.current = 'running'; setRunning(true); setDispatching(false); setWaiting(false);
         if (submittedId.current) setMessages((previous) => delivery(previous, submittedId.current, 'acknowledged'));
@@ -189,15 +205,18 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
           if (buffer.length > 2_000_000) throw new Error('Hermes event exceeds the display limit.');
         }
       } catch (cause) {
-        if (!controller.signal.aborted) { sendAllowed.current = false; setStreamConnected(false); setStatus((previous) => ({ ...previous, connected: false })); setUncertain(true); setError(cause instanceof Error ? cause.message : 'Connection interrupted. The runtime may still be working.'); }
+        if (!controller.signal.aborted) { sendAllowed.current = false; setStreamConnected(false); setStatus((previous) => ({ ...previous, connected: false })); setReviewReplay({ state: 'offline', message: 'Saved review notes are available. Notes emitted while disconnected have not been verified.' }); setUncertain(true); setError(cause instanceof Error ? cause.message : 'Connection interrupted. The runtime may still be working.'); }
       }
-      if (!controller.signal.aborted) { sendAllowed.current = false; setStreamConnected(false); setUncertain(true); }
+      if (!controller.signal.aborted) { sendAllowed.current = false; setStreamConnected(false); setUncertain(true); setReviewReplay({ state: 'offline', message: 'Saved review notes are available. Notes emitted while disconnected have not been verified.' }); }
       if (!controller.signal.aborted) timer = setTimeout(() => void stream(), 3000);
     };
     void stream();
     return () => { controller.abort(); clearInterval(poll); clearTimeout(timer); };
   }, [thread.id, dot.id, loadHistory, hostRevision]);
-  useEffect(() => { timeline.current?.scrollTo({ top: timeline.current.scrollHeight }); }, [messages, tools, approvals]);
+  useEffect(() => {
+    if (followingTimeline.current) timeline.current?.scrollTo({ top: timeline.current.scrollHeight });
+    else setNewActivity(true);
+  }, [messages, tools, approvals, reviewNotes]);
 
   const sendAllowed = useRef(false);
   sendAllowed.current = !loading && !running && !waiting && !dispatching && status.connected && streamConnected && !paused && !uncertain &&
@@ -279,12 +298,17 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
       submission.current.close(); setPreparing(false); setStreamConnected(false); setLoading(true);
       setStatus({ connected: false }); setHostRevision(value => value + 1);
     }} />
-    <div className="hermes-timeline" ref={timeline} role="log" aria-label="Conversation">
+    <ConversationContext context={context} info={sessionInfo} connected={status.connected && streamConnected} host={status.name} />
+    <div className="hermes-timeline" ref={timeline} role="log" aria-label="Conversation" onScroll={() => {
+      const element = timeline.current;
+      if (element) { followingTimeline.current = element.scrollHeight - element.scrollTop - element.clientHeight < 80; if (followingTimeline.current) setNewActivity(false); }
+    }}>
       {(!status.connected || uncertain) && <div className="hermes-connection"><strong>Connect your Hermes runtime</strong><p>{uncertain ? 'Delivery or ongoing work needs inspection. Reconnecting does not resend your request or cancel the runtime.' : 'Your documents remain available. A connection enables real conversations and tool activity.'}</p><button onClick={() => void connect()}>Connect Hermes</button></div>}
       {backgroundApproval && <div className="hermes-connection" role="status"><strong>Another conversation needs your decision</strong>{onOpenConversation ? <button onClick={() => onOpenConversation(backgroundApproval)}>Open conversation</button> : <p>Open the waiting conversation from Chats to review the request.</p>}</div>}
       {loading && <p role="status">Loading conversation…</p>}
       {!loading && !messages.length && <div className="hermes-chat-empty"><Mascot identity={dot.id} name={dot.name} /><h2>{dot.name}</h2><p>{dot.instructions}</p></div>}
       <ChatTranscript messages={messages} calls={[]} />
+      <NativeReviewNotes notes={reviewNotes} replay={reviewReplay} />
       {tools.map((tool) => <section className="inline-computer hermes-tool" key={tool.id}>
         <header><strong>{tool.name}</strong><span className="tool-state">{tool.complete ? 'Finished' : running ? 'Working' : 'Last activity'}</span></header>
         {tool.args != null && <details><summary>Inputs</summary><pre>{JSON.stringify(tool.args, null, 2)?.slice(0, 8000)}</pre></details>}
@@ -297,6 +321,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
         <footer>{(Array.isArray(approval.params.choices) ? approval.params.choices.filter((choice) => typeof choice === 'string' && ['once', 'session', 'always', 'deny'].includes(choice)) : []).map((choice) => <button key={choice} disabled={decisionPending} onClick={() => void decide(approval, choice)}>{choice}</button>)}</footer>
       </section>)}
     </div>
+    {newActivity && <button className="hermes-new-activity" onClick={() => { followingTimeline.current = true; timeline.current?.scrollTo({ top: timeline.current.scrollHeight }); setNewActivity(false); }}>Show new activity</button>}
     {draftError && <div className="chat-error" role="status">{draftError}</div>}
     {error && <div className="chat-error" role="alert">{error}<button onClick={() => setError('')}>Dismiss</button></div>}
     <form className="composer" onSubmit={(e) => { e.preventDefault(); void send(); }}>

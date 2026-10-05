@@ -4056,6 +4056,18 @@ h3 {
 @media (max-width: 850px) { .hermes-client .result-pane { position: absolute; inset: 0 0 0 auto; z-index: 15; height: 100%; box-shadow: -10px 0 24px #0000000d; } }
 @media (max-width: 700px) { .hermes-client.template-app.app .workspace { margin-left: 0; } .hermes-client.template-app.app .sidebar { width: 260px; } }
 .hermes-delivery { align-self: flex-end; color: var(--muted); font-size: 12px; margin-top: -16px; }
+.conversation-context { flex: 0 0 auto; padding: 8px 20px; border-bottom: 1px solid var(--line); font-size: 12px; overflow-wrap: anywhere; }
+.conversation-context dl { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 0 0 6px; }
+.conversation-context dt, .hermes-review-note dt { color: var(--muted); }
+.conversation-context dd, .hermes-review-note dd { margin: 0; }
+.conversation-context details p { margin: 8px 0; }
+.hermes-review-note { flex-shrink: 0; border: 1px solid var(--line); border-radius: 12px; background: #faf9f7; padding: 16px; overflow-wrap: anywhere; }
+.hermes-review-note header { display: flex; flex-direction: column; gap: 4px; }
+.hermes-review-note small, .hermes-review-limit { color: var(--muted); font-size: 12px; }
+.hermes-review-text { white-space: pre-wrap; line-height: 1.5; }
+.hermes-review-note details { font-size: 12px; }
+.hermes-review-note dl { display: grid; grid-template-columns: minmax(80px, 1fr) minmax(0, 2fr); gap: 4px 12px; }
+.hermes-new-activity { align-self: center; margin: 8px 0 0; }
 .hermes-client .hermes-computer .computer-tool-tabs button:last-child { display: block; }
 .hermes-computer-status { display: flex; align-items: center; gap: 7px; padding: 12px 0; color: var(--muted); font-size: 12px; }
 .hermes-connected-dot { width: 7px; height: 7px; border-radius: 50%; background: #5aada7; }
