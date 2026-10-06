@@ -1,6 +1,6 @@
 # Hermes Studio — stato corrente
 
-Consolidato 2026-10-06. **F0–F3 completate/verificate per incremento; F4 shell & F5 file workspace e F6 folder-backed spaces implementati e verificati.** [Catalogo](../features/README.md), [piano](feature-development-plan.md), [decisioni](decisions.md).
+Consolidato 2026-10-06. **F0–F3 completate/verificate per incremento; F4 shell, F5 file workspace, F6 folder-backed spaces e F10 Hermes routines GUI implementati e verificati.** [Catalogo](../features/README.md), [piano](feature-development-plan.md), [decisioni](decisions.md).
 
 ## Baseline verificata
 

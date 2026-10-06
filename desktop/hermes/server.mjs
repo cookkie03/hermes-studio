@@ -11,6 +11,7 @@ import { createApp } from '../upstream/dist/server/server/app.js';
 import { workspaceRoutes } from '../upstream/dist/server/server/workspace-routes.js';
 import { RuntimeConnections } from './connections.mjs';
 import { DraftStore } from './drafts.mjs';
+import { RoutinesManager } from './routines.mjs';
 
 const unavailable = () => { throw new Error('This capability is not connected to Hermes yet.'); };
 export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway, connectorFactory, gatewayFactory } = {}) {
@@ -28,6 +29,8 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   } });
   await bridge.initialize();
   const drafts = new DraftStore(join(dataDir, 'drafts.json')); await drafts.initialize();
+  const routines = new RoutinesManager({ connections: bridge });
+  routines.on('changed', event => { bridge.emit('update', { type: 'cron.changed', ...event }); });
   const facade = {
     workspace,
     setup: () => ({ intelligence: false, model: bridge.list().connections.some(connection => connection.connected), browser: false, voice: false, slack: 'not_configured', missing: [] }),
@@ -127,15 +130,54 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   // Preserve metadata stores and page routes, but do not run a second tool/agent executor.
   app.all('/api/voice/*', c => c.json({ error: 'Voice and telephone calls are a future capability.' }, 501));
   app.all('/api/computers/*', c => c.json({ error: 'Computer preview/takeover is not connected. Hermes tools remain available in the runtime.' }, 501));
-  app.post('/api/tasks', c => c.json({ error: 'Recurring tasks must be configured in Hermes; Studio scheduling is not connected yet.' }, 501));
-  app.post('/api/tasks/:id/actions', c => c.json({ error: 'Task actions are not connected to Hermes.' }, 501));
-  app.put('/api/tasks/:id/schedule', c => c.json({ error: 'Task scheduling is not connected to Hermes.' }, 501));
+  app.get('/api/hermes/routines', async c => c.json(await routines.listJobs({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.post('/api/hermes/routines', async c => c.json(await routines.createJob(await c.req.json(), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.get('/api/hermes/routines/delivery-targets', async c => c.json(await routines.getDeliveryTargets({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.get('/api/hermes/routines/:id', async c => c.json(await routines.getJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.put('/api/hermes/routines/:id', async c => c.json(await routines.updateJob(c.req.param('id'), await c.req.json(), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.patch('/api/hermes/routines/:id', async c => c.json(await routines.updateJob(c.req.param('id'), await c.req.json(), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.post('/api/hermes/routines/:id/pause', async c => c.json(await routines.pauseJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.post('/api/hermes/routines/:id/resume', async c => c.json(await routines.resumeJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.post('/api/hermes/routines/:id/trigger', async c => c.json(await routines.triggerJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.delete('/api/hermes/routines/:id', async c => c.json(await routines.deleteJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.get('/api/hermes/routines/:id/runs', async c => c.json(await routines.getRuns(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile'), limit: Number(c.req.query('limit') || 20) })));
+  app.post('/api/tasks', async c => {
+    try {
+      const body = await c.req.json();
+      return c.json(await routines.createJob(body));
+    } catch (e) {
+      return c.json({ error: e.message || 'Recurring tasks must be configured in Hermes native routines.' }, 400);
+    }
+  });
+  app.post('/api/tasks/:id/actions', async c => {
+    try {
+      const { action } = await c.req.json();
+      const id = c.req.param('id');
+      if (action === 'pause') return c.json(await routines.pauseJob(id));
+      if (action === 'resume') return c.json(await routines.resumeJob(id));
+      if (action === 'run') return c.json(await routines.triggerJob(id));
+      if (action === 'cancel') return c.json(await routines.deleteJob(id));
+      return c.json({ error: 'Unsupported action.' }, 400);
+    } catch (e) {
+      return c.json({ error: e.message }, 400);
+    }
+  });
+  app.put('/api/tasks/:id/schedule', async c => {
+    try {
+      const { intervalSeconds } = await c.req.json();
+      const id = c.req.param('id');
+      const schedule = intervalSeconds ? `${Math.round(intervalSeconds / 60)}m` : 'manual';
+      return c.json(await routines.updateJob(id, { schedule }));
+    } catch (e) {
+      return c.json({ error: e.message }, 400);
+    }
+  });
   app.route('/api', workspaceRoutes(facade, { begin: unavailable, activate: unavailable, compute: unavailable, end: unavailable }));
   app.route('/', createApp({ store, runner: { abort() {}, abortAll() {} }, config: { mode: 'live' }, ownerToken }));
   app.get('/api/*', c => c.json({ error: 'Not found.' }, 404));
   if (staticDir) { app.use('/*', serveStatic({ root: staticDir })); app.get('*', serveStatic({ path: join(staticDir, 'index.html') })); }
   app.onError((error, c) => c.json({ error: error instanceof SyntaxError ? 'Invalid JSON request.' : error.message }, error instanceof SyntaxError ? 400 : 503));
-  return { app, bridge, store, workspace, close: () => { bridge.close(); store.close(); workspace.close(); } };
+  return { app, bridge, routines, store, workspace, close: () => { bridge.close(); store.close(); workspace.close(); } };
 }
 
 export async function startStudio() {

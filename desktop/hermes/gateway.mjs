@@ -29,6 +29,39 @@ export class HermesGateway extends EventEmitter {
     if (Buffer.byteLength(text) > 4 * 1024 * 1024) throw new Error('Hermes response exceeds the local connector limit.');
     return text;
   }
+  async http(path, { method = 'GET', body, timeout = 15000, authenticated = true } = {}) {
+    if (!this.endpoint) throw new Error('Hermes backend is not connected.');
+    const headers = {
+      ...(authenticated && this.token ? { 'X-Hermes-Session-Token': this.token } : {}),
+      ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+    };
+    const signal = this.controller
+      ? AbortSignal.any([AbortSignal.timeout(timeout), this.controller.signal])
+      : AbortSignal.timeout(timeout);
+    const response = await this.fetcher(new URL(path, this.endpoint), {
+      method,
+      redirect: 'error',
+      signal,
+      headers,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    });
+    if ([401, 403].includes(response.status)) throw new Error('Hermes requires login; gated backends are not supported by this local connector.');
+    const text = await response.text();
+    if (!response.ok) {
+      let msg = `Hermes returned HTTP ${response.status}.`;
+      try {
+        const parsed = JSON.parse(text);
+        if (parsed.error || parsed.detail) msg = parsed.error || parsed.detail;
+      } catch {}
+      throw new Error(msg);
+    }
+    if (Buffer.byteLength(text) > 8 * 1024 * 1024) throw new Error('Hermes response exceeds the local connector limit.');
+    try {
+      return JSON.parse(text);
+    } catch {
+      return text;
+    }
+  }
   async connect(endpoint, { serverRequests = false } = {}) {
     endpoint = localEndpoint(endpoint); this.disconnect(); this.endpoint = endpoint; this.controller = new AbortController();
     const generation = this.generation;

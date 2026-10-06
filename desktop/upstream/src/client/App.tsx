@@ -38,6 +38,7 @@ import { ThreadList } from './ThreadList';
 import { ResultPane } from './ResultPane';
 import { TaskRow } from './TaskPresentation';
 import { TaskActions } from './TaskActions';
+import { RoutinesView } from './RoutinesView';
 import { WorkspaceDialog, type Dialog } from './WorkspaceDialog';
 
 export function App() {
@@ -406,6 +407,16 @@ export function App() {
         )}
         <div className="sidebar-bottom">
           <button
+            className={`nav-item ${view === 'tasks' ? 'active' : ''}`}
+            onClick={() => {
+              setView('tasks');
+              setMobile(false);
+            }}
+          >
+            <Clock3 size={17} />
+            <span>Routines</span>
+          </button>
+          <button
             className={`nav-item ${view === 'memories' ? 'active' : ''}`}
             onClick={() => {
               setView('memories');
@@ -450,7 +461,7 @@ export function App() {
               {view === 'chat'
                 ? dot.name
                 : view === 'tasks'
-                  ? 'Activity'
+                  ? 'Routines'
                   : view === 'space'
                     ? 'Pages'
                     : 'Memories'}
@@ -757,91 +768,7 @@ export function App() {
                 )}
               </>
             ) : (
-              <>
-                <label className="search-box">
-                  <Search size={16} />
-                  <input
-                    aria-label="Search tasks"
-                    placeholder="Find a task…"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                </label>
-                <div className="task-list">
-                  {state.tasks
-                    .filter((task) =>
-                      task.prompt.toLowerCase().includes(search.toLowerCase()),
-                    )
-                    .map((task) => (
-                      <TaskRow
-                        key={task.id}
-                        task={task}
-                        onClick={() =>
-                          void api<Detail>(`/tasks/${task.id}`)
-                            .then(setTaskDetail)
-                            .catch((e) => setError(e.message))
-                        }
-                      />
-                    ))}
-                </div>
-                {!state.tasks.length && (
-                  <div className="large-empty">
-                    <Clock3 size={32} />
-                    <h2>Let a thought come back around.</h2>
-                    <p>
-                      Open a conversation and use the clock button to schedule a
-                      server-side task.
-                    </p>
-                  </div>
-                )}
-                {taskDetail && (
-                  <section className="task-detail-card">
-                    <h2>{taskDetail.task.prompt}</h2>
-                    <TaskActions
-                      task={taskDetail.task}
-                      busy={busy}
-                      settings={state.settings}
-                      onAction={(action) =>
-                        void mutate(
-                          `/tasks/${taskDetail.task.id}/actions`,
-                          'POST',
-                          { action },
-                        )
-                      }
-                      onSchedule={async () => {
-                        const raw = window.prompt(
-                          'Repeat interval in minutes (0 removes the schedule)',
-                          String((taskDetail.task.intervalSeconds ?? 0) / 60),
-                        );
-                        if (raw === null) return;
-                        const value = Number(raw);
-                        if (!Number.isFinite(value) || value < 0) {
-                          setError('Enter a valid number of minutes.');
-                          return;
-                        }
-                        await mutate(
-                          `/tasks/${taskDetail.task.id}/schedule`,
-                          'PUT',
-                          {
-                            intervalSeconds: value
-                              ? Math.round(value * 60)
-                              : null,
-                          },
-                        );
-                      }}
-                    />
-                    {taskDetail.task.error && (
-                      <p className="chat-error">{taskDetail.task.error}</p>
-                    )}
-                    {taskDetail.events.slice(-6).map((event) => (
-                      <p className="muted" key={event.id}>
-                        {event.text}
-                      </p>
-                    ))}
-                    <small>{taskDetail.runs.length} saved runs</small>
-                  </section>
-                )}
-              </>
+              <RoutinesView spaces={workspace.spaces} dots={workspace.dots} />
             )}
           </main>
         )}

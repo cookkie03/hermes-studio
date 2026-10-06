@@ -2,6 +2,15 @@
 
 # Registro di lavoro
 
+## 2026-10-06 — F10 Hermes routines and cron GUI
+
+- Implementato l'adattatore backend per le routine/cron native di Hermes (`desktop/hermes/routines.mjs`) integrato in `desktop/hermes/server.mjs`.
+- Rimosso stub 501 tasks: le routine comunicano con il runtime Hermes (GET/POST/PUT/DELETE/pause/resume/trigger) con supporto profile e connectionId.
+- Implementati i componenti frontend: `RoutinesView.tsx`, `RoutineEditor.tsx` e `RoutineRunHistory.tsx` nello stile OpenDots.
+- Separazione tra esito dell'esecuzione (`status`) ed esito del recapito (`deliveryStatus`), visualizzazione timezone/schedulazione e avviso host offline/scheduler non raggiungibile.
+- Aggiunti test automatizzati: unit suite `hermes/routines.test.mjs` (7 test superati) e componente `tests/f10-routines.test.tsx` in vitest (81 test complessivi superati). Typecheck e build eseguiti con successo.
+
+
 ## 2026-10-04 — direzione futura per Codex
 
 - L'utente chiarisce che non vuole ridefinire Hermes attorno alla sincronizzazione generale di chat e progetti: mantiene il modello basato su team e agenti specialisti.

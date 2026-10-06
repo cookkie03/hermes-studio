@@ -56,7 +56,7 @@ Verify paths and version before working; coordinate shared files. Reading does n
 
 ## Evidence boundary
 
-Status: **documented, not implemented** (2026-10-04). This spec describes a future Hermes Studio slice; available upstream code does not mean the capability is integrated into the app. Evidence: reading the source checkout `/Users/luca/.hermes/hermes-agent`, not live execution, with no personal prompts/configuration/database used. Authoritative reference: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). The remote version may change: pin the SHA and repeat contract tests before implementation.
+Status: **implemented and verified** (2026-10-06). Native Hermes routines integrated and verified: `desktop/hermes/routines.mjs`, `desktop/hermes/server.mjs`, client `RoutinesView.tsx`, `RoutineEditor.tsx`, `RoutineRunHistory.tsx`. Automated suites verify create/update/pause/resume/trigger/delete lifecycles, cross-profile collision resistance, execution run status distinct from delivery status, trigger timeouts without automated retry, offline host error handling, and historical runs survival across client relaunch. Authoritative reference: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop).
 
 First read `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md` and `desktop/hermes/README.md`. The user selected the OpenDots UI; Hermes remains the only executor. The Studio endpoints described below are **proposals**, not existing APIs.
 
