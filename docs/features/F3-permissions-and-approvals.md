@@ -82,6 +82,18 @@ Grant folder dello Space esplicito per root/host/operazioni, distinto da selezio
 Le richieste di approvazione/validazione delle operazioni rischiose presenti in Hermes devono apparire nella chat Studio con azione, destinatario host/profilo/sessione, ambito, scelte del runtime ed esito verificato. F3 conserva semantica, scadenza/cancel e policy; F2 presenta le card. Non ricostruire un classificatore di rischio parallelo, non autoapprovare per assenza del client e non trasformare una semplice risposta in autorizzazione. Le impostazioni runtime di permessi appartengono alla sezione Settings Hermes; preferenze solo client restano Settings Hermes Studio. Parità ancora da implementare/provare, non autorizzata da F1.
 
 
+## Screenshot utente 2026-10-05 — Self-improvement review
+
+Evidenza visiva fornita dall’utente: avviso persistente sotto la risposta «Self-improvement review», con sostituzione di memoria proposta ma non applicata e istruzione `/memory pending` per approve/discard. Lo screenshot prova la superficie nel desktop Hermes, non l’integrazione Studio o l’esito della proposta. Sorgente locale verificato a e1e82d782f: handler `apps/desktop/src/app/session/hooks/use-message-stream/gateway-event/status.ts` per `review.summary`, renderer `components/assistant-ui/thread/system-message.tsx`. F8-A adatta questo evento nativo, non costruisce self-improvement nel frontend.
+
+Studio deve mostrare una nota persistente nella conversazione di origine, leggibile anche se arriva dopo fine turno o mentre un’altra chat è selezionata. Presentare riepilogo originale e scope runtime/profilo/sessione; collegamento al turno solo se provato dal contratto. Non usare soltanto toast. Non riaccendere Working per la nota.
+
+Casi richiesti: memoria proposta **in attesa di approvazione**, memoria applicata, skill creata o aggiornata quando confermata dai dati Hermes. `review.summary` espone testo, non garantisce mutazioni strutturate: preservare il testo senza dedurre successo da parole chiave, dal nome del tool o da una proposta. Non etichettare ogni review come Skill Curator: curator e background review sono distinti.
+
+Per pending, mostrare l’istruzione nativa `/memory pending`. Un’azione GUI «Rivedi proposta» può aprire la superficie F3/F8 solo quando il backend collegato espone il percorso supportato; approve/discard richiedono scelta esplicita e ricevuta runtime, nessuna applicazione automatica. Non inventare RPC o trattare il testo dell’avviso come autorizzazione. Se il comando non è integrato, conservare l’istruzione e dichiarare il limite.
+
+Gate: nota tardiva nella sessione corretta, pending distinto da applied, creazione/aggiornamento skill confermati, proposta scartata/fallita, offline/replay senza duplicati, restart con persistenza verificata e nessuna correlazione arbitraria all’ultima risposta. UI accessibile e discreta, con testo oltre al colore. Questa richiesta aggiorna le specifiche; implementazione selezionata F8-A resta da realizzare/verificare.
+
 ## Handoff
 
 > Prima segui docs/agents/feature-workflow.md e la sezione File e skill di questa scheda, leggendo i SKILL.md prima di applicarli. Sviluppa esclusivamente F3. Verifica il contratto Hermes della versione corrente, parti dalle fixture esistenti e definisci gli invarianti del decision module. Non aggiungere auto-approve né plugin/browser/computer nuovi. Prova richieste annullate e routing tra conversazioni possedute; aggiorna docs e limiti. Segui anche Incarico per la chat implementatrice di F3: consegna codice verificato e prove, con il contesto GUI/backend specificato, non soltanto un piano. I gate di capability e le eccezioni F0/F18 restano validi.

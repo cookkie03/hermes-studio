@@ -23,7 +23,7 @@ If essential scope is missing, clarify only that; otherwise use confirmed requir
 <!-- implementation-packet:end -->
 
 
-Status: specification updated D25, 2026-10-04; not implemented. The F0 baseline still uses metadata pages. The new request replaces the Space model as merely a container for internal pages; preserve existing data.
+Status: Folder-backed Spaces slice implemented and verified (2026-10-06). SQLite folder_bindings persisted, multi-root file explorer, non-destructive link/unlink, conflict detection, SaveToSpaceReview filesystem writing, and legacy pages compatibility verified via Vitest and packaged UI tests. The F0 baseline pages remain preserved.
 
 <!-- feature-guidance:start -->
 ## Files and skills to read and use

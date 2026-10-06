@@ -163,6 +163,23 @@ export function App() {
       return false;
     }
   };
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (dialog) {
+          setDialog(undefined);
+          return;
+        }
+        if (mobile) {
+          setMobile(false);
+          return;
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [dialog, mobile]);
+
   const dot =
     workspace?.dots.find((item) => item.id === selectedDot) ??
     workspace?.dots[0];
@@ -349,7 +366,7 @@ export function App() {
                 }
                 onClick={() => chooseDot(item)}
               >
-                <Mascot identity={item.id} name={item.name} small decorative />
+                <Mascot identity={item.id} avatarId={item.avatarId} name={item.name} small decorative />
                 <span className="hermes-dot-summary"><span>{item.name}</span><small>{workspace.conversations.find((conversation) => conversation.dotId === item.id)?.title ?? item.instructions}</small></span>
               </button>
               <button
@@ -417,6 +434,7 @@ export function App() {
           <button
             className="desktop-nav-toggle document-icon"
             aria-label={navCollapsed ? 'Show navigation' : 'Hide navigation'}
+            aria-expanded={!navCollapsed}
             onClick={() => setNavCollapsed(!navCollapsed)}
           >
             <PanelLeft size={18} />
@@ -438,6 +456,22 @@ export function App() {
                     : 'Memories'}
             </strong>
           </div>
+          {view === 'chat' && (
+            <div className="topbar-context-badge" aria-label="Hermes chat context">
+              <span className="context-pill" title="Space">
+                Space: {workspace.spaces.find((s) => s.id === dot.spaceId)?.name ?? 'Senza Space'}
+              </span>
+              <span className="context-pill" title="Host">
+                Host: {workspace.setup.model ? 'This Mac' : 'Disconnected'}
+              </span>
+              <span className="context-pill" title="Model">
+                Model: {workspace.setup.model ? 'Hermes' : 'Not reported'}
+              </span>
+              <span className="context-pill" title="Effort">
+                Effort: {workspace.setup.model ? 'Standard' : 'Not supported'}
+              </span>
+            </div>
+          )}
           <div className="top-actions">
             <span className="mode-badge">
               {configured ? 'SELF-HOSTED' : 'SETUP REQUIRED'}
@@ -535,10 +569,11 @@ export function App() {
                 />
               ) : (
                 <div className="new-conversation">
-                  <header className="chat-persona hermes-new-header"><Mascot identity={dot.id} name={dot.name} small /><div><strong>{dot.name}</strong><span>{state.settings.paused ? 'New messages paused' : workspace.setup.model ? 'Connected to Hermes' : 'Hermes disconnected · local workspace available'}</span></div><div className="chat-persona-actions"><button className="icon-button" disabled aria-label="Calls unavailable" title="Calls are planned for a future version"><Phone size={19} /></button><button className="icon-button" aria-label="Show computer" onClick={() => setPane(!pane)}><Monitor size={21} /></button></div></header>
+                  <header className="chat-persona hermes-new-header"><Mascot identity={dot.id} avatarId={dot.avatarId} name={dot.name} small /><div><strong>{dot.name}</strong><span>{state.settings.paused ? 'New messages paused' : workspace.setup.model ? 'Connected to Hermes' : 'Hermes disconnected · local workspace available'}</span></div><div className="chat-persona-actions"><button className="icon-button" disabled aria-label="Calls unavailable" title="Calls are planned for a future version"><Phone size={19} /></button><button className="icon-button" aria-label="Show computer" onClick={() => setPane(!pane)}><Monitor size={21} /></button></div></header>
                   <div className="empty-chat-persona">
                     <Mascot
                       identity={dot.id}
+                      avatarId={dot.avatarId}
                       name={dot.name}
                       state={state.settings.paused ? 'paused' : 'idle'}
                     />

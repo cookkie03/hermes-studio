@@ -10,6 +10,7 @@ App macOS per assistente personale e progetti: layout OpenDots, componenti Unslo
 - [Direzione corrente](docs/project/MEMORY.md) e [decisioni](docs/project/decisions.md).
 - [Piano per una feature](docs/project/feature-development-plan.md), [workflow](docs/agents/feature-workflow.md) e [confini](docs/architecture/feature-boundaries.md).
 - [UI autorevole](docs/design/opendots-target.md) e [componenti](docs/design/component-system.md).
+- [Figma workspace and frontend workflow](docs/design/figma.md).
 - [Memoria/capacità native Hermes](docs/features/F8-hermes-native-features-and-observability.md); memoria Markdown degli Spaces distinta in F9.
 - [Release GitHub e DMG](docs/features/F13-github-releases-dmg.md).
 

@@ -54,3 +54,33 @@ it('migrates legacy Space ownership once and never restores revoked access on re
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+it('links and unlinks folders in spaces without destroying filesystem contents', () => {
+  const store = new WorkspaceStore(':memory:', 'owner');
+  const space = store.createSpace('Research', 'Research space');
+
+  const dir = mkdtempSync(join(tmpdir(), 'f6-fs-test-'));
+  try {
+    const binding = store.linkFolder(space.id, {
+      host: 'local',
+      name: 'Test-Vault',
+      path: dir,
+      isReadOnly: false,
+    });
+
+    expect(binding.spaceId).toBe(space.id);
+    expect(binding.name).toBe('Test-Vault');
+    expect(binding.host).toBe('local');
+
+    const bindings = store.folderBindings(space.id);
+    expect(bindings.length).toBe(1);
+    expect(bindings[0].id).toBe(binding.id);
+
+    const unlinked = store.unlinkFolder(space.id, binding.id);
+    expect(unlinked).toBe(true);
+    expect(store.folderBindings(space.id).length).toBe(0);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+    store.close();
+  }
+});

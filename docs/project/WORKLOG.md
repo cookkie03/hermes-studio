@@ -293,6 +293,45 @@ Scheda F2 allegata dall’utente come incarico. Incremento verticale corrente: p
 
 Lock preparazione/dispatch per vista; close/scelta host invalida prima del PUT, esiti tardivi non modificano un nuovo owner. Ack requestId/clientSubmissionId non regredisce Working né aggiorna turni nuovi. Draft serializzati per thread e flush al cambio chat; bozza nuova/clear/restart su nuova origin PASS. Suite finale 36 Node + 61 metadata/display, strict typechecks/bootstrap/external-links e package arm64/firma ad hoc PASS. Smoke .app con REST/SSE/HTTP/WS sintetici PASS: double send, delta prima HTTP, tool tardivo, cambio chat durante invio, PageConversation close/host mentre preparazione sospesa e riferimento revisione salvata, IME/focus/900/1360/Reduced Motion. Review Standards/Spec finale 0 findings aperti; fase evento-before-render e barriera host test corrette. Matrice/skill/esiti/gap in [prove F2](../architecture/f2-submission-review-2026-10-04.md). Modello Hermes reale isolato, interrupt/resume GUI, contesto modello/effort/Space, Bots/approvals/collaborazione e restante F2 non certificati. Nessun prompt o dato del runtime personale utilizzato. Commit locale `32f361d` creato: 17 file selezionati, diff/index e scan credenziali PASS. Push non ritentato dopo rifiuto auto-review storico.
 
+## 2026-10-05 — Callout nativi self-improvement e skill
+
+Screenshot utente conferma avviso Self-improvement review con memoria pending e `/memory pending`; richiesta Studio estesa esplicitamente a skill create/aggiornate confermate. F8-A già specificata per review.summary; precisate F8/F2/F3 per persistenza scoped, pending≠applied, approvazione esplicita e skill solo su conferma runtime, senza confondere curator/background review. Handler/renderer desktop sorgente e1e82d782f riletti, nessuna prova live o codice Studio implementato.
+
+
+## 2026-10-05 — Confronto scheda F2 e codice richiesto dall’utente
+
+La modifica recente di F2 aggiunge 12 righe per Self-improvement review e precisa D30: nota persistente nella chat di origine, pending/applicato distinti, skill solo su conferma Hermes, istruzione `/memory pending` e gate replay/restart. Ispezione sorgente: bridge.mjs inoltra eventi scoped ma archivia solo tool.start/tool.complete; Chat.tsx non gestisce review.summary e ComputerPanel consuma solo tool. Mancano quindi rendering e archivio delle note, recupero nella chat non selezionata, deduplicazione/replay e prove dei nuovi casi; revisione GUI della proposta dipende dal percorso supportato F3/F8. Invio/bozze resta l’incremento consegnato, non tutta F2. Restano anche thinking, contesto effettivo e cataloghi/roster/collaborazione degli owner, troncamento e autoscroll condizionale; interrupt/reconnect completi e modello reale isolato non certificati. Nessun codice modificato né test runtime rieseguito per questo confronto; preservate le modifiche documentali preesistenti.
+
+## D38 — Space comune e specialisti indipendenti (2026-10-05)
+
+Visione utente confermata: Finance appare come unico Space Studio con associazioni esplicite ai progetti Hermes profile-scoped del PM/CTO; specialista selezionabile per Space/chat senza vincolo permanente. Collegamento mancante: proposta di progetto esistente o registrazione cartelle tramite API native e conferma esplicita. Nessuna copia file, merge memoria o configurazione nascosta; USER resta per profilo. Aggiornate F6/F7/F2/F14, GUI condivisa e ricerca; Bot Chat/cwd, accessi e multi-host restano gate runtime, non capacità implementate. Nessun codice modificato.
+
+
+## 2026-10-05 — F2 aggiornamento codice selezionato
+
+Utente richiede applicare le nuove differenze F2. Base b285629; diff aggiunge D38 oltre alle note review già analizzate. Incremento in corso: archivio/proiezione review.summary nella chat e contesto F2 veritiero da session.info, senza reiniezione memorie legacy condivise. F6 associazioni progetti e F7 Bot binding non presenti: nessun selettore simulato o cambio cwd/profilo implicito. Seam già richieste dalla scheda: bridge/history, REST autenticata e GUI packaged con fixture isolata. Ticket F2-native-notes-context; skill ask-matt, implement, codebase-design, tdd, react-best-practices, frontend-testing-debugging, documentation-and-adrs lette.
+
+
+## 2026-10-05 — F2 note native e contesto D38 implementati
+
+Bridge archivia review.summary scoped e recupera replay nativo quando annunciato; timeline mostra testo originale e provenienza, conserva note in altra chat/offline/restart, segnala replay parziale/non disponibile e failure di archivio. Nessuna inferenza applied/skill o RPC approve inventata. Contesto separa Space della pagina da profilo/modello/effort/progetto/cwd session.info; rimossa reiniezione memorie legacy condivise. F6 mapping progetti e F7 binding Bots restano non collegati e visibili come limite. Corretti race replay/turno e lock preparazione; scroll segue solo chi è in fondo. Suite finale 43 Node + 61 metadata/display PASS, package PASS, primo smoke finale PASS; clean EOF e screenshot 900px finale in corso. Review Standards/Spec finale 0 findings. Ricevuta docs/architecture/f2-native-notes-context-review-2026-10-05.md; runtime personale/modello reale non usati.
+
+
+## 2026-10-05 — F2 verifica finale note/contesto PASS
+
+Smoke packaged finale PASS, compreso EOF SSE pulito, scroll conservato con evento reale della fixture, note tardive/background senza riaccendere Working, dedupe replay, offline/reconnect e restart nuova origin. 900/1360px, focus-visible e Reduced Motion PASS; screenshot finale leggibile con Computer chiuso /private/tmp/hs-conversations-ui-BlFkZ0/reviews-900.png. Nessun pageerror; suite 43 Node + 61 metadata/display e package PASS. Ticket F2-native-notes-context done solo per incremento. Owner F6/F7/F3 e prove modello reale restano aperti; dettagli e matrice nella ricevuta f2-native-notes-context-review-2026-10-05.md. Nessun push/release.
+
+
+## 2026-10-05 — Git F2 note/contesto
+
+Commit verificato 7e6fad3: feat(f2): persist native review notes and expose chat context. Include solo codice/fixture F2, ticket incremento e nuova ricevuta; index vuoto dopo commit. Modifiche preesistenti alle schede/D38 e documenti di progetto preservate unstaged; nessun push o release.
+
+## 2026-10-05 — Baseline F0–F2 e protezione F0–F3
+
+L’utente conferma di aver realizzato il codice delle feature F0–F2. Registrazione della consegna dichiarata dall’utente, non nuova certificazione live di tutti i gate. Restano aperti: collegamenti Space/progetti D38 e selezione nativa dei Bots (F6/F7); approvazione delle proposte nella GUI; acceptance con modello live. L’utente conferma che tali limiti sono visibili nella UI. Non dichiarare questi percorsi completati dal solo codice F0–F2.
+
+Vincolo permanente per richieste successive: non aggiornare schede, requisiti o codice delle feature F0–F3 senza richiesta esplicita di modificarle. Richieste generiche di documentazione/design o requisiti trasversali vanno registrate negli owner successivi o nei documenti di progetto, senza riaprire F0–F3. Se indispensabile una modifica a quei confini, segnalarla e attendere selezione esplicita. F3 protetta non significa F3 completata. Modifiche preesistenti alle schede preservate, non annullate da questo aggiornamento.
+
 ## 2026-10-05 — F3 selezionata: identità delle decisioni
 
 Baseline 7e6fad3. Incremento F3: richiesta approval con decisionId locale non persistito, verificato insieme a thread/host/RPC prima dell’inoltro. Replay aperto conserva identità; reconnect la rinnova. Enum limitato al contratto Hermes once/session/always/deny. Red riprodotto sul seam bridge esistente, green 31 test bridge/connections; verifiche complete in corso. Sorgente Hermes e1e82d782f letto, nessun runtime/dato personale interrogato. Modifiche documentali precedenti preservate. Skill ask-matt/implement/codebase-design/tdd lette e applicate; axiom-design/frontend-design per card OpenDots; code-review letta per revisione finale.
@@ -304,3 +343,46 @@ decisionId effimero impedisce risposte stale dopo reconnect/cancel con RPC omoni
 ## 2026-10-05 — F4–F18 English translation
 
 User requested English translation of all feature cards F4 through F18 and a commit. Translated the full cards in place: implementation assignments, requirements, skill guidance, source evidence, acceptance gates and handoff prompts. Preserved filenames, link targets, technical inline identifiers and Markdown markers; retained F6’s old fragment as an explicit anchor for protected F2 references. Validation: 15 translated cards, 304 local link targets checked, one pre-existing unavailable external skill path in F18 preserved; F0–F3 byte-for-byte unchanged from task start. No application code or runtime behavior changed. Commit scope: these 15 cards and only this task’s project-log entries; other pending changes are preserved outside the commit.
+# 2026-10-05 — Figma project association
+
+Figma canvas reference created and verified by returned node IDs and screenshot: frame `7:2`, clickable GitHub link. See [linked design workspace](../design/figma.md).
+
+Read project entry documents, ask-matt routing, and Figma design-to-code/use guidance. Read-only plugin inspection verified user-supplied file `GFLrf3A2t6afdV34U8Fh4f`, empty page `0:1`; Git origin confirms `cookkie03/hermes-studio`. Saved design references/workflow and project continuity notes. Existing pending changes preserved; no feature selected or frontend code changed. Automatic GitHub synchronization and Code Connect remain unconfigured.
+
+## 2026-10-06 — F5 implementation & verification (Files, references & artifacts)
+
+Implemented F5 file workspace integration and references according to OpenDots visual guidelines and backend context rules (D25, D34, gui-context-and-references.md):
+- **Authoritative File Workspace Module**: Added `src/shared/file-workspace.ts`, `src/server/file-service.ts`, and `src/server/file-routes.ts` supporting authorized root directories, host isolation (`local` vs remote hosts), path traversal protection, symlink boundary checks, and atomic writes.
+- **Draft Revisions & Conflict Resolution**: Implemented optimistic locking with content hashes (`revision`) preventing blind overwrites when files change externally on disk (e.g. by Obsidian or specialist agents).
+- **Composer File References (@ Mentions)**: Enhanced `Chat.tsx` composer with progressive `@` mention filtering, keyboard navigation (Arrow Up/Down, Enter/Tab, Esc), and chip formatting (`@host/root/path:lineStart-lineEnd`).
+- **OpenDots Computer Panel Files View**: Updated `ComputerPanel.tsx` with root selector, file tree list, search filtering, binary file/large payload safety badges, draft editing/saving with conflict detection, and confirmed save/diff receipts.
+- **D34 Visible Changes & Timeline Diff Receipts**: Added diff and tool receipt rendering in `ComputerToolCard.tsx` and ComputerPanel.
+- **Testing & Verification**: Created `tests/f5-files.test.tsx` (8 unit & integration tests covering namesakes across hosts, path traversal, symlink breakouts, disk conflict detection, large/binary payload handling, mention parsing/filtering, diff computation, read-only roots). All suites pass cleanly: `npm test` (70 tests), `npm run test:packaged-ui`, `npm run test:packaged-conversations`, and `npm run test:packaged-connections`. Zero regressions.
+
+Implemented F4 workspace shell & Studio components according to OpenDots visual guidelines and backend context rules (D34, D36, D37, gui-context-and-references.md):
+- **D34 Settings Scope**: Scoped tabbed interface in `WorkspaceDialog.tsx` separating **Hermes runtime** settings (connection control, host identity/origin, active version, profile, and explicit boundary statement) from **Hermes Studio** local preferences.
+- **D36 / D37 Sidebar & Dots Roster**: Sidebar Dots display namesake badges, host origin hints, and operational state distinct from identity.
+- **Hermes Context Recognition**: Header topbar in `App.tsx` displays active chat context badges for Space, Host, Model, and Effort.
+- **Inspector & Responsive Layout**: At 1360px layout displays 3-column split; at 900px inspector overlay mode opens/closes cleanly without intercepting content or blocking controls when switching views.
+- **Keyboard & Accessibility**: Added global Escape key handler to dismiss modals/overlays and restore focus; sidebar collapsible toggle with `aria-expanded` and focus restoration; Reduced Motion support.
+
+## 2026-10-06 — F6 implementation & verification (Folder-backed Spaces)
+
+Implemented F6 Spaces linked to actual folders according to D25, D38, ADR0007, and gui-context-and-references.md:
+- **Persistent SQLite Folder Bindings**: Added `folder_bindings` table in `WorkspaceStore` mapping Spaces to file roots across hosts (`local`, `debian-mini-pc`) without file duplication or data mutation. Implemented `/spaces/:spaceId/folders` endpoints (GET, POST link, DELETE unlink).
+- **Filesystem-Backed Space Explorer & Editor**: Replaced the metadata-only container in `SpaceWorkspace.tsx` with a multi-folder explorer and text editor. Folders display distinguished host badges (`Laptop` vs `Server`), name search filtering, non-destructive folder linking/unlinking, and explicit file creation.
+- **External Modification & Conflict Detection**: Space editor tracks revisions and detects external changes/conflicts during save, preserving draft content and providing an explicit reload option.
+- **SaveToSpaceReview Filesystem Integration**: Updated `SaveToSpaceReview.tsx` to support direct writing of markdown research drafts to linked folder roots with verifiable `FileDiffReceipt` receipts, alongside backward-compatible legacy metadata pages.
+- **SpaceNav Folder Integration**: Updated sidebar `SpaceNav.tsx` to display linked folder roots under the Space alongside legacy subpages.
+- **Testing & Verification**: Created `tests/f6-spaces.test.tsx` verifying multi-host namesake folder roots, non-destructive unlinking, empty state without fictional files, and external conflict detection. Full suite passed: strict typecheck, 70 Vitest tests, packaged UI test, and Vite production build.
+- **Testing & Verification**: Created `tests/f4-shell.test.tsx` (passing in vitest test:metadata suite). All tests passed: `npm test`, `npm run test:packaged-ui`, `npm run test:packaged-conversations`, `npm run test:packaged-connections`. Zero failures or regressions.
+
+## 2026-10-06 — F7-A implementation (Selectable OpenDots avatar)
+
+Implemented F7-A local avatars increment according to D26 specification:
+- Added `avatarId` to the `dots` database schema (with backward-compatible `ALTER TABLE` migrations).
+- Updated `createDot` and `updateDot` payload mapping to accept and store `avatarId`.
+- Modified `Mascot.tsx` to expose selectable OpenDots avatars (`blue`, `mint`, `orange`, `purple`) while maintaining deterministic hash fallback for legacy bots.
+- Added visual grid radio-group avatar selector to the Create/Edit Dot dialog in `WorkspaceDialog.tsx`.
+- Flow verified via `App.tsx`/`Chat.tsx`/`CallView.tsx` passing the avatar forward to the Mascot view.
+- Skipped F7-B (Backend Bot discovery) as per separation of concerns; backend discovery is a separate isolated increment (F7-B).

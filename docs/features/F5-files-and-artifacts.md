@@ -23,7 +23,7 @@ If essential scope is missing, clarify only that; otherwise use confirmed requir
 <!-- implementation-packet:end -->
 
 
-Status: documented; the historical SwiftUI tree/editor and partial Electron event preview do not constitute a complete file workspace.
+Status: F5 file workspace integration implemented and verified. The file module handles actual roots/symlinks, draft conflict resolution, and D34 file layout integration; progressive @ mention file chips are present in the composer.
 
 
 <!-- feature-guidance:start -->

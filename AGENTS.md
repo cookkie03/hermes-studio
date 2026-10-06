@@ -2,6 +2,10 @@
 
 Assistente personale e progetti macOS. Prodotto Electron/React con runtime Hermes; baseline SwiftUI storica preservata. F0 completata; feature successive selezionate una per chat.
 
+## Baseline protetta F0–F3
+
+Utente conferma codice F0–F2 realizzato. Non aggiornare schede/requisiti/codice F0–F3 per richieste generiche successive: serve richiesta esplicita sulla feature protetta. F3 non dichiarata completata. Registrare nuovi requisiti negli owner successivi o nei documenti di progetto; non riaprire feature protette automaticamente. Restano aperti D38 Space/progetti e selezione Bot nativa (F6/F7), approvazione proposte GUI e acceptance modello live; limiti dichiarati visibili nella UI, non gate certificati da questa registrazione.
+
 ## Inizio del lavoro
 
 Leggi `docs/project/MEMORY.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, il catalogo `docs/features/README.md` e la sola scheda selezionata. Per la sequenza usa `docs/agents/feature-workflow.md`; per decisioni/ownership consulta `docs/project/decisions.md`, gli ADR pertinenti e `docs/architecture/feature-boundaries.md`. D20/ADR0006: incrementi solo su selezione utente. `docs/README.md` è l'indice delle fonti, non un'altra spec.

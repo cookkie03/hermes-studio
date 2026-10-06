@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import { RuntimeConnections } from './RuntimeConnections';
+import { characters, type Character } from './Mascot';
 import type { Dot, Memory, State, WorkspaceState } from '../shared/types';
 export type Dialog =
   | { type: 'space' }
@@ -52,8 +53,12 @@ export function WorkspaceDialog({
     dialog.type === 'dot' ? (dialog.dot?.learningContainerId ?? '') : '',
   );
   const [skillDelivery, setSkillDelivery] = useState(
-    dialog.type === 'dot' ? (dialog.dot?.skillDeliveryEnabled ?? false) : false,
+    dialog.type === 'dot' ? (dialog.dot?.skillDeliveryEnabled ?? true) : true,
   );
+  const [avatarId, setAvatarId] = useState<Character>(
+    dialog.type === 'dot' ? ((dialog.dot?.avatarId as Character) ?? 'blue') : 'blue',
+  );
+  const [settingsTab, setSettingsTab] = useState<'runtime' | 'studio'>('runtime');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const container = useRef<HTMLElement>(null);
@@ -143,6 +148,7 @@ export function WorkspaceDialog({
                 memoryAllowed: memory,
                 learningContainerId: learningContainer.trim() || null,
                 skillDeliveryEnabled: skillDelivery,
+                avatarId,
               };
             }
             if (dialog.type === 'settings') {
@@ -184,6 +190,47 @@ export function WorkspaceDialog({
                 required
               />
             </>
+          )}
+          {dialog.type === 'dot' && (
+            <fieldset className="avatar-picker-fields">
+              <legend className="field-label">Avatar</legend>
+              <div className="avatar-picker-grid" role="radiogroup" aria-label="Choose an avatar">
+                {characters.map((char) => (
+                  <label
+                    key={char}
+                    className={`avatar-option ${avatarId === char ? 'selected' : ''}`}
+                    style={{
+                      display: 'inline-flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      border: avatarId === char ? '2px solid var(--accent, #3b82f6)' : '2px solid transparent',
+                      borderRadius: '8px',
+                      padding: '4px',
+                      marginRight: '8px',
+                      background: avatarId === char ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
+                    }}
+                  >
+                    <input
+                      type="radio"
+                      name="avatarId"
+                      value={char}
+                      checked={avatarId === char}
+                      onChange={() => setAvatarId(char)}
+                      style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }}
+                    />
+                    <img
+                      src={`/dots/${char}.png`}
+                      alt={`${char} avatar`}
+                      width={48}
+                      height={48}
+                      style={{ borderRadius: '4px' }}
+                    />
+                    <span style={{ fontSize: '12px', marginTop: '4px', textTransform: 'capitalize' }}>{char}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
           )}
           {dialog.type !== 'settings' && (
             <>
@@ -256,9 +303,47 @@ export function WorkspaceDialog({
               </select>
             </fieldset>
           )}
-          {dialog.type === 'settings' && <h3>Hermes Studio preferences</h3>}
-          {(dialog.type === 'dot' || dialog.type === 'settings') && (
-            <>
+          {dialog.type === 'settings' && (
+            <div className="settings-scope-tabs" role="tablist" aria-label="Settings scope">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={settingsTab === 'runtime'}
+                aria-controls="hermes-runtime-panel"
+                id="tab-hermes-runtime"
+                className={`tab-button ${settingsTab === 'runtime' ? 'active' : ''}`}
+                onClick={() => setSettingsTab('runtime')}
+              >
+                Hermes runtime
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={settingsTab === 'studio'}
+                aria-controls="hermes-studio-panel"
+                id="tab-hermes-studio"
+                className={`tab-button ${settingsTab === 'studio' ? 'active' : ''}`}
+                onClick={() => setSettingsTab('studio')}
+              >
+                Hermes Studio
+              </button>
+            </div>
+          )}
+          {dialog.type === 'settings' && settingsTab === 'runtime' && (
+            <div id="hermes-runtime-panel" role="tabpanel" aria-labelledby="tab-hermes-runtime">
+              <h3>Hermes runtime settings</h3>
+              <div className="config-note">
+                <strong>Runtime Scope & Limitations</strong>
+                <p>
+                  Host execution targets, model selection, profiles, and tool capabilities belong strictly to the connected Hermes backend. Studio settings present runtime status without creating a divergent local configuration.
+                </p>
+              </div>
+              <RuntimeConnections />
+            </div>
+          )}
+          {(dialog.type === 'dot' || (dialog.type === 'settings' && settingsTab === 'studio')) && (
+            <div id={dialog.type === 'settings' ? 'hermes-studio-panel' : undefined} role={dialog.type === 'settings' ? 'tabpanel' : undefined} aria-labelledby={dialog.type === 'settings' ? 'tab-hermes-studio' : undefined}>
+              {dialog.type === 'settings' && <h3>Hermes Studio preferences</h3>}
               <label className="permission-row">
                 <input
                   type="checkbox"
@@ -286,7 +371,7 @@ export function WorkspaceDialog({
                   </small>
                 </span>
               </label>
-            </>
+            </div>
           )}
           {dialog.type === 'dot' && <p className="muted">Automatic learning and published-skill delivery are future integrations. This Dot's role is included in new Hermes messages; changing it does not restart ongoing work.</p>}
           {dialog.type === 'schedule' && (
@@ -309,7 +394,6 @@ export function WorkspaceDialog({
               </p>
             </>
           )}
-          {dialog.type === 'settings' && <RuntimeConnections />}
           {dialog.type === 'memory' && (
             <p className="muted">
               Memories are explicit preferences, not automatic learning. Avoid

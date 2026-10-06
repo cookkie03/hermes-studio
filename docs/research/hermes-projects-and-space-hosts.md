@@ -17,3 +17,7 @@ Space Studio multi-host aggrega riferimenti a cartelle e progetti distinti per c
 Decisioni future: cardinalità Space/progetti per host; riuso o creazione esplicita progetti; scelta host/cwd di una nuova conversazione; accesso cross-host; indisponibilità/offline. Un tunnel SSH a un runtime non prova accesso dell'agente ai filesystem di altre macchine. Nessuna mutazione del runtime dalla ricerca.
 
 Owner: [F6](../features/F6-spaces-documents-memory.md), file [F5](../features/F5-files-and-artifacts.md), conversazioni [F2](../features/F2-conversations.md), trasporto [F1](../features/F1-runtime-connection.md).
+
+## Decisione successiva D38 — 2026-10-05
+
+Utente conferma Space Studio comune associato ai progetti nativi dei diversi specialisti/profili: Finance visibile una volta, mapping esplicito al progetto PM o CTO. Collegamento mancante proposto all’utente tramite API native, niente copie dei file. Questa associazione di prodotto è accettata; cardinalità multi-host, Bot Chat/cwd e prove operative restano da delimitare in F6. Non modifica i fatti sorgente sopra.

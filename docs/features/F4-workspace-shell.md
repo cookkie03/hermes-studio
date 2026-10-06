@@ -23,7 +23,7 @@ If essential scope is missing, clarify only that; otherwise use confirmed requir
 <!-- implementation-packet:end -->
 
 
-Status: specification for a future chat; partial existing baseline, feature incomplete. Updated: 2026-10-04. The user’s new request is to document the project by feature and start from a nearly empty MVP. This document does not authorize resuming the overnight plan or deleting the prototype.
+Status: implemented and verified. Updated: 2026-10-06. The user’s new request is to document the project by feature and start from a nearly empty MVP. This document does not authorize resuming the overnight plan or deleting the prototype.
 
 
 <!-- feature-guidance:start -->

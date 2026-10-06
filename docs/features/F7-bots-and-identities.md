@@ -51,7 +51,7 @@ Verify paths and version before working; coordinate shared files. Reading does n
 
 ## Evidence boundary
 
-Status: **documented, not implemented** (2026-10-04). This specification describes a future Hermes Studio slice; available upstream code does not mean the capability is connected in the app. Evidence: source checkout reading at `/Users/luca/.hermes/hermes-agent`, not live execution, with no personal prompts/configuration/databases. Authoritative reference: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). The remote version may change: pin the SHA and repeat contract tests before implementation.
+Status: **F7-A implemented, F7-B documented/not implemented** (2026-10-06). F7-A (local selectable OpenDots avatars) is complete and integrated in the UI/backend schema. F7-B (Hermes runtime bot discovery) remains a documented proposal. Evidence: source checkout reading at `/Users/luca/.hermes/hermes-agent`, not live execution, with no personal prompts/configuration/databases. Authoritative reference: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). The remote version may change: pin the SHA and repeat contract tests before implementation.
 
 First read `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md` and `desktop/hermes/README.md`. The user chose OpenDots UI; Hermes remains the only executor. The Studio endpoints described below are **proposals**, not existing APIs.
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { ChevronRight, FileText, Folder } from 'lucide-react';
-import type { Space } from '../shared/types';
+import { ChevronRight, FileText, Folder, Laptop, Server } from 'lucide-react';
+import type { Space, FolderBinding } from '../shared/types';
 import type { Page } from '../server/pages';
 import { api } from './api';
 
@@ -17,19 +17,25 @@ export function SpaceNav({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [pages, setPages] = useState<Page[]>([]);
+  const [folders, setFolders] = useState<FolderBinding[]>([]);
   const [error, setError] = useState('');
+
   useEffect(() => {
     if (!expanded) return;
     let current = true;
     const load = async () => {
       try {
-        const next = await api<Page[]>(`/spaces/${space.id}/pages`);
+        const [nextPages, nextFolders] = await Promise.all([
+          api<Page[]>(`/spaces/${space.id}/pages`),
+          api<FolderBinding[]>(`/spaces/${space.id}/folders`).catch(() => []),
+        ]);
         if (current) {
-          setPages(next);
+          setPages(nextPages);
+          setFolders(nextFolders);
           setError('');
         }
       } catch {
-        if (current) setError('Could not load pages.');
+        if (current) setError('Could not load pages or folders.');
       }
     };
     void load();
@@ -39,12 +45,14 @@ export function SpaceNav({
       clearInterval(timer);
     };
   }, [expanded, space.id]);
+
   const branches = (parentId: string | null, depth = 0): React.ReactNode =>
     pages
       .filter((page) => page.parentId === parentId)
       .map((page) => (
         <div key={page.id}>
           <button
+            type="button"
             className={`nav-item space-page-link ${active && pageId === page.id ? 'active' : ''}`}
             style={{ paddingLeft: 28 + depth * 12 }}
             aria-current={active && pageId === page.id ? 'page' : undefined}
@@ -56,10 +64,12 @@ export function SpaceNav({
           {branches(page.id, depth + 1)}
         </div>
       ));
+
   return (
     <div className="space-nav-group">
       <div className="space-nav-row">
         <button
+          type="button"
           className="icon-button space-disclosure"
           aria-label={`${expanded ? 'Collapse' : 'Expand'} ${space.name}`}
           aria-expanded={expanded}
@@ -72,6 +82,7 @@ export function SpaceNav({
           />
         </button>
         <button
+          type="button"
           className={`nav-item ${active && !pageId ? 'active' : ''}`}
           aria-current={active && !pageId ? 'page' : undefined}
           onClick={() => onOpen()}
@@ -81,17 +92,31 @@ export function SpaceNav({
         </button>
       </div>
       {expanded && (
-        <div id={`space-pages-${space.id}`}>
-          {error ? (
-            <p className="sidebar-error" role="status">
-              {error}
-            </p>
-          ) : (
-            branches(null)
+        <div
+          id={`space-pages-${space.id}`}
+          className="space-subpages"
+          role="group"
+          aria-label={`${space.name} folders and documents`}
+        >
+          {folders.map((f) => (
+            <div key={f.id} className="space-folder-nav-item">
+              <button
+                type="button"
+                className={`nav-item space-folder-link ${active && !pageId ? 'active' : ''}`}
+                style={{ paddingLeft: 28 }}
+                onClick={() => onOpen()}
+                title={`${f.name} on ${f.host}: ${f.path}`}
+              >
+                {f.host === 'local' ? <Laptop size={13} /> : <Server size={13} />}
+                <span>{f.name}</span>
+              </button>
+            </div>
+          ))}
+          {branches(null)}
+          {!folders.length && !pages.length && !error && (
+            <div className="space-nav-empty">No folders or pages</div>
           )}
-          {!error && !pages.length && (
-            <p className="sidebar-empty">No pages yet</p>
-          )}
+          {error && <div className="space-nav-error">{error}</div>}
         </div>
       )}
     </div>

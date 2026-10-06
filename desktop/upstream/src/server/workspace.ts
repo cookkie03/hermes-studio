@@ -1,31 +1,43 @@
 import { ComputerStore } from './computer-store.js';
+import { FileWorkspaceService } from './file-service.js';
 import { Pages } from './pages.js';
 import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { validateLearningSettings } from '../shared/learning.js';
-import type { CallReceipt, Conversation, Dot, Space } from '../shared/types.js';
+import type { CallReceipt, Conversation, Dot, Space, FolderBinding } from '../shared/types.js';
 export class WorkspaceStore {
   private db: DatabaseSync;
   readonly pages: Pages;
   readonly computers: ComputerStore;
+  readonly files: FileWorkspaceService;
   constructor(
     path: string,
     readonly ownerId: string,
   ) {
     if (path !== ':memory:') mkdirSync(dirname(path), { recursive: true });
     this.db = new DatabaseSync(path);
+    this.files = new FileWorkspaceService([
+      {
+        id: 'default-workspace',
+        host: 'local',
+        name: 'Workspace',
+        path: path === ':memory:' ? process.cwd() : dirname(path),
+      },
+    ]);
     this.db.exec(`PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;
       CREATE TABLE IF NOT EXISTS spaces(id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL, createdAt INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS dots(id TEXT PRIMARY KEY, spaceId TEXT NOT NULL, name TEXT NOT NULL, instructions TEXT NOT NULL, researchAllowed INTEGER NOT NULL, memoryAllowed INTEGER NOT NULL, createdAt INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS thread_bindings(id TEXT PRIMARY KEY, dotId TEXT NOT NULL, ownerId TEXT NOT NULL, title TEXT NOT NULL, createdAt INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS task_threads(taskId TEXT PRIMARY KEY, threadId TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS calls(id TEXT PRIMARY KEY, threadId TEXT NOT NULL, startedAt INTEGER NOT NULL, endedAt INTEGER, status TEXT NOT NULL, transcript TEXT NOT NULL, error TEXT);
-      CREATE TABLE IF NOT EXISTS captures(threadId TEXT PRIMARY KEY, value TEXT NOT NULL);`);
+      CREATE TABLE IF NOT EXISTS captures(threadId TEXT PRIMARY KEY, value TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS folder_bindings(id TEXT PRIMARY KEY, spaceId TEXT NOT NULL, rootId TEXT NOT NULL, host TEXT NOT NULL, name TEXT NOT NULL, path TEXT NOT NULL, isReadOnly INTEGER NOT NULL, createdAt INTEGER NOT NULL);`);
     for (const [table, column, definition] of [
       ['dots', 'learningContainerId', 'TEXT'],
       ['dots', 'skillDeliveryEnabled', 'INTEGER NOT NULL DEFAULT 0'],
+      ['dots', 'avatarId', 'TEXT'],
       ['thread_bindings', 'learningContainerId', 'TEXT'],
     ]) {
       if (
@@ -60,6 +72,27 @@ export class WorkspaceStore {
         .some((column) => column.name === 'anchorMessageId')
     )
       this.db.exec('ALTER TABLE calls ADD COLUMN anchorMessageId TEXT');
+    const existingBindings = this.db.prepare('SELECT * FROM folder_bindings').all() as unknown as Array<{
+      id: string;
+      spaceId: string;
+      rootId: string;
+      host: string;
+      name: string;
+      path: string;
+      isReadOnly: number;
+      createdAt: number;
+    }>;
+    for (const b of existingBindings) {
+      try {
+        this.files.registerRoot({
+          id: b.rootId,
+          host: b.host,
+          name: b.name,
+          path: b.path,
+          isReadOnly: !!b.isReadOnly,
+        });
+      } catch {}
+    }
     if (!this.spaces().length) {
       const space = this.createSpace(
         'Everyday',
@@ -94,6 +127,84 @@ export class WorkspaceStore {
       .run(space.id, name, description, space.createdAt);
     return space;
   }
+  folderBindings(spaceId?: string): FolderBinding[] {
+    if (spaceId) {
+      return (this.db
+        .prepare('SELECT * FROM folder_bindings WHERE spaceId = ? ORDER BY createdAt')
+        .all(spaceId) as unknown as Array<{
+          id: string;
+          spaceId: string;
+          rootId: string;
+          host: string;
+          name: string;
+          path: string;
+          isReadOnly: number;
+          createdAt: number;
+        }>).map((b) => ({
+          ...b,
+          isReadOnly: !!b.isReadOnly,
+        }));
+    }
+    return (this.db
+      .prepare('SELECT * FROM folder_bindings ORDER BY createdAt')
+      .all() as unknown as Array<{
+        id: string;
+        spaceId: string;
+        rootId: string;
+        host: string;
+        name: string;
+        path: string;
+        isReadOnly: number;
+        createdAt: number;
+      }>).map((b) => ({
+        ...b,
+        isReadOnly: !!b.isReadOnly,
+      }));
+  }
+  linkFolder(
+    spaceId: string,
+    binding: { rootId?: string; host: string; name: string; path: string; isReadOnly?: boolean },
+  ): FolderBinding {
+    const rootId = binding.rootId || randomUUID();
+    const folderBinding: FolderBinding = {
+      id: randomUUID(),
+      spaceId,
+      rootId,
+      host: binding.host,
+      name: binding.name,
+      path: binding.path,
+      isReadOnly: !!binding.isReadOnly,
+      createdAt: Date.now(),
+    };
+    this.files.registerRoot({
+      id: folderBinding.rootId,
+      host: folderBinding.host,
+      name: folderBinding.name,
+      path: folderBinding.path,
+      isReadOnly: folderBinding.isReadOnly,
+    });
+    this.db
+      .prepare(
+        'INSERT INTO folder_bindings (id, spaceId, rootId, host, name, path, isReadOnly, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      )
+      .run(
+        folderBinding.id,
+        folderBinding.spaceId,
+        folderBinding.rootId,
+        folderBinding.host,
+        folderBinding.name,
+        folderBinding.path,
+        folderBinding.isReadOnly ? 1 : 0,
+        folderBinding.createdAt,
+      );
+    return folderBinding;
+  }
+  unlinkFolder(spaceId: string, bindingId: string): boolean {
+    const result = this.db
+      .prepare('DELETE FROM folder_bindings WHERE spaceId = ? AND id = ?')
+      .run(spaceId, bindingId);
+    return (result as { changes: number }).changes > 0;
+  }
   dots(): Dot[] {
     return this.db
       .prepare('SELECT * FROM dots ORDER BY createdAt')
@@ -123,6 +234,7 @@ export class WorkspaceStore {
     spaceIds: string[] = [spaceId],
     learningContainerId: string | null = null,
     skillDeliveryEnabled = false,
+    avatarId?: string | null,
   ): Dot {
     this.validateSpaceAccess(spaceId, spaceIds);
     validateLearningSettings(learningContainerId, skillDeliveryEnabled);
@@ -136,13 +248,14 @@ export class WorkspaceStore {
       memoryAllowed,
       learningContainerId,
       skillDeliveryEnabled,
+      avatarId: avatarId ?? undefined,
       createdAt: Date.now(),
     };
     this.db.exec('BEGIN');
     try {
       this.db
         .prepare(
-          'INSERT INTO dots (id, spaceId, name, instructions, researchAllowed, memoryAllowed, createdAt, learningContainerId, skillDeliveryEnabled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          'INSERT INTO dots (id, spaceId, name, instructions, researchAllowed, memoryAllowed, createdAt, learningContainerId, skillDeliveryEnabled, avatarId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         )
         .run(
           dot.id,
@@ -154,6 +267,7 @@ export class WorkspaceStore {
           dot.createdAt,
           learningContainerId,
           +skillDeliveryEnabled,
+          dot.avatarId ?? null,
         );
       for (const id of dot.spaceIds)
         this.db.prepare('INSERT INTO dot_spaces VALUES (?, ?)').run(dot.id, id);
@@ -186,6 +300,7 @@ export class WorkspaceStore {
       spaceIds?: string[];
       learningContainerId?: string | null;
       skillDeliveryEnabled?: boolean;
+      avatarId?: string | null;
     },
   ): Dot {
     const current = this.dot(id);
@@ -199,12 +314,14 @@ export class WorkspaceStore {
         : patch.learningContainerId;
     const skillDeliveryEnabled =
       patch.skillDeliveryEnabled ?? current.skillDeliveryEnabled ?? false;
+    const avatarId =
+      patch.avatarId === undefined ? (current.avatarId ?? null) : patch.avatarId;
     validateLearningSettings(learningContainerId, skillDeliveryEnabled);
     this.db.exec('BEGIN');
     try {
       this.db
         .prepare(
-          'UPDATE dots SET name=?, instructions=?, researchAllowed=?, memoryAllowed=?, learningContainerId=?, skillDeliveryEnabled=? WHERE id=?',
+          'UPDATE dots SET name=?, instructions=?, researchAllowed=?, memoryAllowed=?, learningContainerId=?, skillDeliveryEnabled=?, avatarId=? WHERE id=?',
         )
         .run(
           patch.name,
@@ -213,6 +330,7 @@ export class WorkspaceStore {
           +patch.memoryAllowed,
           learningContainerId,
           +skillDeliveryEnabled,
+          avatarId,
           id,
         );
       this.db

@@ -13,6 +13,7 @@ import { ConversationHost } from './ConversationHost';
 import { ConversationSubmission } from './conversation-submission';
 import { NativeReviewNotes, mergeReviewNotes, type NativeReviewNote, type ReviewReplay } from './NativeReviewNotes';
 import { ConversationContext, type NativeSessionInfo, type StudioConversationContext } from './ConversationContext';
+import { filterFileMentions, formatFileChip, type FileRoot, type FileItem, type FileReference } from '../shared/file-workspace';
 interface Approval { requestId: unknown; decisionId: string; state?: 'sending' | 'sent' | 'cancelled' | 'expired' | 'uncertain'; choice?: string; params: { command?: string; description?: string; choices?: string[] } }
 const textOf = (value: unknown) => typeof value === 'string' ? value : '';
 const draftWrites = new Map<string, Promise<unknown>>();
@@ -68,13 +69,77 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   const [backgroundApproval, setBackgroundApproval] = useState<string>();
   const assistantId = useRef<string | undefined>(undefined);
   const timeline = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const turnPhase = useRef<TurnPhase>('idle');
   const submittedId = useRef<string | undefined>(undefined);
   const draftChanged = useRef(false);
+
+  // File @ mention state
+  const [fileRoots, setFileRoots] = useState<FileRoot[]>([]);
+  const [fileItems, setFileItems] = useState<FileItem[]>([]);
+  const [mentionSuggestions, setMentionSuggestions] = useState<FileReference[]>([]);
+  const [mentionMatch, setMentionMatch] = useState<{ start: number; query: string } | null>(null);
+  const [selectedMentionIndex, setSelectedMentionIndex] = useState(0);
+
+  const checkMentions = useCallback((text: string) => {
+    const atIndex = text.lastIndexOf('@');
+    if (atIndex >= 0 && (atIndex === 0 || /\s/.test(text[atIndex - 1]))) {
+      const query = text.slice(atIndex + 1);
+      if (!/\s/.test(query) && query.length <= 80) {
+        setMentionMatch({ start: atIndex, query });
+        const matches = filterFileMentions(query, fileRoots, fileItems);
+        setMentionSuggestions(matches);
+        setSelectedMentionIndex(0);
+        return;
+      }
+    }
+    setMentionSuggestions([]);
+    setMentionMatch(null);
+  }, [fileRoots, fileItems]);
+
   const updateDraft = useCallback((value: string) => {
     draftChanged.current = true; setDraft(value);
     try { localStorage.setItem(draftKey, value); } catch { setDraftError('Local draft storage is unavailable.'); }
-  }, [draftKey]);
+    checkMentions(value);
+  }, [draftKey, checkMentions]);
+
+  // Load roots & items on initial mount if empty
+  useEffect(() => {
+    let active = true;
+    const fetchRootsAndFiles = async () => {
+      try {
+        const fetchedRoots = await api<FileRoot[]>('/files/roots');
+        if (active && fetchedRoots.length > 0) {
+          setFileRoots(fetchedRoots);
+          const fetchedItems = await api<FileItem[]>(`/files/tree?rootId=${encodeURIComponent(fetchedRoots[0].id)}`);
+          if (active) setFileItems(fetchedItems);
+        }
+      } catch {
+        // Fallback synthetic roots for offline/tests
+        if (active && fileRoots.length === 0) {
+          const fbRoot: FileRoot = { id: 'default-workspace', host: 'local', name: 'Workspace', path: '/workspace' };
+          setFileRoots([fbRoot]);
+          setFileItems([
+            { rootId: 'default-workspace', host: 'local', path: 'notes.md', fullPath: '/workspace/notes.md', name: 'notes.md', kind: 'file', size: 120, revision: 'abc', updatedAt: Date.now() },
+            { rootId: 'default-workspace', host: 'local', path: 'src/App.tsx', fullPath: '/workspace/src/App.tsx', name: 'App.tsx', kind: 'file', size: 450, revision: 'def', updatedAt: Date.now() },
+          ]);
+        }
+      }
+    };
+    void fetchRootsAndFiles();
+    return () => { active = false; };
+  }, []);
+
+  const applyMention = (ref: FileReference) => {
+    if (!mentionMatch) return;
+    const chip = formatFileChip(ref) + ' ';
+    const before = draft.slice(0, mentionMatch.start);
+    const after = draft.slice(mentionMatch.start + mentionMatch.query.length + 1);
+    updateDraft(before + chip + after);
+    setMentionSuggestions([]);
+    setMentionMatch(null);
+    textareaRef.current?.focus();
+  };
   useEffect(() => {
     let active = true;
     void api<{ draft: string }>(`/conversations/${encodeURIComponent(thread.id)}/draft`).then((value) => {
@@ -290,7 +355,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   };
   return <div className="live-chat hermes-chat">
     <header className="chat-persona">
-      <Mascot identity={dot.id} name={dot.name} small state={running ? 'working' : 'idle'} />
+      <Mascot identity={dot.id} avatarId={dot.avatarId} name={dot.name} small state={running ? 'working' : 'idle'} />
       <div><strong>{dot.name}</strong><span>{paused ? 'Paused' : running ? 'Working' : uncertain ? 'Connection needs inspection' : waiting ? 'Waiting for Hermes' : dispatching ? 'Sending…' : status.connected && streamConnected ? `Connected · ${status.name ?? 'Hermes'}` : `${status.name ?? 'Hermes'} disconnected`}</span></div>
       <div className="chat-persona-actions">
         <button className="icon-button" aria-label="Review response for Space" title="Review a response before saving" disabled={loading || preparing || running || waiting || dispatching || uncertain || !messages.some((message) => message.role === 'assistant' && message.content.trim())} onClick={() => setReviewContent([...messages].reverse().find((message) => message.role === 'assistant' && message.content.trim())?.content)}><FileText size={19} /></button>
@@ -312,7 +377,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
       {(!status.connected || uncertain) && <div className="hermes-connection"><strong>Connect your Hermes runtime</strong><p>{uncertain ? 'Delivery or ongoing work needs inspection. Reconnecting does not resend your request or cancel the runtime.' : 'Your documents remain available. A connection enables real conversations and tool activity.'}</p><button onClick={() => void connect()}>Connect Hermes</button></div>}
       {backgroundApproval && <div className="hermes-connection" role="status"><strong>Another conversation needs your decision</strong>{onOpenConversation ? <button onClick={() => onOpenConversation(backgroundApproval)}>Open conversation</button> : <p>Open the waiting conversation from Chats to review the request.</p>}</div>}
       {loading && <p role="status">Loading conversation…</p>}
-      {!loading && !messages.length && <div className="hermes-chat-empty"><Mascot identity={dot.id} name={dot.name} /><h2>{dot.name}</h2><p>{dot.instructions}</p></div>}
+      {!loading && !messages.length && <div className="hermes-chat-empty"><Mascot identity={dot.id} avatarId={dot.avatarId} name={dot.name} /><h2>{dot.name}</h2><p>{dot.instructions}</p></div>}
       <ChatTranscript messages={messages} calls={[]} />
       <NativeReviewNotes notes={reviewNotes} replay={reviewReplay} />
       {tools.map((tool) => <section className="inline-computer hermes-tool" key={tool.id}>
@@ -332,10 +397,63 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
     {newActivity && <button className="hermes-new-activity" onClick={() => { followingTimeline.current = true; timeline.current?.scrollTo({ top: timeline.current.scrollHeight }); setNewActivity(false); }}>Show new activity</button>}
     {draftError && <div className="chat-error" role="status">{draftError}</div>}
     {error && <div className="chat-error" role="alert">{error}<button onClick={() => setError('')}>Dismiss</button></div>}
-    <form className="composer" onSubmit={(e) => { e.preventDefault(); void send(); }}>
+    <form className="composer" style={{ position: 'relative' }} onSubmit={(e) => { e.preventDefault(); void send(); }}>
+      {mentionSuggestions.length > 0 && (
+        <div className="at-mention-dropdown" role="listbox" aria-label="File references">
+          {mentionSuggestions.map((ref, idx) => (
+            <button
+              type="button"
+              key={`${ref.host}-${ref.rootName}-${ref.path}`}
+              className={`at-mention-item ${idx === selectedMentionIndex ? 'focused' : ''}`}
+              role="option"
+              aria-selected={idx === selectedMentionIndex}
+              onClick={() => applyMention(ref)}
+            >
+              <FileText size={14} />
+              <strong>{ref.path}</strong>
+              <small>{ref.host}/{ref.rootName}</small>
+            </button>
+          ))}
+        </div>
+      )}
       <button type="button" className="icon-button" disabled title="Attachments are not connected yet" aria-label="Attachments unavailable"><Plus size={22} /></button>
-      <textarea aria-label="Message Hermes" placeholder="Ask anything" value={draft} onChange={(e) => updateDraft(e.target.value)} maxLength={32000}
-        onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); void send(); } }} />
+      <textarea
+        ref={textareaRef}
+        aria-label="Message Hermes"
+        placeholder="Ask anything or use @path to reference files"
+        value={draft}
+        onChange={(e) => updateDraft(e.target.value)}
+        maxLength={32000}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape' && mentionSuggestions.length > 0) {
+            e.preventDefault();
+            setMentionSuggestions([]);
+            setMentionMatch(null);
+            return;
+          }
+          if (mentionSuggestions.length > 0) {
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              setSelectedMentionIndex((prev) => (prev + 1) % mentionSuggestions.length);
+              return;
+            }
+            if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              setSelectedMentionIndex((prev) => (prev - 1 + mentionSuggestions.length) % mentionSuggestions.length);
+              return;
+            }
+            if ((e.key === 'Enter' || e.key === 'Tab') && !e.shiftKey) {
+              e.preventDefault();
+              applyMention(mentionSuggestions[selectedMentionIndex]);
+              return;
+            }
+          }
+          if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+            e.preventDefault();
+            void send();
+          }
+        }}
+      />
       {running ? <button type="button" className="send-button" aria-label="Interrupt current turn" onClick={() => void api('/hermes/interrupt', 'POST', { threadId: thread.id }).catch((e: Error) => setError(e.message))}><Square size={16} /></button>
         : <button className="send-button" aria-label="Send message" disabled={!draft.trim() || !status.connected || !streamConnected || uncertain || waiting || dispatching || preparing || loading || paused}><ArrowUp size={21} /></button>}
     </form>

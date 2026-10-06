@@ -39,6 +39,8 @@ Consolidato 2026-10-04. Questo file registra le decisioni utente; [MEMORY](MEMOR
 | D36 | Sub-agent temporanei in pannello laterale della chat padre; Dots persistenti nella propria conversazione, messaggi tra Bots visibili e indicatori di attività confermati dal runtime | F2/F4/F7/F14; contesto Space/host/modello/effort e @ file preservati; queued non significa Working |
 | D37 | Ogni runtime Hermes collegato porta i propri Bots in Studio come Dots, tramite roster nativo e identità scoped al runtime; nessuna ricreazione manuale | F1/F7/F2/F4/F14; chat canonica, omonimi/offline/reconnect; precedente interpretazione Docs errata e rimossa |
 
+| D38 | Space comune in Studio associato ai progetti Hermes dei diversi profili; scelta specialista + Space con risoluzione del progetto corretto, collegamento mancante proposto esplicitamente | F6/F7/F2/F14; file unici, SOUL/MEMORY/USER per profilo, Bot Chat/cambio contesto e accessi da verificare; nessun nuovo backend |
+
 ## Decisioni storiche superate
 
 | ID | Direzione iniziale | Superata o delimitata da |

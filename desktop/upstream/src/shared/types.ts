@@ -69,6 +69,16 @@ export interface Space {
   description: string;
   createdAt: number;
 }
+export interface FolderBinding {
+  id: string;
+  spaceId: string;
+  rootId: string;
+  host: string;
+  name: string;
+  path: string;
+  isReadOnly?: boolean;
+  createdAt: number;
+}
 export interface Dot {
   id: string;
   /** Default destination for saved pages, not ownership. */
@@ -81,6 +91,7 @@ export interface Dot {
   createdAt: number;
   learningContainerId?: string | null;
   skillDeliveryEnabled?: boolean;
+  avatarId?: 'blue' | 'mint' | 'orange' | 'purple' | string;
 }
 export interface Conversation {
   id: string;
@@ -115,4 +126,5 @@ export interface WorkspaceState {
   conversations: Conversation[];
   setup: SetupStatus;
   calls: CallReceipt[];
+  folderBindings?: FolderBinding[];
 }

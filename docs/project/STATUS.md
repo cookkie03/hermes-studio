@@ -1,6 +1,6 @@
 # Hermes Studio — stato corrente
 
-Consolidato 2026-10-04. **F0 completata; F1 incremento locale/SSH implementato e verificato; F2 incremento invio/bozze verificato, feature completa parziale; altre feature documentate o parziali.** Incremento selezionato D32/D33: attach locale/SSH e routing host; codice prodotto modificato. [Catalogo](../features/README.md), [piano](feature-development-plan.md), [decisioni](decisions.md).
+Consolidato 2026-10-06. **F0–F3 completate/verificate per incremento; F4 shell & F5 file workspace e F6 folder-backed spaces implementati e verificati.** [Catalogo](../features/README.md), [piano](feature-development-plan.md), [decisioni](decisions.md).
 
 ## Baseline verificata
 
@@ -92,6 +92,45 @@ Scheda F2 allegata dall’utente come incarico. Incremento verticale corrente: p
 
 Lock preparazione/dispatch per vista; close/scelta host invalida prima del PUT, esiti tardivi non modificano un nuovo owner. Ack requestId/clientSubmissionId non regredisce Working né aggiorna turni nuovi. Draft serializzati per thread e flush al cambio chat; bozza nuova/clear/restart su nuova origin PASS. Suite finale 36 Node + 61 metadata/display, strict typechecks/bootstrap/external-links e package arm64/firma ad hoc PASS. Smoke .app con REST/SSE/HTTP/WS sintetici PASS: double send, delta prima HTTP, tool tardivo, cambio chat durante invio, PageConversation close/host mentre preparazione sospesa e riferimento revisione salvata, IME/focus/900/1360/Reduced Motion. Review Standards/Spec finale 0 findings aperti; fase evento-before-render e barriera host test corrette. Matrice/skill/esiti/gap in [prove F2](../architecture/f2-submission-review-2026-10-04.md). Modello Hermes reale isolato, interrupt/resume GUI, contesto modello/effort/Space, Bots/approvals/collaborazione e restante F2 non certificati. Nessun prompt o dato del runtime personale utilizzato. Commit locale `32f361d` creato: 17 file selezionati, diff/index e scan credenziali PASS. Push non ritentato dopo rifiuto auto-review storico.
 
+## 2026-10-05 — Callout nativi self-improvement e skill
+
+Screenshot utente conferma avviso Self-improvement review con memoria pending e `/memory pending`; richiesta Studio estesa esplicitamente a skill create/aggiornate confermate. F8-A già specificata per review.summary; precisate F8/F2/F3 per persistenza scoped, pending≠applied, approvazione esplicita e skill solo su conferma runtime, senza confondere curator/background review. Handler/renderer desktop sorgente e1e82d782f riletti, nessuna prova live o codice Studio implementato.
+
+
+## 2026-10-05 — Confronto scheda F2 e codice richiesto dall’utente
+
+La modifica recente di F2 aggiunge 12 righe per Self-improvement review e precisa D30: nota persistente nella chat di origine, pending/applicato distinti, skill solo su conferma Hermes, istruzione `/memory pending` e gate replay/restart. Ispezione sorgente: bridge.mjs inoltra eventi scoped ma archivia solo tool.start/tool.complete; Chat.tsx non gestisce review.summary e ComputerPanel consuma solo tool. Mancano quindi rendering e archivio delle note, recupero nella chat non selezionata, deduplicazione/replay e prove dei nuovi casi; revisione GUI della proposta dipende dal percorso supportato F3/F8. Invio/bozze resta l’incremento consegnato, non tutta F2. Restano anche thinking, contesto effettivo e cataloghi/roster/collaborazione degli owner, troncamento e autoscroll condizionale; interrupt/reconnect completi e modello reale isolato non certificati. Nessun codice modificato né test runtime rieseguito per questo confronto; preservate le modifiche documentali preesistenti.
+
+## D38 — Space comune e specialisti indipendenti (2026-10-05)
+
+Visione utente confermata: Finance appare come unico Space Studio con associazioni esplicite ai progetti Hermes profile-scoped del PM/CTO; specialista selezionabile per Space/chat senza vincolo permanente. Collegamento mancante: proposta di progetto esistente o registrazione cartelle tramite API native e conferma esplicita. Nessuna copia file, merge memoria o configurazione nascosta; USER resta per profilo. Aggiornate F6/F7/F2/F14, GUI condivisa e ricerca; Bot Chat/cwd, accessi e multi-host restano gate runtime, non capacità implementate. Nessun codice modificato.
+
+
+## 2026-10-05 — F2 aggiornamento codice selezionato
+
+Utente richiede applicare le nuove differenze F2. Base b285629; diff aggiunge D38 oltre alle note review già analizzate. Incremento in corso: archivio/proiezione review.summary nella chat e contesto F2 veritiero da session.info, senza reiniezione memorie legacy condivise. F6 associazioni progetti e F7 Bot binding non presenti: nessun selettore simulato o cambio cwd/profilo implicito. Seam già richieste dalla scheda: bridge/history, REST autenticata e GUI packaged con fixture isolata. Ticket F2-native-notes-context; skill ask-matt, implement, codebase-design, tdd, react-best-practices, frontend-testing-debugging, documentation-and-adrs lette.
+
+
+## 2026-10-05 — F2 note native e contesto D38 implementati
+
+Bridge archivia review.summary scoped e recupera replay nativo quando annunciato; timeline mostra testo originale e provenienza, conserva note in altra chat/offline/restart, segnala replay parziale/non disponibile e failure di archivio. Nessuna inferenza applied/skill o RPC approve inventata. Contesto separa Space della pagina da profilo/modello/effort/progetto/cwd session.info; rimossa reiniezione memorie legacy condivise. F6 mapping progetti e F7 binding Bots restano non collegati e visibili come limite. Corretti race replay/turno e lock preparazione; scroll segue solo chi è in fondo. Suite finale 43 Node + 61 metadata/display PASS, package PASS, primo smoke finale PASS; clean EOF e screenshot 900px finale in corso. Review Standards/Spec finale 0 findings. Ricevuta docs/architecture/f2-native-notes-context-review-2026-10-05.md; runtime personale/modello reale non usati.
+
+
+## 2026-10-05 — F2 verifica finale note/contesto PASS
+
+Smoke packaged finale PASS, compreso EOF SSE pulito, scroll conservato con evento reale della fixture, note tardive/background senza riaccendere Working, dedupe replay, offline/reconnect e restart nuova origin. 900/1360px, focus-visible e Reduced Motion PASS; screenshot finale leggibile con Computer chiuso /private/tmp/hs-conversations-ui-BlFkZ0/reviews-900.png. Nessun pageerror; suite 43 Node + 61 metadata/display e package PASS. Ticket F2-native-notes-context done solo per incremento. Owner F6/F7/F3 e prove modello reale restano aperti; dettagli e matrice nella ricevuta f2-native-notes-context-review-2026-10-05.md. Nessun push/release.
+
+
+## 2026-10-05 — Git F2 note/contesto
+
+Commit verificato 7e6fad3: feat(f2): persist native review notes and expose chat context. Include solo codice/fixture F2, ticket incremento e nuova ricevuta; index vuoto dopo commit. Modifiche preesistenti alle schede/D38 e documenti di progetto preservate unstaged; nessun push o release.
+
+## 2026-10-05 — Baseline F0–F2 e protezione F0–F3
+
+L’utente conferma di aver realizzato il codice delle feature F0–F2. Registrazione della consegna dichiarata dall’utente, non nuova certificazione live di tutti i gate. Restano aperti: collegamenti Space/progetti D38 e selezione nativa dei Bots (F6/F7); approvazione delle proposte nella GUI; acceptance con modello live. L’utente conferma che tali limiti sono visibili nella UI. Non dichiarare questi percorsi completati dal solo codice F0–F2.
+
+Vincolo permanente per richieste successive: non aggiornare schede, requisiti o codice delle feature F0–F3 senza richiesta esplicita di modificarle. Richieste generiche di documentazione/design o requisiti trasversali vanno registrate negli owner successivi o nei documenti di progetto, senza riaprire F0–F3. Se indispensabile una modifica a quei confini, segnalarla e attendere selezione esplicita. F3 protetta non significa F3 completata. Modifiche preesistenti alle schede preservate, non annullate da questo aggiornamento.
+
 ## 2026-10-05 — F3 selezionata: identità delle decisioni
 
 Baseline 7e6fad3. Incremento F3: richiesta approval con decisionId locale non persistito, verificato insieme a thread/host/RPC prima dell’inoltro. Replay aperto conserva identità; reconnect la rinnova. Enum limitato al contratto Hermes once/session/always/deny. Red riprodotto sul seam bridge esistente, green 31 test bridge/connections; verifiche complete in corso. Sorgente Hermes e1e82d782f letto, nessun runtime/dato personale interrogato. Modifiche documentali precedenti preservate. Skill ask-matt/implement/codebase-design/tdd lette e applicate; axiom-design/frontend-design per card OpenDots; code-review letta per revisione finale.
@@ -103,3 +142,15 @@ decisionId effimero impedisce risposte stale dopo reconnect/cancel con RPC omoni
 ## 2026-10-05 — F4–F18 English translation
 
 User requested English translation of all feature cards F4 through F18 and a commit. Translated the full cards in place: implementation assignments, requirements, skill guidance, source evidence, acceptance gates and handoff prompts. Preserved filenames, link targets, technical inline identifiers and Markdown markers; retained F6’s old fragment as an explicit anchor for protected F2 references. Validation: 15 translated cards, 304 local link targets checked, one pre-existing unavailable external skill path in F18 preserved; F0–F3 byte-for-byte unchanged from task start. No application code or runtime behavior changed. Commit scope: these 15 cards and only this task’s project-log entries; other pending changes are preserved outside the commit.
+# 2026-10-05 — Figma project association
+
+Figma canvas reference created and verified by returned node IDs and screenshot: frame `7:2`, clickable GitHub link. See [linked design workspace](../design/figma.md).
+
+User provided the Hermes Studio Figma file and requested association with GitHub/frontend work. Plugin access verified: page `0:1` exists and was empty. Repository design links saved in `docs/design/figma.md` and root README. No frontend implementation, automatic synchronization, or component mappings configured.
+
+## F7-A — Selectable OpenDots avatars implemented
+
+- D26 compliant local avatar selection.
+- Persisted via `avatarId` in SQLite and preserved across dialog reopen, reload, and restart.
+- Graceful fallback using deterministic hashing for bots without an assigned avatar.
+- Accessible radio group options for all 4 OpenDots avatars (`blue`, `mint`, `orange`, `purple`).

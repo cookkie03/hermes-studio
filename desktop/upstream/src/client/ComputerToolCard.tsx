@@ -178,6 +178,19 @@ export function ComputerToolCard({
         complete &&
         typeof data.stderr === 'string' &&
         data.stderr && <pre>{data.stderr.slice(0, 2000)}</pre>}
+      {(action.startsWith('files_') || action === 'write_file' || action === 'patch' || action === 'read_file') && (
+        <div className="file-receipt-card-inline" aria-label="File operation receipt">
+          <div className="file-receipt-header">
+            <FileText size={14} />
+            <span>{typeof parameters.host === 'string' ? parameters.host : 'local'}/{detail || (typeof parameters.relativePath === 'string' ? parameters.relativePath : 'file')}</span>
+            {typeof data.revision === 'string' && <span className="file-rev">rev:{data.revision}</span>}
+            <span className={`outcome-pill ${failed ? 'rejected' : 'applied'}`}>{failed ? 'Failed' : 'Applied'}</span>
+          </div>
+          {typeof data.diff === 'string' && data.diff && (
+            <pre className="file-diff-preview" aria-label="File diff preview">{data.diff.slice(0, 2000)}</pre>
+          )}
+        </div>
+      )}
       {showScreen && (
         <div className="inline-computer-preview">
           <div className="inline-computer-caption">

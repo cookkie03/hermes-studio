@@ -14,18 +14,32 @@ Header persistente e composer mostrano il contesto della chat/bot attivo: **Spac
 
 | Campo | Autorità e comportamento |
 |---|---|
-| Space | Progetto Hermes scoped a connessione/profilo/projectId, con cartelle del progetto. Nome UI «Space»; nessuna associazione per solo nome |
+| Space | Progetto Hermes scoped a connessione/profilo/projectId, con cartelle del progetto. Space UI comune può collegare più progetti di profili diversi secondo D38; nessuna associazione per solo nome |
 | Host | Host effettivo della conversazione/bot, distinto dagli host delle cartelle e dal Mac client |
 | Modello | Modello effettivamente confermato per sessione/turno, distinto dal default o dalla selezione pending |
 | Effort | Valore supportato e confermato dal backend/modello. Mostrare «Non supportato» o «Non verificato» invece di inventare Medium |
 
 Nessuno Space associato → «Senza Space» esplicito. Loading, offline e ultimo valore noto con stale label distinti; non mostrare dati di una chat precedente mentre si carica la nuova. Cambio modello/effort/Space tramite operazione Hermes supportata: selezione pending → ack/esito reale → aggiornamento. Un turno già avviato conserva origine/contesto effettivi anche dopo una selezione per il prossimo turno. Nessuna migrazione host/sessione implicita.
 
+## D38 — Uno Space comune, più specialisti e progetti di profilo
+
+Visione confermata dall’utente il 2026-10-05: Studio mostra un solo Space Finance; scegliere Product Manager o CTO risolve il progetto Hermes del rispettivo profilo. Gli specialisti non sono vincolati permanentemente a uno Space: la scelta specialista + Space riguarda il lavoro/chat corrente. Uno stesso specialista conserva identità e memoria passando a Maintenance.
+
+Un progetto Hermes è scoped al profilo (`HERMES_HOME/projects.db`), non un progetto globale comune a tutti i Bots. Lo Space Studio conserva associazioni esplicite a progetti nativi identificati da connessione/runtime, profilo e projectId; più associazioni possono puntare agli stessi file sullo stesso host. Non fondere progetti per nome, non duplicare i file e non creare un backend distribuito.
+
+Se manca il collegamento per lo specialista scelto, proporre di selezionare un progetto esistente del suo profilo oppure registrare le cartelle tramite API Hermes supportate, dopo scelta esplicita. Presentare profilo/host/cartelle prima della conferma; no creazione/configurazione nascosta. Il collegamento è confermato solo dopo esito runtime. Il catalogo può essere parziale/offline: mostrare il limite anziché ricreare progetti.
+
+SOUL, MEMORY e USER restano del singolo profilo Hermes; USER comune non richiesto. Memoria e procedure personali non vengono fuse entrando nello Space. File di progetto condivisi e skill di progetto scoperti dal runtime nel contesto effettivo sono distinti dai ricordi del Bot; membership o messaggio non concede accesso ai file, alle memorie o ai tool di altri profili.
+
+F6 possiede le associazioni Space/progetti; F7 identità dei Bots; F2 selezione e contesto della chat; F14 collaborazione tra profili. Per la Bot Chat canonica verificare come applicare il progetto/cwd con le capacità Bot Mode conservate: non promettere sessioni parallele indipendenti dello stesso Bot né cambiare il contesto di un turno attivo. Se necessario bloccare/rinviare il cambio con stato esplicito. Chiamare il CTO non gli assegna automaticamente lo Space del PM: risolvere il suo collegamento e verificarne contesto/grant prima di dichiarare lavoro condiviso. Host diversi non implicano filesystem comune.
+
+**Gate:** uno Space Finance e due profili PM/CTO, progetti nativi distinti sugli stessi file; entrambi aprono il contesto corretto con memoria propria e header Space/host/modello/effort confermato. CTO passa a Maintenance senza perdere identità o spostare il lavoro Finance in corso. Collegamento mancante con proposta esplicita, API non supportata, progetti omonimi, offline/reconnect, grant negato, cambio durante fetch/turno e collaborazione senza accesso implicito. Nessuna copia di file, nessun merge di profili, nessuna modifica Hermes per sola selezione UI. Requisito accettato, implementazione e prove runtime ancora da svolgere.
+
 ## Spaces come progetti Hermes
 
 Richiesta aggiornata: collegare e presentare i progetti Hermes come Spaces, preservando cartelle e identità runtime, senza nuovo modello progetto backend. [Ricerca progetti/host](../research/hermes-projects-and-space-hosts.md): Project Hermes ha più folder ma scope a un backend/profilo; cartelle senza host proprio. Contratti projects.* e session.workspace.move nel sorgente sono riferimenti, non prove live.
 
-F6 deve riusare/elencare/collegare progetti esistenti, creare o modificare solo tramite API Hermes comprovate e scelta esplicita. Il precedente requisito multi-host non autorizza un Project Hermes distribuito inesistente: si mostrano riferimenti scoped separati e host/cartelle effettivi. Cardinalità e UX dell’aggregazione da delimitare in F6; se il backend non supporta accesso cross-host, dichiararlo. Niente mount/copia/sync o nuovo executor per aggirare il limite.
+F6 deve riusare/elencare/collegare progetti esistenti, creare o modificare solo tramite API Hermes comprovate e scelta esplicita. Il precedente requisito multi-host non autorizza un Project Hermes distribuito inesistente: si mostrano riferimenti scoped separati e host/cartelle effettivi. Aggregazione tra progetti di profili diversi confermata da D38; dettagli operativi e multi-host da delimitare in F6; se il backend non supporta accesso cross-host, dichiararlo. Niente mount/copia/sync o nuovo executor per aggirare il limite.
 
 ## `@` — file e riferimenti precisi
 

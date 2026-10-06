@@ -1,4 +1,5 @@
 import { pageRoutes } from './page-routes.js';
+import { fileRoutes } from './file-routes.js';
 import { Hono } from 'hono';
 import { z } from 'zod';
 import type { MetadataBackend } from './metadata-contracts.js';
@@ -15,6 +16,7 @@ const dotSchema = z
     memoryAllowed: z.boolean(),
     learningContainerId: learningContainerIdSchema.optional(),
     skillDeliveryEnabled: z.boolean().optional(),
+    avatarId: z.string().nullable().optional(),
     spaceIds: z.array(z.string().min(1)).min(1).max(100).optional(),
     spaceId: z.string().min(1).optional(),
   })
@@ -22,6 +24,7 @@ const dotSchema = z
 export function workspaceRoutes(platform: MetadataBackend, voice: Pick<VoiceService, 'begin' | 'activate' | 'compute' | 'end'>) {
   const app = new Hono();
   app.route('/', pageRoutes(platform));
+  app.route('/', fileRoutes(platform.workspace.files));
   app.get('/workspace', (c) =>
     c.json({
       spaces: platform.workspace.spaces(),
@@ -29,8 +32,45 @@ export function workspaceRoutes(platform: MetadataBackend, voice: Pick<VoiceServ
       conversations: platform.workspace.conversations(),
       setup: platform.setup(),
       calls: platform.workspace.calls(),
+      folderBindings: platform.workspace.folderBindings(),
     }),
   );
+  app.get('/spaces/:spaceId/folders', (c) => {
+    const spaceId = c.req.param('spaceId');
+    return c.json(platform.workspace.folderBindings(spaceId));
+  });
+  app.post('/spaces/:spaceId/folders', async (c) => {
+    const spaceId = c.req.param('spaceId');
+    const folderSchema = z
+      .object({
+        rootId: z.string().optional(),
+        host: z.string().trim().min(1),
+        name: z.string().trim().min(1).max(100),
+        path: z.string().trim().min(1),
+        isReadOnly: z.boolean().optional(),
+      })
+      .strict();
+
+    const parse = folderSchema.safeParse(await c.req.json());
+    if (!parse.success) {
+      return c.json({ error: 'Invalid folder binding data.' }, 400);
+    }
+    try {
+      const binding = platform.workspace.linkFolder(spaceId, parse.data);
+      return c.json(binding, 201);
+    } catch (e) {
+      return c.json({ error: e instanceof Error ? e.message : 'Could not link folder.' }, 400);
+    }
+  });
+  app.delete('/spaces/:spaceId/folders/:bindingId', (c) => {
+    const spaceId = c.req.param('spaceId');
+    const bindingId = c.req.param('bindingId');
+    const success = platform.workspace.unlinkFolder(spaceId, bindingId);
+    if (!success) {
+      return c.json({ error: 'Folder binding not found.' }, 404);
+    }
+    return c.json({ success: true });
+  });
   app.post('/spaces', async (c) => {
     const data = z
       .object({
@@ -87,6 +127,7 @@ export function workspaceRoutes(platform: MetadataBackend, voice: Pick<VoiceServ
         data.data.spaceIds,
         data.data.learningContainerId,
         data.data.skillDeliveryEnabled,
+        data.data.avatarId,
       ),
       201,
     );
