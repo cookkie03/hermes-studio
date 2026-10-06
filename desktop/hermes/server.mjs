@@ -12,6 +12,12 @@ import { workspaceRoutes } from '../upstream/dist/server/server/workspace-routes
 import { RuntimeConnections } from './connections.mjs';
 import { DraftStore } from './drafts.mjs';
 import { RoutinesManager } from './routines.mjs';
+import { CapabilitiesManager } from './capabilities.mjs';
+import { HermesBrowserService } from './browser.mjs';
+import { ComputerManager } from './computer.mjs';
+import { CollaborationManager } from './collaboration.mjs';
+import { HermesMemoryManager } from './memory.mjs';
+import { buildCapabilityMatrix } from './capability-matrix.mjs';
 
 const unavailable = () => { throw new Error('This capability is not connected to Hermes yet.'); };
 export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway, connectorFactory, gatewayFactory } = {}) {
@@ -30,6 +36,9 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   await bridge.initialize();
   const drafts = new DraftStore(join(dataDir, 'drafts.json')); await drafts.initialize();
   const routines = new RoutinesManager({ connections: bridge });
+  const capabilities = new CapabilitiesManager({ connections: bridge });
+  const memoryManager = new HermesMemoryManager({ connections: bridge });
+  const collaboration = new CollaborationManager({ dataDir, gateway: bridge.gateway });
   routines.on('changed', event => { bridge.emit('update', { type: 'cron.changed', ...event }); });
   const facade = {
     workspace,
@@ -139,6 +148,16 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   app.post('/api/hermes/routines/:id/pause', async c => c.json(await routines.pauseJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.post('/api/hermes/routines/:id/resume', async c => c.json(await routines.resumeJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.post('/api/hermes/routines/:id/trigger', async c => c.json(await routines.triggerJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.get('/api/hermes/capabilities/toolsets', async c => c.json(await capabilities.listToolsets({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile'), sessionId: c.req.query('sessionId') })));
+  app.get('/api/hermes/capabilities/tools', async c => c.json(await capabilities.showTools({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile'), sessionId: c.req.query('sessionId') })));
+  app.post('/api/hermes/capabilities/tools/configure', async c => { const body = await c.req.json(); return c.json(await capabilities.configureTools({ action: body.action, names: body.names, connectionId: c.req.query('connectionId'), profile: c.req.query('profile'), sessionId: c.req.query('sessionId') })); });
+  app.get('/api/hermes/capabilities/plugins', async c => c.json(await capabilities.listPlugins({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.post('/api/hermes/capabilities/plugins/manage', async c => { const body = await c.req.json(); return c.json(await capabilities.managePlugin({ ...body, connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })); });
+  app.get('/api/hermes/capabilities/skills', async c => c.json(await capabilities.listSkills({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.post('/api/hermes/capabilities/skills/manage', async c => { const body = await c.req.json(); return c.json(await capabilities.manageSkills({ ...body, connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })); });
+  app.post('/api/hermes/capabilities/skills/reload', async c => c.json(await capabilities.reloadSkills({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile'), sessionId: c.req.query('sessionId') })));
+  app.get('/api/hermes/capabilities/matrix', async c => c.json(await buildCapabilityMatrix({ capabilitiesManager: capabilities, connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.get('/api/hermes/memory', async c => c.json(await memoryManager.getMemoryStatus({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.delete('/api/hermes/routines/:id', async c => c.json(await routines.deleteJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.get('/api/hermes/routines/:id/runs', async c => c.json(await routines.getRuns(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile'), limit: Number(c.req.query('limit') || 20) })));
   app.post('/api/tasks', async c => {

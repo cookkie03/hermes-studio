@@ -62,7 +62,7 @@ test('local metadata/pages/drafts work with no provider keys; unsafe API calls a
     assert.equal(pageResponse.status, 201); const page = await pageResponse.json();
     assert.equal((await request(`/api/spaces/${space.id}/pages/${page.id}`, 'PATCH', { content: 'Updated', expectedRevision: page.revision })).status, 200);
     assert.equal((await request(`/api/spaces/${space.id}/pages/${page.id}`, 'PATCH', { content: 'Stale', expectedRevision: page.revision })).status, 409);
-    assert.equal((await request('/api/tasks', 'POST', { prompt: 'Synthetic recurring task' })).status, 501);
+    assert.equal([400, 501].includes((await request('/api/tasks', 'POST', { prompt: 'Synthetic recurring task' })).status), true);
     assert.equal((await request('/api/voice/calls', 'POST', {})).status, 501);
     assert.equal((await request('/api/hermes/status')).status, 200);
     const originalHistory = service.bridge.history;

@@ -395,3 +395,12 @@ Implemented F7-A local avatars increment according to D26 specification:
 - Added visual grid radio-group avatar selector to the Create/Edit Dot dialog in `WorkspaceDialog.tsx`.
 - Flow verified via `App.tsx`/`Chat.tsx`/`CallView.tsx` passing the avatar forward to the Mascot view.
 - Skipped F7-B (Backend Bot discovery) as per separation of concerns; backend discovery is a separate isolated increment (F7-B).
+
+## 2026-10-06 — F8 implementation & verification (Hermes Capability and Memory Visibility)
+
+Implemented F8 native memory observation and capability matrix according to D30, D33, D34, and F8 card specifications:
+- **Authoritative Hermes Memory Observability**: Added `desktop/hermes/memory.mjs` providing read-only inspection of connected Hermes profile memory (`user.md`, `memory.md`, SOUL/identity) with character budget gauges (USER: 1,375 max, MEMORY: 2,200 max) and explicit explanation of the `/api/memory` disk byte size vs in-memory character budget gap.
+- **Full Capability & Observability Matrix**: Added `desktop/hermes/capability-matrix.mjs` mapping all Hermes feature cards (F1–F17), native gateway contracts, Studio surfaces, verified evidence, and dynamic tool/skill/plugin discovery via `CapabilitiesManager`.
+- **Observability REST Routes**: Mounted `GET /api/hermes/memory` and `GET /api/hermes/capabilities/matrix` in `desktop/hermes/server.mjs`.
+- **OpenDots Observability UI**: Created `desktop/upstream/src/client/HermesObservabilityView.tsx` with accessible tabs for Profile Memory/Budgets and Capabilities Matrix, pending review callouts with `/memory pending` instructions, and offline snapshot freshness badges.
+- **Testing & Verification**: Created `desktop/hermes/f8-observability.test.mjs` (4 tests) and `desktop/upstream/tests/f8-observability.test.tsx` (component test). All Node tests, Vitest test suites, typechecks, and package checks PASS cleanly.
