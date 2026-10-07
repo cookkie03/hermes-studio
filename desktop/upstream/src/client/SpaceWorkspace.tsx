@@ -16,9 +16,12 @@ import {
   Edit3,
   Server,
   Laptop,
+  Bookmark,
+  Sparkles,
+  X,
 } from 'lucide-react';
 import type { Page } from '../server/pages';
-import type { Space, WorkspaceState, FolderBinding } from '../shared/types';
+import type { Space, WorkspaceState, FolderBinding, SpaceMemoryConfig } from '../shared/types';
 import type { FileItem, FileReadResult, FileDiffReceipt } from '../shared/file-workspace';
 import { api } from './api';
 import { SpaceLibrary } from './SpaceLibrary';
@@ -51,7 +54,9 @@ export function SpaceWorkspace({
   onCreateDot: () => void;
 }) {
   const [pages, setPages] = useState<Page[]>([]);
-  const [folderBindings, setFolderBindings] = useState<FolderBinding[]>([]);
+  const [folderBindings, setFolderBindings] = useState<FolderBinding[]>(
+    workspace.folderBindings ? workspace.folderBindings.filter((b) => b.spaceId === space.id) : [],
+  );
   const [filesByRoot, setFilesByRoot] = useState<Record<string, FileItem[]>>({});
   const [selectedFile, setSelectedFile] = useState<{
     rootId: string;
@@ -80,10 +85,59 @@ export function SpaceWorkspace({
     isReadOnly: false,
   });
 
-  const [activeTab, setActiveTab] = useState<'files' | 'pages'>('files');
+  const [activeTab, setActiveTab] = useState<'files' | 'pages' | 'memory'>('files');
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
   const [outline, setOutline] = useState(false);
+
+  // Space Markdown Memory state
+  const [memoryConfig, setMemoryConfig] = useState<SpaceMemoryConfig | null>(null);
+  const [memoryContent, setMemoryContent] = useState('');
+  const [memoryRevision, setMemoryRevision] = useState('');
+  const [memoryDirty, setMemoryDirty] = useState(false);
+  const [memoryStatus, setMemoryStatus] = useState<
+    'saved' | 'saving' | 'modified' | 'conflict' | 'error'
+  >('saved');
+  const [memoryError, setMemoryError] = useState('');
+  const [memoryPreview, setMemoryPreview] = useState(false);
+  const [showMemoryConfigModal, setShowMemoryConfigModal] = useState(false);
+  const [showMilestoneModal, setShowMilestoneModal] = useState(false);
+  const [milestoneTitle, setMilestoneTitle] = useState('');
+  const [milestoneContent, setMilestoneContent] = useState('');
+  const [memoryConfigForm, setMemoryConfigForm] = useState<{
+    rootId: string;
+    relativePath: string;
+    policy: 'manual' | 'milestones';
+    createIfNotExists: boolean;
+  }>({
+    rootId: '',
+    relativePath: 'MEMORY.md',
+    policy: 'manual',
+    createIfNotExists: true,
+  });
+
+  const loadSpaceMemory = useCallback(async () => {
+    try {
+      const res = await api<{
+        config: SpaceMemoryConfig | null;
+        file: FileReadResult | null;
+        error?: string;
+      }>(`/spaces/${space.id}/memory`);
+      setMemoryConfig(res.config);
+      if (res.config && res.file) {
+        if (!memoryDirty) {
+          setMemoryContent(res.file.content);
+          setMemoryRevision(res.file.revision);
+          setMemoryStatus(res.config.lastOutcome === 'conflict' ? 'conflict' : 'saved');
+        }
+      }
+      if (res.error) {
+        setMemoryError(res.error);
+      }
+    } catch {
+      // Memory not configured or error
+    }
+  }, [space.id, memoryDirty]);
 
   // Load pages
   const loadPages = useCallback(async () => {
@@ -127,17 +181,21 @@ export function SpaceWorkspace({
     let active = true;
     void loadPages();
     void loadFolderBindings();
+    void loadSpaceMemory();
     const timer = setInterval(() => {
       if (active) {
         void loadPages();
         void loadFolderBindings();
+        if (activeTab === 'memory' && !memoryDirty && memoryStatus !== 'saving') {
+          void loadSpaceMemory();
+        }
       }
     }, 5000);
     return () => {
       active = false;
       clearInterval(timer);
     };
-  }, [loadPages, loadFolderBindings]);
+  }, [loadPages, loadFolderBindings, loadSpaceMemory, activeTab, memoryDirty, memoryStatus]);
 
   // Load files for each folder binding
   useEffect(() => {
@@ -194,6 +252,110 @@ export function SpaceWorkspace({
     } catch (e) {
       setFileStatus('error');
       setFileError(e instanceof Error ? e.message : 'Failed to save file.');
+    }
+  };
+
+  // Save space memory
+  const saveSpaceMemory = async (forceOverwrite = false) => {
+    if (!memoryConfig) return;
+    setMemoryStatus('saving');
+    setMemoryError('');
+    try {
+      const res = await api<{
+        outcome: 'success' | 'conflict';
+        receipt?: FileDiffReceipt;
+        newRevision?: string;
+        config?: SpaceMemoryConfig;
+        error?: string;
+      }>(`/spaces/${space.id}/memory/write`, 'POST', {
+        content: memoryContent,
+        expectedRevision: forceOverwrite ? undefined : memoryRevision,
+        mode: 'replace',
+      });
+      if (res.outcome === 'conflict') {
+        setMemoryStatus('conflict');
+        setMemoryError('Conflict: memory file was modified externally. Please review or reload.');
+      } else if (res.newRevision) {
+        setMemoryRevision(res.newRevision);
+        setMemoryDirty(false);
+        setMemoryStatus('saved');
+        if (res.config) setMemoryConfig(res.config);
+        void loadRootFiles(memoryConfig.rootId);
+      }
+    } catch (e) {
+      setMemoryStatus('error');
+      setMemoryError(e instanceof Error ? e.message : 'Failed to save space memory.');
+    }
+  };
+
+  // Bind or configure space memory
+  const handleBindMemory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!memoryConfigForm.rootId || !memoryConfigForm.relativePath.trim()) return;
+    try {
+      const res = await api<{
+        config: SpaceMemoryConfig | null;
+        file: FileReadResult | null;
+      }>(`/spaces/${space.id}/memory`, 'POST', {
+        rootId: memoryConfigForm.rootId,
+        relativePath: memoryConfigForm.relativePath.trim(),
+        policy: memoryConfigForm.policy,
+        createIfNotExists: memoryConfigForm.createIfNotExists,
+      });
+      setMemoryConfig(res.config);
+      if (res.file) {
+        setMemoryContent(res.file.content);
+        setMemoryRevision(res.file.revision);
+        setMemoryDirty(false);
+        setMemoryStatus('saved');
+      }
+      setShowMemoryConfigModal(false);
+      await loadRootFiles(memoryConfigForm.rootId);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not configure space memory.');
+    }
+  };
+
+  // Unbind space memory
+  const handleUnbindMemory = async () => {
+    if (!window.confirm('Unbind memory file from this Space? The file will remain on disk.'))
+      return;
+    try {
+      await api(`/spaces/${space.id}/memory`, 'DELETE');
+      setMemoryConfig(null);
+      setMemoryContent('');
+      setMemoryRevision('');
+      setMemoryDirty(false);
+      setMemoryStatus('saved');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not unbind memory.');
+    }
+  };
+
+  // Record milestone / decision
+  const handleRecordMilestone = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!milestoneTitle.trim() || !milestoneContent.trim()) return;
+    try {
+      const dateStr = new Date().toISOString().replace('T', ' ').substring(0, 19);
+      const heading = `${dateStr} — ${milestoneTitle.trim()}`;
+      await api<{
+        outcome: 'success' | 'conflict';
+        receipt?: FileDiffReceipt;
+        newRevision?: string;
+        config?: SpaceMemoryConfig;
+      }>(`/spaces/${space.id}/memory/write`, 'POST', {
+        content: milestoneContent.trim(),
+        expectedRevision: memoryRevision || undefined,
+        mode: 'append',
+        appendHeading: heading,
+      });
+      setShowMilestoneModal(false);
+      setMilestoneTitle('');
+      setMilestoneContent('');
+      await loadSpaceMemory();
+    } catch (err) {
+      setMemoryError(err instanceof Error ? err.message : 'Failed to record milestone.');
     }
   };
 
@@ -457,29 +619,39 @@ export function SpaceWorkspace({
             </div>
           </header>
 
-          {/* Navigation Tabs if Space has both Folder bindings and legacy pages */}
-          {(folderBindings.length > 0 || pages.length > 0) && (
-            <div className="space-view-tabs" role="tablist">
-              <button
-                type="button"
-                role="tab"
-                aria-selected={activeTab === 'files'}
-                className={`tab-btn ${activeTab === 'files' ? 'active' : ''}`}
-                onClick={() => setActiveTab('files')}
-              >
-                <Folder size={14} /> Linked Folders ({folderBindings.length})
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={activeTab === 'pages'}
-                className={`tab-btn ${activeTab === 'pages' ? 'active' : ''}`}
-                onClick={() => setActiveTab('pages')}
-              >
-                <FileText size={14} /> Legacy Pages ({pages.length})
-              </button>
-            </div>
-          )}
+          {/* Navigation Tabs for Space Folders, Legacy pages and Space Memory */}
+          <div className="space-view-tabs" role="tablist">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'files'}
+              className={`tab-btn ${activeTab === 'files' ? 'active' : ''}`}
+              onClick={() => setActiveTab('files')}
+            >
+              <Folder size={14} /> Linked Folders ({folderBindings.length})
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'pages'}
+              className={`tab-btn ${activeTab === 'pages' ? 'active' : ''}`}
+              onClick={() => setActiveTab('pages')}
+            >
+              <FileText size={14} /> Legacy Pages ({pages.length})
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'memory'}
+              className={`tab-btn ${activeTab === 'memory' ? 'active' : ''}`}
+              onClick={() => {
+                setActiveTab('memory');
+                void loadSpaceMemory();
+              }}
+            >
+              <Bookmark size={14} /> Space Memory {memoryConfig ? '(Active)' : ''}
+            </button>
+          </div>
 
           {activeTab === 'files' ? (
             <div className="space-folders-container">
@@ -580,6 +752,146 @@ export function SpaceWorkspace({
                       </section>
                     );
                   })}
+                </div>
+              )}
+            </div>
+          ) : activeTab === 'memory' ? (
+            <div className="space-memory-container">
+              {!memoryConfig ? (
+                <div className="space-memory-setup">
+                  <div className="empty-icon-circle">
+                    <Bookmark size={32} />
+                  </div>
+                  <h3>Space Markdown Memory</h3>
+                  <p>
+                    Bind or initialize a dedicated Markdown memory file (e.g. <code>MEMORY.md</code>) in an authorized workspace folder. Space Markdown memory tracks authoritative filesystem revisions, handles external conflicts, and remains cleanly isolated from Hermes runtime profile memory.
+                  </p>
+                  <button
+                    type="button"
+                    className="primary-action-btn"
+                    disabled={folderBindings.length === 0}
+                    onClick={() => {
+                      if (folderBindings.length > 0) {
+                        setMemoryConfigForm({
+                          rootId: folderBindings[0].rootId,
+                          relativePath: 'MEMORY.md',
+                          policy: 'manual',
+                          createIfNotExists: true,
+                        });
+                      }
+                      setShowMemoryConfigModal(true);
+                    }}
+                  >
+                    <Plus size={15} /> Configure Space Memory
+                  </button>
+                  {folderBindings.length === 0 && (
+                    <p className="chat-error" style={{ marginTop: '12px' }}>
+                      Link at least one folder to this Space first before configuring memory.
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div className="space-memory-active-view">
+                  <header className="space-memory-header">
+                    <div className="memory-meta-badges">
+                      <span className="memory-badge" title="Root and relative path">
+                        <Bookmark size={12} />{' '}
+                        {folderBindings.find((b) => b.rootId === memoryConfig.rootId)?.name ??
+                          'Folder'}{' '}
+                        / {memoryConfig.relativePath}
+                      </span>
+                      <span className="memory-policy-badge" title="Memory update policy">
+                        Policy: {memoryConfig.policy}
+                      </span>
+                      <span className={`memory-status-pill ${memoryStatus}`}>
+                        {memoryStatus === 'saving' && <LoaderCircle size={13} className="spin" />}
+                        {memoryStatus === 'saved' && <Check size={13} />}
+                        {memoryStatus === 'conflict' && <AlertTriangle size={13} />}
+                        {memoryStatus.toUpperCase()}
+                      </span>
+                      {memoryRevision && (
+                        <span className="memory-badge" title={`Revision Token: ${memoryRevision}`}>
+                          Rev: {memoryRevision.substring(0, 8)}
+                        </span>
+                      )}
+                    </div>
+                    <div className="memory-header-actions">
+                      <button
+                        type="button"
+                        className="record-milestone-btn"
+                        onClick={() => setShowMilestoneModal(true)}
+                        title="Record a significant decision or milestone"
+                      >
+                        <Sparkles size={14} /> Record Milestone
+                      </button>
+                      <button
+                        type="button"
+                        className="icon-btn"
+                        onClick={() => setMemoryPreview(!memoryPreview)}
+                        title={memoryPreview ? 'Edit Markdown' : 'Preview Markdown'}
+                      >
+                        {memoryPreview ? <Edit3 size={15} /> : <Eye size={15} />}
+                        {memoryPreview ? 'Edit' : 'Preview'}
+                      </button>
+                      <button
+                        type="button"
+                        className="save-btn"
+                        disabled={!memoryDirty || memoryStatus === 'saving'}
+                        onClick={() => void saveSpaceMemory()}
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        className="icon-action-btn"
+                        onClick={() => void handleUnbindMemory()}
+                        title="Unbind memory file from Space"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  </header>
+
+                  {memoryError && (
+                    <div className="file-error-banner" role="alert">
+                      <AlertTriangle size={16} />
+                      <span>{memoryError}</span>
+                      {memoryStatus === 'conflict' && (
+                        <button
+                          type="button"
+                          className="reload-conflict-btn"
+                          onClick={() => void loadSpaceMemory()}
+                        >
+                          Reload from disk
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="file-editor-body">
+                    {memoryPreview ? (
+                      <div className="file-markdown-preview">
+                        <pre>{memoryContent}</pre>
+                      </div>
+                    ) : (
+                      <textarea
+                        className="file-raw-editor"
+                        value={memoryContent}
+                        aria-label={`Editing Space Memory ${memoryConfig.relativePath}`}
+                        onChange={(e) => {
+                          setMemoryContent(e.target.value);
+                          setMemoryDirty(true);
+                          setMemoryStatus('modified');
+                        }}
+                        onKeyDown={(e) => {
+                          if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+                            e.preventDefault();
+                            void saveSpaceMemory();
+                          }
+                        }}
+                      />
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -710,6 +1022,145 @@ export function SpaceWorkspace({
                     </button>
                     <button type="submit" className="submit-btn">
                       Create File
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* Configure Space Memory Modal */}
+          {showMemoryConfigModal && (
+            <div className="modal-backdrop" onClick={() => setShowMemoryConfigModal(false)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <header className="modal-header">
+                  <h3>Configure Space Memory</h3>
+                  <button
+                    type="button"
+                    className="icon-button"
+                    onClick={() => setShowMemoryConfigModal(false)}
+                  >
+                    ×
+                  </button>
+                </header>
+                <form onSubmit={handleBindMemory} className="modal-form">
+                  <label>
+                    Target Folder Root
+                    <select
+                      value={memoryConfigForm.rootId}
+                      onChange={(e) =>
+                        setMemoryConfigForm({ ...memoryConfigForm, rootId: e.target.value })
+                      }
+                    >
+                      {folderBindings.map((b) => (
+                        <option key={b.rootId} value={b.rootId}>
+                          {b.name} ({b.host}) — {b.path}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Relative File Path
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. MEMORY.md or docs/MEMORY.md"
+                      value={memoryConfigForm.relativePath}
+                      onChange={(e) =>
+                        setMemoryConfigForm({ ...memoryConfigForm, relativePath: e.target.value })
+                      }
+                    />
+                  </label>
+                  <label>
+                    Update Policy
+                    <select
+                      value={memoryConfigForm.policy}
+                      onChange={(e) =>
+                        setMemoryConfigForm({
+                          ...memoryConfigForm,
+                          policy: e.target.value as 'manual' | 'milestones',
+                        })
+                      }
+                    >
+                      <option value="manual">Manual (Explicit Save & Review)</option>
+                      <option value="milestones">Milestones (Save on significant events)</option>
+                    </select>
+                  </label>
+                  <label className="checkbox-row">
+                    <input
+                      type="checkbox"
+                      checked={memoryConfigForm.createIfNotExists}
+                      onChange={(e) =>
+                        setMemoryConfigForm({
+                          ...memoryConfigForm,
+                          createIfNotExists: e.target.checked,
+                        })
+                      }
+                    />
+                    Create with standard Space Memory template if file does not exist
+                  </label>
+                  <div className="modal-actions">
+                    <button
+                      type="button"
+                      className="cancel-btn"
+                      onClick={() => setShowMemoryConfigModal(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button type="submit" className="submit-btn">
+                      Bind Memory File
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* Record Milestone Modal */}
+          {showMilestoneModal && (
+            <div className="modal-backdrop" onClick={() => setShowMilestoneModal(false)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <header className="modal-header">
+                  <h3>Record Milestone or Decision</h3>
+                  <button
+                    type="button"
+                    className="icon-button"
+                    onClick={() => setShowMilestoneModal(false)}
+                  >
+                    ×
+                  </button>
+                </header>
+                <form onSubmit={handleRecordMilestone} className="modal-form">
+                  <label>
+                    Milestone / Decision Summary
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Completed integration tests for feature F9"
+                      value={milestoneTitle}
+                      onChange={(e) => setMilestoneTitle(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Details / Evidence / Notes
+                    <textarea
+                      rows={4}
+                      required
+                      placeholder="e.g. All test cases passed with zero regressions. Preserved manual sections and confirmed revision tokens."
+                      value={milestoneContent}
+                      onChange={(e) => setMilestoneContent(e.target.value)}
+                    />
+                  </label>
+                  <div className="modal-actions">
+                    <button
+                      type="button"
+                      className="cancel-btn"
+                      onClick={() => setShowMilestoneModal(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button type="submit" className="submit-btn">
+                      Append to Space Memory
                     </button>
                   </div>
                 </form>

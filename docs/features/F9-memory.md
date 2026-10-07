@@ -23,7 +23,7 @@ If essential scope is missing, clarify only that; otherwise use confirmed requir
 <!-- implementation-packet:end -->
 
 
-Status: documented, not complete; D28/D30 update, 2026-10-04. Local MVP content is preserved. [F8](F8-hermes-native-features-and-observability.md) owns Hermes memory visualization and native notes; this card does not create a second runtime store.
+Status: F9-A and F9-B implemented and verified; 2026-10-06. F9-A (Studio local preference scope isolation from Hermes profile and Space files) and F9-B (Space Markdown Memory `MEMORY.md` binding, template scaffolding, revision tracking, conflict handling, and milestone logging) verified via comprehensive automated test suite `tests/f9-memory.test.tsx` (8 tests passing). F8 owns runtime memory viewer; F9-C remains optional direct runtime mutations.
 
 <!-- feature-guidance:start -->
 

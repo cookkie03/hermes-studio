@@ -63,11 +63,23 @@ export interface State {
   configured: boolean;
 }
 export type Action = 'run' | 'pause' | 'cancel';
+export interface SpaceMemoryConfig {
+  spaceId: string;
+  rootId: string;
+  relativePath: string;
+  policy: 'manual' | 'milestones';
+  lastConfirmedWrite?: number | null;
+  lastRevision?: string | null;
+  lastOutcome?: 'success' | 'conflict' | 'error' | 'idle' | null;
+  lastError?: string | null;
+}
+
 export interface Space {
   id: string;
   name: string;
   description: string;
   createdAt: number;
+  memoryConfig?: SpaceMemoryConfig | null;
 }
 export interface FolderBinding {
   id: string;

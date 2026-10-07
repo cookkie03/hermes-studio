@@ -2,6 +2,19 @@
 
 # Registro di lavoro
 
+## 2026-10-06 — F9 Space Markdown memory and memory integration
+
+- **F9-A (Isolamento scope e preferenze locali):**
+  - Aggiornato `WorkspaceDialog.tsx` per etichettare esplicitamente lo scope di provenienza delle preferenze locali Studio (`Scope: Studio Local Preferences`), separandole chiaramente dai profili memoria Hermes (`USER`/`MEMORY`) e dai file di memoria Markdown degli Space (`MEMORY.md`).
+  - Nessuna re-iniezione o migrazione implicita nel runtime Hermes; preservazione degli store locali e legacy in caso di errore.
+- **F9-B (Space Markdown Memory):**
+  - Esteso `WorkspaceStore` (`workspace.ts`) con la tabella `space_memory_configs` e i relativi metodi di configurazione, persistenza revisioni e tracciamento esiti (`spaceMemoryConfig`, `setSpaceMemoryConfig`, `updateSpaceMemoryStatus`, `deleteSpaceMemoryConfig`).
+  - Aggiunti endpoint REST in `workspace-routes.ts`: `GET /spaces/:id/memory`, `POST /spaces/:id/memory` (con opzione di scaffolding automatico template standard `MEMORY.md`), `POST /spaces/:id/memory/write` (con modalità replace/append, validazione `expectedRevision` e gestione conflitti 409) e `DELETE /spaces/:id/memory`.
+  - Integrato il tab `Space Memory` in `SpaceWorkspace.tsx`: badge origine root/host/revisione, pillole di stato (`saved`, `saving`, `modified`, `conflict`, `error`), visualizzatore/editor Markdown, modal di registrazione milestone/decisioni e gestione conflitti di modifica esterna con reload.
+- **Verifica e Test:**
+  - Aggiunta suite di test completa `desktop/upstream/tests/f9-memory.test.tsx` (8 test che coprono isolamento scope, creazione template, scrittura controllata da revisioni, rilevamento conflitti 409, append milestone e rendering UI).
+  - Test suite totale: 17 file di test e 90 test vitest superati (`npm run test:metadata`), build client e metadata completata con successo (`npm run build`).
+
 ## 2026-10-06 — F10 Hermes routines and cron GUI
 
 - Implementato l'adattatore backend per le routine/cron native di Hermes (`desktop/hermes/routines.mjs`) integrato in `desktop/hermes/server.mjs`.

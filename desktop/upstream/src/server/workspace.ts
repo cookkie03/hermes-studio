@@ -6,7 +6,7 @@ import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { validateLearningSettings } from '../shared/learning.js';
-import type { CallReceipt, Conversation, Dot, Space, FolderBinding } from '../shared/types.js';
+import type { CallReceipt, Conversation, Dot, Space, FolderBinding, SpaceMemoryConfig } from '../shared/types.js';
 export class WorkspaceStore {
   private db: DatabaseSync;
   readonly pages: Pages;
@@ -33,7 +33,8 @@ export class WorkspaceStore {
       CREATE TABLE IF NOT EXISTS task_threads(taskId TEXT PRIMARY KEY, threadId TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS calls(id TEXT PRIMARY KEY, threadId TEXT NOT NULL, startedAt INTEGER NOT NULL, endedAt INTEGER, status TEXT NOT NULL, transcript TEXT NOT NULL, error TEXT);
       CREATE TABLE IF NOT EXISTS captures(threadId TEXT PRIMARY KEY, value TEXT NOT NULL);
-      CREATE TABLE IF NOT EXISTS folder_bindings(id TEXT PRIMARY KEY, spaceId TEXT NOT NULL, rootId TEXT NOT NULL, host TEXT NOT NULL, name TEXT NOT NULL, path TEXT NOT NULL, isReadOnly INTEGER NOT NULL, createdAt INTEGER NOT NULL);`);
+      CREATE TABLE IF NOT EXISTS folder_bindings(id TEXT PRIMARY KEY, spaceId TEXT NOT NULL, rootId TEXT NOT NULL, host TEXT NOT NULL, name TEXT NOT NULL, path TEXT NOT NULL, isReadOnly INTEGER NOT NULL, createdAt INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS space_memory_configs(spaceId TEXT PRIMARY KEY, rootId TEXT NOT NULL, relativePath TEXT NOT NULL, policy TEXT NOT NULL, lastConfirmedWrite INTEGER, lastRevision TEXT, lastOutcome TEXT, lastError TEXT);`);
     for (const [table, column, definition] of [
       ['dots', 'learningContainerId', 'TEXT'],
       ['dots', 'skillDeliveryEnabled', 'INTEGER NOT NULL DEFAULT 0'],
@@ -111,9 +112,79 @@ export class WorkspaceStore {
     this.db.close();
   }
   spaces(): Space[] {
-    return this.db
+    const rows = this.db
       .prepare('SELECT * FROM spaces ORDER BY createdAt')
-      .all() as unknown as Space[];
+      .all() as unknown as Array<{ id: string; name: string; description: string; createdAt: number }>;
+    return rows.map((s) => ({
+      ...s,
+      memoryConfig: this.spaceMemoryConfig(s.id),
+    }));
+  }
+  spaceMemoryConfig(spaceId: string): SpaceMemoryConfig | null {
+    const row = this.db
+      .prepare('SELECT * FROM space_memory_configs WHERE spaceId = ?')
+      .get(spaceId) as any;
+    if (!row) return null;
+    return {
+      spaceId: row.spaceId,
+      rootId: row.rootId,
+      relativePath: row.relativePath,
+      policy: row.policy,
+      lastConfirmedWrite: row.lastConfirmedWrite ?? null,
+      lastRevision: row.lastRevision ?? null,
+      lastOutcome: row.lastOutcome ?? null,
+      lastError: row.lastError ?? null,
+    };
+  }
+  setSpaceMemoryConfig(
+    spaceId: string,
+    config: { rootId: string; relativePath: string; policy: 'manual' | 'milestones' },
+  ): SpaceMemoryConfig {
+    const existing = this.spaceMemoryConfig(spaceId);
+    this.db
+      .prepare(
+        'INSERT OR REPLACE INTO space_memory_configs (spaceId, rootId, relativePath, policy, lastConfirmedWrite, lastRevision, lastOutcome, lastError) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      )
+      .run(
+        spaceId,
+        config.rootId,
+        config.relativePath,
+        config.policy,
+        existing?.lastConfirmedWrite ?? null,
+        existing?.lastRevision ?? null,
+        existing?.lastOutcome ?? 'idle',
+        null,
+      );
+    return this.spaceMemoryConfig(spaceId)!;
+  }
+  updateSpaceMemoryStatus(
+    spaceId: string,
+    status: {
+      lastConfirmedWrite?: number | null;
+      lastRevision?: string | null;
+      lastOutcome?: 'success' | 'conflict' | 'error' | 'idle' | null;
+      lastError?: string | null;
+    },
+  ): void {
+    const existing = this.spaceMemoryConfig(spaceId);
+    if (!existing) return;
+    this.db
+      .prepare(
+        'UPDATE space_memory_configs SET lastConfirmedWrite = ?, lastRevision = ?, lastOutcome = ?, lastError = ? WHERE spaceId = ?',
+      )
+      .run(
+        (status.lastConfirmedWrite !== undefined ? status.lastConfirmedWrite : existing.lastConfirmedWrite) ?? null,
+        (status.lastRevision !== undefined ? status.lastRevision : existing.lastRevision) ?? null,
+        (status.lastOutcome !== undefined ? status.lastOutcome : existing.lastOutcome) ?? null,
+        (status.lastError !== undefined ? status.lastError : existing.lastError) ?? null,
+        spaceId,
+      );
+  }
+  deleteSpaceMemoryConfig(spaceId: string): boolean {
+    const res = this.db
+      .prepare('DELETE FROM space_memory_configs WHERE spaceId = ?')
+      .run(spaceId);
+    return (res as { changes: number }).changes > 0;
   }
   createSpace(name: string, description: string): Space {
     const space = {

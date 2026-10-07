@@ -4984,3 +4984,107 @@ h3 {
     grid-template-columns: 1fr;
   }
 }
+
+/* F9 Space Markdown Memory UI */
+.space-memory-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 520px;
+  background: #fff;
+  border: 1px solid var(--border, #deded9);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.space-memory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #faf9f7;
+  border-bottom: 1px solid var(--border, #deded9);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.memory-meta-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.memory-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #eef2f5;
+  color: #476582;
+  font-family: ui-monospace, monospace;
+}
+.memory-policy-badge {
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #ede9fe;
+  color: #6d28d9;
+}
+.memory-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.memory-status-pill.saved { background: #d4edda; color: #155724; }
+.memory-status-pill.saving { background: #cce5ff; color: #004085; }
+.memory-status-pill.modified { background: #fff3cd; color: #856404; }
+.memory-status-pill.conflict { background: #fee2e2; color: #991b1b; }
+.memory-status-pill.error { background: #fee2e2; color: #991b1b; }
+.memory-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.record-milestone-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: 1px solid #c7d2fe;
+  background: #e0e7ff;
+  color: #3730a3;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.record-milestone-btn:hover { background: #c7d2fe; }
+.space-memory-setup {
+  padding: 32px 24px;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+.space-memory-setup h3 {
+  font-size: 20px;
+  margin: 12px 0 6px;
+}
+.space-memory-setup p {
+  color: var(--muted, #81828c);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.space-memory-setup-card {
+  background: #faf9f7;
+  border: 1px solid var(--border, #deded9);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: left;
+}

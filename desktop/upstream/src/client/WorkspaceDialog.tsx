@@ -395,10 +395,15 @@ export function WorkspaceDialog({
             </>
           )}
           {dialog.type === 'memory' && (
-            <p className="muted">
-              Memories are explicit preferences, not automatic learning. Avoid
-              secrets; enabled memories go to your model provider.
-            </p>
+            <div className="config-note" style={{ marginTop: '0.75rem', marginBottom: '0.75rem' }}>
+              <strong>Scope: Studio Local Preferences</strong>
+              <p>
+                Stored in local Studio storage. Studio local preferences are isolated from Hermes runtime profile memory (<code>USER</code> / <code>MEMORY</code> stores) and Space Markdown files (<code>MEMORY.md</code>).
+              </p>
+              <p className="muted" style={{ fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                Preferences are explicit context inclusions. Avoid secrets; enabled items are included with message context sent to your model provider.
+              </p>
+            </div>
           )}
           {error && (
             <p className="chat-error" role="alert">

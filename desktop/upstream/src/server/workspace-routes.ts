@@ -71,6 +71,178 @@ export function workspaceRoutes(platform: MetadataBackend, voice: Pick<VoiceServ
     }
     return c.json({ success: true });
   });
+  app.get('/spaces/:spaceId/memory', (c) => {
+    const spaceId = c.req.param('spaceId');
+    const config = platform.workspace.spaceMemoryConfig(spaceId);
+    if (!config) {
+      return c.json({ config: null, file: null });
+    }
+    try {
+      const file = platform.workspace.files.readFile(config.rootId, config.relativePath);
+      return c.json({ config, file });
+    } catch (e) {
+      return c.json({
+        config,
+        file: null,
+        error: e instanceof Error ? e.message : 'Could not read memory file.',
+      });
+    }
+  });
+  app.post('/spaces/:spaceId/memory', async (c) => {
+    const spaceId = c.req.param('spaceId');
+    const space = platform.workspace.spaces().find((s) => s.id === spaceId);
+    if (!space) return c.json({ error: 'Space not found.' }, 404);
+
+    const schema = z
+      .object({
+        rootId: z.string().min(1),
+        relativePath: z.string().trim().min(1),
+        policy: z.enum(['manual', 'milestones']).default('manual'),
+        createIfNotExists: z.boolean().optional(),
+      })
+      .strict();
+
+    const parsed = schema.safeParse(await c.req.json());
+    if (!parsed.success) {
+      return c.json({ error: 'Invalid space memory configuration.' }, 400);
+    }
+
+    const { rootId, relativePath, policy, createIfNotExists } = parsed.data;
+    const root = platform.workspace.files.getRoot(rootId);
+    if (!root) return c.json({ error: 'Folder root not found.' }, 404);
+
+    let fileExists = false;
+    try {
+      platform.workspace.files.readFile(rootId, relativePath);
+      fileExists = true;
+    } catch {
+      fileExists = false;
+    }
+
+    if (!fileExists && createIfNotExists) {
+      if (root.isReadOnly) {
+        return c.json(
+          { error: `Cannot create memory file in read-only folder root '${root.name}'.` },
+          400,
+        );
+      }
+      const defaultContent = `# ${space.name} — Space Memory\n\n## Context & Goals\n${space.description || 'Goals and context for this Space.'}\n\n## Key Decisions\n- Initialized Space Markdown Memory.\n\n## Significant Milestones & Outcomes\n\n`;
+      const writeResult = platform.workspace.files.writeFile({
+        rootId,
+        relativePath,
+        content: defaultContent,
+        toolName: 'space_memory_init',
+      });
+      platform.workspace.setSpaceMemoryConfig(spaceId, {
+        rootId,
+        relativePath,
+        policy,
+      });
+      platform.workspace.updateSpaceMemoryStatus(spaceId, {
+        lastConfirmedWrite: Date.now(),
+        lastRevision: writeResult.newRevision,
+        lastOutcome: 'success',
+        lastError: null,
+      });
+    } else {
+      platform.workspace.setSpaceMemoryConfig(spaceId, {
+        rootId,
+        relativePath,
+        policy,
+      });
+    }
+
+    const config = platform.workspace.spaceMemoryConfig(spaceId);
+    let file = null;
+    try {
+      file = platform.workspace.files.readFile(rootId, relativePath);
+    } catch {}
+
+    return c.json({ config, file });
+  });
+  app.post('/spaces/:spaceId/memory/write', async (c) => {
+    const spaceId = c.req.param('spaceId');
+    const config = platform.workspace.spaceMemoryConfig(spaceId);
+    if (!config) return c.json({ error: 'Space memory is not configured.' }, 400);
+
+    const schema = z
+      .object({
+        content: z.string(),
+        expectedRevision: z.string().optional(),
+        mode: z.enum(['replace', 'append']).default('replace'),
+        appendHeading: z.string().optional(),
+      })
+      .strict();
+
+    const parsed = schema.safeParse(await c.req.json());
+    if (!parsed.success) {
+      return c.json({ error: 'Invalid write payload.' }, 400);
+    }
+
+    const { content, expectedRevision, mode, appendHeading } = parsed.data;
+    let finalContent = content;
+
+    if (mode === 'append') {
+      try {
+        const existing = platform.workspace.files.readFile(config.rootId, config.relativePath);
+        const heading = appendHeading ? `\n\n### ${appendHeading}\n` : '\n\n';
+        finalContent = existing.content.trimEnd() + heading + content + '\n';
+      } catch {
+        return c.json({ error: 'Failed to read existing file for appending.' }, 400);
+      }
+    }
+
+    try {
+      const res = platform.workspace.files.writeFile({
+        rootId: config.rootId,
+        relativePath: config.relativePath,
+        content: finalContent,
+        expectedRevision,
+        toolName: 'space_memory_editor',
+      });
+
+      if (res.receipt.outcome === 'conflict') {
+        platform.workspace.updateSpaceMemoryStatus(spaceId, {
+          lastOutcome: 'conflict',
+          lastError: 'Conflict: Memory file modified externally.',
+        });
+        return c.json(
+          {
+            outcome: 'conflict',
+            receipt: res.receipt,
+            config: platform.workspace.spaceMemoryConfig(spaceId),
+          },
+          409,
+        );
+      }
+
+      platform.workspace.updateSpaceMemoryStatus(spaceId, {
+        lastConfirmedWrite: Date.now(),
+        lastRevision: res.newRevision,
+        lastOutcome: 'success',
+        lastError: null,
+      });
+
+      return c.json({
+        outcome: 'success',
+        receipt: res.receipt,
+        newRevision: res.newRevision,
+        config: platform.workspace.spaceMemoryConfig(spaceId),
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to write memory file.';
+      platform.workspace.updateSpaceMemoryStatus(spaceId, {
+        lastOutcome: 'error',
+        lastError: message,
+      });
+      return c.json({ error: message }, 400);
+    }
+  });
+  app.delete('/spaces/:spaceId/memory', (c) => {
+    const spaceId = c.req.param('spaceId');
+    platform.workspace.deleteSpaceMemoryConfig(spaceId);
+    return c.json({ success: true });
+  });
   app.post('/spaces', async (c) => {
     const data = z
       .object({
