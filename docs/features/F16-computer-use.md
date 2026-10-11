@@ -52,7 +52,7 @@ Verify paths and version before working; coordinate shared files. These readings
 
 ## Evidence boundary
 
-Status: **documented, not implemented** (2026-10-04). This specification describes a future Hermes Studio slice; available upstream code does not mean a capability is connected in the app. Evidence: reading the source checkout `/Users/luca/.hermes/hermes-agent`, not live execution, no personal prompt/configuration/database. Authoritative reference: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). The remote version may change: pin the SHA and repeat contract tests before implementing.
+Status: **implemented F16-A/B adapter, live gates open** (2026-10-11). This specification describes a future Hermes Studio slice; available upstream code does not mean a capability is connected in the app. Evidence: reading the source checkout `/Users/luca/.hermes/hermes-agent`, not live execution, no personal prompt/configuration/database. Authoritative reference: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). The remote version may change: pin the SHA and repeat contract tests before implementing.
 
 First read `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md`, and `desktop/hermes/README.md`. The user chose the OpenDots UI; Hermes remains the only executor. The Studio endpoints described below are **proposals**, not existing APIs.
 

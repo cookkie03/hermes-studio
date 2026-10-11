@@ -290,7 +290,7 @@ export interface ComputerTarget {
   profile?: string;
   app?: string;
   window?: string;
-  driverStatus: 'available' | 'missing_driver' | 'denied_permissions' | 'no_display';
+  driverStatus: 'available' | 'unavailable' | 'missing_driver' | 'denied_permissions' | 'no_display';
   modes: ('som' | 'vision' | 'ax')[];
   humanHasControl: boolean;
   botScreenStreamAvailable: boolean;

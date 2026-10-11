@@ -29,6 +29,43 @@ import { api } from './api';
 interface Status { connected: boolean; lastError?: string }
 interface Activity { id: string; name: string; result?: unknown; complete: boolean }
 
+interface ComputerTargetView {
+  connectionId: string;
+  host: string;
+  profile?: string;
+  app?: string;
+  window?: string;
+  driverStatus: string;
+  modes: string[];
+  humanHasControl: boolean;
+  botScreenStreamAvailable: boolean;
+}
+interface CaptureReceiptView {
+  id: string;
+  timestamp: number;
+  mode: string;
+  targetApp?: string;
+  targetWindow?: string;
+  imageUrl?: string | null;
+  base64?: string | null;
+  textSummary?: string | null;
+  elements?: Array<{ id: string; label: string; role?: string; bounds?: [number, number, number, number] }>;
+  stale: boolean;
+}
+interface ComputerActionView {
+  id: string;
+  toolId?: string;
+  action: string;
+  args: Record<string, unknown>;
+  target: ComputerTargetView;
+  status: string;
+  createdAt: number;
+  resultSummary?: string;
+  error?: string;
+  payloadTruncated?: boolean;
+}
+
+
 export function ComputerPanel({
   dot,
   threadId,
@@ -65,6 +102,51 @@ export function ComputerPanel({
   const [browserLoading, setBrowserLoading] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [browserHistoryFilter, setBrowserHistoryFilter] = useState('');
+
+  // Native Hermes Computer Use receipts (F16-A/B). Browser state above remains F12.
+  const [computerTarget, setComputerTarget] = useState<ComputerTargetView | null>(null);
+  const [computerCaptures, setComputerCaptures] = useState<CaptureReceiptView[]>([]);
+  const [computerActions, setComputerActions] = useState<ComputerActionView[]>([]);
+  const [computerLeaseBusy, setComputerLeaseBusy] = useState(false);
+
+  const loadComputerReceipts = async () => {
+    try {
+      const query = threadId ? `?threadId=${encodeURIComponent(threadId)}` : '';
+      const [target, captures, activity] = await Promise.all([
+        api<ComputerTargetView>(`/hermes/computer/target${query}`),
+        api<{ captures: CaptureReceiptView[] }>(`/hermes/computer/captures${query}`),
+        api<{ activity: ComputerActionView[] }>(`/hermes/computer/activity${query}`),
+      ]);
+      setComputerTarget(target);
+      setComputerCaptures(captures.captures);
+      setComputerActions(activity.activity);
+    } catch {
+      // Hermes may be disconnected; the existing status/error surface remains authoritative.
+    }
+  };
+
+  useEffect(() => {
+    void loadComputerReceipts();
+    const timer = window.setInterval(() => void loadComputerReceipts(), 2000);
+    return () => window.clearInterval(timer);
+  }, [dot.id, threadId]);
+
+  const setHumanControl = async (humanHasControl: boolean) => {
+    setComputerLeaseBusy(true);
+    try {
+      const lease = await api<{ humanHasControl: boolean }>(
+        '/hermes/computer/lease',
+        'POST',
+        { connectionId: computerTarget?.connectionId ?? 'local', threadId, humanHasControl },
+      );
+      setComputerTarget(previous => previous ? { ...previous, humanHasControl: lease.humanHasControl } : previous);
+      await loadComputerReceipts();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not change computer control.');
+    } finally {
+      setComputerLeaseBusy(false);
+    }
+  };
 
   const loadBrowserStatus = async () => {
     try {
@@ -389,6 +471,72 @@ export function ComputerPanel({
       </div>
 
       {error && <p className="computer-error" role="alert">{error}</p>}
+
+      <section className="hermes-native-computer" aria-label="Native Hermes Computer Use">
+        <header className="native-computer-header">
+          <div>
+            <span className="eyebrow">NATIVE HERMES COMPUTER USE</span>
+            <h3>{computerTarget?.host ?? 'Target unavailable'}</h3>
+            <p>
+              {computerTarget
+                ? `${computerTarget.app ?? 'Application'} / ${computerTarget.window ?? 'Window'} · ${computerTarget.profile ?? 'default'} profile`
+                : 'Waiting for a verified Hermes target.'}
+            </p>
+          </div>
+          <span className={`status-pill ${computerTarget?.driverStatus === 'available' ? 'pill-agent' : 'pill-human'}`}>
+            {computerTarget?.driverStatus ?? 'unavailable'}
+          </span>
+        </header>
+        <div className="native-computer-meta">
+          <span>Modes: {computerTarget?.modes.join(', ') ?? '—'}</span>
+          <span>Captures: {computerCaptures.length}</span>
+          <span>Actions: {computerActions.length}</span>
+          <button
+            className="lease-btn takeover-btn"
+            disabled={!computerTarget?.botScreenStreamAvailable || computerLeaseBusy}
+            onClick={() => void setHumanControl(!computerTarget?.humanHasControl)}
+            aria-label={computerTarget?.humanHasControl ? 'Return computer control to Hermes' : 'Take control of computer'}
+          >
+            {computerTarget?.humanHasControl ? <Bot size={14} /> : <UserCheck size={14} />}
+            <span>{computerTarget?.humanHasControl ? 'Return to Hermes' : 'Take control'}</span>
+          </button>
+        </div>
+        {computerTarget?.humanHasControl && (
+          <p className="computer-warning" role="status">Human has control. Hermes mutations are denied until control is returned.</p>
+        )}
+        {computerCaptures.length === 0 ? (
+          <p className="hermes-computer-placeholder">No native capture received yet. Capture output stays on the bot host.</p>
+        ) : (
+          <div className="native-computer-captures">
+            {computerCaptures.slice(0, 3).map(capture => (
+              <article key={capture.id} className={`computer-capture ${capture.stale ? 'stale' : ''}`}>
+                <div className="computer-capture-heading">
+                  <strong>{capture.mode.toUpperCase()} capture</strong>
+                  <time dateTime={new Date(capture.timestamp).toISOString()}>{new Date(capture.timestamp).toLocaleTimeString()}</time>
+                  {capture.stale && <span className="status-pill pill-human">Stale</span>}
+                </div>
+                {capture.imageUrl || capture.base64 ? (
+                  <img
+                    src={capture.imageUrl ?? `data:image/png;base64,${capture.base64}`}
+                    alt={`${capture.mode} capture from ${capture.targetApp ?? 'target application'}`}
+                  />
+                ) : <p>{capture.textSummary ?? 'Capture contains no visual preview.'}</p>}
+                <small>{capture.targetApp ?? 'Unknown app'} / {capture.targetWindow ?? 'Unknown window'}</small>
+              </article>
+            ))}
+          </div>
+        )}
+        <div className="native-computer-activity" aria-label="Computer action outcomes">
+          {computerActions.slice(0, 6).map(action => (
+            <div key={action.id} className="computer-action-row">
+              <span>{action.action}</span>
+              <span className={`status-pill action-${action.status}`}>{action.status}</span>
+              {action.payloadTruncated && <small>payload archived as summary (&gt;64 KiB)</small>}
+              {action.error && <small>{action.error}</small>}
+            </div>
+          ))}
+        </div>
+      </section>
 
       {tab === 'Browser' && (
         <section className="hermes-browser-workspace" role="tabpanel" aria-label="Browser Surface">

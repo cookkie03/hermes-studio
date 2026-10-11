@@ -6,6 +6,13 @@
 - Verifiche: `npm run typecheck:renderer`; `npx vitest run --root upstream tests/f15-terminal.test.ts tests/computer-card.test.tsx tests/transcript.test.tsx` (3 file, 10 test passati); `npm test`; `npm run build`.
 - Gate ancora aperti: smoke `.app`, test con runtime Hermes collegato, incremental/backpressure reale, disconnect/reconnect del terminale, resize/interruption e PTY interattivo. Il contratto sorgente Hermes letto espone il terminal tool come esecuzione con risultato aggregato, non come sessione PTY Studio.
 
+## Incremento F16-A/B — Computer Use nativo tramite Studio (2026-10-11)
+
+- Implementato `desktop/hermes/computer.mjs` come adapter di receipts: consuma gli eventi runtime `computer_use`, espone target/host/profilo/modi, conserva catture e azioni, marca snapshot stale, riduce payload oltre 64 KiB a summary e rispetta `human_has_control`.
+- Collegati gli endpoint `/api/hermes/computer/*` e gli eventi SSE; `ComputerPanel` presenta target/provenienza, catture SOM/vision/AX, timestamp, esiti, errori e lease umano senza aggiungere executor CUA/VNC/MCP.
+- Aggiunti `hermes/computer.test.mjs` e `tests/f16-computer.test.tsx`. Verifiche: 4 test Node F16 passati, 1 test Vitest F16 passato, typecheck renderer, syntax check backend e build superati.
+- `npm run test:metadata` ha un fallimento preesistente in `tests/f6-spaces.test.tsx` sull'empty-state copy; la suite completa non è dichiarata verde. Runtime Hermes/driver/display/permessi reali, capture→azione→postcondizione, packaged UI e F16-C Bot Screen restano da verificare.
+
 
 - Added a persisted `CollaborationManager` and HTTP adapter for F14 synthetic collaboration state: temporary subagents, Dot-to-Dot messages, hosted room logs, recall results, and explicit Space/profile project links.
 - Added `CollaborationPanel` and `RecallResults` to the renderer. The panel keeps temporary children separate from persistent Dots and shows delivery IDs, queued-vs-reply semantics, failure/uncertain states, room sequence numbers, profile scope, and D38 link status.

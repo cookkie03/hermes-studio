@@ -20,6 +20,13 @@ Evidence: `node --test hermes/collaboration.test.mjs hermes/collaboration-server
 
 Implementata e verificata la prima slice F15: Chat presenta gli eventi Hermes `tool.start`/`tool.complete` dei tool terminal/exec/shell come output terminale con stato, stdout, stderr, exit code e cwd osservato. Nessun executor parallelo, PTY, stdin, resize o nuova API backend è stato aggiunto; la sessione interattiva resta non supportata. Test mirati, `npm test` e `npm run build` superati; smoke `.app`, runtime Hermes live e gate PTY/backpressure/disconnect/resize/interruption restano aperti.
 
+## Incremento F16-A/B — Computer Use nativo tramite Studio (2026-10-11)
+
+Implementata la prima connessione frontend/adattatore per Computer Use Hermes. `ComputerManager` riceve gli eventi runtime nativi `computer_use`, conserva ricevute di cattura/azione per host, espone target/profilo/app/finestra/modalità e rende espliciti `working`, approvazione, esito, errore, payload archiviato come summary oltre 64 KiB e catture stale. La superficie `ComputerPanel` mostra provenienza, catture SOM/vision/AX, timestamp, esiti e stato `human_has_control`; il cambio lease è disabilitato se lo stream Bot Screen non è dichiarato disponibile.
+
+Verifiche: `node --test hermes/computer.test.mjs` (4 passati), `npx vitest run --root upstream tests/f16-computer.test.tsx` (1 passato), `npm run typecheck:renderer`, `node --check hermes/server.mjs`, `node --check hermes/computer.mjs`, `npm run build` superati. `npm run test:metadata` eseguito: 20 file/98 test passati, 1 test F6 preesistente fallito per mismatch di testo dell'empty state. Non eseguiti: runtime Hermes/driver/display/permessi live, capture→azione approvata→postcondizione reale, screenshot/accessibility/IME packaged, F16-C Bot Screen stream/takeover nativo; non viene dichiarato un executor o un takeover reale.
+
+
 19 schede F0–F18 con skill, ingressi, incrementi, ownership, gate e handoff. In particolare: folder-backed Spaces F6/F5, picker avatar F7-A, browser condiviso F12, voce in-app F17, memoria Markdown Space F9 e viewer/riepiloghi Hermes F8. Metadata del MVP non dimostrano questi nuovi comportamenti.
 
 Design OpenDots autorevole; componenti Unsloth/Codex. Unsloth disclosure osservata; Codex solo screenshot per diniego del tool. Token/motion proposti, non misurati. Screenshot personali esclusi da Git.

@@ -34,6 +34,7 @@ export class ComputerManager extends EventEmitter {
     this.captures = new Map(); // connectionId -> CaptureReceipt[]
     this.actions = new Map();  // connectionId -> ComputerActionRequest[]
     this.leases = new Map();   // connectionId -> BotScreenLease
+    this.probedHosts = new Set(); // hosts that emitted a native computer_use event
 
     if (this.connections) {
       this.connections.on('update', event => this.handleRuntimeEvent(event));
@@ -43,20 +44,20 @@ export class ComputerManager extends EventEmitter {
   getTarget({ connectionId = 'local', threadId } = {}) {
     const connId = connectionId || 'local';
     const lease = this.getLease({ connectionId: connId });
-    
-    // Default probe info for local Mac / remote host
-    const isLocal = connId === 'local';
+    const connection = this.connections?.statusFor?.(connId);
+    const connected = connection?.connected === true;
+    const probed = this.probedHosts.has(connId);
     return {
       connectionId: connId,
-      host: isLocal ? 'This Mac' : `Host (${connId})`,
+      host: connection?.host || connection?.name || (connId === 'local' ? 'This Mac' : `Host (${connId})`),
       profile: 'default',
-      platform: process.platform,
-      app: 'Finder',
-      window: isLocal ? 'Desktop' : 'Remote Display',
-      driverStatus: 'available',
-      modes: ['som', 'vision', 'ax'],
+      app: undefined,
+      window: undefined,
+      driverStatus: probed ? (connected ? 'available' : 'unavailable') : 'unavailable',
+      modes: probed && connected ? ['som', 'vision', 'ax'] : [],
       humanHasControl: lease.humanHasControl,
-      botScreenStreamAvailable: true,
+      // Bot Screen is a separate native contract; do not claim it from a tool connection.
+      botScreenStreamAvailable: false,
     };
   }
 
@@ -90,7 +91,10 @@ export class ComputerManager extends EventEmitter {
       lease: updated,
     });
 
-    return updated;
+  return {
+    ...this.getTarget({ connectionId: connId, threadId }),
+    ...updated,
+  };
   }
 
   getCaptures({ connectionId = 'local', threadId } = {}) {
@@ -196,30 +200,32 @@ export class ComputerManager extends EventEmitter {
 
   handleRuntimeEvent(event) {
     if (!event) return;
-    const name = event.payload?.name || event.name;
+    const runtime = event.type === 'runtime' && event.event ? event.event : event;
+    const name = runtime.payload?.name || runtime.name;
     if (!name || (!name.startsWith('computer_') && name !== 'computer_use')) return;
 
-    const connId = event.connectionId || 'local';
-    const threadId = event.threadId;
+    const connId = event.connectionId || runtime.connectionId || 'local';
+    const threadId = event.threadId || runtime.threadId;
+    this.probedHosts.add(connId);
 
-    if (event.type === 'tool.start') {
-      const args = event.payload?.args || {};
+    if (runtime.type === 'tool.start') {
+      const args = runtime.payload?.args || {};
       const actionName = args.action || name.replace(/^computer_/, '') || 'capture';
       this.recordAction({
         connectionId: connId,
         threadId,
         action: {
-          toolId: event.payload?.tool_id,
+          toolId: runtime.payload?.tool_id,
           action: actionName,
           args,
           status: 'working',
           createdAt: Date.now(),
         },
       });
-    } else if (event.type === 'tool.complete') {
-      const toolId = event.payload?.tool_id;
-      const result = event.payload?.result;
-      const error = event.payload?.error;
+    } else if (runtime.type === 'tool.complete') {
+      const toolId = runtime.payload?.tool_id;
+      const result = runtime.payload?.result;
+      const error = runtime.payload?.error;
 
       // Extract capture if result contains snapshot / base64 / screenshot
       if (result && typeof result === 'object' && (result.base64 || result.image_url || result.screenshot)) {
@@ -248,36 +254,36 @@ export class ComputerManager extends EventEmitter {
           error,
         },
       });
-    } else if (event.type === 'approval-waiting') {
+    } else if (runtime.type === 'approval-waiting') {
       this.recordAction({
         connectionId: connId,
         threadId,
         action: {
-          toolId: event.payload?.tool_id,
-          action: event.payload?.action || 'computer_mutation',
-          args: event.payload?.args || {},
+          toolId: runtime.payload?.tool_id,
+          action: runtime.payload?.action || 'computer_mutation',
+          args: runtime.payload?.args || {},
           status: 'pending_approval',
           createdAt: Date.now(),
         },
       });
-    } else if (event.type === 'approval-granted') {
+    } else if (runtime.type === 'approval-granted') {
       this.recordAction({
         connectionId: connId,
         threadId,
         action: {
-          toolId: event.payload?.tool_id,
+          toolId: runtime.payload?.tool_id,
           status: 'approved',
           approvedAt: Date.now(),
         },
       });
-    } else if (event.type === 'approval-denied') {
+    } else if (runtime.type === 'approval-denied') {
       this.recordAction({
         connectionId: connId,
         threadId,
         action: {
-          toolId: event.payload?.tool_id,
+          toolId: runtime.payload?.tool_id,
           status: 'denied',
-          error: event.payload?.reason || 'User denied action',
+          error: runtime.payload?.reason || 'User denied action',
         },
       });
     }

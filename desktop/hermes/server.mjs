@@ -18,6 +18,7 @@ import { ComputerManager } from './computer.mjs';
 import { CollaborationManager } from './collaboration.mjs';
 import { HermesMemoryManager } from './memory.mjs';
 import { buildCapabilityMatrix } from './capability-matrix.mjs';
+import { AudioManager } from './audio.mjs';
 
 const unavailable = () => { throw new Error('This capability is not connected to Hermes yet.'); };
 export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway, connectorFactory, gatewayFactory } = {}) {
@@ -37,6 +38,8 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   const drafts = new DraftStore(join(dataDir, 'drafts.json')); await drafts.initialize();
   const routines = new RoutinesManager({ connections: bridge });
   const capabilities = new CapabilitiesManager({ connections: bridge });
+  const computer = new ComputerManager({ connections: bridge });
+  computer.on('changed', event => { bridge.emit('update', event); });
   const memoryManager = new HermesMemoryManager({ connections: bridge });
   const collaboration = new CollaborationManager({ dataDir, gateway: bridge.gateway });
   await collaboration.initialize();
@@ -172,7 +175,23 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
       return c.json({ error: err.message }, 400);
     }
   });
-  app.get('/api/hermes/routines', async c => c.json(await routines.listJobs({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
+  app.get('/api/hermes/computer/target', c => c.json(computer.getTarget({ connectionId: c.req.query('connectionId'), threadId: c.req.query('threadId') })));
+  app.get('/api/hermes/computer/captures', c => c.json({ captures: computer.getCaptures({ connectionId: c.req.query('connectionId'), threadId: c.req.query('threadId') }) }));
+  app.get('/api/hermes/computer/activity', c => c.json({ activity: computer.getActivity({ connectionId: c.req.query('connectionId'), threadId: c.req.query('threadId') }) }));
+  app.get('/api/hermes/computer/lease', c => c.json(computer.getLease({ connectionId: c.req.query('connectionId') })));
+  app.post('/api/hermes/computer/lease', async c => {
+    const data = await c.req.json();
+    return c.json(computer.setHumanControl({ connectionId: data.connectionId, threadId: data.threadId, humanHasControl: data.humanHasControl }));
+  });
+  app.post('/api/hermes/computer/captures', async c => {
+    const data = await c.req.json();
+    return c.json(computer.recordCapture({ connectionId: data.connectionId, threadId: data.threadId, capture: data.capture || data }));
+  });
+  app.post('/api/hermes/computer/activity', async c => {
+    const data = await c.req.json();
+    return c.json(computer.recordAction({ connectionId: data.connectionId, threadId: data.threadId, action: data.action || data }));
+  });
+
   app.post('/api/hermes/routines', async c => c.json(await routines.createJob(await c.req.json(), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.get('/api/hermes/routines/delivery-targets', async c => c.json(await routines.getDeliveryTargets({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.get('/api/hermes/routines/:id', async c => c.json(await routines.getJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
@@ -322,7 +341,7 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   app.get('/api/*', c => c.json({ error: 'Not found.' }, 404));
   if (staticDir) { app.use('/*', serveStatic({ root: staticDir })); app.get('*', serveStatic({ path: join(staticDir, 'index.html') })); }
   app.onError((error, c) => c.json({ error: error instanceof SyntaxError ? 'Invalid JSON request.' : error.message }, error instanceof SyntaxError ? 400 : 503));
-  return { app, bridge, routines, capabilities, memoryManager, collaboration, browser, store, workspace, close: () => { bridge.close(); store.close(); workspace.close(); } };
+  return { app, bridge, routines, capabilities, computer, memoryManager, collaboration, browser, store, workspace, close: () => { bridge.close(); store.close(); workspace.close(); } };
 }
 
 export async function startStudio() {

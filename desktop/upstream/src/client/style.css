@@ -4164,6 +4164,26 @@ h3 {
 .hermes-computer-output { background: white; border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-top: 12px; }
 .hermes-computer-output small { display: block; color: var(--muted); }
 .hermes-computer-output pre { max-height: 220px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11px; }
+.hermes-native-computer { border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 14px; margin: 0 0 12px; }
+.native-computer-header, .native-computer-meta, .computer-capture-heading, .computer-action-row { display: flex; align-items: center; gap: 8px; }
+.native-computer-header { justify-content: space-between; align-items: flex-start; }
+.native-computer-header h3 { margin: 4px 0; font-size: 14px; font-weight: 600; }
+.native-computer-header p, .native-computer-header small { margin: 0; color: var(--muted); font-size: 12px; }
+.native-computer-meta { flex-wrap: wrap; margin: 12px 0; color: var(--muted); font-size: 12px; }
+.native-computer-meta .lease-btn { margin-left: auto; }
+.native-computer-captures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.computer-capture { min-width: 0; border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+.computer-capture.stale { border-color: #d9a441; opacity: .76; }
+.computer-capture-heading { justify-content: space-between; font-size: 10px; color: var(--muted); }
+.computer-capture img { display: block; width: 100%; max-height: 160px; object-fit: contain; margin: 8px 0; background: #f7f7f7; }
+.computer-capture p, .computer-capture small, .computer-action-row small { color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
+.native-computer-activity { display: grid; gap: 6px; margin-top: 10px; }
+.computer-action-row { flex-wrap: wrap; padding: 6px 0; border-top: 1px solid var(--line); font-size: 12px; }
+.computer-action-row .status-pill { margin-left: auto; }
+.computer-action-row small { width: 100%; }
+.computer-warning { color: #9a6612; font-size: 12px; }
+@media (max-width: 700px) { .native-computer-captures { grid-template-columns: 1fr; } .native-computer-meta .lease-btn { margin-left: 0; } }
+
 .hermes-client .new-conversation .hermes-new-header { margin: -25px -38px 24px; width: calc(100% + 76px); }
 .hermes-client .sidebar-bottom .version { display: none; }
 /* Live QA: constrain summaries inside the selected sidebar row. */
