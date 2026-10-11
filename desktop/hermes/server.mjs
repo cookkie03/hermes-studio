@@ -39,10 +39,12 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   const capabilities = new CapabilitiesManager({ connections: bridge });
   const memoryManager = new HermesMemoryManager({ connections: bridge });
   const collaboration = new CollaborationManager({ dataDir, gateway: bridge.gateway });
+  const browser = new HermesBrowserService({ dataDir });
+  await browser.initialize();
   routines.on('changed', event => { bridge.emit('update', { type: 'cron.changed', ...event }); });
   const facade = {
     workspace,
-    setup: () => ({ intelligence: false, model: bridge.list().connections.some(connection => connection.connected), browser: false, voice: false, slack: 'not_configured', missing: [] }),
+    setup: () => ({ intelligence: false, model: bridge.list().connections.some(connection => connection.connected), browser: true, voice: false, slack: 'not_configured', missing: [] }),
     createConversation: async (dotId, title) => { if (!workspace.dot(dotId)) throw new Error('Dot not found.'); return workspace.bindThread(randomUUID(), dotId, title); },
     handle: () => new Response(JSON.stringify({ error: 'Use the local Hermes connector.' }), { status: 501 }),
     pages: {
@@ -138,7 +140,37 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   });
   // Preserve metadata stores and page routes, but do not run a second tool/agent executor.
   app.all('/api/voice/*', c => c.json({ error: 'Voice and telephone calls are a future capability.' }, 501));
-  app.all('/api/computers/*', c => c.json({ error: 'Computer preview/takeover is not connected. Hermes tools remain available in the runtime.' }, 501));
+  // F12 Integrated Browser Workspace & Control Lease
+  app.get('/api/dots/:id/computer', c => c.json(browser.getStatus(c.req.param('id'))));
+  app.get('/api/computers/:dotId', c => c.json(browser.getStatus(c.req.param('dotId'))));
+  app.post('/api/dots/:id/computer/start', c => c.json(browser.getStatus(c.req.param('id'))));
+  app.post('/api/dots/:id/computer/stop', c => c.json(browser.getStatus(c.req.param('id'))));
+  app.post('/api/dots/:id/computer/take', async c => c.json(await browser.takeControl(c.req.param('id'))));
+  app.post('/api/computers/:dotId/take', async c => c.json(await browser.takeControl(c.req.param('dotId'))));
+  app.post('/api/dots/:id/computer/release', async c => c.json(await browser.releaseControl(c.req.param('id'))));
+  app.post('/api/computers/:dotId/release', async c => c.json(await browser.releaseControl(c.req.param('dotId'))));
+  app.post('/api/computers/:dotId/navigate', async c => {
+    const data = await c.req.json();
+    return c.json(await browser.navigate(c.req.param('dotId'), data.url, data.actor || 'owner'));
+  });
+  app.post('/api/computers/:dotId/tabs', async c => {
+    const dotId = c.req.param('dotId');
+    const data = await c.req.json();
+    if (data.action === 'create') return c.json(await browser.createTab(dotId, data.url, data.actor || 'owner'));
+    if (data.action === 'switch') return c.json(await browser.switchTab(dotId, data.tabId));
+    if (data.action === 'close') return c.json(await browser.closeTab(dotId, data.tabId, data.actor || 'owner'));
+    return c.json({ error: 'Invalid tab action.' }, 400);
+  });
+  app.post('/api/computers/:dotId/clear', async c => c.json(await browser.clearData(c.req.param('dotId'))));
+  app.post('/api/dots/:id/computer/actions', async c => {
+    const dotId = c.req.param('id');
+    const data = await c.req.json();
+    try {
+      return c.json(await browser.executeAction(dotId, data.action, data.input, data.actor || 'agent'));
+    } catch (err) {
+      return c.json({ error: err.message }, 400);
+    }
+  });
   app.get('/api/hermes/routines', async c => c.json(await routines.listJobs({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.post('/api/hermes/routines', async c => c.json(await routines.createJob(await c.req.json(), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.get('/api/hermes/routines/delivery-targets', async c => c.json(await routines.getDeliveryTargets({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));

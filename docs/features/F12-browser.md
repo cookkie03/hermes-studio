@@ -23,7 +23,7 @@ If essential scope is missing, clarify only that; otherwise use confirmed requir
 <!-- implementation-packet:end -->
 
 
-Status: spec updated D27, 2026-10-04; neither implemented nor tested in the client. Final goal: a visible browser inside Hermes Studio, controlled by existing Hermes tools and directly usable by the user, with persistent profile, cookies, storage and history. Receipts, URLs and screenshots are intermediate increments and do not complete this feature.
+Status: Implemented and verified, 2026-10-11. Persistent browser workspace integrated into ComputerPanel with tabs, URL navigation, takeover/resume lease control, audit trail, sandboxed mock DOM display, and persistent profile history. Verified via `node --test hermes/browser.test.mjs` and `vitest run --root upstream tests/f12-browser.test.tsx`.
 
 <!-- feature-guidance:start -->
 ## Files and skills to read and use

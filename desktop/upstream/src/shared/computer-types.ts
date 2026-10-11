@@ -14,6 +14,7 @@ export interface ComputerAudit {
   actor: 'owner' | 'agent';
   outcome: 'pending' | 'succeeded' | 'failed';
   createdAt: number;
+  details?: string;
 }
 export interface ComputerControl {
   holder: 'bot' | 'human';
@@ -25,10 +26,42 @@ export interface ComputerControl {
 export interface ComputerStatus {
   configured: boolean;
   state: 'not_configured' | 'stopped' | 'running' | 'unavailable';
+  holder?: 'bot' | 'human';
+  requested?: boolean;
+  transitioning?: boolean;
+  resumeSnapshotRequired?: boolean;
   permissions: ComputerPermissions;
   audit: ComputerAudit[];
   control?: ComputerControl;
   error?: string;
+}
+
+export interface BrowserTab {
+  id: string;
+  url: string;
+  title: string;
+  content: string;
+  createdAt: number;
+}
+
+export interface BrowserHistoryItem {
+  id: string;
+  url: string;
+  title: string;
+  visitedAt: number;
+}
+
+export interface BrowserStatus extends ComputerStatus {
+  holder?: 'bot' | 'human';
+  activeTabId?: string;
+  activeUrl?: string;
+  activeTitle?: string;
+  activeContent?: string;
+  tabs?: BrowserTab[];
+  history?: BrowserHistoryItem[];
+  cookiesCount?: number;
+  localStorageCount?: number;
+  lastNavigatedAt?: number;
 }
 const path = z
   .string()

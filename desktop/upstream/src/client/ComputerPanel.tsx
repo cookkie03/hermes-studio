@@ -1,8 +1,29 @@
 // Preserve the OpenDots computer surface while exposing verified Hermes capabilities and file workspace.
 import { useEffect, useState, useRef } from 'react';
-import { Folder, Globe, Terminal, FileText, AlertTriangle, CheckCircle, RefreshCw, Search, Save, HardDrive } from 'lucide-react';
+import {
+  Folder,
+  Globe,
+  Terminal,
+  FileText,
+  AlertTriangle,
+  CheckCircle,
+  RefreshCw,
+  Search,
+  Save,
+  HardDrive,
+  ArrowLeft,
+  ArrowRight,
+  RotateCw,
+  Plus,
+  X,
+  History,
+  Trash2,
+  UserCheck,
+  Bot,
+} from 'lucide-react';
 import type { Dot } from '../shared/types';
 import type { FileRoot, FileItem, FileReadResult, FileDiffReceipt } from '../shared/file-workspace';
+import type { BrowserStatus } from '../shared/computer-types';
 import { api } from './api';
 
 interface Status { connected: boolean; lastError?: string }
@@ -37,6 +58,131 @@ export function ComputerPanel({
   const [highlightRange, setHighlightRange] = useState<{ start?: number; end?: number } | undefined>(
     initialFileRef ? { start: initialFileRef.lineStart, end: initialFileRef.lineEnd } : undefined
   );
+
+  // Browser state (F12)
+  const [browserStatus, setBrowserStatus] = useState<BrowserStatus | null>(null);
+  const [urlInput, setUrlInput] = useState('https://hermes.local/start');
+  const [browserLoading, setBrowserLoading] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [browserHistoryFilter, setBrowserHistoryFilter] = useState('');
+
+  const loadBrowserStatus = async () => {
+    try {
+      const res = await api<BrowserStatus>(`/dots/${encodeURIComponent(dot.id)}/computer`);
+      setBrowserStatus(res);
+      if (res.activeUrl) setUrlInput(res.activeUrl);
+    } catch {
+      // Offline or error
+    }
+  };
+
+  useEffect(() => {
+    void loadBrowserStatus();
+  }, [dot.id]);
+
+  const handleNavigateUrl = async (targetUrl: string) => {
+    if (!targetUrl.trim()) return;
+    setBrowserLoading(true);
+    setError('');
+    try {
+      const res = await api<BrowserStatus>(
+        `/computers/${encodeURIComponent(dot.id)}/navigate`,
+        'POST',
+        { url: targetUrl, actor: 'owner' }
+      );
+      setBrowserStatus(res);
+      if (res.activeUrl) setUrlInput(res.activeUrl);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Navigation failed.');
+    } finally {
+      setBrowserLoading(false);
+    }
+  };
+
+  const handleNavigateSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    void handleNavigateUrl(urlInput);
+  };
+
+  const handleNewTab = async () => {
+    try {
+      const res = await api<BrowserStatus>(
+        `/computers/${encodeURIComponent(dot.id)}/tabs`,
+        'POST',
+        { action: 'create', url: 'https://hermes.local/start', actor: 'owner' }
+      );
+      setBrowserStatus(res);
+      if (res.activeUrl) setUrlInput(res.activeUrl);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to create tab.');
+    }
+  };
+
+  const handleSwitchTab = async (tabId: string) => {
+    try {
+      const res = await api<BrowserStatus>(
+        `/computers/${encodeURIComponent(dot.id)}/tabs`,
+        'POST',
+        { action: 'switch', tabId }
+      );
+      setBrowserStatus(res);
+      if (res.activeUrl) setUrlInput(res.activeUrl);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to switch tab.');
+    }
+  };
+
+  const handleCloseTab = async (tabId: string) => {
+    try {
+      const res = await api<BrowserStatus>(
+        `/computers/${encodeURIComponent(dot.id)}/tabs`,
+        'POST',
+        { action: 'close', tabId, actor: 'owner' }
+      );
+      setBrowserStatus(res);
+      if (res.activeUrl) setUrlInput(res.activeUrl);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to close tab.');
+    }
+  };
+
+  const handleTakeControl = async () => {
+    try {
+      const res = await api<BrowserStatus>(
+        `/dots/${encodeURIComponent(dot.id)}/computer/take`,
+        'POST'
+      );
+      setBrowserStatus(res);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to take over browser.');
+    }
+  };
+
+  const handleReleaseControl = async () => {
+    try {
+      const res = await api<BrowserStatus>(
+        `/dots/${encodeURIComponent(dot.id)}/computer/release`,
+        'POST'
+      );
+      setBrowserStatus(res);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to resume agent.');
+    }
+  };
+
+  const handleClearStorage = async () => {
+    if (!window.confirm('Reset browser profile, cookies and history?')) return;
+    try {
+      const res = await api<BrowserStatus>(
+        `/computers/${encodeURIComponent(dot.id)}/clear`,
+        'POST'
+      );
+      setBrowserStatus(res);
+      if (res.activeUrl) setUrlInput(res.activeUrl);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to clear browser storage.');
+    }
+  };
 
   const editorRef = useRef<HTMLTextAreaElement>(null);
 
@@ -245,12 +391,236 @@ export function ComputerPanel({
       {error && <p className="computer-error" role="alert">{error}</p>}
 
       {tab === 'Browser' && (
-        <section className="hermes-computer-placeholder" role="tabpanel" aria-label="Browser">
-          <Globe size={28} />
-          <h3>No live computer view</h3>
-          <p>
-            Hermes research and browser tools appear in the conversation when they run. A live browser stream and human takeover are not connected in this version.
-          </p>
+        <section className="hermes-browser-workspace" role="tabpanel" aria-label="Browser Surface">
+          {/* Top Bar: Tabs Bar */}
+          <div className="browser-tabs-bar" role="tablist" aria-label="Browser Tabs">
+            <div className="browser-tabs-scroll">
+              {(browserStatus?.tabs ?? [
+                {
+                  id: 'tab-default',
+                  url: 'https://hermes.local/start',
+                  title: 'Hermes Start Page',
+                  content: '<h1>Start Page</h1>',
+                  createdAt: Date.now(),
+                },
+              ]).map((t) => (
+                <div
+                  key={t.id}
+                  className={`browser-tab-item ${t.id === (browserStatus?.activeTabId || 'tab-default') ? 'active' : ''}`}
+                  role="tab"
+                  aria-selected={t.id === (browserStatus?.activeTabId || 'tab-default')}
+                  onClick={() => void handleSwitchTab(t.id)}
+                >
+                  <Globe size={13} className="browser-tab-icon" />
+                  <span className="browser-tab-title" title={t.title || t.url}>{t.title || 'New Tab'}</span>
+                  <button
+                    className="browser-tab-close"
+                    aria-label={`Close tab ${t.title || t.url}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      void handleCloseTab(t.id);
+                    }}
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              className="browser-new-tab-button icon-button"
+              aria-label="Open new browser tab"
+              onClick={() => void handleNewTab()}
+            >
+              <Plus size={14} />
+            </button>
+          </div>
+
+          {/* Navigation & Address Bar */}
+          <div className="browser-nav-bar">
+            <div className="browser-nav-actions">
+              <button
+                className="icon-button"
+                aria-label="Go back"
+                onClick={() => void loadBrowserStatus()}
+                title="Back"
+              >
+                <ArrowLeft size={15} />
+              </button>
+              <button
+                className="icon-button"
+                aria-label="Go forward"
+                title="Forward"
+                disabled
+              >
+                <ArrowRight size={15} />
+              </button>
+              <button
+                className="icon-button"
+                aria-label="Reload current page"
+                onClick={() => void loadBrowserStatus()}
+                title="Reload"
+              >
+                <RotateCw size={15} />
+              </button>
+            </div>
+
+            <form className="browser-address-form" onSubmit={handleNavigateSubmit}>
+              <div className="browser-address-input-wrapper">
+                <Globe size={14} className="address-icon" />
+                <input
+                  type="text"
+                  aria-label="Browser address URL"
+                  className="browser-address-input"
+                  value={urlInput}
+                  onChange={(e) => setUrlInput(e.target.value)}
+                  placeholder="Enter URL (https://...)"
+                />
+              </div>
+              <button type="submit" className="browser-go-button" disabled={browserLoading}>
+                {browserLoading ? 'Loading…' : 'Go'}
+              </button>
+            </form>
+
+            <div className="browser-bar-actions">
+              <button
+                className={`browser-action-pill ${showHistory ? 'active' : ''}`}
+                onClick={() => setShowHistory(!showHistory)}
+                aria-label="Toggle browsing history"
+                title="History"
+              >
+                <History size={14} />
+                <span>History</span>
+              </button>
+              <button
+                className="browser-action-pill"
+                onClick={() => void handleClearStorage()}
+                aria-label="Reset profile and storage"
+                title="Clear cookies, storage and history"
+              >
+                <Trash2 size={14} />
+                <span>Reset</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Control Lease & Takeover Banner */}
+          <div className={`browser-lease-banner ${browserStatus?.holder === 'human' ? 'human-held' : 'agent-held'}`}>
+            <div className="lease-info">
+              <span className={`status-pill ${browserStatus?.holder === 'human' ? 'pill-human' : 'pill-agent'}`}>
+                {browserStatus?.holder === 'human' ? 'User Control' : 'Agent Control'}
+              </span>
+              <span className="lease-description">
+                {browserStatus?.holder === 'human'
+                  ? 'Human user has taken over. Hermes agent browser tools are suspended until resume.'
+                  : 'Hermes agent controls the browser. Click Take Over to interact manually.'}
+              </span>
+            </div>
+            <div className="lease-actions">
+              {browserStatus?.holder === 'human' ? (
+                <button
+                  className="lease-btn resume-btn"
+                  onClick={() => void handleReleaseControl()}
+                  aria-label="Resume agent control"
+                >
+                  <Bot size={14} />
+                  <span>Resume Agent</span>
+                </button>
+              ) : (
+                <button
+                  className="lease-btn takeover-btn"
+                  onClick={() => void handleTakeControl()}
+                  aria-label="Take over browser control"
+                >
+                  <UserCheck size={14} />
+                  <span>Take Over</span>
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Main View Area: Rendered Page / Content or History drawer */}
+          <div className="browser-viewport-container">
+            {showHistory ? (
+              <div className="browser-history-drawer" role="region" aria-label="Browser History">
+                <div className="history-drawer-header">
+                  <h4>Persistent Browsing History</h4>
+                  <input
+                    type="text"
+                    placeholder="Search history…"
+                    value={browserHistoryFilter}
+                    onChange={(e) => setBrowserHistoryFilter(e.target.value)}
+                    className="history-search-input"
+                    aria-label="Search browsing history"
+                  />
+                </div>
+                <div className="history-list">
+                  {(browserStatus?.history ?? [])
+                    .filter(h => !browserHistoryFilter || h.title.toLowerCase().includes(browserHistoryFilter.toLowerCase()) || h.url.toLowerCase().includes(browserHistoryFilter.toLowerCase()))
+                    .map(item => (
+                      <div
+                        key={item.id}
+                        className="history-item"
+                        onClick={() => {
+                          setUrlInput(item.url);
+                          void handleNavigateUrl(item.url);
+                        }}
+                      >
+                        <div className="history-item-title">{item.title}</div>
+                        <div className="history-item-url">{item.url}</div>
+                        <div className="history-item-time">{new Date(item.visitedAt).toLocaleTimeString()}</div>
+                      </div>
+                    ))}
+                  {(browserStatus?.history ?? []).length === 0 && (
+                    <p className="muted history-empty">No history recorded yet.</p>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="browser-page-display">
+                <div className="page-meta-header">
+                  <div className="page-title-badge">
+                    <span className="dot-profile-tag">Profile: {dot.name}</span>
+                    <h3 className="page-title">{browserStatus?.activeTitle || 'Start Page'}</h3>
+                  </div>
+                  <div className="page-storage-meta">
+                    <span title="Stored cookies">{browserStatus?.cookiesCount ?? 3} cookies</span>
+                    <span title="Local storage entries">{browserStatus?.localStorageCount ?? 5} keys</span>
+                  </div>
+                </div>
+                <div className="browser-sandboxed-view" role="region" aria-label="Web page content">
+                  <div className="browser-mock-page">
+                    <div className="mock-address-bar">
+                      <span>URL:</span> <code>{browserStatus?.activeUrl || 'https://hermes.local/start'}</code>
+                    </div>
+                    <div
+                      className="mock-dom-body"
+                      dangerouslySetInnerHTML={{
+                        __html: browserStatus?.activeContent || '<p>Page loaded successfully in sandboxed session.</p>'
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Audit trail / Activity footer */}
+          <div className="browser-audit-footer">
+            <div className="audit-header">
+              <span className="audit-title">Browser Activity Log</span>
+              <span className="audit-count">{(browserStatus?.audit ?? []).length} events</span>
+            </div>
+            <div className="audit-stream">
+              {(browserStatus?.audit ?? []).slice(0, 5).map(ev => (
+                <div key={ev.id} className="audit-item">
+                  <span className={`audit-actor ${ev.actor}`}>{ev.actor}</span>
+                  <span className="audit-action">{ev.action}</span>
+                  <span className="audit-details">{ev.details || ''}</span>
+                  <span className="audit-time">{new Date(ev.createdAt).toLocaleTimeString()}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
       )}
 

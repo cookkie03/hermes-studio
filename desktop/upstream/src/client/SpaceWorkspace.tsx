@@ -85,7 +85,9 @@ export function SpaceWorkspace({
     isReadOnly: false,
   });
 
-  const [activeTab, setActiveTab] = useState<'files' | 'pages' | 'memory'>('files');
+  const [activeTab, setActiveTab] = useState<'files' | 'pages' | 'memory'>(
+    folderBindings.length > 0 ? 'files' : 'pages',
+  );
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(false);
   const [outline, setOutline] = useState(false);
