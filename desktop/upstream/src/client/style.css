@@ -4128,6 +4128,9 @@ h3 {
 .hermes-chat-empty p { max-width: 400px; color: var(--muted); line-height: 1.5; }
 .hermes-tool, .hermes-approval { border: 1px solid var(--line); border-radius: 16px; background: white; padding: 16px; }
 .hermes-tool pre, .hermes-approval pre { max-height: 260px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
+.hermes-terminal-output .hermes-terminal-meta { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 0 14px 10px; color: var(--muted); font-size: 11px; }
+.hermes-terminal-output pre { margin: 0; border-top: 1px solid var(--line); border-radius: 0; background: #202126; color: #f0f1f4; max-height: 340px; padding: 13px 14px; white-space: pre-wrap; overflow-wrap: anywhere; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.hermes-terminal-output .hermes-terminal-stderr { background: #3a2020; color: #ffd7d2; }
 .hermes-approval footer { display: flex; gap: 8px; justify-content: flex-end; border-top: 1px solid var(--line); padding-top: 12px; }
 .hermes-client button:focus-visible, .hermes-client input:focus-visible, .hermes-client textarea:focus-visible { outline: 2px solid #7285d5; outline-offset: 3px; }
 /* D06 calls for event-driven motion, so preserve the pose without the upstream endless bob. */

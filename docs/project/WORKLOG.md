@@ -1,4 +1,11 @@
-## 2026-10-11 — F14 collaboration and delegation adapter
+## Incremento F15 — output terminale tool-only (2026-10-11)
+
+- Implementata la superficie output-only in `Chat.tsx`: gli eventi Hermes `tool.start`/`tool.complete` già posseduti dalla sessione vengono presentati come card terminale quando il tool è `terminal`, `exec` o `shell`.
+- Visualizzati stdout, stderr separato, exit code, cwd osservato e stato `Working`/`Finished`/`Needs attention`; il testo resta contenuto non fidato e non viene interpretato come markup o comando renderer.
+- Aggiunti test Vitest per classificazione tool, parsing di risultato nativo, output ANSI/untrusted, completamento e exit code nonzero. Nessun executor, PTY, stdin, resize o nuova API backend aggiunti.
+- Verifiche: `npm run typecheck:renderer`; `npx vitest run --root upstream tests/f15-terminal.test.ts tests/computer-card.test.tsx tests/transcript.test.tsx` (3 file, 10 test passati); `npm test`; `npm run build`.
+- Gate ancora aperti: smoke `.app`, test con runtime Hermes collegato, incremental/backpressure reale, disconnect/reconnect del terminale, resize/interruption e PTY interattivo. Il contratto sorgente Hermes letto espone il terminal tool come esecuzione con risultato aggregato, non come sessione PTY Studio.
+
 
 - Added a persisted `CollaborationManager` and HTTP adapter for F14 synthetic collaboration state: temporary subagents, Dot-to-Dot messages, hosted room logs, recall results, and explicit Space/profile project links.
 - Added `CollaborationPanel` and `RecallResults` to the renderer. The panel keeps temporary children separate from persistent Dots and shows delivery IDs, queued-vs-reply semantics, failure/uncertain states, room sequence numbers, profile scope, and D38 link status.

@@ -6,7 +6,7 @@ import { api, authHeaders } from './api';
 import { Mascot } from './Mascot';
 import { ChatTranscript } from './ChatTranscript';
 import { SaveToSpaceReview } from './SaveToSpaceReview';
-import { appendAssistant, delivery, pendingMessage, remainingDraft, mergeHistory, projectedText, afterDispatchResponse, restoreDraft, mergeToolEvent, type ToolActivity, type TurnPhase, type TextMessage } from './hermes-display';
+import { appendAssistant, delivery, pendingMessage, remainingDraft, mergeHistory, projectedText, afterDispatchResponse, restoreDraft, mergeToolEvent, isTerminalTool, parseToolResult, type ToolActivity, type TurnPhase, type TextMessage } from './hermes-display';
 
 import type { RuntimeStatus } from './runtime-connections';
 import { ConversationHost } from './ConversationHost';
@@ -380,11 +380,23 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
       {!loading && !messages.length && <div className="hermes-chat-empty"><Mascot identity={dot.id} avatarId={dot.avatarId} name={dot.name} /><h2>{dot.name}</h2><p>{dot.instructions}</p></div>}
       <ChatTranscript messages={messages} calls={[]} />
       <NativeReviewNotes notes={reviewNotes} replay={reviewReplay} />
-      {tools.map((tool) => <section className="inline-computer hermes-tool" key={tool.id}>
-        <header><strong>{tool.name}</strong><span className="tool-state">{tool.complete ? 'Finished' : running ? 'Working' : 'Last activity'}</span></header>
-        {tool.args != null && <details><summary>Inputs</summary><pre>{JSON.stringify(tool.args, null, 2)?.slice(0, 8000)}</pre></details>}
-        {tool.result != null && <pre>{(typeof tool.result === 'string' ? tool.result : JSON.stringify(tool.result, null, 2))?.slice(0, 12000)}</pre>}
-      </section>)}
+      {tools.map((tool) => {
+        const terminal = isTerminalTool(tool.name);
+        const result = parseToolResult(tool.result);
+        const output = typeof result.output === 'string' ? result.output : '';
+        const exitCode = typeof result.exit_code === 'number' ? result.exit_code : typeof result.exitCode === 'number' ? result.exitCode : undefined;
+        const stderr = typeof result.stderr === 'string' ? result.stderr : '';
+        const failed = exitCode !== undefined && exitCode !== 0;
+        const state = failed ? 'Needs attention' : tool.complete ? 'Finished' : running ? 'Working' : 'Last activity';
+        return <section className={`inline-computer hermes-tool ${terminal ? 'hermes-terminal-output' : ''}`} key={tool.id} aria-label={terminal ? `Terminal output from ${tool.name}` : `Tool output from ${tool.name}`}>
+          <header><strong>{terminal ? 'Terminal output' : tool.name}</strong><span className={`tool-state ${failed ? 'failed' : ''}`}>{state}</span></header>
+          {terminal && <div className="hermes-terminal-meta"><span>Tool: {tool.name}</span>{exitCode !== undefined && <span>Exit code: {exitCode}</span>}{typeof result.cwd === 'string' && <span>CWD: {result.cwd}</span>}</div>}
+          {tool.args != null && <details><summary>Inputs</summary><pre>{JSON.stringify(tool.args, null, 2)?.slice(0, 8000)}</pre></details>}
+          {terminal && output && <pre aria-label="Terminal stdout">{output.slice(0, 12000)}</pre>}
+          {terminal && stderr && <pre className="hermes-terminal-stderr" aria-label="Terminal stderr">{stderr.slice(0, 8000)}</pre>}
+          {!terminal && tool.result != null && <pre>{(typeof tool.result === 'string' ? tool.result : JSON.stringify(tool.result, null, 2))?.slice(0, 12000)}</pre>}
+        </section>;
+      })}
       {reviewContent !== undefined && <SaveToSpaceReview threadId={thread.id} dot={dot} initialContent={reviewContent} initialTitle={thread.title || 'Research draft'} onSaved={onSaved} onClose={() => setReviewContent(undefined)} />}
       {approvals.map(approval => <section className="hermes-approval" key={approval.decisionId} aria-label="Hermes approval">
         <header><strong>Review before continuing</strong></header>

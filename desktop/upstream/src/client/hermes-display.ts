@@ -60,6 +60,27 @@ export function restoreDraft(local: string | null, saved: string): string {
 }
 
 export interface ToolActivity { id: string; name: string; args?: unknown; result?: unknown; complete: boolean }
+
+export function isTerminalTool(name: string): boolean {
+  return /(^|[_-])(terminal|exec|shell)([_-]|$)/i.test(name) || /^(terminal|exec|shell)$/i.test(name);
+}
+
+export function parseToolResult(raw: unknown): Record<string, unknown> {
+  if (typeof raw === 'string') {
+    try {
+      const parsed: unknown = JSON.parse(raw);
+      return parsed && typeof parsed === 'object' && !Array.isArray(parsed)
+        ? Object.fromEntries(Object.entries(parsed))
+        : { output: raw };
+    } catch {
+      return { output: raw };
+    }
+  }
+  return raw && typeof raw === 'object' && !Array.isArray(raw)
+    ? Object.fromEntries(Object.entries(raw))
+    : {};
+}
+
 export function mergeToolEvent(previous: ToolActivity[], event: { type?: string; payload?: Record<string, unknown> }): ToolActivity[] {
   if (!['tool.start', 'tool.complete'].includes(event.type ?? '')) return previous;
   const payload = event.payload ?? {};

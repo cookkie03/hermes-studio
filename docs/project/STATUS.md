@@ -16,7 +16,10 @@ Implemented and verified the first F14 vertical slice: temporary subagent side p
 
 Evidence: `node --test hermes/collaboration.test.mjs hermes/collaboration-server.test.mjs` (6 passed), `npm run typecheck` (passed), `npm run build` (passed). Native connected-backend handshakes, packaged `.app` smoke, real two-profile delivery, and keyboard/IME/900/1360 accessibility checks remain pending.
 
-## Requisiti specificati, ancora da implementare/provare
+## Incremento F15 — output terminale tool-only (2026-10-11)
+
+Implementata e verificata la prima slice F15: Chat presenta gli eventi Hermes `tool.start`/`tool.complete` dei tool terminal/exec/shell come output terminale con stato, stdout, stderr, exit code e cwd osservato. Nessun executor parallelo, PTY, stdin, resize o nuova API backend è stato aggiunto; la sessione interattiva resta non supportata. Test mirati, `npm test` e `npm run build` superati; smoke `.app`, runtime Hermes live e gate PTY/backpressure/disconnect/resize/interruption restano aperti.
+
 19 schede F0–F18 con skill, ingressi, incrementi, ownership, gate e handoff. In particolare: folder-backed Spaces F6/F5, picker avatar F7-A, browser condiviso F12, voce in-app F17, memoria Markdown Space F9 e viewer/riepiloghi Hermes F8. Metadata del MVP non dimostrano questi nuovi comportamenti.
 
 Design OpenDots autorevole; componenti Unsloth/Codex. Unsloth disclosure osservata; Codex solo screenshot per diniego del tool. Token/motion proposti, non misurati. Screenshot personali esclusi da Git.

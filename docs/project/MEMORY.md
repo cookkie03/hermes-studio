@@ -10,7 +10,10 @@ Assistente personale e progetti macOS. Layout OpenDots conforme allo screenshot 
 
 Sviluppo **una feature per chat**, solo sull'incremento selezionato dall'utente. Catalogo [F0–F18](../features/README.md); [piano](feature-development-plan.md). F0 completata e verificata: non riaprire il task globale o i piani notturni. D31: schede rinumerate nell’ordine concordato, senza zero iniziale. [Vecchi/nuovi ID](../features/numbering-2026-10-04.md). F1 implementata e verificata; F2 selezionata con incremento invio/bozze verificato; la rinumerazione resta documentale. Automazione/goal storici sospesi secondo l'ultima evidenza registrata, non ricontrollati da questo consolidamento.
 
-## Requisiti da preservare
+## F15 — output Hermes terminale
+
+La prima slice F15 usa esclusivamente gli eventi tool già ricevuti dalla sessione Hermes (`tool.start`/`tool.complete`). La UI riconosce terminal/exec/shell, rende stdout/stderr come testo non fidato, espone `exit_code`/cwd e non considera un exit nonzero come successo. Il contratto sorgente del terminal tool letto nel profilo Hermes restituisce un risultato aggregato (`output`, `exit_code`, errore/metadati); non è stato trovato un contratto PTY Studio per stdin/resize/interruzione. Non aggiungere un executor renderer: un PTY futuro richiede un contratto Hermes verificato e capability/permessi espliciti.
+
 
 - **Non duplicare Hermes.** Hermes è l'unico backend autorevole. Prima di aggiungere codice o una feature a Studio, verificare se Hermes la offre già e integrarvi la GUI tramite i contratti nativi. Studio implementa soltanto presentazione, connessione e adattamento necessari; non replica executor, scheduler, cron, heartbeat, bot, memoria, progetti, impostazioni o logiche di approvazione già presenti nel backend. Ogni nuova astrazione va motivata dal confine client/runtime e verificata contro il sorgente Hermes.
 - Spaces collegano cartelle reali: filesystem autoritativo, editor e conflitti condivisi F6/F5; collegare/scollegare preserva dati. [ADR0007](../adr/0007-folder-backed-spaces.md).

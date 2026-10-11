@@ -25,7 +25,7 @@ If essential scope is missing, clarify only that; otherwise use confirmed requir
 <!-- implementation-packet:end -->
 
 
-Status: documented; tool output in the UI is not an interactive PTY session.
+Status: first output-only slice implemented and verified; tool output in the UI is not an interactive PTY session.
 
 
 <!-- feature-guidance:start -->
