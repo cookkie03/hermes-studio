@@ -1,3 +1,10 @@
+## 2026-10-11 — F14 collaboration and delegation adapter
+
+- Added a persisted `CollaborationManager` and HTTP adapter for F14 synthetic collaboration state: temporary subagents, Dot-to-Dot messages, hosted room logs, recall results, and explicit Space/profile project links.
+- Added `CollaborationPanel` and `RecallResults` to the renderer. The panel keeps temporary children separate from persistent Dots and shows delivery IDs, queued-vs-reply semantics, failure/uncertain states, room sequence numbers, profile scope, and D38 link status.
+- Added unit/API fixtures covering spawn/list/tail/steer/interrupt, queued handoff, async failure, room sequence data, recall filtering, and missing-to-linked D38 associations.
+- Verification: `node --test hermes/collaboration.test.mjs hermes/collaboration-server.test.mjs` (6 passed), `npm run typecheck` passed, and `npm run build` passed. Native connected Hermes handshakes and packaged-app/UI gate checks remain explicitly pending.
+
 > Numerazione storica: gli ID nel testo precedono il riordino; i link alle schede puntano ai file attuali. [Corrispondenza vecchi/nuovi ID](../features/numbering-2026-10-04.md).
 
 

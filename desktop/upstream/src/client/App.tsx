@@ -20,6 +20,7 @@ import {
   Search,
   Settings2,
   Trash2,
+  Users,
   X,
 } from 'lucide-react';
 import type {
@@ -39,6 +40,7 @@ import { TaskRow } from './TaskPresentation';
 import { TaskActions } from './TaskActions';
 import { RoutinesView } from './RoutinesView';
 import { WorkspaceDialog, type Dialog } from './WorkspaceDialog';
+import { CollaborationPanel } from './CollaborationPanel';
 
 export function App() {
   const [state, setState] = useState<State>();
@@ -51,6 +53,7 @@ export function App() {
   const dirtyPage = useRef(false);
   const [spaceId, setSpaceId] = useState('');
   const [pageId, setPageId] = useState<string>();
+  const [collaborationOpen, setCollaborationOpen] = useState(false);
   const setDirtyPage = useCallback((value: boolean) => {
     dirtyPage.current = value;
   }, []);
@@ -508,6 +511,14 @@ export function App() {
             >
               <Monitor size={18} />
             </button>
+            <button
+              className="icon-button"
+              aria-label={collaborationOpen ? 'Hide collaboration panel' : 'Show collaboration panel'}
+              aria-expanded={collaborationOpen}
+              onClick={() => setCollaborationOpen(!collaborationOpen)}
+            >
+              <Users size={18} />
+            </button>
           </div>
         </header>
         {error && (
@@ -789,6 +800,22 @@ export function App() {
           </div>
         )}
       </div>
+      {collaborationOpen && view === 'chat' && thread && (
+        <CollaborationPanel
+          threadId={thread.id}
+          dot={dot}
+          allDots={workspace.dots}
+          spaceId={dot.spaceId}
+          onClose={() => setCollaborationOpen(false)}
+          onOpenConversation={(id) => {
+            const target = workspace.conversations.find((item) => item.id === id);
+            if (target && setView('chat')) {
+              setSelectedDot(target.dotId);
+              setSelectedThread(id);
+            }
+          }}
+        />
+      )}
       {dialog && (
         <WorkspaceDialog
           dialog={dialog}

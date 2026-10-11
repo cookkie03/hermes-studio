@@ -18,6 +18,7 @@ Sviluppo **una feature per chat**, solo sull'incremento selezionato dall'utente.
 - Browser F12: stessa pagina/profilo per utente e strumenti Hermes, persistenza e takeover; tool/controller/CDP richiedono prova prima della scelta tecnica.
 - F8: memoria Hermes visibile, riepiloghi post-turn e copertura delle capacità native. F9: file memoria dello Space e preferenze legacy; nessun secondo archivio Hermes reiniettato. F11: skill/plugin e manutenzione autorizzata.
 - F17: dettatura, messaggi vocali, TTS e vocal chat in-app; motori/provider Hermes. Telefonate e specialisti Codex restano [idee future](../future/README.md).
+- F14 increment: `desktop/hermes/collaboration.mjs` and routes expose a persisted Studio adapter for temporary subagent panels, Dot-to-Dot message receipts, hosted-room logs, scoped recall results, and explicit D38 profile-project links. The adapter is covered by synthetic tests; runtime-native delegation/message_agent/groups/session_search contracts still require connected-backend verification before claiming native execution.
 - F13: release GitHub con DMG/.app installabile; artefatti locali ad hoc esistenti non sono release notarizzate.
 
 ## Fonti e confini

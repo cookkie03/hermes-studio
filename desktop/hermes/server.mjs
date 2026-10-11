@@ -39,6 +39,7 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   const capabilities = new CapabilitiesManager({ connections: bridge });
   const memoryManager = new HermesMemoryManager({ connections: bridge });
   const collaboration = new CollaborationManager({ dataDir, gateway: bridge.gateway });
+  await collaboration.initialize();
   const browser = new HermesBrowserService({ dataDir });
   await browser.initialize();
   routines.on('changed', event => { bridge.emit('update', { type: 'cron.changed', ...event }); });
@@ -189,6 +190,102 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   app.get('/api/hermes/memory', async c => c.json(await memoryManager.getMemoryStatus({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.delete('/api/hermes/routines/:id', async c => c.json(await routines.deleteJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.get('/api/hermes/routines/:id/runs', async c => c.json(await routines.getRuns(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile'), limit: Number(c.req.query('limit') || 20) })));
+  // Collaboration and delegation routes (F14)
+  app.get('/api/hermes/collaboration/subagents', async c => c.json(await collaboration.listSubagents(c.req.query('parentId'))));
+  app.post('/api/hermes/collaboration/subagents', async c => {
+    try {
+      const body = await c.req.json();
+      return c.json(await collaboration.spawnSubagent(body));
+    } catch (e) {
+      return c.json({ error: e.message }, 400);
+    }
+  });
+  app.get('/api/hermes/collaboration/subagents/:id/tail', async c => {
+    try {
+      return c.json(await collaboration.getSubagentTail(c.req.param('id'), Number(c.req.query('maxBytes') || 16384)));
+    } catch (e) {
+      return c.json({ error: e.message }, 404);
+    }
+  });
+  app.post('/api/hermes/collaboration/subagents/:id/steer', async c => {
+    try {
+      const body = await c.req.json();
+      return c.json(await collaboration.steerSubagent(c.req.param('id'), body.message));
+    } catch (e) {
+      return c.json({ error: e.message }, 400);
+    }
+  });
+  app.post('/api/hermes/collaboration/subagents/:id/interrupt', async c => {
+    try {
+      return c.json(await collaboration.interruptSubagent(c.req.param('id')));
+    } catch (e) {
+      return c.json({ error: e.message }, 400);
+    }
+  });
+  app.get('/api/hermes/collaboration/messages', async c => c.json(await collaboration.listBotMessages({
+    threadId: c.req.query('threadId'),
+    profile: c.req.query('profile'),
+    dotId: c.req.query('dotId'),
+  })));
+  app.post('/api/hermes/collaboration/messages', async c => {
+    try {
+      const body = await c.req.json();
+      return c.json(await collaboration.sendBotMessage(body));
+    } catch (e) {
+      return c.json({ error: e.message }, 400);
+    }
+  });
+  app.get('/api/hermes/collaboration/rooms', async c => c.json(await collaboration.listRooms()));
+  app.post('/api/hermes/collaboration/rooms', async c => {
+    try {
+      const body = await c.req.json();
+      return c.json(await collaboration.createRoom(body));
+    } catch (e) {
+      return c.json({ error: e.message }, 400);
+    }
+  });
+  app.get('/api/hermes/collaboration/rooms/:id/events', async c => {
+    try {
+      return c.json(await collaboration.getRoomLog(c.req.param('id'), {
+        sinceSeq: Number(c.req.query('sinceSeq') || 0),
+        limit: Number(c.req.query('limit') || 50),
+      }));
+    } catch (e) {
+      return c.json({ error: e.message }, 400);
+    }
+  });
+  app.post('/api/hermes/collaboration/rooms/:id/events', async c => {
+    try {
+      const body = await c.req.json();
+      return c.json(await collaboration.sendRoomEvent(c.req.param('id'), body));
+    } catch (e) {
+      return c.json({ error: e.message }, 400);
+    }
+  });
+  app.post('/api/hermes/collaboration/rooms/:id/events/:eventId/retry', async c => {
+    try {
+      return c.json(await collaboration.retryRoomEvent(c.req.param('id'), c.req.param('eventId')));
+    } catch (e) {
+      return c.json({ error: e.message }, 400);
+    }
+  });
+  app.get('/api/hermes/collaboration/recall', async c => c.json(await collaboration.searchRecall({
+    query: c.req.query('query') || '',
+    profile: c.req.query('profile'),
+    limit: Number(c.req.query('limit') || 10),
+  })));
+  app.get('/api/hermes/collaboration/space-link', async c => c.json(await collaboration.getSpaceLink({
+    spaceId: c.req.query('spaceId'),
+    profile: c.req.query('profile'),
+  })));
+  app.post('/api/hermes/collaboration/space-link', async c => {
+    try {
+      const body = await c.req.json();
+      return c.json(await collaboration.createSpaceLink(body));
+    } catch (e) {
+      return c.json({ error: e.message }, 400);
+    }
+  });
   app.post('/api/tasks', async c => {
     try {
       const body = await c.req.json();
@@ -225,7 +322,7 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   app.get('/api/*', c => c.json({ error: 'Not found.' }, 404));
   if (staticDir) { app.use('/*', serveStatic({ root: staticDir })); app.get('*', serveStatic({ path: join(staticDir, 'index.html') })); }
   app.onError((error, c) => c.json({ error: error instanceof SyntaxError ? 'Invalid JSON request.' : error.message }, error instanceof SyntaxError ? 400 : 503));
-  return { app, bridge, routines, store, workspace, close: () => { bridge.close(); store.close(); workspace.close(); } };
+  return { app, bridge, routines, capabilities, memoryManager, collaboration, browser, store, workspace, close: () => { bridge.close(); store.close(); workspace.close(); } };
 }
 
 export async function startStudio() {

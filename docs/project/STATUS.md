@@ -10,8 +10,13 @@ Questi sono esiti precedentemente documentati, non test rieseguiti dal consolida
 
 .app arm64 locale di sviluppo, firma ad hoc; DMG precedente non rigenerato con F0, nessuna release GitHub/firma Apple/notarizzazione. [Artefatti storici](../releases/development-artifacts.md). Node handshake Hermes 0.21.5 verificato senza sessione/prompt: non prova chat, streaming o strumenti.
 
-## Requisiti specificati, ancora da implementare/provare
+## Incremento F14 — adapter GUI/connection (2026-10-11)
 
+Implemented and verified the first F14 vertical slice: temporary subagent side panel (spawn/list/tail/steer/interrupt), persistent Dot-to-Dot messages with explicit queued handoff and asynchronous reply/failure states, hosted-room sequence logs, scoped recall result links, and explicit D38 Space/profile project-link state. This is a persisted Studio adapter with synthetic data; it does not claim that the local adapter is the Hermes runtime's native `delegate_task`, `message_agent`, `groups.*`, or `session_search` implementation.
+
+Evidence: `node --test hermes/collaboration.test.mjs hermes/collaboration-server.test.mjs` (6 passed), `npm run typecheck` (passed), `npm run build` (passed). Native connected-backend handshakes, packaged `.app` smoke, real two-profile delivery, and keyboard/IME/900/1360 accessibility checks remain pending.
+
+## Requisiti specificati, ancora da implementare/provare
 19 schede F0–F18 con skill, ingressi, incrementi, ownership, gate e handoff. In particolare: folder-backed Spaces F6/F5, picker avatar F7-A, browser condiviso F12, voce in-app F17, memoria Markdown Space F9 e viewer/riepiloghi Hermes F8. Metadata del MVP non dimostrano questi nuovi comportamenti.
 
 Design OpenDots autorevole; componenti Unsloth/Codex. Unsloth disclosure osservata; Codex solo screenshot per diniego del tool. Token/motion proposti, non misurati. Screenshot personali esclusi da Git.
