@@ -53,7 +53,7 @@ Verify paths and version before working; coordinate shared files. Reading does n
 
 ## Evidence boundary
 
-Status: **documented, not implemented** (2026-10-04). This spec describes a future Hermes Studio slice; available upstream code does not mean the capability is integrated into the app. Evidence: reading the source checkout `/Users/luca/.hermes/hermes-agent`, not live execution, with no personal prompts/configuration/database used. Authoritative reference: [Hermes apps/desktop](https://github.com/NousResearch/hermes-agent/tree/main/apps/desktop). The remote version may change: pin the SHA and repeat contract tests before implementation.
+Status: **implemented — read-only catalog increment verified locally** (2026-10-07). `CapabilitiesManager` exposes a scoped snapshot composed only of `tools.list`, `tools.show`, `plugins.manage {action:list}` and `skills.manage {action:list}`; the Studio catalog remains read-only and no personal runtime configuration was changed. Contract proof uses synthetic gateway fixtures; a live host/profile check and the management increment remain separate gates.
 
 First read `AGENTS.md`, `docs/project/STATUS.md`, `GLOSSARY.md`, ADR0006, `docs/architecture/principles.md`, `.scratch/hermes-desktop/spec.md`, `docs/design/opendots-target.md` and `desktop/hermes/README.md`. The user selected the OpenDots UI; Hermes remains the only executor. The Studio endpoints described below are **proposals**, not existing APIs.
 

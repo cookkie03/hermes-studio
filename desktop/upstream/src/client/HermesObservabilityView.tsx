@@ -4,6 +4,7 @@ import type {
   HermesCapabilityMatrix,
   HermesCapabilityMatrixItem,
 } from '../shared/types';
+import { CapabilitiesView } from './CapabilitiesView';
 
 export function HermesObservabilityView({
   connectionId = 'local',
@@ -14,6 +15,7 @@ export function HermesObservabilityView({
 }) {
   const [memoryStatus, setMemoryStatus] = useState<HermesNativeMemoryStatus | null>(null);
   const [capabilityMatrix, setCapabilityMatrix] = useState<HermesCapabilityMatrix | null>(null);
+  const [capabilityPanel, setCapabilityPanel] = useState<'overview' | 'catalog'>('overview');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'memory' | 'capabilities'>('memory');
@@ -163,22 +165,30 @@ export function HermesObservabilityView({
         </section>
       )}
 
-      {activeTab === 'capabilities' && capabilityMatrix && (
+      {activeTab === 'capabilities' && (
         <section className="observability-section capabilities-section" aria-label="Capabilities Matrix">
-          <div className="capabilities-grid">
-            {capabilityMatrix.items.map((item: HermesCapabilityMatrixItem) => (
-              <article key={item.id} className="capability-card">
-                <header>
-                  <span className="card-badge">{item.owningCard}</span>
-                  <h3>{item.name}</h3>
-                  <span className={`status-pill ${item.status}`}>{item.status.replace('_', ' ')}</span>
-                </header>
-                <p className="surface-info"><strong>Surface:</strong> {item.surface}</p>
-                <p className="contract-info"><strong>Native Contract:</strong> <code>{item.nativeContract}</code></p>
-                <p className="evidence-info">{item.evidence}</p>
-              </article>
-            ))}
+          <div className="capabilities-subtabs" role="tablist" aria-label="Capabilities content">
+            <button type="button" role="tab" aria-selected={capabilityPanel === 'overview'} className={`tab-button ${capabilityPanel === 'overview' ? 'active' : ''}`} onClick={() => setCapabilityPanel('overview')}>Coverage overview</button>
+            <button type="button" role="tab" aria-selected={capabilityPanel === 'catalog'} className={`tab-button ${capabilityPanel === 'catalog' ? 'active' : ''}`} onClick={() => setCapabilityPanel('catalog')}>Native catalog</button>
           </div>
+          {capabilityPanel === 'catalog' ? (
+            <CapabilitiesView connectionId={connectionId} profile={profile} />
+          ) : capabilityMatrix && (
+            <div className="capabilities-grid">
+              {capabilityMatrix.items.map((item: HermesCapabilityMatrixItem) => (
+                <article key={item.id} className="capability-card">
+                  <header>
+                    <span className="card-badge">{item.owningCard}</span>
+                    <h3>{item.name}</h3>
+                    <span className={`status-pill ${item.status}`}>{item.status.replace('_', ' ')}</span>
+                  </header>
+                  <p className="surface-info"><strong>Surface:</strong> {item.surface}</p>
+                  <p className="contract-info"><strong>Native Contract:</strong> <code>{item.nativeContract}</code></p>
+                  <p className="evidence-info">{item.evidence}</p>
+                </article>
+              ))}
+            </div>
+          )}
         </section>
       )}
     </div>

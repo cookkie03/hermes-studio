@@ -416,3 +416,48 @@ export interface HermesCapabilityMatrix {
   discoveredPlugins?: Array<{ name: string; description?: string; enabled?: boolean }>;
 }
 
+export interface ToolsetRow {
+  name: string;
+  description: string;
+  tool_count: number;
+  enabled: boolean;
+  tools?: string[];
+}
+
+export interface ToolShowItem {
+  name: string;
+  description: string;
+}
+
+export interface ToolShowSection {
+  name: string;
+  tools: ToolShowItem[];
+}
+
+export interface PluginServerRow {
+  name: string;
+  state: string;
+  sentence?: string;
+}
+
+export interface AgentPluginRow {
+  name: string;
+  key: string;
+  version: string;
+  description: string;
+  source: string;
+  status: string;
+  portable?: boolean;
+  install_dir?: string;
+  has_desktop_half?: boolean;
+  servers: PluginServerRow[];
+  update_available?: boolean;
+  catalog_name?: string;
+  catalog_version?: string;
+}
+
+export interface CapabilityDelta {
+  [surface: string]: string[];
+}
+
+

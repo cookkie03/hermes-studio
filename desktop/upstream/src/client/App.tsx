@@ -7,7 +7,6 @@ import {
   ArrowUpRight,
   BookOpen,
   Clock3,
-  Code2,
   Folder,
   Menu,
   MessageCircle,

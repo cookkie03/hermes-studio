@@ -2,7 +2,7 @@
 
 Figma workspace linked on 2026-10-05: [design references and workflow](../design/figma.md). File `GFLrf3A2t6afdV34U8Fh4f` belongs to this repository's frontend design work; no automatic GitHub sync or Code Connect mappings configured.
 
-Consolidata 2026-10-06. Leggere questo riepilogo e [STATUS](STATUS.md) all'inizio del lavoro. [Decisioni D01–D38](decisions.md) conserva le richieste; [WORKLOG](WORKLOG.md) la cronologia. [Indice documentazione](../README.md) distingue fonti attuali e storia.
+Consolidata 2026-10-07. Leggere questo riepilogo e [STATUS](STATUS.md) all'inizio del lavoro. [Decisioni D01–D38](decisions.md) conserva le richieste; [WORKLOG](WORKLOG.md) la cronologia. [Indice documentazione](../README.md) distingue fonti attuali e storia.
 
 ## Direzione corrente
 

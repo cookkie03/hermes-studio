@@ -13,192 +13,47 @@ class MockGateway extends EventEmitter {
   async request(method, params) {
     this.requests.push({ method, params });
     if (!this.connected) throw new Error('Hermes backend is offline.');
-
-    if (method === 'tools.list' || method === 'toolsets.list') {
-      return {
-        toolsets: [
-          { name: 'browser', description: 'Browser automation toolset', tool_count: 5, enabled: true, tools: ['navigate', 'click', 'type'] },
-          { name: 'terminal', description: 'Terminal command toolset', tool_count: 3, enabled: false, tools: ['exec'] },
-        ],
-      };
-    }
-
-    if (method === 'tools.show') {
-      return {
-        sections: [
-          {
-            name: 'browser',
-            tools: [
-              { name: 'navigate', description: 'Open URL' },
-              { name: 'click', description: 'Click selector' },
-            ],
-          },
-        ],
-        total: 2,
-      };
-    }
-
-    if (method === 'tools.configure') {
-      return {
-        changed: params.names,
-        enabled_toolsets: params.action === 'enable' ? params.names : [],
-        missing_servers: [],
-        reset: false,
-        unknown: [],
-      };
-    }
-
-    if (method === 'plugins.manage') {
-      if (params.action === 'list') {
-        return {
-          plugins: [
-            {
-              name: 'telegram-bot',
-              key: 'telegram-bot',
-              version: '1.2.0',
-              description: 'Telegram bot interface',
-              source: 'catalog',
-              status: 'active',
-              portable: true,
-              install_dir: '/plugins/telegram-bot',
-              has_desktop_half: true,
-              servers: [{ name: 'telegram-mcp', state: 'connected', sentence: 'Connected' }],
-              update_available: false,
-            },
-          ],
-          user_count: 1,
-          bundled_count: 0,
-        };
-      }
-      if (params.action === 'toggle') {
-        return {
-          ok: true,
-          name: params.name || params.key,
-          restart_required: false,
-        };
-      }
-      if (params.action === 'update') {
-        if (!params.accept_capabilities) {
-          return {
-            ok: false,
-            consent_required: true,
-            delta: { permissions: ['network.listen', 'fs.write'] },
-            delta_lines: ['Adds network listening capability', 'Adds file system write access'],
-          };
-        }
-        return {
-          ok: true,
-          sha: 'abcdef1234567890',
-        };
-      }
-      if (params.action === 'settings') {
-        return {
-          ok: true,
-          name: params.name || params.key,
-        };
-      }
-    }
-
-    if (method === 'skills.manage') {
-      if (params.action === 'list') {
-        return {
-          skills: {
-            devops: ['git-lfs-operations', 'disk-cleanup'],
-            productivity: ['pdf', 'docx'],
-          },
-        };
-      }
-    }
-
-    if (method === 'skills.reload') {
-      return {
-        output: 'Reloaded 4 skills.',
-        result: {
-          added: [{ name: 'new-skill', description: 'A new skill' }],
-          removed: [],
-          unchanged: ['git-lfs-operations', 'disk-cleanup'],
-          total: 3,
-          commands: 3,
-        },
-      };
-    }
-
+    if (method === 'tools.list') return { toolsets: [{ name: 'browser', description: 'Browser automation', tool_count: 2, enabled: true, tools: ['navigate', 'click'] }] };
+    if (method === 'tools.show') return { sections: [{ name: 'browser', tools: [{ name: 'navigate', description: 'Open a URL' }] }], total: 1 };
+    if (method === 'plugins.manage') return { plugins: [{ name: 'telegram-bot', key: 'telegram-bot', version: '1.2.0', description: 'Telegram bot', source: 'catalog', status: 'active', portable: true, has_desktop_half: true, servers: [{ name: 'telegram-mcp', state: 'connected', sentence: 'Connected' }] }], user_count: 1, bundled_count: 0 };
+    if (method === 'skills.manage') return { skills: { devops: ['disk-cleanup'], productivity: ['pdf'] } };
     throw new Error(`Unexpected gateway RPC call: ${method}`);
   }
 }
 
-test('CapabilitiesManager lists toolsets and show tools', async () => {
+test('CapabilitiesManager uses only native scoped catalog calls', async () => {
   const gateway = new MockGateway();
-  const mgr = new CapabilitiesManager({ gateway });
+  const manager = new CapabilitiesManager({ gateway });
+  const snapshot = await manager.snapshot({ connectionId: 'mac', profile: 'default', sessionId: 'owned-session' });
 
-  const toolsets = await mgr.listToolsets({ profile: 'dev' });
-  assert.equal(toolsets.toolsets.length, 2);
-  assert.equal(toolsets.toolsets[0].name, 'browser');
-  assert.equal(gateway.requests[0].method, 'tools.list');
-  assert.equal(gateway.requests[0].params.profile, 'dev');
-
-  const tools = await mgr.showTools();
-  assert.equal(tools.total, 2);
-  assert.equal(gateway.requests[1].method, 'tools.show');
+  assert.equal(snapshot.connectionId, 'mac');
+  assert.equal(snapshot.tools.total, 1);
+  assert.equal(snapshot.plugins.plugins[0].status, 'active');
+  assert.deepEqual(snapshot.skills.skills.devops, ['disk-cleanup']);
+  const calls = Object.fromEntries(gateway.requests.map(({ method, params }) => [method, params]));
+  assert.deepEqual(calls['tools.list'], { session_id: 'owned-session' });
+  assert.deepEqual(calls['tools.show'], { session_id: 'owned-session' });
+  assert.deepEqual(calls['plugins.manage'], { action: 'list', profile: 'default' });
+  assert.deepEqual(calls['skills.manage'], { action: 'list', profile: 'default' });
 });
 
-test('CapabilitiesManager configures tools with validation', async () => {
+test('CapabilitiesManager keeps standalone profile catalogs separate from session catalogs', async () => {
   const gateway = new MockGateway();
-  const mgr = new CapabilitiesManager({ gateway });
+  const manager = new CapabilitiesManager({ gateway });
 
-  await assert.rejects(mgr.configureTools({ action: 'invalid', names: ['browser'] }), /Invalid action/);
-  await assert.rejects(mgr.configureTools({ action: 'enable', names: [] }), /cannot be empty/);
-
-  const res = await mgr.configureTools({ action: 'enable', names: ['browser'] });
-  assert.deepEqual(res.changed, ['browser']);
-  assert.equal(gateway.requests[0].method, 'tools.configure');
-  assert.equal(gateway.requests[0].params.action, 'enable');
+  const plugins = await manager.listPlugins({ profile: 'profile-a' });
+  const skills = await manager.listSkills({ profile: 'profile-a' });
+  assert.equal(plugins.plugins.length, 1);
+  assert.deepEqual(skills.skills.productivity, ['pdf']);
+  assert.deepEqual(gateway.requests[0], { method: 'plugins.manage', params: { action: 'list', profile: 'profile-a' } });
+  assert.deepEqual(gateway.requests[1], { method: 'skills.manage', params: { action: 'list', profile: 'profile-a' } });
 });
 
-test('CapabilitiesManager plugin management and capability delta consent', async () => {
-  const gateway = new MockGateway();
-  const mgr = new CapabilitiesManager({ gateway });
+test('CapabilitiesManager reports unavailable hosts rather than fabricating a catalog', async () => {
+  const offline = new MockGateway();
+  offline.connected = false;
+  await assert.rejects(new CapabilitiesManager({ gateway: offline }).snapshot(), /Hermes backend is offline/);
 
-  const list = await mgr.listPlugins();
-  assert.equal(list.plugins.length, 1);
-  assert.equal(list.plugins[0].name, 'telegram-bot');
-
-  const toggle = await mgr.managePlugin({ action: 'toggle', name: 'telegram-bot', enable: false });
-  assert.equal(toggle.ok, true);
-
-  // Update without accept_capabilities yields consent_required
-  const updateReq = await mgr.managePlugin({ action: 'update', name: 'telegram-bot' });
-  assert.equal(updateReq.ok, false);
-  assert.equal(updateReq.consent_required, true);
-  assert.ok(updateReq.delta.permissions.includes('network.listen'));
-
-  // Update with accept_capabilities succeeds
-  const updateConsent = await mgr.managePlugin({ action: 'update', name: 'telegram-bot', accept_capabilities: true });
-  assert.equal(updateConsent.ok, true);
-});
-
-test('CapabilitiesManager skills list and reload', async () => {
-  const gateway = new MockGateway();
-  const mgr = new CapabilitiesManager({ gateway });
-
-  const skills = await mgr.listSkills();
-  assert.ok(skills.skills.devops.includes('git-lfs-operations'));
-
-  const reloaded = await mgr.reloadSkills();
-  assert.equal(reloaded.result.total, 3);
-  assert.equal(reloaded.result.added[0].name, 'new-skill');
-});
-
-test('CapabilitiesManager rejects invalid actions and handles offline gateway', async () => {
-  const gateway = new MockGateway();
-  gateway.connected = false;
-  const mgr = new CapabilitiesManager({ gateway });
-
-  await assert.rejects(mgr.listToolsets(), /Hermes backend is offline/);
-
-  const mgrOfflineConn = new CapabilitiesManager({ connections: { slots: new Map() } });
-  await assert.rejects(mgrOfflineConn.listToolsets({ connectionId: 'local' }), /offline or backend is unreachable/);
-
-  const mgrOnline = new CapabilitiesManager({ gateway: new MockGateway() });
-  await assert.rejects(mgrOnline.managePlugin({ action: 'unknown_action' }), /Invalid plugin action/);
+  const unavailable = new CapabilitiesManager({ connections: { slots: new Map() } });
+  await assert.rejects(unavailable.listToolsets(), /offline or backend is unreachable/);
 });

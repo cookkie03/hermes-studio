@@ -1,6 +1,13 @@
 > Numerazione storica: gli ID nel testo precedono il riordino; i link alle schede puntano ai file attuali. [Corrispondenza vecchi/nuovi ID](../features/numbering-2026-10-04.md).
 
-# Registro di lavoro
+
+## 2026-10-07 — F11 read-only Hermes capability catalog
+
+- Implementato `desktop/hermes/capabilities.mjs`: snapshot scoped soltanto tramite i contratti nativi `tools.list`, `tools.show`, `plugins.manage {action:list}` e `skills.manage {action:list}`; toolset/tool restano session-scoped, plugin/skill profile-scoped.
+- Collegato lo snapshot allowlisted a `GET /api/hermes/capabilities/snapshot`, senza endpoint di installazione, toggle, reload o `tools.configure`; nessuna configurazione/personale runtime è stata modificata.
+- Aggiunto `CapabilitiesView.tsx` nel pannello F8 Capabilities con categorie, filtro progressivo, dettaglio stato e indicazioni esplicite `installed ≠ active`, offline/stale e deferred tool visibili.
+- Verificati: `npm --prefix desktop test` (pass), `npm --prefix desktop run build` (pass), typecheck e fixture F11. Non eseguiti: smoke .app e test contro host/profilo Hermes reale; gestione persistente plugin/tool/skill resta un incremento futuro.
+
 
 ## 2026-10-06 — F9 Space Markdown memory and memory integration
 
