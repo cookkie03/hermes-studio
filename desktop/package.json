@@ -21,7 +21,10 @@
     "test:external-links": "node scripts/test-external-links.cjs",
     "test:packaged-ui": "node scripts/test-packaged-ui.cjs",
     "test:packaged-conversations": "node scripts/test-packaged-conversations.cjs",
-    "test:packaged-connections": "node scripts/test-packaged-connections.cjs"
+    "test:packaged-connections": "node scripts/test-packaged-connections.cjs",
+    "release:manifest": "node scripts/release-manifest.cjs",
+    "package:release": "npm run package:dmg && npm run release:manifest",
+    "verify:release": "npm run test && npm run package:release && npm run test:packaged-ui && npm run test:packaged-connections"
   },
   "keywords": [],
   "author": "Atai Barkai",

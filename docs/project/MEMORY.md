@@ -112,3 +112,17 @@ decisionId effimero impedisce risposte stale dopo reconnect/cancel con RPC omoni
 ## 2026-10-05 — F4–F18 English translation
 
 User requested English translation of all feature cards F4 through F18 and a commit. Translated the full cards in place: implementation assignments, requirements, skill guidance, source evidence, acceptance gates and handoff prompts. Preserved filenames, link targets, technical inline identifiers and Markdown markers; retained F6’s old fragment as an explicit anchor for protected F2 references. Validation: 15 translated cards, 304 local link targets checked, one pre-existing unavailable external skill path in F18 preserved; F0–F3 byte-for-byte unchanged from task start. No application code or runtime behavior changed. Commit scope: these 15 cards and only this task’s project-log entries; other pending changes are preserved outside the commit.
+
+## 2026-10-11 — Protected cards and voice/routine clarification
+
+User prohibits edits to existing F0–F13 cards because another coding agent is implementing them; new supplements are allowed, F14–F18 editable within requested scope. Rule persisted in AGENTS. F17 clarifies reuse of Hermes realtime voice→session delegation, porting required upstream desktop client transport when necessary, without a parallel executor. New docs/features/addendum-bot-self-scheduled-routines-2026-10-11.md records Bots scheduling their own native cron jobs and receiving periodic results in their own Bot Chat; F10 unchanged. Specification only, no code/runtime changes or new live verification. Existing staged work from the other agent preserved; this task does not stage/commit it.
+
+## 2026-10-11 — F13 macOS packaging, DMG release, and GitHub draft release
+
+F13 implemented and verified:
+- Reproducible macOS packaging pipeline with `desktop/scripts/release-manifest.cjs`, `desktop/package.json` (`release:manifest`, `package:release`, `verify:release`).
+- Verified local DMG generation (`Hermes Studio-0.1.0-arm64.dmg`), SHA-256 hash `cb8332a704a38703e0136364ee5d10ba41f390deecba7bfbc508b00eb54d011b`, size 131,241,647 bytes, and `release-manifest.json`.
+- Strict deep codesign verified on bundle and mounted read-only volume.
+- Packaged smoke tests for UI, connections, approvals, and conversations passed without npm/devserver.
+- Added GitHub Actions release workflow `.github/workflows/release.yml`, `CONTRIBUTING.md`, `README.md` user download focus, and `docs/releases/release-notes-v0.1.0.md`.
+

@@ -154,3 +154,19 @@ User provided the Hermes Studio Figma file and requested association with GitHub
 - Persisted via `avatarId` in SQLite and preserved across dialog reopen, reload, and restart.
 - Graceful fallback using deterministic hashing for bots without an assigned avatar.
 - Accessible radio group options for all 4 OpenDots avatars (`blue`, `mint`, `orange`, `purple`).
+
+## 2026-10-11 — Protected cards and voice/routine clarification
+
+User prohibits edits to existing F0–F13 cards because another coding agent is implementing them; new supplements are allowed, F14–F18 editable within requested scope. Rule persisted in AGENTS. F17 clarifies reuse of Hermes realtime voice→session delegation, porting required upstream desktop client transport when necessary, without a parallel executor. New docs/features/addendum-bot-self-scheduled-routines-2026-10-11.md records Bots scheduling their own native cron jobs and receiving periodic results in their own Bot Chat; F10 unchanged. Specification only, no code/runtime changes or new live verification. Existing staged work from the other agent preserved; this task does not stage/commit it.
+
+## 2026-10-11 — F13 macOS packaging, DMG release, and GitHub draft release
+
+F13 implemented and verified:
+- Reproducible packaging pipeline established with `npm run package:release` (`package:dmg` + `release:manifest`) and full verification suite `npm run verify:release`.
+- Packaged `.app` and DMG (`Hermes Studio-0.1.0-arm64.dmg`, 131,241,647 bytes) built with embedded Electron/Node runtime; no user-side Node/npm required.
+- SHA-256 (`cb8332a704a38703e0136364ee5d10ba41f390deecba7bfbc508b00eb54d011b`) and `release-manifest.json` generated and verified.
+- Strict deep codesign (`codesign --verify --deep --strict`) passed on `.app` and mounted DMG.
+- Clean read-only disk image mount verified with `/Applications` drag symlink and `.app` integrity.
+- Packaged UI smoke test (`test:packaged-ui`), host connections (`test:packaged-connections`), approvals (`test:packaged-approvals`), and conversations (`test:packaged-conversations`) passed with synthetic data; no live runtime/secrets in bundle.
+- User-oriented `README.md`, developer `CONTRIBUTING.md`, release notes `docs/releases/release-notes-v0.1.0.md`, and GitHub Actions release workflow `.github/workflows/release.yml` created.
+

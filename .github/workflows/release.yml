@@ -1,0 +1,112 @@
+name: Release macOS DMG
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      draft:
+        description: 'Create as draft release'
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-verify:
+    name: Build & Verify macOS DMG
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+          cache-dependency-path: 'desktop/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: desktop
+        run: npm ci
+
+      - name: Strict TypeScript typecheck
+        working-directory: desktop
+        run: npm run typecheck
+
+      - name: Run test suite
+        working-directory: desktop
+        run: |
+          node --test hermes/*.test.mjs
+          npm run test:metadata
+          npm run test:bootstrap
+          npm run test:external-links
+
+      - name: Package DMG (macOS arm64)
+        working-directory: desktop
+        run: npm run package:dmg
+
+      - name: Generate release manifest & checksums
+        working-directory: desktop
+        run: npm run release:manifest
+
+      - name: Verify packaged UI & connections smoke
+        working-directory: desktop
+        run: |
+          npm run test:packaged-ui
+          npm run test:packaged-connections
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-release-artifacts
+          path: |
+            desktop/release/*.dmg
+            desktop/release/*.dmg.sha256
+            desktop/release/release-manifest.json
+          retention-days: 7
+
+  publish-release:
+    name: Publish Release Draft
+    needs: build-and-verify
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-release-artifacts
+          path: release-artifacts
+
+      - name: Publish draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF_NAME:-v0.1.0}"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && -z "${GITHUB_REF_NAME}" ]]; then
+            TAG="v0.1.0"
+          fi
+          
+          NOTES_FILE="docs/releases/release-notes-v0.1.0.md"
+          EXTRA_ARGS=""
+          if [[ "${{ inputs.draft }}" != "false" ]]; then
+            EXTRA_ARGS="--draft"
+          fi
+
+          gh release create "$TAG" \
+            release-artifacts/*.dmg \
+            release-artifacts/*.dmg.sha256 \
+            release-artifacts/release-manifest.json \
+            --title "Hermes Studio $TAG" \
+            --notes-file "$NOTES_FILE" \
+            $EXTRA_ARGS
