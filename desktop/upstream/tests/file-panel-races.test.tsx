@@ -13,7 +13,8 @@ const pending=new Map<string,(value:any)=>void>();
 function render(){harness.cursor=0;tree=ComputerPanel({dot,threadId:'qa-thread'});const effects=harness.effects.splice(0);effects.forEach(run=>run());return tree;}
 function nodes(node:any,match:(node:any)=>boolean):any[]{if(!node||typeof node!=='object')return [];if(Array.isArray(node))return node.flatMap(child=>nodes(child,match));return [...(match(node)?[node]:[]),...nodes(node.props?.children,match)];}
 function field(label:string){return nodes(tree,node=>node.props?.['aria-label']===label)[0];}
-function button(text:string){return nodes(tree,node=>node.type==='button' && (node.props.children===text || nodes(node.props.children,item=>item.props?.children===text).length))[0];}
+function visibleText(value:any):string {if(typeof value==='string')return value;if(Array.isArray(value))return value.map(visibleText).join('');return value?.props ? visibleText(value.props.children) : '';}
+function button(text:string){return nodes(tree,node=>node.type==='button' && visibleText(node.props.children).trim()===text)[0];}
 async function settle(){await new Promise(resolve=>setTimeout(resolve,0));render();await new Promise(resolve=>setTimeout(resolve,0));render();}
 function response(rootId:string,path:string,content:string,revision='original'){return {rootId,host:'local',path,content,revision,size:content.length,isBinary:false,largeFile:false,updatedAt:1};}
 beforeEach(()=>{

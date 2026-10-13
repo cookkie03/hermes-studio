@@ -198,24 +198,24 @@ export class FileWorkspaceService {
       currentRevision = existingRead.revision;
     }
 
-      // Check external conflict: if expectedRevision was supplied and differs from disk
-      if (expectedRevision && expectedRevision !== currentRevision) {
-        const receipt: FileDiffReceipt = {
-          id: `receipt-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-          host: root.host,
-          rootId: root.id,
-          path: relativePath,
-          revision: currentRevision,
-          toolName,
-          outcome: 'conflict',
-          oldContent,
-          newContent: content,
-          timestamp: Date.now(),
-          error: `External conflict: file modified on disk (expected ${expectedRevision}, found ${currentRevision}).`,
-        };
-        this.receipts.push(receipt);
-        return { receipt, newRevision: currentRevision };
-      }
+    // Check external conflict: if expectedRevision was supplied and differs from disk
+    if (expectedRevision && expectedRevision !== currentRevision) {
+      const receipt: FileDiffReceipt = {
+        id: `receipt-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        host: root.host,
+        rootId: root.id,
+        path: relativePath,
+        revision: currentRevision,
+        toolName,
+        outcome: 'conflict',
+        oldContent,
+        newContent: content,
+        timestamp: Date.now(),
+        error: `External conflict: file modified on disk (expected ${expectedRevision}, found ${currentRevision}).`,
+      };
+      this.receipts.push(receipt);
+      return { receipt, newRevision: currentRevision };
+    }
 
     // Validate the nearest existing parent even when the destination is new.
     // Continue on its canonical path so an outside symlink cannot become a writer.

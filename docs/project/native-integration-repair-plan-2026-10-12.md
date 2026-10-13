@@ -25,11 +25,14 @@
 ## Tasks
 
 - [x] File boundary: failing public FileWorkspaceService tests for root list/search and new writes via outside parent symlink; correct nearest-parent realpath checks and preserve revision conflicts. Command: npx vitest run --root upstream tests/f5-files.test.tsx.
-- [ ] Native context/identity/projects: inspect current upstream methods, resolve actual profile/host/session/project; replace global header labels and synthetic project IDs. Add public adapter/API routing/unsupported/offline tests.
-- [ ] Collaboration: replace timers/maps as execution source with subagent/groups/recall native requests and actual events; respect unavailable spawn/steer/message endpoints, managed Bot Chat gates and uncertain delivery. Native request receipt tests replace simulation assertions.
-- [ ] Browser: real dedicated persistent Electron browsing surface shared through verified Hermes preview/controller callbacks; exact current upstream auth/capability limitations recorded. Test synthetic site DOM/cookie/storage/restart and native callback action/results; remove mock HTML and counts.
+- [x] Native context/identity/projects: inspect current upstream methods, resolve actual profile/host/session/project; replace global header labels and synthetic project IDs. Add public adapter/API routing/unsupported/offline tests.
+- [x] Collaboration: replace timers/maps as execution source with subagent/groups/recall native requests and actual events; respect unavailable spawn/steer/message endpoints, managed Bot Chat gates and uncertain delivery. Native request receipt tests replace simulation assertions.
+- [x] Browser: real dedicated persistent Electron browsing surface shared through verified Hermes preview/controller callbacks; exact current upstream auth/capability limitations recorded. Test synthetic site DOM/cookie/storage/restart and native callback action/results; remove mock HTML and counts.
 - [x] Computer: reject unavailable takeover API and preserve runtime completion receipts; test successful completion under unsupported lease request.
-- [ ] Audio: proxy supported native audio routes with immutable thread owner; authenticated tests exercise handlers, no fallback transcript. Integrate dictation/playback/live pathways only when runtime advertises and supports them; denied permission/cancel/late event tests.
-- [ ] Verification: repair meaningful F6 UI acceptance mismatch, full typecheck/tests/build, package separate .app, synthetic UI/chat/approvals/native integration smoke, independent review and document actual remaining external gates.
+- [x] Audio: proxy supported native audio routes with immutable thread owner; authenticated tests exercise handlers, no fallback transcript. Integrate dictation/playback/live pathways only when runtime advertises and supports them; denied permission/cancel/late event tests.
+- [x] Verification: repair meaningful F6 UI acceptance mismatch, full typecheck/tests/build, package separate .app, synthetic UI/chat/approvals/native integration smoke, independent review and document actual remaining external gates.
 
 Shared ownership: parent owns server.mjs, App/Chat/ComputerPanel, transport and product adapters. Research agents only write their respective docs/research files. Each repair uses red→green at the public interfaces already implicated in and authorized by the review, rather than testing internals. No new dependencies or publications without a concrete need.
+
+
+Repair verification and remaining external gates: [verification receipt](../architecture/native-integration-repair-verification-2026-10-13.md). Feature-wide acceptance is not inferred from the repaired adapters.
