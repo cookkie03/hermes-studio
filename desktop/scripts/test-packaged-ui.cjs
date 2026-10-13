@@ -6,7 +6,7 @@ const fs = require('node:fs/promises'); const path = require('node:path');
  try {
   app=await _electron.launch({executablePath:path.join(root,'release/mac-arm64/Hermes Studio.app/Contents/MacOS/Hermes Studio'),args:[`--user-data-dir=${data}`],env:{...process.env,HERMES_STUDIO_DISABLE_AUTOCONNECT:'1'},timeout:45000});
   let page=await app.firstWindow({timeout:50000}); const errors=[];
-  const watch = current => { current.on('pageerror',e=>errors.push(e.message)); current.on('console',m=>{if(m.type()==='error' && !/status of (409|503)/.test(m.text()))errors.push(m.text())}); };
+  const watch = current => { current.on('dialog', dialog => {void dialog.dismiss().catch(() => {});}); current.on('pageerror',e=>errors.push(e.message)); current.on('console',m=>{if(m.type()==='error' && !/status of (409|503)/.test(m.text()))errors.push(m.text())}); };
   watch(page);
   await page.getByText('SPACES',{exact:true}).waitFor({timeout:20000});
   await page.getByText('Hermes disconnected · local workspace available',{exact:true}).waitFor();

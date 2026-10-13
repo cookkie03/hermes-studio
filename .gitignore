@@ -52,3 +52,9 @@ desktop/release/
 # Synthetic Python verification caches
 __pycache__/
 *.pyc
+
+# Local agent/replay transcripts and command captures
+/codex-rea/
+
+# Scratch, workspace state, and generated local artifacts
+/hermes-desktop/

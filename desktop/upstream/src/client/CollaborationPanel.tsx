@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Users,
   Bot,
@@ -57,6 +57,7 @@ export function CollaborationPanel({
   const [newContext, setNewContext] = useState('');
   const [steerText, setSteerText] = useState('');
 
+  const currentChild=useRef(selectedSubagentId);currentChild.current=selectedSubagentId;
   // 2. Bot messaging state
   const [messages, setMessages] = useState<BotMessage[]>([]);
   const [targetDotId, setTargetDotId] = useState<string>(allDots.find((d) => d.id !== dot.id)?.id || '');
@@ -69,6 +70,7 @@ export function CollaborationPanel({
   const [roomMsgInput, setRoomMsgInput] = useState('');
   const [newRoomName, setNewRoomName] = useState('');
 
+  const currentRoom=useRef(selectedRoomId);currentRoom.current=selectedRoomId;
   // 4. Recall state
   const [recallQuery, setRecallQuery] = useState('');
   const [recallResults, setRecallResults] = useState<RecallResult[]>([]);
@@ -76,6 +78,7 @@ export function CollaborationPanel({
   // 5. Space link state
   const [spaceLink, setSpaceLink] = useState<SpaceProfileLink | null>(null);
   const [customProjectId, setCustomProjectId] = useState('');
+  const [projects,setProjects] = useState<Array<{id:string;name:string}>>([]);
 
   // --- Subagents Fetch & Tail ---
   const loadSubagents = useCallback(async () => {
@@ -92,12 +95,12 @@ export function CollaborationPanel({
 
   const loadSubagentTail = useCallback(async (id: string) => {
     try {
-      const data = await api<{ tail: string }>(`/hermes/collaboration/subagents/${encodeURIComponent(id)}/tail?maxBytes=16384`);
-      setSubagentTail(data.tail);
+      const data = await api<{ tail: string }>(`/hermes/collaboration/subagents/${encodeURIComponent(id)}/tail?maxBytes=16384&threadId=${encodeURIComponent(threadId)}`);
+      if(currentChild.current===id)setSubagentTail(data.tail);
     } catch {
-      setSubagentTail('Tail buffer unavailable.');
+      if(currentChild.current===id)setSubagentTail('Tail buffer unavailable.');
     }
-  }, []);
+  }, [threadId]);
 
   useEffect(() => {
     if (tab === 'subagents') {
@@ -134,20 +137,20 @@ export function CollaborationPanel({
   // --- Rooms Fetch ---
   const loadRooms = useCallback(async () => {
     try {
-      const list = await api<HostedRoom[]>('/hermes/collaboration/rooms');
+      const list = await api<HostedRoom[]>(`/hermes/collaboration/rooms?threadId=${encodeURIComponent(threadId)}`);
       setRooms(list);
       if (!selectedRoomId && list.length > 0) {
         setSelectedRoomId(list[0].roomId);
       }
     } catch {}
-  }, [selectedRoomId]);
+  }, [selectedRoomId, threadId]);
 
   const loadRoomEvents = useCallback(async (roomId: string) => {
     try {
-      const events = await api<RoomLogEvent[]>(`/hermes/collaboration/rooms/${encodeURIComponent(roomId)}/events?limit=50`);
-      setRoomEvents(events);
+      const events = await api<RoomLogEvent[]>(`/hermes/collaboration/rooms/${encodeURIComponent(roomId)}/events?limit=50&threadId=${encodeURIComponent(threadId)}`);
+      if(currentRoom.current===roomId)setRoomEvents(events);
     } catch {}
-  }, []);
+  }, [threadId]);
 
   useEffect(() => {
     if (tab === 'rooms') {
@@ -168,10 +171,11 @@ export function CollaborationPanel({
   // --- Space Link Fetch ---
   const loadSpaceLink = useCallback(async () => {
     try {
-      const link = await api<SpaceProfileLink>(`/hermes/collaboration/space-link?spaceId=${encodeURIComponent(spaceId)}&profile=${encodeURIComponent(dot.id)}`);
+      const link = await api<SpaceProfileLink>(`/hermes/collaboration/space-link?spaceId=${encodeURIComponent(spaceId)}&threadId=${encodeURIComponent(threadId)}`);
       setSpaceLink(link);
-    } catch {}
-  }, [spaceId, dot.id]);
+      setProjects(await api(`/hermes/collaboration/projects?threadId=${encodeURIComponent(threadId)}`));
+    } catch (error) {setError(error instanceof Error ? error.message : 'Project catalog is unavailable.');}
+  }, [spaceId, dot.id, threadId]);
 
   useEffect(() => {
     if (tab === 'spaceLink') {
@@ -190,10 +194,7 @@ export function CollaborationPanel({
         parentId: threadId,
         goal: newGoal.trim(),
         context: newContext.trim(),
-        model: 'auto/fast',
-        effort: 'Standard',
         spaceId,
-        host: 'This Mac',
       });
       setNewGoal('');
       setNewContext('');
@@ -211,7 +212,7 @@ export function CollaborationPanel({
     if (!selectedSubagentId || !steerText.trim()) return;
     try {
       await api(`/hermes/collaboration/subagents/${encodeURIComponent(selectedSubagentId)}/steer`, 'POST', {
-        message: steerText.trim(),
+        threadId, message: steerText.trim(),
       });
       setSteerText('');
       await loadSubagentTail(selectedSubagentId);
@@ -222,7 +223,7 @@ export function CollaborationPanel({
 
   const handleInterrupt = async (id: string) => {
     try {
-      await api(`/hermes/collaboration/subagents/${encodeURIComponent(id)}/interrupt`, 'POST');
+      await api(`/hermes/collaboration/subagents/${encodeURIComponent(id)}/interrupt`, 'POST', { threadId });
       await loadSubagents();
       await loadSubagentTail(id);
     } catch (err) {
@@ -238,11 +239,10 @@ export function CollaborationPanel({
     try {
       const targetDot = allDots.find((d) => d.id === targetDotId);
       await api('/hermes/collaboration/messages', 'POST', {
-        fromProfile: dot.id,
-        toProfile: targetDot?.id || targetDotId,
+        threadId,
+        toProfile: targetDot?.nativeBinding?.profile,
         fromDotId: dot.id,
         toDotId: targetDotId,
-        threadId,
         content: messageDraft.trim(),
       });
       setMessageDraft('');
@@ -260,7 +260,7 @@ export function CollaborationPanel({
     try {
       const created = await api<HostedRoom>('/hermes/collaboration/rooms', 'POST', {
         name: newRoomName.trim(),
-        members: [dot.id, ...allDots.filter((d) => d.id !== dot.id).map((d) => d.id)],
+        threadId, members: allDots.filter(d=>d.nativeBinding?.connectionId===dot.nativeBinding?.connectionId).slice(0,6).map(d=>({ member_id:d.id, profile:d.nativeBinding!.profile, handle:d.nativeBinding!.profile, display_name:d.name })),
       });
       setNewRoomName('');
       setSelectedRoomId(created.roomId);
@@ -275,7 +275,7 @@ export function CollaborationPanel({
     if (!selectedRoomId || !roomMsgInput.trim()) return;
     try {
       await api(`/hermes/collaboration/rooms/${encodeURIComponent(selectedRoomId)}/events`, 'POST', {
-        fromProfile: dot.id,
+        threadId,
         payload: { text: roomMsgInput.trim() },
       });
       setRoomMsgInput('');
@@ -289,7 +289,7 @@ export function CollaborationPanel({
     setRecallQuery(q);
     setLoading(true);
     try {
-      const res = await api<RecallResult[]>(`/hermes/collaboration/recall?query=${encodeURIComponent(q)}&limit=15`);
+      const res = await api<RecallResult[]>(`/hermes/collaboration/recall?query=${encodeURIComponent(q)}&limit=15&threadId=${encodeURIComponent(threadId)}`);
       setRecallResults(res);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Recall search failed.');
@@ -304,9 +304,8 @@ export function CollaborationPanel({
     try {
       const link = await api<SpaceProfileLink>('/hermes/collaboration/space-link', 'POST', {
         spaceId,
-        profile: dot.id,
+        threadId,
         projectId: customProjectId.trim() || undefined,
-        host: 'This Mac',
       });
       setSpaceLink(link);
       setCustomProjectId('');
@@ -422,15 +421,15 @@ export function CollaborationPanel({
                         </div>
                         <p className="subagent-goal-preview">{sub.goal}</p>
                         <div className="subagent-card-footer">
-                          <span>Model: {sub.model ?? 'auto/fast'}</span>
-                          <span>Effort: {sub.effort ?? 'Standard'}</span>
+                          <span>Model: {sub.model ?? 'Not reported'}</span>
+                          <span>Effort: {sub.effort ?? 'Not reported'}</span>
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
 
-                <form className="spawn-subagent-form" onSubmit={handleSpawnSubagent}>
+                <p>Ask the parent in chat to delegate. Only children reported by Hermes appear here.</p><form className="spawn-subagent-form" onSubmit={handleSpawnSubagent}>
                   <h4>Spawn New Subagent</h4>
                   <input
                     type="text"
@@ -447,7 +446,7 @@ export function CollaborationPanel({
                     onChange={(e) => setNewContext(e.target.value)}
                     rows={2}
                   />
-                  <button type="submit" className="primary" disabled={loading || !newGoal.trim()}>
+                  <button type="submit" className="primary" disabled title="Use delegate_task through the parent chat">
                     {loading ? 'Spawning…' : 'Delegate Task'}
                   </button>
                 </form>
@@ -476,9 +475,9 @@ export function CollaborationPanel({
 
                     <div className="inspector-meta-grid">
                       <div><strong>Status:</strong> {activeSubagent.status}</div>
-                      <div><strong>Host:</strong> {activeSubagent.host ?? 'This Mac'}</div>
-                      <div><strong>Space:</strong> {activeSubagent.spaceId ?? 'default'}</div>
-                      <div><strong>Model:</strong> {activeSubagent.model ?? 'auto/fast'}</div>
+                      <div><strong>Host:</strong> {activeSubagent.host ?? 'Not reported'}</div>
+                      <div><strong>Space:</strong> {activeSubagent.spaceId ?? 'Not reported'}</div>
+                      <div><strong>Model:</strong> {activeSubagent.model ?? 'Not reported'}</div>
                     </div>
 
                     <div className="tail-output-section">
@@ -690,7 +689,7 @@ export function CollaborationPanel({
                   <strong>Space:</strong> {spaceId}
                 </div>
                 <div>
-                  <strong>Specialist Profile:</strong> {dot.name} ({dot.id})
+                  <strong>Native Profile:</strong> {spaceLink?.profile ?? 'Not reported'}
                 </div>
                 <div>
                   <strong>Status:</strong>{' '}
@@ -715,18 +714,16 @@ export function CollaborationPanel({
 
               <form className="spacelink-form" onSubmit={handleLinkSpaceProject}>
                 <h4>Explicit Project Link Confirmation</h4>
-                <label htmlFor="custom-proj-id">Hermes Project ID / Slug:</label>
-                <input
-                  id="custom-proj-id"
-                  type="text"
-                  placeholder={`proj-${dot.id}-${spaceId}`}
-                  value={customProjectId}
-                  onChange={(e) => setCustomProjectId(e.target.value)}
-                />
-                <button type="submit" className="primary" disabled={loading}>
+                <label htmlFor="custom-proj-id">Existing Hermes project:</label>
+                <select id="custom-proj-id" value={customProjectId} onChange={e=>setCustomProjectId(e.target.value)}>
+                  <option value="">Select a native project</option>
+                  {projects.map(project=><option key={project.id} value={project.id}>{project.name}</option>)}
+                </select>
+                <button type="submit" className="primary" disabled={loading || !customProjectId}>
                   {loading ? 'Linking…' : 'Confirm Space-Project Association'}
                 </button>
               </form>
+              {spaceLink?.status === 'linked' && <button type="button" onClick={()=>void api('/hermes/collaboration/space-context','POST',{threadId,spaceId}).then(()=>setError('Native project applied. Reopen the conversation to load its confirmed context.')).catch(e=>setError(e.message))}>Use this project in the current chat</button>}
             </div>
           </div>
         )}

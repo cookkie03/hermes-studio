@@ -1,118 +1,36 @@
-import { test, describe, beforeEach, afterEach } from 'node:test';
-import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { HermesBrowserService, sanitizeUrl } from './browser.mjs';
+import test from 'node:test';import assert from 'node:assert/strict';
+import {HermesBrowserService,sanitizeUrl} from './browser.mjs';
+function fixture(transport) {
+ const workspace={dot:()=>({id:'dot'}),requireThread:id=>({dotId:id==='other'?'other-dot':'dot'})};
+ const bridge={gateway:{request:async()=>({sections:[{tools:[{name:'read_preview'},{name:'drive_preview'}]}]})},sessions:new Map([['thread',{runtimeId:'runtime-1',info:{profile_name:'qa'}}]]),transportGeneration:1};
+ const connections={on(){},threadHost:()=>({connectionId:'local'}),statusFor:()=>({connected:true,name:'Synthetic host',mode:'local'}),slots:new Map([['local',{bridge}]])};
+ return new HermesBrowserService({connections,workspace,transport});
+}
+test('browser does not invent running state before a real desktop transport mounts',async()=>{
+ const manager=fixture();const status=await manager.getStatus('dot');assert.equal(status.configured,false);assert.equal(status.cookiesCount,null);
+ await assert.rejects(()=>manager.mount({dotId:'dot'}),/desktop app/);
+});
+test('native DOM read/action results come from the transport, not manufactured strings',async()=>{
+ const calls=[];const manager=fixture(async(method,args)=>{calls.push({method,args});if(method==='mount')return {configured:true,state:'running'};if(method==='read')return {kind:'url',url:'https://synthetic.example/',text:'Actual DOM'};throw Error('Element does not exist');});
+ await manager.mount({dotId:'dot',threadId:'thread',bounds:{x:1,y:1,width:100,height:100}});
+ assert.equal((await manager.handleNativeRequest({id:'read-1',method:'preview.read',params:{session_id:'runtime-1'}},{threadId:'thread',connectionId:'local'})).text,'Actual DOM');
+ await assert.rejects(()=>manager.handleNativeRequest({id:'act-1',method:'preview.act',params:{session_id:'runtime-1',action:'click',ref:'missing'}},{threadId:'thread',connectionId:'local'}),/Element does not exist/);
+ assert.equal(calls.at(-1).method,'act');
+});
+test('replayed mutations and foreign conversation callbacks never execute',async()=>{
+ let calls=0;const manager=fixture(async()=>{calls++;return {configured:true};});await manager.mount({dotId:'dot',threadId:'thread'});
+ await assert.rejects(()=>manager.handleNativeRequest({id:'act',method:'preview.act',replayed:true,params:{session_id:'runtime-1'}},{threadId:'thread',connectionId:'local'}),/replayed/i);
+ await assert.rejects(()=>manager.handleNativeRequest({id:'foreign',method:'preview.act',params:{session_id:'runtime-1'}},{threadId:'other',connectionId:'local'}),/owned conversation/);
+ assert.equal(calls,1);
+});
+test('browser mount validates Dot/thread identity and navigation protocols',async()=>{
+ const manager=fixture(async()=>({configured:true}));await assert.rejects(()=>manager.mount({dotId:'dot',threadId:'other'}),/belong/);
+ assert.throws(()=>sanitizeUrl('file:///tmp/private'),/HTTP/);assert.throws(()=>sanitizeUrl('https://user:password@example.com'),/credentials/);
+ assert.equal(sanitizeUrl('https://synthetic.example'),'https://synthetic.example/');
+});
 
-describe('HermesBrowserService Backend Integration (F12)', () => {
-  let tempDir;
-  let service;
-
-  beforeEach(async () => {
-    tempDir = mkdtempSync(join(tmpdir(), 'f12-browser-test-'));
-    service = new HermesBrowserService({ dataDir: tempDir });
-    await service.initialize();
-  });
-
-  afterEach(() => {
-    try {
-      rmSync(tempDir, { recursive: true, force: true });
-    } catch {}
-  });
-
-  test('sanitizeUrl validates and cleans URLs correctly', () => {
-    assert.equal(sanitizeUrl('https://example.com/page'), 'https://example.com/page');
-    assert.equal(sanitizeUrl('http://user:pass@example.com/login'), 'http://example.com/login');
-    assert.throws(() => sanitizeUrl('javascript:alert(1)'), /Only http: and https: protocols/);
-    assert.throws(() => sanitizeUrl('file:///etc/passwd'), /Only http: and https: protocols/);
-    assert.throws(() => sanitizeUrl('not-a-url'), /Invalid URL format/);
-  });
-
-  test('initializes default session state and persists to disk', async () => {
-    const status = service.getStatus('dot-scout');
-    assert.equal(status.holder, 'bot');
-    assert.equal(status.activeUrl, 'https://hermes.local/start');
-    assert.equal(status.tabs.length, 1);
-    assert.equal(status.history.length, 1);
-
-    // Create a second instance pointing to the same dataDir to test persistence
-    const service2 = new HermesBrowserService({ dataDir: tempDir });
-    await service2.initialize();
-    const status2 = service2.getStatus('dot-scout');
-    assert.equal(status2.activeUrl, 'https://hermes.local/start');
-  });
-
-  test('handles tab navigation, switching, creation and closing', async () => {
-    await service.navigate('dot-scout', 'https://news.ycombinator.com');
-    let status = service.getStatus('dot-scout');
-    assert.equal(status.activeUrl, 'https://news.ycombinator.com/');
-    assert.equal(status.history[0].url, 'https://news.ycombinator.com/');
-
-    // Create new tab
-    await service.createTab('dot-scout', 'https://github.com');
-    status = service.getStatus('dot-scout');
-    assert.equal(status.tabs.length, 2);
-    assert.equal(status.activeUrl, 'https://github.com/');
-
-    // Switch tab back to first tab
-    const firstTabId = status.tabs[0].id;
-    await service.switchTab('dot-scout', firstTabId);
-    status = service.getStatus('dot-scout');
-    assert.equal(status.activeTabId, firstTabId);
-    assert.equal(status.activeUrl, 'https://news.ycombinator.com/');
-
-    // Close active tab
-    await service.closeTab('dot-scout', firstTabId);
-    status = service.getStatus('dot-scout');
-    assert.equal(status.tabs.length, 1);
-    assert.equal(status.activeUrl, 'https://github.com/');
-  });
-
-  test('enforces takeover and release control lease transitions', async () => {
-    let status = service.getStatus('dot-scout');
-    assert.equal(status.holder, 'bot');
-
-    // Human takes over control
-    status = await service.takeControl('dot-scout');
-    assert.equal(status.holder, 'human');
-    assert.equal(status.audit[0].action, 'takeover');
-
-    // Agent attempt to navigate during takeover fails with lease error
-    await assert.rejects(
-      () => service.navigate('dot-scout', 'https://agent-attempt.com', 'agent'),
-      /Control standard: Human user has taken over the browser/
-    );
-
-    // Agent attempt to run action during takeover fails
-    await assert.rejects(
-      () => service.executeAction('dot-scout', 'click', { ref: '#button' }, 'agent'),
-      /Control standard: Human user has taken over the browser/
-    );
-
-    // Human navigation during takeover succeeds
-    await service.navigate('dot-scout', 'https://user-manual.com', 'owner');
-    status = service.getStatus('dot-scout');
-    assert.equal(status.activeUrl, 'https://user-manual.com/');
-
-    // Human releases control back to agent
-    status = await service.releaseControl('dot-scout');
-    assert.equal(status.holder, 'bot');
-    assert.equal(status.audit[0].action, 'resume');
-
-    // Agent navigation after release succeeds
-    await service.navigate('dot-scout', 'https://agent-success.com', 'agent');
-    status = service.getStatus('dot-scout');
-    assert.equal(status.activeUrl, 'https://agent-success.com/');
-  });
-
-  test('clears browser storage, history and tabs', async () => {
-    await service.navigate('dot-scout', 'https://example.com');
-    await service.clearData('dot-scout');
-    const status = service.getStatus('dot-scout');
-    assert.equal(status.history.length, 0);
-    assert.equal(status.cookiesCount, 0);
-    assert.equal(status.localStorageCount, 0);
-    assert.equal(status.activeUrl, 'https://hermes.local/start');
-  });
+test('warm sessions without native preview tools keep manual browsing and cannot grant agent control',async()=>{
+ const manager=fixture(async()=>({configured:true}));manager.connections.slots.get('local').bridge.gateway.request=async()=>({sections:[{tools:[{name:'terminal'}]}]});
+ await manager.mount({dotId:'dot',threadId:'thread'});assert.equal(manager.current.nativePreviewSupported,false);assert.throws(()=>manager.releaseControl('dot'),/not enabled desktop preview/);
+ await assert.rejects(()=>manager.handleNativeRequest({id:'act',method:'preview.act',params:{session_id:'runtime-1',action:'click'}},{threadId:'thread',connectionId:'local'}),/not enabled desktop preview/);
 });

@@ -4,6 +4,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('hermesStudioDesktop', Object.freeze({
   platform: process.platform,
   packaged: true,
+  browser: Object.freeze({ mount: (options) => ipcRenderer.invoke('hermes:browser-surface', options), unmount: (owner) => ipcRenderer.invoke('hermes:browser-surface', { unmount: true, ...owner }) }),
 }));
 // Only native user clicks can request source navigation. No callable IPC is exposed to page scripts.
 window.addEventListener('click', (event) => {

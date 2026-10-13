@@ -9,7 +9,7 @@ Development prerequisites: Node24+ and npm. Installed application includes Elect
 - npm run package:dir: create production .app.
 - npm run package:dmg: create macOS DMG.
 
-The entrypoint starts only its own interface service at a dynamic loopback port. F1 discovers/attaches to Hermes locally or through OS OpenSSH and can start missing native services through the host supervisor; quitting this UI service never kills the Hermes backend. App archive is dedicated userData. Calls are a future direction and permission requests are denied by default.
+The entrypoint starts only its own interface service at a dynamic loopback port. F1 discovers/attaches to Hermes locally or through OS OpenSSH and can start missing native services through the host supervisor; quitting this UI service never kills the Hermes backend. App archive is dedicated userData. Telephone calls remain a future direction. Microphone access is limited to audio requested by the trusted Studio window; browsing pages cannot request camera or microphone access.
 
 Adapter contract: hermes/server.mjs receives HERMES_STUDIO_HOST/PORT/DATA_DIR/STATIC_DIR/OWNER_TOKEN, serves built assets plus /api, and sends process.parentPort.postMessage({type:'ready',port}) once listening. Electron supplies the bearer header only for that same loopback service; it is not exposed to the renderer.
 
@@ -40,3 +40,13 @@ Choose the host before a conversation creates its native session. Later its host
 Missing services use native `hermes serve` under a user LaunchAgent/systemd unit and native `hermes gateway install --if-missing/start/status`. No Hermes installation, update, scheduler, executor, project or memory implementation is added. Existing services/config/auth gates are preserved. Disconnect/quit closes only the client socket/tunnel. macOS user services require host login; Linux logout persistence depends on linger, which Studio observes without changing. Gateway status does not certify cron/bots or 24-hour execution.
 
 Run `npm run test:packaged-connections` for isolated GUI fixtures. `npm run test:packaged-connections -- --live-mac` and `node scripts/verify-local-attach.mjs --live-mac` explicitly attach to an existing ungated runtime, without startup, sessions, prompts or personal history. `HERMES_STUDIO_DISABLE_AUTOCONNECT=1` isolates synthetic app checks. ssh2 is a development-only fixture dependency; shipped transport is OS OpenSSH. [F1 evidence](../docs/architecture/f1-review-2026-10-04.md).
+
+## Native integration repair (2026-10-13)
+
+Bots come from the connected Hermes installation and open its canonical Bot Chat. Collaboration, project selection, audio and memory use that conversation’s native profile and connection. Direct subagent creation and Bot Screen takeover remain unavailable where the native backend provides no matching client contract. A delivered message, completed action or transcript is shown only from a native response.
+
+The Browser panel uses a dedicated persistent WebContentsView and the runtime’s desktop preview callbacks. Manual browsing is available independently; agent control requires the selected session to report read_preview and drive_preview through tools.show. Existing live sessions retain their actual toolsets. Take Over pauses this shared preview’s mutations; it does not claim to suspend every computer or headless-browser tool on the host.
+
+Chat audio offers editable dictation, playback of the latest response and realtime voice where configured. Realtime requests delegate to the same Hermes conversation; tools, memory and approvals remain native. Missing credentials, disabled providers, interrupted transport and uncertain delivery remain explicit. The voice transport is adapted from MIT-licensed NousResearch/hermes-agent; the bundled notice is hermes/HERMES-UPSTREAM-LICENSE.txt.
+
+Run npm run test:native-browser against a separately packaged test copy (HERMES_STUDIO_TEST_APP can select its executable). Verification/native-contract-acceptance.mjs is an opt-in native contract check with explicit HERMES_TEST_SOURCE/HERMES_TEST_PYTHON, an empty isolated home and no provider inference. See docs/architecture/native-integration-repair-verification-2026-10-13.md for the evidence and unverified external gates.

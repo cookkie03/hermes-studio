@@ -8,8 +8,9 @@ export interface NativeSessionInfo {
 }
 export interface StudioConversationContext {
   studioSpace: { id: string; name: string } | null;
-  nativeProjectLink: 'unavailable';
-  nativeBotBinding: 'unavailable';
+  nativeProjectLink: 'unavailable' | 'reported';
+  nativeBotBinding: 'unavailable' | 'bound';
+  nativeBot?: {profile: string; connectionId: string} | null;
 }
 const reported = (value: unknown) => typeof value === 'string' && value ? value : 'Not reported';
 export function ConversationContext({ context, info, connected, host }: {
@@ -25,7 +26,7 @@ export function ConversationContext({ context, info, connected, host }: {
     </dl>
     <details><summary>Native project and specialist context</summary>
       <p>Native project: {reported(info?.project?.name)} · ID: {reported(info?.project?.id)}. Working folder: {reported(info?.cwd)}.</p>
-      <p>Space-to-profile project links and native Bot identity are not connected yet. A Studio specialist label does not select a Hermes profile. Documents sent with this chat do not change its native project or grant access to another profile.</p>
+      <p>{context?.nativeBotBinding === 'bound' ? `Native Bot: ${context.nativeBot?.profile ?? 'reported'} · ${context.nativeBot?.connectionId ?? 'reported host'}.` : 'This Studio specialist has no native Bot binding.'} Space project links can be selected in Collaboration. Documents sent with this chat do not grant access to another profile.</p>
       {!connected && <p>Native context is unverified while offline.</p>}
     </details>
   </section>;

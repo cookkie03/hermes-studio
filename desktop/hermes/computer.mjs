@@ -41,20 +41,27 @@ export class ComputerManager extends EventEmitter {
     }
   }
 
-  getTarget({ connectionId = 'local', threadId } = {}) {
-    const connId = connectionId || 'local';
+  connectionFor(connectionId, threadId) {
+    return threadId ? this.connections?.threadHost?.(threadId)?.connectionId ?? connectionId ?? 'local' : connectionId ?? 'local';
+  }
+
+  getTarget({ connectionId, threadId } = {}) {
+    const connId = this.connectionFor(connectionId, threadId);
     const lease = this.getLease({ connectionId: connId });
     const connection = this.connections?.statusFor?.(connId);
     const connected = connection?.connected === true;
-    const probed = this.probedHosts.has(connId);
+    const captures = (this.captures.get(connId) ?? []).filter(row => !threadId || row.threadId === threadId);
+    const latest = captures[0];
+    const info = threadId ? this.connections?.forThread?.(threadId)?.sessions?.get(threadId)?.info : undefined;
+    const probed = Boolean(latest);
     return {
       connectionId: connId,
       host: connection?.host || connection?.name || (connId === 'local' ? 'This Mac' : `Host (${connId})`),
-      profile: 'default',
-      app: undefined,
-      window: undefined,
+      profile: info?.profile_name,
+      app: latest?.targetApp,
+      window: latest?.targetWindow,
       driverStatus: probed ? (connected ? 'available' : 'unavailable') : 'unavailable',
-      modes: probed && connected ? ['som', 'vision', 'ax'] : [],
+      modes: probed && connected ? [...new Set(captures.map(row => row.mode).filter(Boolean))] : [],
       humanHasControl: lease.humanHasControl,
       // Bot Screen is a separate native contract; do not claim it from a tool connection.
       botScreenStreamAvailable: false,
@@ -74,6 +81,11 @@ export class ComputerManager extends EventEmitter {
   }
 
   setHumanControl({ connectionId = 'local', threadId, humanHasControl } = {}) {
+    // Receipt observation is not a native display lease. Fail before changing state.
+    throw new Error('Native computer takeover is not supported by this adapter.');
+  }
+
+  observeNativeLease({ connectionId = 'local', threadId, humanHasControl } = {}) {
     const connId = connectionId || 'local';
     const current = this.getLease({ connectionId: connId });
     const updated = {
@@ -97,13 +109,13 @@ export class ComputerManager extends EventEmitter {
   };
   }
 
-  getCaptures({ connectionId = 'local', threadId } = {}) {
-    const connId = connectionId || 'local';
+  getCaptures({ connectionId, threadId } = {}) {
+    const connId = this.connectionFor(connectionId, threadId);
     const list = this.captures.get(connId) || [];
     const target = this.getTarget({ connectionId: connId, threadId });
 
     // Mark staleness dynamically
-    return list.map(capture => ({
+    return list.filter(capture => !threadId || capture.threadId === threadId).map(capture => ({
       ...capture,
       stale: checkStaleSnapshot(capture.timestamp, target.window, capture.targetWindow),
     }));
@@ -115,9 +127,10 @@ export class ComputerManager extends EventEmitter {
     const receipt = {
       id: capture.id || randomUUID(),
       timestamp: capture.timestamp || Date.now(),
-      mode: capture.mode || 'som',
-      targetApp: capture.targetApp || 'Finder',
-      targetWindow: capture.targetWindow || 'Desktop',
+      threadId,
+      mode: capture.mode,
+      targetApp: capture.targetApp,
+      targetWindow: capture.targetWindow,
       imageUrl: capture.imageUrl || null,
       base64: capture.base64 || null,
       textSummary: capture.textSummary || null,
@@ -125,7 +138,7 @@ export class ComputerManager extends EventEmitter {
       stale: false,
     };
 
-    const updated = [receipt, ...list].slice(0, 50);
+    const updated = [receipt, ...list.filter(item => item.id !== receipt.id)].slice(0, 50);
     this.captures.set(connId, updated);
 
     this.emit('changed', {
@@ -138,9 +151,9 @@ export class ComputerManager extends EventEmitter {
     return receipt;
   }
 
-  getActivity({ connectionId = 'local', threadId } = {}) {
-    const connId = connectionId || 'local';
-    return this.actions.get(connId) || [];
+  getActivity({ connectionId, threadId } = {}) {
+    const connId = this.connectionFor(connectionId, threadId);
+    return (this.actions.get(connId) || []).filter(row => !threadId || row.threadId === threadId);
   }
 
   recordAction({ connectionId = 'local', threadId, action } = {}) {
@@ -151,40 +164,29 @@ export class ComputerManager extends EventEmitter {
     let status = action.status || 'pending_approval';
     let error = action.error;
 
-    if (lease.humanHasControl) {
-      status = 'denied';
-      error = 'Human has control of the computer. Agent action paused/denied.';
-    }
+    // Preserve the outcome emitted by Hermes, including in-flight completions.
 
     const { payload, truncated } = truncatePayloadIfNeeded(action.result);
 
-    const record = {
-      id: action.id || randomUUID(),
-      toolId: action.toolId,
-      action: action.action || 'capture',
-      args: action.args || {},
-      target,
-      status,
-      createdAt: action.createdAt || Date.now(),
-      approvedAt: action.approvedAt,
-      completedAt: action.completedAt,
-      preCapture: action.preCapture,
-      postCapture: action.postCapture,
-      resultSummary: typeof payload === 'string' ? payload : JSON.stringify(payload),
-      error,
-      payloadTruncated: truncated,
-    };
-
     const list = this.actions.get(connId) || [];
-    const existingIdx = list.findIndex(item => item.id === record.id || (record.toolId && item.toolId === record.toolId));
-
-    let updated;
-    if (existingIdx >= 0) {
-      updated = [...list];
-      updated[existingIdx] = { ...updated[existingIdx], ...record };
-    } else {
-      updated = [record, ...list].slice(0, 100);
-    }
+    const existingIdx = list.findIndex(item => item.threadId === threadId && (action.id ? item.id === action.id : action.toolId && item.toolId === action.toolId));
+    const previous = existingIdx >= 0 ? list[existingIdx] : {};
+    const supplied = Object.fromEntries(Object.entries(action).filter(([, value]) => value !== undefined));
+    const record = {
+      ...previous, ...supplied,
+      id: previous.id ?? action.id ?? randomUUID(),
+      threadId,
+      action: action.action ?? previous.action ?? 'unknown',
+      args: action.args ?? previous.args ?? {},
+      target: previous.target ?? target,
+      status, error,
+      createdAt: previous.createdAt ?? action.createdAt ?? Date.now(),
+      ...(action.result === undefined ? {} : { resultSummary: typeof payload === 'string' ? payload : JSON.stringify(payload), payloadTruncated: truncated }),
+    };
+    const updated = [...list];
+    if (existingIdx >= 0) updated[existingIdx] = record;
+    else updated.unshift(record);
+    updated.splice(100);
 
     this.actions.set(connId, updated);
 
@@ -224,23 +226,23 @@ export class ComputerManager extends EventEmitter {
       });
     } else if (runtime.type === 'tool.complete') {
       const toolId = runtime.payload?.tool_id;
-      const result = runtime.payload?.result;
-      const error = runtime.payload?.error;
+      let result = runtime.payload?.result;
+      if (typeof result === 'string') { try { result = JSON.parse(result); } catch {} }
+      const error = runtime.payload?.error || result?.error || (result?.ok === false || result?.success === false ? 'Native computer action failed.' : undefined);
 
-      // Extract capture if result contains snapshot / base64 / screenshot
-      if (result && typeof result === 'object' && (result.base64 || result.image_url || result.screenshot)) {
-        this.recordCapture({
-          connectionId: connId,
-          threadId,
-          capture: {
-            mode: result.mode || 'som',
-            targetApp: result.app,
-            targetWindow: result.window,
-            base64: result.base64,
-            imageUrl: result.image_url || result.screenshot,
-            elements: result.elements || [],
-          },
-        });
+      // Read the actual text or multimodal computer_use envelope. A remote file path is not a local image.
+      const meta = result?.meta ?? result ?? {};
+      const image = result?.content?.find(item => item.type === 'image_url')?.image_url?.url ?? result?.image_url ?? result?.screenshot;
+      const safeImage = typeof image === 'string' && /^data:image\/[a-zA-Z0-9.+-]+;base64,/.test(image) ? image : null;
+      if (!error && result && (safeImage || result.base64 || meta.screenshot_path || result.elements || result.summary || result.text_summary)) {
+        this.recordCapture({ connectionId: connId, threadId, capture: {
+          id: toolId ? `${threadId}:${toolId}` : undefined,
+          mode: meta.mode, targetApp: result.app ?? meta.app,
+          targetWindow: result.window_title ?? meta.window_title ?? result.window,
+          base64: result.base64, imageUrl: safeImage,
+          textSummary: result.summary ?? result.text_summary ?? result.content?.find(item => item.type === 'text')?.text,
+          elements: result.elements ?? meta.elements ?? [],
+        } });
       }
 
       this.recordAction({

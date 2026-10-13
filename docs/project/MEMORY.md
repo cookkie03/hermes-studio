@@ -1,5 +1,21 @@
 # Memoria operativa di Hermes Studio
 
+## Riparazione integrazioni native — 2026-10-12
+
+Utente richiede correggere tutti i difetti della review e rendere il progetto funzionante. Scope selezionato: otto findings e relative integrazioni native, con runtime/profili personali preservati. [Piano](native-integration-repair-plan-2026-10-12.md). In corso: file F5/F6 16 test PASS, collaboration/computer 10 PASS, audio/API 5 PASS. Browser reale/Bots/header/progetti implementati, integrazione e acceptance in corso. Ulteriori simulazioni memory/matrix e schema routine/computer incluse. La review precedente resta evidenza storica, non esito post-fix.
+
+## Review funzionale corrente — 2026-10-12
+
+Richiesta esplicita di review dell'intero software. Prima verifica: build PASS, 83 test Node PASS, 99 metadata/UI PASS e 1 FAIL; smoke offline dell'artefatto precedente PASS. Evidenziati adapter browser/collaborazione simulati, takeover solo locale, collegamento progetto inventato e difetti file tree/symlink. [Report con prove e limiti](../architecture/current-functionality-review-2026-10-12.md). Esito: app avviabile e core verificato, prodotto non completo. Otto difetti documentati; nessun codice feature modificato. Nuova app separata, chat e approvals sintetiche PASS.
+
+## Nota incremento routine Bot self-scheduled (2026-10-11)
+
+- Implementata la superficie Studio/proxy dell'addendum senza aggiungere scheduler, executor o memory system: il runtime Hermes resta autoritativo.
+- La creazione richiede un profilo proprietario concreto; ownership immutabile; mutazioni indirizzate al profilo restituito dal runtime.
+- `bot-chat` è mostrato come destinazione machine-local per un turno separato e i target non configurati dall'host sono disabilitati.
+- Verificati typecheck, 5 test UI F10, 10 test manager routine e `git diff --check`.
+- E2E runtime ancora aperto: autorizzazione Bot, due run/risposta Bot Chat, isolamento Bot B, capability off, pause/cancel, offline/client chiuso, replay e delivery senza duplicati.
+
 Figma workspace linked on 2026-10-05: [design references and workflow](../design/figma.md). File `GFLrf3A2t6afdV34U8Fh4f` belongs to this repository's frontend design work; no automatic GitHub sync or Code Connect mappings configured.
 
 Consolidata 2026-10-11. Leggere questo riepilogo e [STATUS](STATUS.md) all'inizio del lavoro. [Decisioni D01–D38](decisions.md) conserva le richieste; [WORKLOG](WORKLOG.md) la cronologia. [Indice documentazione](../README.md) distingue fonti attuali e storia.
@@ -130,3 +146,15 @@ F13 implemented and verified:
 - Packaged smoke tests for UI, connections, approvals, and conversations passed without npm/devserver.
 - Added GitHub Actions release workflow `.github/workflows/release.yml`, `CONTRIBUTING.md`, `README.md` user download focus, and `docs/releases/release-notes-v0.1.0.md`.
 
+
+
+## 2026-10-13 — REA coding-agent setup planned
+
+User requests REA installation for this Codex coding agent, with setup plan approval before apply. Live `npx rea-agents@latest setup --client codex --dry-run --json` resolved 6.4.0, status planned, no applied actions. Plan: personal Codex config `/Users/luca/.codex/config.toml` with backup, and bundled skill `/Users/luca/.agents/skills/reverse-engineer-anything`; user-wide scope explicitly disclosed. Approval pending; no product feature or Hermes runtime changes. [Plan](rea-setup-plan-2026-10-13.md).
+
+
+## 2026-10-13 — Riparazioni dei contratti nativi in corso
+
+Browser demo sostituito da WebContentsView isolata e callback native preview.read/preview.act; niente successi DOM simulati. Collaborazione usa sessione/profilo owner, subagent RPC reali, relay senza delivery ID inventato, gruppi verificati sulla stessa installazione, log/cursori nativi e recall della sola conversazione. Bots nativi scoperti da profiles.list e associati a Bot Chat canonica, con controllo installazione/generazione e apertura concorrente serializzata. Progetti selezionati da catalogo reale e applicati con session.cwd.set. Audio inoltrato a HTTP Hermes del profilo; controlli dettatura/lettura/live aggiunti, trasporto live adattato dal sorgente MIT Hermes a50406d9 (licenza inclusa), richieste di lavoro nella stessa sessione chat. File: root listing e scritture con parent symlink fuori root corrette. Memoria/capability/header mostrano dati osservati o indisponibilità esplicita. Computer: ricevute native, errori/multimodale normalizzati, scope per chat e identità azione conservata; takeover non supportato respinto. Routine: nessun successo/consegna dedotto dalla destinazione, timestamp secondi corretti e scope cronologia.
+
+Build e 100 test metadata passavano prima degli ultimi incrementi; build aggiornata PASS. Prima suite completa fuori sandbox: 90/91 Node PASS, unico difetto rimasto nell'aspettativa del test API (404 nativo owner invalido rispetto a 400), corretto. Nessuna interrogazione del runtime/dati personali, nessuna chiamata a provider. Verifiche complete, review finale e smoke packaged/native isolato ancora da eseguire; non dichiarata la copertura live di modello/voce/gruppi remoti. Modifiche preesistenti preservate, nessun commit/push.

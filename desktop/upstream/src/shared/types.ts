@@ -92,6 +92,7 @@ export interface FolderBinding {
   createdAt: number;
 }
 export interface Dot {
+  nativeBinding?: { connectionId: string; installId: string; profile: string; canonicalSessionId: string | null; verifiedAt: number };
   id: string;
   /** Default destination for saved pages, not ownership. */
   spaceId: string;
@@ -213,6 +214,7 @@ export interface SubagentTask {
   context?: string;
   outputSchema?: Record<string, unknown> | string;
   status: SubagentStatus;
+  acceptingSteer?: boolean;
   model?: string;
   effort?: string;
   spaceId?: string;
@@ -344,10 +346,10 @@ export interface BotScreenLease {
 export interface HermesMemoryBudget {
   category: 'user' | 'memory';
   label: string;
-  charLimit: number;
-  currentChars: number;
-  percentage: number;
-  rawSizeBytes?: number;
+  charLimit: number | null;
+  currentChars: number | null;
+  percentage: number | null;
+  rawSizeBytes?: number | null;
 }
 
 export interface HermesMemoryEntry {
@@ -368,6 +370,9 @@ export interface HermesPendingReviewSummary {
 }
 
 export interface HermesNativeMemoryStatus {
+  available?: boolean;
+  contentAvailable?: boolean;
+  reason?: string;
   connectionId: string;
   profile: string;
   activeProvider: string;

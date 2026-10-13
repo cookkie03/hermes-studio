@@ -119,7 +119,7 @@ test('chat context distinguishes a page Space from native profile/project and ne
     service.bridge.bindings.set(thread.id, { storedId: 'synthetic-stored' });
     const history = await (await request(`/hermes/history?threadId=${thread.id}`)).json();
     assert.equal(history.context.studioSpace.id, spaceId);
-    assert.equal(history.context.nativeProjectLink, 'unavailable');
+    assert.equal(history.context.nativeProjectLink, 'reported');
     assert.equal(history.session.info.profile_name, 'synthetic-cto');
     assert.equal((await (await request(`/hermes/history?threadId=${plain.id}`)).json()).context.studioSpace, null);
     await request('/hermes/send', 'POST', { threadId: thread.id, text: 'Inspect selected document', pageReference: { id: page.id, spaceId, revision: page.revision } });

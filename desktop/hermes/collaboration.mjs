@@ -1,385 +1,185 @@
 import { randomUUID } from 'node:crypto';
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, rename, mkdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
+import { resolveThreadScope, assertCurrentScope } from './native-scope.mjs';
 
+// Only native receipts and client-side bookmarks are persisted. Legacy demo records
+// are retained in the file but never promoted to execution, delivery or project state.
 export class CollaborationManager {
-  constructor({ dataDir, gateway } = {}) {
-    this.dataDir = dataDir;
-    this.gateway = gateway;
-
-    this.subagents = new Map(); // id -> SubagentTask
-    this.messages = new Map(); // id -> BotMessage
-    this.rooms = new Map(); // roomId -> HostedRoom
-    this.roomLogs = new Map(); // roomId -> RoomLogEvent[]
-    this.spaceLinks = new Map(); // `${spaceId}:${profile}` -> SpaceProfileLink
-
-    this.initialized = false;
+  constructor({ dataDir, connections, workspace } = {}) {
+    this.connections = connections; this.workspace = workspace;
     this.storagePath = dataDir ? join(dataDir, 'collaboration.json') : null;
+    this.messages = new Map(); this.rooms = new Map(); this.spaceLinks = new Map();
+    this.writeQueue = Promise.resolve(); this.ready = null;
   }
-
-  async initialize() {
-    if (this.initialized) return;
-    this.initialized = true;
-
-    if (!this.storagePath) return;
-
-    try {
-      const raw = await readFile(this.storagePath, 'utf8');
-      const data = JSON.parse(raw);
-
-      if (Array.isArray(data.subagents)) {
-        for (const item of data.subagents) this.subagents.set(item.id, item);
-      }
-      if (Array.isArray(data.messages)) {
-        for (const item of data.messages) this.messages.set(item.id, item);
-      }
-      if (Array.isArray(data.rooms)) {
-        for (const item of data.rooms) this.rooms.set(item.roomId, item);
-      }
-      if (data.roomLogs && typeof data.roomLogs === 'object') {
-        for (const [roomId, logs] of Object.entries(data.roomLogs)) {
-          this.roomLogs.set(roomId, logs);
-        }
-      }
-      if (Array.isArray(data.spaceLinks)) {
-        for (const item of data.spaceLinks) {
-          this.spaceLinks.set(`${item.spaceId}:${item.profile}`, item);
-        }
-      }
-    } catch {
-      // Clean start if file missing or corrupted
-    }
+  initialize() {
+    return this.ready ??= (async () => {
+      if (!this.storagePath) return;
+      try {
+        const data = JSON.parse(await readFile(this.storagePath, 'utf8'));
+        if (data.version !== 2) { this.legacyDemo = data; return; }
+        this.legacyDemo = data.legacyDemo;
+        for (const record of data.messages ?? []) this.messages.set(record.id, record);
+        for (const record of data.rooms ?? []) this.rooms.set(record.key, record);
+        for (const record of data.spaceLinks ?? []) this.spaceLinks.set(record.key, record);
+      } catch (error) { if (error.code !== 'ENOENT') throw new Error('Collaboration records could not be read; existing data was preserved.'); }
+    })();
   }
-
-  async persist() {
-    if (!this.storagePath) return;
-    try {
+  persist() {
+    if (!this.storagePath) return Promise.resolve();
+    const operation = this.writeQueue.then(async () => {
       await mkdir(dirname(this.storagePath), { recursive: true });
-      const payload = {
-        subagents: Array.from(this.subagents.values()),
-        messages: Array.from(this.messages.values()),
-        rooms: Array.from(this.rooms.values()),
-        roomLogs: Object.fromEntries(this.roomLogs.entries()),
-        spaceLinks: Array.from(this.spaceLinks.values()),
-      };
-      await writeFile(this.storagePath, JSON.stringify(payload, null, 2), 'utf8');
-    } catch {
-      // Ignore background persistence errors
-    }
+      const temporary = `${this.storagePath}.${randomUUID()}.tmp`;
+      await writeFile(temporary, JSON.stringify({ version: 2, legacyDemo: this.legacyDemo, messages: [...this.messages.values()], rooms: [...this.rooms.values()], spaceLinks: [...this.spaceLinks.values()] }), { mode: 0o600 });
+      await rename(temporary, this.storagePath);
+    }); this.writeQueue = operation.catch(() => {}); return operation;
   }
-
-  // --- Subagents (`delegate_task`) ---
-
+  scope(threadId) { return resolveThreadScope(this.connections, threadId); }
+  async call(owner, method, params = {}, timeout) {
+    const result = await owner.gateway.request(method, { ...params, profile: owner.profile }, timeout);
+    assertCurrentScope(this.connections, owner); return result;
+  }
   async listSubagents(parentId) {
-    await this.initialize();
-    const all = Array.from(this.subagents.values());
-    if (!parentId) return all;
-    return all.filter((s) => s.parentId === parentId);
+    const owner = this.scope(parentId);
+    const result = await this.call(owner, 'subagent.list', { session_id: owner.session.runtimeId });
+    return (result.subagents ?? []).map(item => ({ ...item, id: item.subagent_id ?? item.id, subagentId: item.subagent_id ?? item.id, parentId, host: owner.host, profile: owner.profile, goal: item.goal ?? item.task ?? '', nativeStatus: item.status, acceptingSteer: item.accepting_steer === true, status: item.status === 'running' ? 'working' : item.status ?? 'unknown', output: item.output ?? '' }));
   }
-
-  async spawnSubagent({
-    parentId = 'default-thread',
-    goal = '',
-    context = '',
-    outputSchema,
-    model = 'auto/fast',
-    effort = 'Standard',
-    spaceId = 'default',
-    host = 'This Mac',
-  }) {
-    await this.initialize();
-    if (!goal.trim()) throw new Error('Subagent goal is required.');
-
-    const id = `subagent-${randomUUID().slice(0, 8)}`;
-    const subagentId = `child-${randomUUID().slice(0, 6)}`;
-    const task = {
-      id,
-      parentId,
-      subagentId,
-      goal: goal.trim(),
-      context: context.trim(),
-      outputSchema,
-      status: 'working',
-      model,
-      effort,
-      spaceId,
-      host,
-      output: `[${new Date().toISOString()}] Subagent ${subagentId} spawned for parent ${parentId}.\nGoal: ${goal.trim()}\nRunning initial execution steps...`,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      result: null,
-    };
-
-    this.subagents.set(id, task);
-    await this.persist();
-    return task;
+  async spawnSubagent() { throw new Error('Direct subagent spawn is not supported. Ask the parent in chat to delegate using its native delegate_task tool.'); }
+  async requireChild(id, owner) {
+    const children = await this.call(owner, 'subagent.list', { session_id: owner.session.runtimeId });
+    if (!(children.subagents ?? []).some(child => (child.subagent_id ?? child.id) === id)) throw new Error('This child does not belong to the selected native conversation.');
   }
-
-  async getSubagentTail(id, maxBytes = 16384) {
-    await this.initialize();
-    const task = this.subagents.get(id);
-    if (!task) throw new Error(`Subagent ${id} not found.`);
-
-    const output = task.output || '';
-    const buffer = Buffer.from(output, 'utf8');
-    if (buffer.length <= maxBytes) {
-      return { id: task.id, subagentId: task.subagentId, status: task.status, tail: output, totalBytes: buffer.length };
+  async getSubagentTail(id, maxBytes = 16384, { threadId } = {}) {
+    const owner = this.scope(threadId); await this.requireChild(id, owner);
+    const result = await this.call(owner, 'subagent.tail', { session_id: owner.session.runtimeId, subagent_id: id });
+    const text = result.tail ?? result.output ?? result.text ?? '';
+    const buffer = Buffer.from(typeof text === 'string' ? text : JSON.stringify(text));
+    return { ...result, id, subagentId: id, tail: buffer.subarray(-Math.min(16384, Math.max(1, maxBytes))).toString('utf8'), totalBytes: buffer.length };
+  }
+  async steerSubagent(id, text, { threadId } = {}) {
+    if (typeof text !== 'string' || !text.trim()) throw new Error('Steering text is required.');
+    const owner = this.scope(threadId); await this.requireChild(id, owner);
+    return this.call(owner, 'subagent.steer', { session_id: owner.session.runtimeId, subagent_id: id, text });
+  }
+  async interruptSubagent(id, { threadId } = {}) {
+    const owner = this.scope(threadId); await this.requireChild(id, owner);
+    return this.call(owner, 'subagent.interrupt', { session_id: owner.session.runtimeId, subagent_id: id });
+  }
+  async listBotMessages({ threadId } = {}) {
+    this.connections.forThread(threadId); await this.initialize();
+    return [...this.messages.values()].filter(row => row.threadId === threadId).sort((a,b) => a.createdAt-b.createdAt);
+  }
+  async sendBotMessage({ threadId, toProfile, toDotId, content } = {}) {
+    if (typeof content !== 'string' || !content.trim() || content.length > 16000) throw new Error('A message of 1–16,000 characters is required.');
+    const owner = this.scope(threadId);
+    if (toDotId) {
+      const target = this.workspace?.dot(toDotId)?.nativeBinding;
+      if (!target || target.connectionId !== owner.connectionId) throw new Error('Choose a native Bot on the owning host; cross-host relay is not configured.');
+      toProfile = target.profile;
     }
-    const sliced = buffer.subarray(buffer.length - maxBytes).toString('utf8');
-    return { id: task.id, subagentId: task.subagentId, status: task.status, tail: sliced, totalBytes: buffer.length };
-  }
-
-  async steerSubagent(id, message) {
+    const roster = await this.call(owner, 'profiles.list', { include_sessions: false });
+    if (!roster.profiles?.some(p => p.name === toProfile)) throw new Error('Target profile is not in the native roster.');
     await this.initialize();
-    const task = this.subagents.get(id);
-    if (!task) throw new Error(`Subagent ${id} not found.`);
-    if (['completed', 'failed', 'interrupted'].includes(task.status)) {
-      throw new Error(`Subagent ${id} is already in state '${task.status}' and cannot be steered.`);
+    const receipt = { id: randomUUID(), threadId, connectionId: owner.connectionId, fromProfile: owner.profile, toProfile, content: content.trim(), status: 'delivery_uncertain', createdAt: Date.now(), deliveryId: null, reply: null, error: null };
+    this.messages.set(receipt.id, receipt); await this.persist();
+    try {
+      const result = await owner.gateway.request('bot_relay.deliver', { profile: toProfile, message: receipt.content, from_profile: owner.profile, from_handle: owner.profile }, 1400000);
+      assertCurrentScope(this.connections, owner);
+      // Target profile is a recipient, not the sender's routing profile.
+      receipt.status = ['queued','reply_received','failed'].includes(result.status) ? result.status : typeof result.reply === 'string' ? 'reply_observed' : 'delivery_uncertain';
+      receipt.reply = typeof result.reply === 'string' ? result.reply : null;
+      receipt.deliveryId = result.delivery_id ?? null;
+      receipt.error = result.error ?? null;
+    } catch (error) { receipt.error = error.message; await this.persist(); throw error; }
+    await this.persist(); return receipt;
+  }
+  roomKey(owner, id) { return JSON.stringify([owner.connectionId, owner.profile, id]); }
+  async listRooms({ threadId } = {}) {
+    const owner = this.scope(threadId); await this.initialize();
+    const result = [];
+    for (const record of this.rooms.values()) if (record.connectionId === owner.connectionId && record.profile === owner.profile) {
+      const state = await this.call(owner, 'groups.state', { room_id: record.roomId });
+      result.push({ ...record, state: (state.room ?? state).disbanded_at ? 'disbanded' : 'active', native: state });
     }
-
-    const timestamp = new Date().toISOString();
-    task.output += `\n[${timestamp}] [STEER DIRECTIVE]: ${message}`;
-    task.status = 'working';
-    task.updatedAt = Date.now();
-
-    this.subagents.set(id, task);
-    await this.persist();
-    return task;
+    return result;
   }
-
-  async interruptSubagent(id) {
-    await this.initialize();
-    const task = this.subagents.get(id);
-    if (!task) throw new Error(`Subagent ${id} not found.`);
-
-    const timestamp = new Date().toISOString();
-    task.output += `\n[${timestamp}] [INTERRUPTED]: Execution stopped by parent agent call.`;
-    task.status = 'interrupted';
-    task.updatedAt = Date.now();
-
-    this.subagents.set(id, task);
-    await this.persist();
-    return task;
-  }
-
-  // --- Bot Messaging (`message_agent`) ---
-
-  async listBotMessages({ threadId, profile, dotId } = {}) {
-    await this.initialize();
-    let all = Array.from(this.messages.values());
-    if (threadId) all = all.filter((m) => m.threadId === threadId);
-    if (profile) all = all.filter((m) => m.fromProfile === profile || m.toProfile === profile);
-    if (dotId) all = all.filter((m) => m.fromDotId === dotId || m.toDotId === dotId);
-    return all.sort((a, b) => a.createdAt - b.createdAt);
-  }
-
-  async sendBotMessage({
-    fromProfile = 'default',
-    toProfile = 'peer',
-    fromDotId = 'dot-a',
-    toDotId = 'dot-b',
-    threadId = 'default-thread',
-    content = '',
-    simulateFailure = false,
-  }) {
-    await this.initialize();
-    if (!content.trim()) throw new Error('Bot message content cannot be empty.');
-    if (content.length > 16000) throw new Error('Bot message body exceeds maximum length of 16,000 characters.');
-
-    const id = `msg-${randomUUID().slice(0, 8)}`;
-    const deliveryId = `deliv-${randomUUID().slice(0, 8)}`;
-
-    const msg = {
-      id,
-      deliveryId,
-      fromProfile,
-      toProfile,
-      fromDotId,
-      toDotId,
-      threadId,
-      content: content.trim(),
-      status: 'queued', // Ack queued is a handoff, not a receipt
-      createdAt: Date.now(),
-      reply: null,
-      error: null,
-    };
-
-    this.messages.set(id, msg);
-
-    // Simulate async transition to working -> reply_received or failed
-    if (simulateFailure) {
-      setTimeout(() => {
-        msg.status = 'failed';
-        msg.error = `Delivery failed to ${toProfile} (${toDotId}). Host unconfirmed.`;
-        this.messages.set(id, msg);
-        void this.persist();
-      }, 50);
-    } else {
-      setTimeout(() => {
-        msg.status = 'working';
-        this.messages.set(id, msg);
-        void this.persist();
-
-        setTimeout(() => {
-          msg.status = 'reply_received';
-          msg.reply = `Ack & reply from ${toProfile}: Received message "${content.slice(0, 40)}..." and processed.`;
-          this.messages.set(id, msg);
-          void this.persist();
-        }, 100);
-      }, 50);
+  async createRoom({ threadId, roomId = randomUUID(), name, members } = {}) {
+    const owner = this.scope(threadId);
+    const capabilities = await this.call(owner, 'groups.capabilities');
+    if (!capabilities.driver || !capabilities.methods?.includes('groups.create')) throw new Error('Native hosted groups are not available on this host.');
+    const roster=await this.call(owner,'profiles.list',{include_sessions:false});
+    if(!Array.isArray(members) || members.length < 2 || members.length > 6)throw new Error('Select 2–6 native Bots on the owning host.');
+    const seen=new Set();
+    for(const member of members){
+      const binding=this.workspace?.dot(member.member_id)?.nativeBinding;
+      if(!binding || binding.connectionId!==owner.connectionId || binding.installId!==roster.install_id || binding.profile!==member.profile || !roster.profiles?.some(row=>row.name===member.profile) || seen.has(member.profile))throw new Error('Room members must be distinct native Bots on the owning installation.');
+      seen.add(member.profile);
     }
-
-    await this.persist();
-    return msg;
+    const result = await this.call(owner, 'groups.create', { room_id: roomId, name, members });
+    const nativeId = result.room_id ?? result.room?.room_id;
+    if (!nativeId) throw new Error('Hermes did not confirm a room identity. Inspect native groups before retrying.');
+    const record = { key: this.roomKey(owner, nativeId), roomId: nativeId, name: result.room?.name ?? result.name ?? name, members: result.room?.members ?? members, state: result.room?.disbanded_at ? 'disbanded' : 'active', connectionId: owner.connectionId, profile: owner.profile, createdAt: Date.now() };
+    await this.initialize(); this.rooms.set(record.key, record); await this.persist(); return record;
   }
-
-  // --- Hosted Rooms (`groups.*`) ---
-
-  async listRooms() {
-    await this.initialize();
-    return Array.from(this.rooms.values());
-  }
-
-  async createRoom({ roomId, name, members = ['default', 'peer'] }) {
-    await this.initialize();
-    const id = roomId || `room-${randomUUID().slice(0, 8)}`;
-    if (this.rooms.has(id)) throw new Error(`Room ${id} already exists.`);
-
-    const room = {
-      roomId: id,
-      name: name || `Room ${id}`,
-      members,
-      state: 'active',
-      createdAt: Date.now(),
-    };
-
-    this.rooms.set(id, room);
-    if (!this.roomLogs.has(id)) this.roomLogs.set(id, []);
-    await this.persist();
-    return room;
-  }
-
-  async sendRoomEvent(roomId, { fromProfile = 'default', payload = {} }) {
-    await this.initialize();
-    const room = this.rooms.get(roomId);
-    if (!room) throw new Error(`Room ${roomId} not found.`);
-    if (room.state !== 'active') throw new Error(`Room ${roomId} is ${room.state} and cannot accept events.`);
-
-    const logs = this.roomLogs.get(roomId) || [];
-    const seq = logs.length + 1;
-    const eventId = `evt-${randomUUID().slice(0, 8)}`;
-
-    const event = {
-      seq,
-      eventId,
-      roomId,
-      fromProfile,
-      payload,
-      timestamp: Date.now(),
-    };
-
-    logs.push(event);
-    this.roomLogs.set(roomId, logs);
-    await this.persist();
-    return event;
-  }
-
-  async getRoomLog(roomId, { sinceSeq = 0, limit = 50 } = {}) {
-    await this.initialize();
-    const logs = this.roomLogs.get(roomId) || [];
-    const filtered = logs.filter((e) => e.seq > sinceSeq);
-    return filtered.slice(0, limit);
-  }
-
-  async retryRoomEvent(roomId, eventId) {
-    await this.initialize();
-    const logs = this.roomLogs.get(roomId) || [];
-    const event = logs.find((e) => e.eventId === eventId);
-    if (!event) throw new Error(`Event ${eventId} not found in room ${roomId}.`);
-
-    event.error = null;
-    event.timestamp = Date.now();
-    await this.persist();
-    return event;
-  }
-
-  // --- Session Recall (`session_search`) ---
-
-  async searchRecall({ query = '', profile, limit = 10 } = {}) {
-    await this.initialize();
-    const results = [];
-
-    // Search across bot messages
-    for (const msg of this.messages.values()) {
-      if (profile && msg.fromProfile !== profile && msg.toProfile !== profile) continue;
-      if (query && !msg.content.toLowerCase().includes(query.toLowerCase())) continue;
-
-      results.push({
-        sessionId: msg.threadId,
-        profile: msg.fromProfile,
-        threadId: msg.threadId,
-        messageId: msg.id,
-        snippet: msg.content.slice(0, 200),
-        timestamp: msg.createdAt,
-        score: query ? 0.9 : 0.5,
-      });
+  async getRoomLog(roomId, { threadId, sinceSeq = 0, limit = 50 } = {}) {
+    const owner = this.scope(threadId);
+    const events=[]; let cursor=sinceSeq;
+    // Bound each read and preserve the native sequence while showing the newest page.
+    for(let page=0;page<100;page++) {
+      const result=await this.call(owner,'groups.log',{room_id:roomId,since_seq:cursor,limit:200});
+      const rows=result.events ?? result.log ?? [];
+      events.push(...rows);
+      const next=rows.at(-1)?.seq;
+      if(!result.has_more || !Number.isFinite(next) || next<=cursor)break;
+      cursor=next;
     }
-
-    // Search across room logs
-    for (const [roomId, logs] of this.roomLogs.entries()) {
-      for (const event of logs) {
-        if (profile && event.fromProfile !== profile) continue;
-        const text = typeof event.payload === 'string' ? event.payload : JSON.stringify(event.payload);
-        if (query && !text.toLowerCase().includes(query.toLowerCase())) continue;
-
-        results.push({
-          sessionId: roomId,
-          profile: event.fromProfile,
-          threadId: roomId,
-          messageId: event.eventId,
-          snippet: `[Room Event #${event.seq}] ${text.slice(0, 180)}`,
-          timestamp: event.timestamp,
-          score: query ? 0.85 : 0.4,
-        });
-      }
-    }
-
-    return results.sort((a, b) => b.timestamp - a.timestamp).slice(0, limit);
+    return events.slice(-Math.min(200,Math.max(1,limit))).map(event=>({...event,
+      eventId:event.event_id, fromProfile:typeof event.actor==='string' ? event.actor : event.actor?.profile ?? event.actor?.handle ?? 'Not reported',
+      timestamp:typeof event.created_at==='number' ? event.created_at*1000 : null,
+    }));
   }
 
-  // --- D38 Space Profile Project Link ---
-
-  async getSpaceLink({ spaceId, profile }) {
-    await this.initialize();
-    const key = `${spaceId}:${profile}`;
-    const existing = this.spaceLinks.get(key);
-    if (existing) return existing;
-
-    // Return default missing link state
-    return {
-      spaceId,
-      profile,
-      projectId: null,
-      host: 'This Mac',
-      status: 'missing',
-    };
+  async sendRoomEvent(roomId, { threadId, payload, eventId = randomUUID() } = {}) {
+    const owner = this.scope(threadId);
+    if (!payload || typeof payload.text !== 'string') throw new Error('Room text is required.');
+    return this.call(owner, 'groups.send', { room_id: roomId, event_id: eventId, payload: { text: payload.text, thread_id: threadId } });
   }
-
-  async createSpaceLink({ spaceId, profile, projectId, host = 'This Mac' }) {
-    await this.initialize();
-    if (!spaceId || !profile) throw new Error('spaceId and profile are required.');
-
-    const key = `${spaceId}:${profile}`;
-    const link = {
-      spaceId,
-      profile,
-      projectId: projectId || `proj-${profile}-${spaceId}`,
-      host,
-      status: 'linked',
-    };
-
-    this.spaceLinks.set(key, link);
-    await this.persist();
-    return link;
+  async retryRoomEvent(roomId, taskId, { threadId } = {}) { return this.call(this.scope(threadId), 'groups.retry', { room_id: roomId, task_id: taskId }); }
+  async searchRecall({ threadId, query = '', limit = 10 } = {}) {
+    const owner = this.scope(threadId); const history = await this.connections.history(threadId);
+    assertCurrentScope(this.connections, owner);
+    if (!query.trim()) return [];
+    return (history.messages ?? []).filter(m => typeof m.content === 'string' && m.content.toLowerCase().includes(query.toLowerCase())).slice(-Math.min(50,Math.max(1,limit))).map(m => ({ id:m.id, sessionId:owner.runtimeId, timestamp:m.timestamp ?? m.created_at ?? null, threadId, messageId:m.id, snippet:m.content.slice(0,2000), source:'owned-native-conversation', profile:owner.profile, anchor:`conversation:${threadId}:${m.id}` }));
+  }
+  linkKey(owner, spaceId) { return JSON.stringify([owner.connectionId, owner.profile, spaceId]); }
+  async getSpaceLink({ threadId, spaceId } = {}) {
+    const owner = this.scope(threadId); await this.initialize();
+    const link = this.spaceLinks.get(this.linkKey(owner, spaceId));
+    if (!link) return { spaceId, profile:owner.profile, connectionId:owner.connectionId, host:owner.host, projectId:null, status:'missing' };
+    const result = await this.call(owner, 'projects.get', { id:link.projectId });
+    if (result.project?.id !== link.projectId) throw new Error('The linked native project could not be verified.');
+    return { ...link, status:'linked', project:result.project };
+  }
+  async listProjects({ threadId } = {}) { return (await this.call(this.scope(threadId), 'projects.list')).projects ?? []; }
+  async applySpaceProject({threadId,spaceId}={}) {
+    const owner=this.scope(threadId);
+    if(owner.session.running || owner.bridge.turns?.has(threadId))throw new Error('Wait for the current native turn to finish before changing its project.');
+    const link=await this.getSpaceLink({threadId,spaceId});
+    const cwd=link.project?.primary_path;
+    if(link.status!=='linked' || !cwd)throw new Error('Choose a verified native project with a primary folder first.');
+    const result=await this.call(owner,'session.cwd.set',{session_id:owner.session.runtimeId,cwd});
+    owner.session.info={...owner.session.info,...result};
+    owner.bridge.emit?.('update',{type:'session-context',threadId,info:owner.session.info});
+    return {...link,contextChanged:true,nativeResult:result};
+  }
+  async createSpaceLink({ threadId, spaceId, projectId } = {}) {
+    if (typeof projectId !== 'string' || !projectId) throw new Error('A real native project ID is required.');
+    const owner = this.scope(threadId);
+    const thread = this.workspace?.requireThread(threadId);
+    if (!spaceId || !this.workspace?.canAccessSpace(thread.dotId,spaceId)) throw new Error('This specialist has no access to the selected Space.');
+    const result = await this.call(owner, 'projects.get', { id:projectId });
+    if (result.project?.id !== projectId) throw new Error('Hermes did not confirm the requested project.');
+    const link={key:this.linkKey(owner,spaceId),spaceId,projectId,profile:owner.profile,connectionId:owner.connectionId,host:owner.host,status:'linked',project:result.project};
+    await this.initialize();this.spaceLinks.set(link.key,link);await this.persist();return link;
   }
 }

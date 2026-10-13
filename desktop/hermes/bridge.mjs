@@ -5,8 +5,8 @@ import { dirname } from 'node:path';
 import { HermesGateway, candidates } from './gateway.mjs';
 
 export class HermesBridge extends EventEmitter {
-  constructor({ gateway = new HermesGateway(), bindingPath, connectionId = 'local', requireThread = () => {}, prepareText = (_threadId, text) => text } = {}) {
-    super(); this.gateway = gateway; this.bindingPath = bindingPath; this.connectionId = connectionId; this.requireThread = requireThread;
+  constructor({ gateway = new HermesGateway(), bindingPath, connectionId = 'local', prepareBinding, requireThread = () => {}, prepareText = (_threadId, text) => text } = {}) {
+    super(); this.previewReceipts = new Map(); this.prepareBinding = prepareBinding; this.gateway = gateway; this.bindingPath = bindingPath; this.connectionId = connectionId; this.requireThread = requireThread;
     this.reviewReplay = new Map(); this.reviewPersistenceErrors = new Map();
     this.transportGeneration = 0; this.prepareText = prepareText; this.sessionJobs = new Map(); this.earlyRequests = [];
     this.handlers = new Map(); this.capabilityQueue = Promise.resolve(); this.approvalEnabled = false;
@@ -69,6 +69,7 @@ export class HermesBridge extends EventEmitter {
   }
   async session(threadId, { profile, storedId } = {}) {
     this.requireThread(threadId);
+    await this.prepareBinding?.(threadId);
     const binding = this.bindings.get(threadId);
     if (storedId !== undefined && storedId !== binding?.storedId) throw new Error('Only this conversation’s owned session can be resumed.');
     if (profile !== undefined && profile !== binding?.profile) throw new Error('Importing another Hermes profile is not supported.');
@@ -85,16 +86,18 @@ export class HermesBridge extends EventEmitter {
     const check = () => { if (generation !== this.transportGeneration || !this.gateway.connected) throw new Error('Hermes connection changed while loading the session. Reconnect to inspect its owned binding.'); };
     const saved = storedId ?? this.bindings.get(threadId)?.storedId;
     profile ??= this.bindings.get(threadId)?.profile;
-    const params = saved ? { session_id: saved, close_on_disconnect: false } : { source: 'desktop', idempotency_key: threadId, close_on_disconnect: false };
+    const params = saved ? { session_id: saved, source: 'desktop', close_on_disconnect: false } : { source: 'desktop', idempotency_key: threadId, close_on_disconnect: false };
     if (profile) params.profile = profile;
     const result = this.validateSession(await this.gateway.request(saved ? 'session.resume' : 'session.create', params, saved ? 120000 : 30000));
     check();
-    this.bindings.set(threadId, { ...this.bindings.get(threadId), storedId: result.storedId, ...(profile ? { profile } : {}) }); await this.persistBindings();
+    this.bindings.set(threadId, { ...this.bindings.get(threadId), storedId: result.storedId, ...((profile || result.info?.profile_name) ? { profile: profile || result.info.profile_name } : {}) }); await this.persistBindings();
     check();
+    if (profile && !result.info?.profile_name) result.info = { ...result.info, profile_name: profile };
     result.messages = this.projectHistory(threadId, result.messages); this.sessions.set(threadId, result);
     this.emit('update', { type: 'session-context', threadId, info: result.info });
+    // Snapshot replays must seed the receipt cache before plain queued redeliveries.
+    for (const request of result.openRequests) this.serverRequest({ ...request, replayed: true });
     this.drainRequests();
-    for (const request of result.openRequests) this.serverRequest(request);
     if (saved) {
       if (result.running === false && !result.hydrating && !['resuming', 'hydrating'].includes(result.status)) {
         if (!this.turns.get(threadId)?.preparing) this.turns.delete(threadId);
@@ -255,13 +258,28 @@ export class HermesBridge extends EventEmitter {
     this.requests.delete(key); this.emit('update', { type: 'cancel', threadId: item.threadId, requestId: params.id, decisionId: item.decisionId, params });
   }
   serverRequest(frame) {
-    if (frame.method !== 'approval') { this.gateway.respond(frame.id, null, { code: -32601, message: 'This client does not support this interaction yet.' }); return; }
+    if (frame.method !== 'approval' && !['preview.read','preview.act'].includes(frame.method)) { this.gateway.respond(frame.id, null, { code: -32601, message: 'This client does not support this interaction yet.' }); return; }
     const runtimeId = frame.params?.session_id ?? frame.params?.gateway_session_id;
     const threadId = [...this.sessions].find(([, session]) => session.runtimeId === runtimeId)?.[0];
     if (!threadId) {
       // Reattach may replay a request before its RPC snapshot binds the new live ID.
       if (this.sessionJobs.size && this.earlyRequests.length < 100) { this.earlyRequests.push(frame); return; }
       this.gateway.respond(frame.id, null, { code: -32602, message: 'Request is not bound to an owned conversation.' }); return;
+    }
+    if (['preview.read','preview.act'].includes(frame.method)) {
+      const key=JSON.stringify([runtimeId,frame.id]);
+      const generation=this.transportGeneration;
+      let result=this.previewReceipts.get(key);
+      if(!result) {
+        result=Promise.resolve().then(()=>this.interactionHandler?.(frame,threadId)).then(value=>{
+          if(value===undefined)throw new Error('Native preview is not attached to this client.');
+          return {value:JSON.stringify(value)};
+        }).catch(error=>({value:JSON.stringify({success:false,error:error.message})}));
+        this.previewReceipts.set(key,result);
+        if(this.previewReceipts.size>100)this.previewReceipts.delete(this.previewReceipts.keys().next().value);
+      }
+      void result.then(value=>{if(generation===this.transportGeneration && this.gateway.connected)this.gateway.respond(frame.id,value);});
+      return;
     }
     const key = JSON.stringify(frame.id);
     const existing = this.requests.get(key);

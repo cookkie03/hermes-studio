@@ -37,8 +37,7 @@ export function normalizeDeliveryStatus(run) {
   if (run.delivery_error || run.deliveryError) return 'delivery-failed';
   if (run.delivery_status) return run.delivery_status;
   if (run.deliveryStatus) return run.deliveryStatus;
-  if (run.deliver === 'local' || run.deliveryTarget === 'local') return 'local-saved';
-  if (run.deliver || run.deliveryTarget) return 'delivered';
+  // A configured destination is not a delivery receipt.
   return 'none';
 }
 
@@ -136,7 +135,10 @@ export class RoutinesManager extends EventEmitter {
     if (!scheduleStr.trim()) throw new Error('A valid schedule expression is required.');
 
     const gateway = this.resolveGateway(connectionId);
-    const query = profile ? `?profile=${encodeURIComponent(profile)}` : '';
+    if (!profile || typeof profile !== 'string' || !profile.trim()) {
+      throw new Error('A concrete owner profile is required to create a routine.');
+    }
+    const query = `?profile=${encodeURIComponent(profile)}`;
 
     const body = {
       prompt: payload.prompt.trim(),
@@ -197,6 +199,7 @@ export class RoutinesManager extends EventEmitter {
     if (updates.model !== undefined) payload.model = updates.model;
     if (updates.provider !== undefined) payload.provider = updates.provider;
     if (updates.enabled !== undefined) payload.enabled = Boolean(updates.enabled);
+    if (updates.profile !== undefined) throw new Error('Routine ownership is immutable; create a new routine in the target profile.');
 
     const updated = await gateway.http(`/api/cron/jobs/${encodeURIComponent(jobId)}${query}`, {
       method: 'PUT',
@@ -276,9 +279,14 @@ export class RoutinesManager extends EventEmitter {
     const raw = await gateway.http(`/api/cron/jobs/${encodeURIComponent(jobId)}/runs${query}`, { method: 'GET' });
     const rawRuns = Array.isArray(raw) ? raw : Array.isArray(raw?.runs) ? raw.runs : [];
 
+    const timestamp = value => {
+      if (value == null) return null;
+      if (typeof value === 'number') return value < 1e12 ? value * 1000 : value;
+      const parsed = Date.parse(value); return Number.isFinite(parsed) ? parsed : null;
+    };
     const runs = rawRuns.map((r, index) => {
-      const runId = r.id || r.session_id || r.runId || `run-${index}-${Date.now()}`;
-      const status = normalizeRunStatus(r.status || (r.is_active ? 'running' : 'completed'));
+      const runId = r.id || r.session_id || r.runId || `unreported-run-${jobId}-${index}`;
+      const status = normalizeRunStatus(r.status || (r.is_active === true ? 'running' : 'unknown'));
       const deliveryStatus = normalizeDeliveryStatus(r);
       return {
         id: runId,
@@ -286,13 +294,14 @@ export class RoutinesManager extends EventEmitter {
         sessionId: r.session_id || r.sessionId || runId,
         connectionId,
         profile: r.profile || profile || 'default',
-        startedAt: r.started_at || r.created_at || r.last_active || Date.now(),
-        completedAt: r.completed_at || r.finished_at || null,
+        startedAt: timestamp(r.started_at ?? r.created_at ?? r.last_active),
+        completedAt: timestamp(r.ended_at ?? r.completed_at ?? r.finished_at),
+        title: r.title ?? null, source: r.source ?? null,
         status,
         deliveryStatus,
         deliveryTarget: r.deliver || r.delivery_target || r.deliveryTarget || null,
         deliveryError: r.delivery_error || r.deliveryError || null,
-        resultSummary: r.result || r.summary || r.text || (r.messages?.length ? r.messages[r.messages.length - 1].content : null),
+        resultSummary: r.result || r.summary || r.preview || r.text || (r.messages?.length ? r.messages[r.messages.length - 1].content : null),
         error: r.error || r.last_error || null,
         inputTokens: r.input_tokens || 0,
         outputTokens: r.output_tokens || 0,
@@ -307,9 +316,8 @@ export class RoutinesManager extends EventEmitter {
     const gateway = this.resolveGateway(connectionId);
     const query = profile ? `?profile=${encodeURIComponent(profile)}` : '';
     const res = await gateway.http(`/api/cron/delivery-targets${query}`, { method: 'GET' });
-    const targets = Array.isArray(res) ? res : Array.isArray(res?.targets) ? res.targets : [
-      { id: 'local', name: 'Local (save only)', home_target_set: true, home_env_var: null },
-    ];
+    const targets = Array.isArray(res) ? res : Array.isArray(res?.targets) ? res.targets : null;
+    if (!targets) throw new Error('Hermes did not return its delivery targets.');
     return { targets };
   }
 }

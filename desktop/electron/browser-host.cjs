@@ -1,0 +1,62 @@
+'use strict';
+const { WebContentsView, session }=require('electron');
+const fs=require('node:fs');const path=require('node:path');const {randomUUID}=require('node:crypto');
+function safeURL(raw) {const url=new URL(raw);if(!['http:','https:'].includes(url.protocol)||url.username||url.password)throw Error('Unsupported browser URL.');return url.href;}
+function readPage(start,count) {const text=document.body?.innerText??'',from=Math.min(text.length,Math.max(0,Number(start)||0)),size=Math.min(24000,Math.max(1,Number(count)||24000));return {kind:'url',url:location.href,title:document.title,text:text.slice(from,from+size),start:from,end:Math.min(text.length,from+size),total_chars:text.length};}
+function actPage(params) {
+ const find=()=>params.selector?document.querySelector(params.selector):params.ref?document.querySelector(`[data-hermes-preview-ref="${CSS.escape(String(params.ref))}"]`):document.activeElement;
+ if(params.action==='elements') {const nodes=[...document.querySelectorAll('a[href],button,input,textarea,select,[role="button"],[contenteditable="true"]')].filter(e=>e.getBoundingClientRect().width&&e.getBoundingClientRect().height).slice(0,Math.min(200,Number(params.max)||80));return {success:true,url:location.href,title:document.title,elements:nodes.map((e,i)=>{let ref=e.getAttribute('data-hermes-preview-ref');if(!ref){ref='preview-'+crypto.randomUUID();e.setAttribute('data-hermes-preview-ref',ref);}return {ref,tag:e.tagName.toLowerCase(),text:(e.innerText||e.getAttribute('aria-label')||e.getAttribute('placeholder')||'').slice(0,300)};})};}
+ if(params.action==='click') {const element=find();if(!element || !element.getBoundingClientRect().width || element.disabled || element.closest('[inert]') || element.getAttribute('aria-disabled')==='true')throw Error('The selected element is not present, enabled or visible.');element.click();return {success:true,action:'click',url:location.href};}
+ if(params.action==='focus') {const element=find();if(!element || !element.getBoundingClientRect().width || element.disabled)throw Error('The selected element is not present or enabled.');element.focus();if(params.clear){if(typeof element.select==='function')element.select();else if(element.isContentEditable){const range=document.createRange();range.selectNodeContents(element);const selection=getSelection();selection.removeAllRanges();selection.addRange(range);}else throw Error('Target is not editable.');}return {success:true};}
+ if(params.action==='scroll') {const amount=Math.max(-10000,Math.min(10000,Number(params.amount)||500));const target=(params.ref||params.selector)?find():document.scrollingElement;if(!target)throw Error('Scroll target is unavailable.');if(params.to==='top')target.scrollTo(0,0);else if(params.to==='bottom')target.scrollTo(0,target.scrollHeight);else target.scrollBy(0,amount);return {success:true,action:'scroll',x:target.scrollLeft,y:target.scrollTop};}
+ throw Error('Unsupported DOM action.');
+}
+class NativeBrowserHost {
+ constructor({getWindow,dataDir}) {this.getWindow=getWindow;this.file=path.join(dataDir,'native-browser-tabs.json');this.profiles=new Map();this.current=null;this.saved={};if(fs.existsSync(this.file)){const parsed=JSON.parse(fs.readFileSync(this.file,'utf8'));if(parsed.version!==1)throw Error('Unsupported native browser state.');this.saved=parsed.profiles??{};}}
+ persist() {const profiles={...this.saved};for(const [key,profile]of this.profiles)profiles[key]={tabs:profile.tabs.map(t=>({id:t.id,url:t.view.webContents.getURL()||t.url,title:t.view.webContents.getTitle()||t.title})),activeTabId:profile.activeTabId,history:profile.history};fs.mkdirSync(path.dirname(this.file),{recursive:true});const temp=this.file+'.tmp';fs.writeFileSync(temp,JSON.stringify({version:1,profiles}),{mode:0o600});fs.renameSync(temp,this.file);this.saved=profiles;}
+ createTab(profile,url,id=randomUUID()) {const partition=session.fromPartition(`persist:hermes-studio-preview-${profile.key}`);partition.setPermissionRequestHandler((_wc,_permission,cb)=>cb(false));partition.setPermissionCheckHandler(()=>false);partition.on('will-download',(event)=>event.preventDefault());const view=new WebContentsView({webPreferences:{session:partition,sandbox:true,contextIsolation:true,nodeIntegration:false,webSecurity:true,allowRunningInsecureContent:false}});const tab={id,url:url??'about:blank',title:'New tab',view};profile.tabs.push(tab);
+  view.webContents.setWindowOpenHandler(({url})=>{try{const next=this.createTab(profile,safeURL(url));profile.activeTabId=next.id;if(this.current?.profile===profile)this.display(profile,this.current.bounds,this.current.visible);this.persist();}catch{}return {action:'deny'};});
+  const preventUnsafe=(event,url)=>{try{safeURL(url);}catch{if(url!=='about:blank')event.preventDefault();}};view.webContents.on('will-navigate',preventUnsafe);view.webContents.on('will-redirect',preventUnsafe);
+  view.webContents.on('did-navigate',(_event,url)=>{tab.url=url;tab.title=view.webContents.getTitle();profile.history.unshift({id:randomUUID(),url,title:tab.title,visitedAt:Date.now()});profile.history=profile.history.slice(0,100);this.persist();});view.webContents.on('page-title-updated',()=>this.persist());
+  void view.webContents.loadURL(url&&url!=='about:blank'?safeURL(url):'about:blank').catch(error=>{tab.error=error.message;});return tab;
+ }
+ profile(scope) {let profile=this.profiles.get(scope.profileKey);if(profile)return profile;profile={key:scope.profileKey,tabs:[],holder:'human',history:this.saved[scope.profileKey]?.history??[],audit:[],scope};this.profiles.set(profile.key,profile);const saved=this.saved[profile.key];for(const tab of saved?.tabs??[])this.createTab(profile,tab.url,tab.id);if(!profile.tabs.length)this.createTab(profile);profile.activeTabId=saved?.activeTabId??profile.tabs[0].id;return profile;}
+ tab(profile) {return profile.tabs.find(t=>t.id===profile.activeTabId)??profile.tabs[0];}
+ hide() {if(this.current?.attached){this.getWindow()?.contentView.removeChildView(this.current.attached);this.current.attached=null;}}
+ display(profile,bounds,visible) {this.hide();const window=this.getWindow();if(!window||!visible)return;const view=this.tab(profile).view,outer=window.getContentBounds();const x=Math.max(0,Math.min(outer.width,Math.round(Number(bounds?.x)||0))),y=Math.max(0,Math.min(outer.height,Math.round(Number(bounds?.y)||0)));const width=Math.max(0,Math.min(outer.width-x,Math.round(Number(bounds?.width)||0))),height=Math.max(0,Math.min(outer.height-y,Math.round(Number(bounds?.height)||0)));if(width<1||height<1)return;window.contentView.addChildView(view);view.setBounds({x,y,width,height});this.current.attached=view;}
+ async status(profile) {const tab=this.tab(profile),wc=tab.view.webContents;let cookiesCount=null,localStorageCount=null;try{cookiesCount=(await wc.session.cookies.get({})).length;if(!wc.isLoading() && /^https?:/.test(wc.getURL()))localStorageCount=await Promise.race([wc.executeJavaScript('Object.keys(localStorage).length'),new Promise((_,reject)=>setTimeout(()=>reject(Error('Storage read timed out.')),2000))]);}catch{}return {configured:true,state:wc.isLoading()?'loading':wc.getURL()==='about:blank'?'manual':'running',holder:profile.holder,activeTabId:tab.id,activeUrl:wc.getURL()||tab.url,activeTitle:wc.getTitle()||tab.title,tabs:profile.tabs.map(t=>({id:t.id,url:t.view.webContents.getURL()||t.url,title:t.view.webContents.getTitle()||t.title})),history:profile.history,audit:profile.audit,cookiesCount,localStorageCount,control:{holder:profile.holder},permissions:{enabled:true,browser:true,files:false,shell:false},previewToolFamily:'desktop_preview',connectionId:profile.scope.connectionId,profile:profile.scope.profile,connected:profile.scope.connected,nativePreviewAvailable:profile.scope.nativePreviewSupported===true && profile.scope.connected,nativePreviewReason:profile.scope.nativePreviewReason,canGoBack:wc.navigationHistory.canGoBack(),canGoForward:wc.navigationHistory.canGoForward()};}
+ async run(method,args,scope) {
+  if(method==='unmount'){if(this.current?.scope.generation!==scope.generation)return {unmounted:false};this.hide();this.current=null;return {unmounted:true};}
+  const profile=this.profile(scope);
+  if(method==='mount'){if(!scope.nativePreviewSupported || profile.scope.threadId!==scope.threadId)profile.holder='human';this.current={profile,scope,bounds:args.bounds,visible:args.visible,attached:this.current?.attached};profile.scope=scope;this.display(profile,args.bounds,args.visible);return this.status(profile);}
+  if(!this.current||this.current.scope.profileKey!==scope.profileKey||this.current.scope.generation!==scope.generation)throw Error('The selected native browser owner changed.');
+  const tab=this.tab(profile),wc=tab.view.webContents;
+  if(args.actor==='agent'&&profile.holder==='human'&&method!=='read')throw Error('The user controls this preview. Agent actions are suspended until explicit Resume.');
+  let result;
+  if(args.actor==='agent' && method!=='read' && !this.current.attached)throw Error('The native preview surface is not visible.');
+  if(method==='status')return this.status(profile);
+  if(method==='take')profile.holder='human';
+  else if(method==='resume'){if(!scope.connected||!scope.runtimeId||!scope.nativePreviewSupported)throw Error('Connect this owned conversation before allowing native preview tools.');profile.holder='bot';}
+  else if(method==='navigate')await wc.loadURL(safeURL(args.url));
+  else if(method==='back'){if(wc.navigationHistory.canGoBack())wc.navigationHistory.goBack();}
+  else if(method==='forward'){if(wc.navigationHistory.canGoForward())wc.navigationHistory.goForward();}
+  else if(method==='reload')wc.reload();
+  else if(method==='tab-create'){const next=this.createTab(profile,args.url);profile.activeTabId=next.id;this.display(profile,this.current.bounds,this.current.visible);}
+  else if(method==='tab-switch'){if(!profile.tabs.some(t=>t.id===args.tabId))throw Error('Browser tab not found.');profile.activeTabId=args.tabId;this.display(profile,this.current.bounds,this.current.visible);}
+  else if(method==='tab-close'){const index=profile.tabs.findIndex(t=>t.id===args.tabId);if(index<0)throw Error('Browser tab not found.');this.hide();profile.tabs.splice(index,1)[0].view.webContents.close();if(!profile.tabs.length)this.createTab(profile);if(!profile.tabs.some(t=>t.id===profile.activeTabId))profile.activeTabId=profile.tabs[0].id;this.display(profile,this.current.bounds,this.current.visible);}
+  else if(method==='clear'){await wc.session.clearStorageData();profile.history=[];}
+  else if(method==='read'){return wc.executeJavaScript(`(${readPage.toString()})(${JSON.stringify(args.start)},${JSON.stringify(args.count)})`);}
+  else if(method==='act') {
+    const action=args.action;
+    if(action==='navigate'){await wc.loadURL(safeURL(args.to??args.url));result={success:true,action,url:wc.getURL()};}
+    else if(['back','forward','reload'].includes(action)){return this.run(action,{actor:'agent'},scope);}
+    else if(action==='type'){await wc.executeJavaScript(`(${actPage.toString()})(${JSON.stringify({...args,action:'focus',clear:true})})`);await wc.insertText(String(args.text??''));if(args.submit){wc.sendInputEvent({type:'keyDown',keyCode:'Enter'});wc.sendInputEvent({type:'keyUp',keyCode:'Enter'});}result={success:true,action};}
+    else if(action==='press'){if(!args.ref&&!args.selector)throw Error('Keyboard actions require a target.');await wc.executeJavaScript(`(${actPage.toString()})(${JSON.stringify({...args,action:'focus'})})`);const key=String(args.key??'');if(!key||key.length>40)throw Error('A valid keyboard key is required.');wc.sendInputEvent({type:'keyDown',keyCode:key});wc.sendInputEvent({type:'keyUp',keyCode:key});result={success:true,action};}
+    else if(action==='capture'){result={success:true,data_url:(await wc.capturePage()).toDataURL()};}
+    else result=await wc.executeJavaScript(`(${actPage.toString()})(${JSON.stringify(args)})`);
+  }else throw Error('Unsupported native browser operation.');
+  profile.audit.unshift({id:randomUUID(),action:method,actor:args.actor??'owner',outcome:'succeeded',createdAt:Date.now(),details:result?.action??method});profile.audit=profile.audit.slice(0,100);this.persist();if(result)return result;return this.status(profile);
+ }
+ close(){this.hide();for(const profile of this.profiles.values())for(const tab of profile.tabs)if(!tab.view.webContents.isDestroyed())tab.view.webContents.close();this.profiles.clear();}
+}
+module.exports={NativeBrowserHost};

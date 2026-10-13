@@ -4,6 +4,8 @@ const path = require('node:path');
 const { randomBytes } = require('node:crypto');
 const { startInterfaceServer } = require('./backend-bootstrap.cjs');
 const { sourceURL } = require('./external-links.cjs');
+const { NativeBrowserHost } = require('./browser-host.cjs');
+let browserHost;
 
 app.setName('Hermes Studio');
 let window;
@@ -20,10 +22,24 @@ ipcMain.on('hermes:open-source', (event, value) => {
   const url = sourceURL(value, origin);
   if (url) void shell.openExternal(url).catch(() => {});
 });
+ipcMain.handle('hermes:browser-surface', async (event, body) => {
+  if(!window || event.sender!==window.webContents || !sameOrigin(event.senderFrame?.url))throw Error('Browser surface owner rejected.');
+  const endpoint=body?.unmount?'/api/browser/unmount':'/api/browser/surface';
+  const response=await fetch(origin+endpoint,{method:'POST',headers:{Authorization:`Bearer ${ownerToken}`,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const result=await response.json();if(!response.ok)throw Error(result.error||'Native browser surface is unavailable.');return result;
+});
 function bootstrap() {
+  browserHost = new NativeBrowserHost({ getWindow: () => window, dataDir: app.getPath('userData') });
   return startInterfaceServer({
     utilityProcess, root: app.getAppPath(), dataDirectory: app.getPath('userData'), token: ownerToken,
-    onStarted: (child) => { ownedServer = child; },
+    onStarted: (child) => {
+      ownedServer = child;
+      child.on('message', event => {
+        const message=event?.data ?? event;
+        if(message?.type !== 'browser-request')return;
+        void browserHost.run(message.method,message.args,message.scope).then(result=>child.postMessage({type:'browser-response',id:message.id,result})).catch(error=>child.postMessage({type:'browser-response',id:message.id,error:error.message}));
+      });
+    },
     onUnexpectedExit: () => {
       if (quitting) return;
       void dialog.showMessageBox({ type: 'error', title: 'Hermes Studio',
@@ -34,8 +50,11 @@ function bootstrap() {
 }
 function createWindow() {
   const windowSession = session.fromPartition('hermes-studio-ui');
-  windowSession.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
-  windowSession.setPermissionCheckHandler(() => false);
+  const permitsAudio = (contents, permission, details) => permission === 'media' && contents === window?.webContents &&
+    sameOrigin(contents.getURL()) && details?.mediaTypes?.length > 0 && details.mediaTypes.every(type => type === 'audio');
+  windowSession.setPermissionRequestHandler((contents, permission, callback, details) => callback(permitsAudio(contents, permission, details)));
+  windowSession.setPermissionCheckHandler((contents, permission, requestingOrigin, details) =>
+    permission === 'media' && contents === window?.webContents && sameOrigin(requestingOrigin) && details?.mediaType === 'audio');
   windowSession.webRequest.onBeforeSendHeaders({ urls: [`${origin}/api/*`] }, (details, callback) => {
     const headers = { ...details.requestHeaders };
     if (sameOrigin(details.url)) headers.Authorization = `Bearer ${ownerToken}`;
@@ -71,7 +90,7 @@ function createWindow() {
 }
 
 app.on('before-quit', () => { quitting = true; });
-app.on('will-quit', () => { ownedServer?.kill(); ownedServer = undefined; });
+app.on('will-quit', () => { browserHost?.close(); ownedServer?.kill(); ownedServer = undefined; });
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
 app.on('activate', () => { if (origin && !window) createWindow(); });
 

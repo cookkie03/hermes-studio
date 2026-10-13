@@ -10,6 +10,7 @@ import { appendAssistant, delivery, pendingMessage, remainingDraft, mergeHistory
 
 import type { RuntimeStatus } from './runtime-connections';
 import { ConversationHost } from './ConversationHost';
+import { AudioControls, type VoiceReply } from './AudioControls';
 import { ConversationSubmission } from './conversation-submission';
 import { NativeReviewNotes, mergeReviewNotes, type NativeReviewNote, type ReviewReplay } from './NativeReviewNotes';
 import { ConversationContext, type NativeSessionInfo, type StudioConversationContext } from './ConversationContext';
@@ -67,6 +68,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   const [decisionPending, setDecisionPending] = useState(false);
   const decisionLock = useRef(false);
   const [backgroundApproval, setBackgroundApproval] = useState<string>();
+  const voiceReply = useRef<VoiceReply | null>(null);
   const assistantId = useRef<string | undefined>(undefined);
   const timeline = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -115,15 +117,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
           if (active) setFileItems(fetchedItems);
         }
       } catch {
-        // Fallback synthetic roots for offline/tests
-        if (active && fileRoots.length === 0) {
-          const fbRoot: FileRoot = { id: 'default-workspace', host: 'local', name: 'Workspace', path: '/workspace' };
-          setFileRoots([fbRoot]);
-          setFileItems([
-            { rootId: 'default-workspace', host: 'local', path: 'notes.md', fullPath: '/workspace/notes.md', name: 'notes.md', kind: 'file', size: 120, revision: 'abc', updatedAt: Date.now() },
-            { rootId: 'default-workspace', host: 'local', path: 'src/App.tsx', fullPath: '/workspace/src/App.tsx', name: 'App.tsx', kind: 'file', size: 450, revision: 'def', updatedAt: Date.now() },
-          ]);
-        }
+        if (active) { setFileRoots([]); setFileItems([]); }
       }
     };
     void fetchRootsAndFiles();
@@ -203,6 +197,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
       if (frame.type === 'session-context') setSessionInfo(frame.info as NativeSessionInfo | undefined);
       if (frame.type === 'persistence-error') setError(textOf(frame.message) || 'Runtime activity could not be saved to disk.');
       if (frame.type === 'connection' && frame.connected === false) {
+        voiceReply.current?.fail('The Hermes connection was lost; the outcome is unconfirmed.');
         setApprovals([]);
         setReviewReplay({ state: 'offline', message: 'Saved review notes are available. Notes emitted while disconnected have not been verified.' });
         sendAllowed.current = false; setUncertain(true); setStatus(previous => ({ ...previous, connected: false }));
@@ -215,6 +210,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
         setRunning(frame.status === 'running');
         if (frame.uncertain === true) setUncertain(true);
         if (['completed', 'error', 'interrupted'].includes(String(frame.status))) { assistantId.current = undefined; if (frame.uncertain !== true) setUncertain(false); }
+        if (['error','interrupted'].includes(String(frame.status))) voiceReply.current?.fail(textOf(frame.message) || 'The Hermes turn was interrupted or failed.');
         if (frame.status === 'error') setError(textOf(frame.message) || 'The Hermes turn failed.');
       }
       if (frame.type === 'admitted') {
@@ -237,11 +233,14 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
         if (submittedId.current) setMessages((previous) => delivery(previous, submittedId.current, 'acknowledged'));
       }
       if (event?.type === 'message.delta') {
+        voiceReply.current?.delta(textOf(payload.text));
         setRunning(true); setWaiting(false);
         const id = assistantId.current ?? crypto.randomUUID(); assistantId.current = id;
         setMessages((previous) => appendAssistant(previous, id, textOf(payload.text)));
       }
       if (event?.type === 'message.complete') {
+        if (['error','interrupted'].includes(String(payload.status))) voiceReply.current?.fail(textOf(payload.error) || 'The Hermes turn failed or was interrupted.');
+        else voiceReply.current?.complete(textOf(payload.text));
         const id = assistantId.current ?? crypto.randomUUID();
         if (textOf(payload.text)) setMessages((previous) => appendAssistant(previous, id, textOf(payload.text), true));
         turnPhase.current = payload.status === 'error' ? 'error' : payload.status === 'interrupted' ? 'interrupted' : 'completed';
@@ -296,10 +295,10 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
     return () => owner.close();
   }, [thread.id, hostRevision]);
 
-  const send = async () => {
+  const send = async (voice?: {text: string; id: string}): Promise<boolean> => {
     const capturedDraft = draft;
-    const text = capturedDraft.trim();
-    if (!text || !sendAllowed.current) return;
+    const text = (voice?.text ?? capturedDraft).trim();
+    if (!text || !sendAllowed.current) return false;
     const owner = submission.current;
     let id: string | undefined;
     const result = await owner.send({
@@ -310,34 +309,35 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
       },
       dispatch: async (pageReference) => {
         setPreparing(false);
-        const clientSubmissionId = crypto.randomUUID(); id = clientSubmissionId; submittedId.current = clientSubmissionId;
+        const clientSubmissionId = voice?.id ?? crypto.randomUUID(); id = clientSubmissionId; submittedId.current = clientSubmissionId;
         setMessages((previous) => pendingMessage(previous, clientSubmissionId, text));
         turnPhase.current = 'dispatching'; setDispatching(true); setError('');
         await api('/hermes/send', 'POST', { threadId: thread.id, text, clientSubmissionId: id, ...(pageReference ? { pageReference } : {}) });
       },
     });
-    if (result.status === 'busy' || result.status === 'stale' || owner !== submission.current) return;
+    if (result.status === 'busy' || result.status === 'stale' || owner !== submission.current) return false;
     setPreparing(false);
     if (result.status === 'blocked') {
       setError('The connection or turn changed while preparing. Your message was not sent; your draft is preserved.');
-      return;
+      return false;
     }
     setDispatching(false);
     if (result.status === 'error') {
       const message = result.cause instanceof Error ? result.cause.message : 'The request failed.';
-      if (result.stage === 'prepare') { setError(message); return; }
+      if (result.stage === 'prepare') { setError(message); return false; }
       turnPhase.current = 'error'; setUncertain(true);
       setMessages((previous) => delivery(previous, id, 'uncertain'));
       setError(`${message} Delivery must be checked; your draft is preserved.`);
-      return;
+      return false;
     }
     turnPhase.current = afterDispatchResponse(turnPhase.current);
     setWaiting(turnPhase.current === 'accepted');
-    setDraft((current) => {
+    if (!voice) setDraft((current) => {
       const next = remainingDraft(current, capturedDraft);
       try { localStorage.setItem(draftKey, next); } catch { /* disk draft route remains authoritative */ }
       return next;
     });
+    return true;
   };
   const connect = async () => {
     try { await api('/hermes/connect', 'POST', { connectionId: status.connectionId ?? 'local' }); setStatus(await api(`/hermes/status?threadId=${encodeURIComponent(thread.id)}`)); await loadHistory(); setError(''); }
@@ -466,6 +466,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
           }
         }}
       />
+      <AudioControls threadId={thread.id} connected={status.connected && streamConnected && !paused} canSend={sendAllowed.current} messages={messages} onDraft={text => updateDraft(draft ? `${draft}\n${text}` : text)} onSubmit={(text,id) => send({text,id})} reply={voiceReply}/>
       {running ? <button type="button" className="send-button" aria-label="Interrupt current turn" onClick={() => void api('/hermes/interrupt', 'POST', { threadId: thread.id }).catch((e: Error) => setError(e.message))}><Square size={16} /></button>
         : <button className="send-button" aria-label="Send message" disabled={!draft.trim() || !status.connected || !streamConnected || uncertain || waiting || dispatching || preparing || loading || paused}><ArrowUp size={21} /></button>}
     </form>

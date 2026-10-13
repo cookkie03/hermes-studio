@@ -4,6 +4,7 @@ import type {
   HermesCapabilityMatrix,
   HermesCapabilityMatrixItem,
 } from '../shared/types';
+import { api } from './api';
 import { CapabilitiesView } from './CapabilitiesView';
 
 export function HermesObservabilityView({
@@ -25,19 +26,12 @@ export function HermesObservabilityView({
     async function loadObservability() {
       try {
         setLoading(true);
-        const [memRes, capRes] = await Promise.all([
-          fetch(`/api/hermes/memory?connectionId=${connectionId}&profile=${profile}`),
-          fetch(`/api/hermes/capabilities/matrix?connectionId=${connectionId}&profile=${profile}`),
+        const [memory,matrix] = await Promise.all([
+          api<HermesNativeMemoryStatus>(`/hermes/memory?connectionId=${encodeURIComponent(connectionId)}&profile=${encodeURIComponent(profile)}`),
+          api<HermesCapabilityMatrix>(`/hermes/capabilities/matrix?connectionId=${encodeURIComponent(connectionId)}&profile=${encodeURIComponent(profile)}`),
         ]);
+        if(active){setMemoryStatus(memory);setCapabilityMatrix(matrix);if(memory.reason)setError(memory.reason);}
 
-        if (active) {
-          if (memRes.ok) {
-            setMemoryStatus(await memRes.json());
-          }
-          if (capRes.ok) {
-            setCapabilityMatrix(await capRes.json());
-          }
-        }
       } catch (err) {
         if (active) {
           setError(err instanceof Error ? err.message : 'Failed to load Hermes observability data');
@@ -107,19 +101,19 @@ export function HermesObservabilityView({
                 <article key={budget.category} className="budget-card">
                   <header>
                     <h3>{budget.label}</h3>
-                    <span className="budget-percent">{budget.percentage}%</span>
+                    <span className="budget-percent">{budget.percentage === null ? 'Not reported' : `${budget.percentage}%`}</span>
                   </header>
-                  <div className="progress-bar-track" role="progressbar" aria-valuenow={budget.percentage} aria-valuemin={0} aria-valuemax={100}>
+                  <div className="progress-bar-track" role="progressbar" aria-valuenow={budget.percentage ?? undefined} aria-valuemin={0} aria-valuemax={100}>
                     <div
-                      className={`progress-bar-fill ${budget.percentage > 90 ? 'critical' : budget.percentage > 70 ? 'warning' : 'ok'}`}
-                      style={{ width: `${Math.min(100, budget.percentage)}%` }}
+                      className={`progress-bar-fill ${(budget.percentage ?? 0) > 90 ? 'critical' : (budget.percentage ?? 0) > 70 ? 'warning' : 'ok'}`}
+                      style={{ width: `${Math.min(100, budget.percentage ?? 0)}%` }}
                     />
                   </div>
                   <footer className="budget-footer">
                     <span>
-                      {budget.currentChars.toLocaleString()} / {budget.charLimit.toLocaleString()} chars
+                      {budget.currentChars === null ? 'Content not reported' : `${budget.currentChars.toLocaleString()} chars`} · Limit: {budget.charLimit === null ? 'Not reported' : budget.charLimit.toLocaleString()}
                     </span>
-                    <small>Enforced on injection</small>
+                    <small>Disk size: {budget.rawSizeBytes == null ? 'Not reported' : `${budget.rawSizeBytes} bytes`}</small>
                   </footer>
                 </article>
               ))}
@@ -133,7 +127,7 @@ export function HermesObservabilityView({
 
           {memoryStatus.pendingReviews.length > 0 && (
             <div className="pending-reviews-block">
-              <h3>Pending Self-Improvement Reviews</h3>
+              <h3>Native Review Notes</h3>
               {memoryStatus.pendingReviews.map((review) => (
                 <div key={review.id} className="pending-review-card">
                   <p>{review.text}</p>
@@ -147,7 +141,7 @@ export function HermesObservabilityView({
           )}
 
           <div className="memory-entries-list">
-            <h3>Active Memory Entries in Profile ({memoryStatus.entries.length})</h3>
+            <h3>Verified File Content in Profile ({memoryStatus.entries.length})</h3>
             {memoryStatus.entries.length === 0 ? (
               <p className="empty-notice">No active memory entries recorded in this profile yet.</p>
             ) : (

@@ -31,6 +31,9 @@ class MockGateway extends EventEmitter {
     const url = new URL(path, 'http://127.0.0.1');
     const pathname = url.pathname;
     const profile = url.searchParams.get('profile') || 'default';
+    if (pathname === '/api/cron/jobs' && method === 'POST' && !url.searchParams.get('profile')) {
+      throw new Error('A concrete owner profile is required to create a routine.');
+    }
 
     // GET /api/cron/delivery-targets
     if (pathname === '/api/cron/delivery-targets' && method === 'GET') {
@@ -185,7 +188,7 @@ test('RoutinesManager: lifecycle (create, list, update, pause, resume, trigger, 
     schedule: '0 8 * * *',
     deliver: 'telegram',
     model: 'auto/fast',
-  });
+  }, { profile: 'default' });
 
   assert.equal(created.name, 'Morning Digest');
   assert.equal(created.prompt, 'Summarize top research updates.');
@@ -337,6 +340,36 @@ test('RoutinesManager: reports clear error when host is offline or scheduler unr
   );
 });
 
+test('RoutinesManager: update cannot change the owning profile', async () => {
+  const manager = new RoutinesManager({ gateway: new MockGateway() });
+  await assert.rejects(
+    manager.updateJob('missing', { profile: 'bot-b' }),
+    /ownership is immutable/,
+  );
+});
+
+test('RoutinesManager: bot-chat delivery target is passed through without fan-out', async () => {
+  const gateway = new MockGateway();
+  gateway.deliveryTargets.push({ id: 'bot-chat:bot-a', name: 'Bot A Chat', home_target_set: true });
+  const manager = new RoutinesManager({ gateway });
+  const created = await manager.createJob({
+    name: 'Bot A recurring check',
+    prompt: 'Check the synthetic queue and report changes.',
+    schedule: '30m',
+    deliver: 'bot-chat:bot-a',
+  }, { profile: 'bot-a' });
+  assert.equal(created.profile, 'bot-a');
+  assert.equal(created.deliver, 'bot-chat:bot-a');
+  assert.equal(gateway.httpCalls.filter((call) => call.method === 'POST').length, 1);
+});
+
+test('RoutinesManager: creation without a concrete profile is rejected', async () => {
+  const manager = new RoutinesManager({ gateway: new MockGateway() });
+  await assert.rejects(
+    manager.createJob({ prompt: 'Synthetic task', schedule: '1h' }),
+    /concrete owner profile/,
+  );
+});
 test('RoutinesManager: historical runs survive client close and relaunch', async () => {
   const gateway = new MockGateway();
   // Populate backend storage with runs
@@ -375,4 +408,10 @@ test('RoutinesManager: historical runs survive client close and relaunch', async
   assert.equal(fetchedAfterRestart.runs.length, 2);
   assert.equal(fetchedAfterRestart.runs[0].resultSummary, 'Autonomous overnight synthesis completed.');
   assert.equal(fetchedAfterRestart.runs[1].error, 'Host was suspended mid-execution.');
+});
+
+test('native output history keeps unknown success, second-based times, output and delivery evidence',async()=>{
+ const gateway=new MockGateway();gateway.runsByJob.set('native-output',[{id:'cron_output:j:exec:0',title:'FAILED · crash',preview:'crash',source:'cron_output',started_at:1791831400,ended_at:1791831401,is_active:false,deliver:'telegram'}]);
+ const manager=new RoutinesManager({gateway});const {runs}=await manager.getRuns('native-output',{profile:'qa'});
+ assert.equal(runs[0].status,'unknown');assert.equal(runs[0].startedAt,1791831400000);assert.equal(runs[0].completedAt,1791831401000);assert.equal(runs[0].resultSummary,'crash');assert.equal(runs[0].deliveryStatus,'none');
 });

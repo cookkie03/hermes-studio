@@ -32,7 +32,7 @@ export function RecallResults({
           <input
             type="search"
             aria-label="Search conversation history"
-            placeholder="Search past conversations (FTS5 recall)..."
+            placeholder="Search this conversation…"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
@@ -45,7 +45,7 @@ export function RecallResults({
       <div className="recall-list" role="list" aria-label="Recalled conversation snippets">
         {results.length === 0 ? (
           <div className="recall-empty" role="status">
-            {searchInput ? 'No verified session recall results found.' : 'Enter a query to recall relevant past conversations across profiles.'}
+            {searchInput ? 'No verified session recall results found.' : 'Search verified messages in this conversation.'}
           </div>
         ) : (
           results.map((res) => (
@@ -68,7 +68,7 @@ export function RecallResults({
                   <User size={12} aria-hidden="true" /> @session:{res.profile}/{res.threadId}
                 </span>
                 <span className="recall-timestamp">
-                  <Clock size={11} aria-hidden="true" /> {new Date(res.timestamp).toLocaleTimeString()}
+                  <Clock size={11} aria-hidden="true" /> {res.timestamp ? new Date(res.timestamp).toLocaleTimeString() : 'Time not reported'}
                 </span>
               </div>
               <p className="recall-snippet">{res.snippet}</p>
@@ -76,7 +76,7 @@ export function RecallResults({
                 <span className="recall-anchor">
                   <Hash size={11} aria-hidden="true" /> Msg: {res.messageId}
                 </span>
-                {res.score !== undefined && (
+                {typeof res.score === 'number' && (
                   <span className="recall-score">Match: {Math.round(res.score * 100)}%</span>
                 )}
                 <span className="recall-open-action">

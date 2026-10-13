@@ -9,6 +9,7 @@ interface RoutineEditorProps {
   dots?: Dot[];
   onSave: (saved: RoutineJob) => void;
   onClose: () => void;
+  profile?: string;
 }
 
 export function RoutineEditor({
@@ -17,6 +18,7 @@ export function RoutineEditor({
   dots = [],
   onSave,
   onClose,
+  profile,
 }: RoutineEditorProps) {
   const [name, setName] = useState(routine?.name ?? '');
   const [prompt, setPrompt] = useState(routine?.prompt ?? '');
@@ -34,21 +36,26 @@ export function RoutineEditor({
   });
   const [deliver, setDeliver] = useState(routine?.deliver ?? 'local');
   const [model, setModel] = useState(routine?.model ?? '');
+  const effectiveProfile = routine?.profile ?? profile;
+  const routineScope = effectiveProfile ? `?profile=${encodeURIComponent(effectiveProfile)}` : '';
   const [targets, setTargets] = useState<RoutineDeliveryTarget[]>([
     { id: 'local', name: 'Local (save only)', home_target_set: true },
   ]);
+  const selectedTargetUnavailable = Boolean(deliver && !targets.some((target) => target.id === deliver && target.home_target_set));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    void api<{ targets: RoutineDeliveryTarget[] }>('/hermes/routines/delivery-targets')
+    void api<{ targets: RoutineDeliveryTarget[] }>(
+      `/hermes/routines/delivery-targets${routineScope}`,
+    )
       .then((res) => {
         if (Array.isArray(res?.targets) && res.targets.length > 0) {
           setTargets(res.targets);
         }
       })
       .catch(() => {});
-  }, []);
+  }, [routineScope]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,6 +67,10 @@ export function RoutineEditor({
       setError('Please provide a schedule.');
       return;
     }
+    if (selectedTargetUnavailable) {
+      setError('The selected delivery destination is not available on this Hermes host.');
+      return;
+    }
 
     setBusy(true);
     setError('');
@@ -67,7 +78,7 @@ export function RoutineEditor({
     try {
       let saved: RoutineJob;
       if (routine?.id) {
-        saved = await api<RoutineJob>(`/hermes/routines/${encodeURIComponent(routine.id)}`, 'PUT', {
+        saved = await api<RoutineJob>(`/hermes/routines/${encodeURIComponent(routine.id)}${routineScope}`, 'PUT', {
           name: name.trim() || null,
           prompt: prompt.trim(),
           schedule: scheduleExpr.trim(),
@@ -75,7 +86,8 @@ export function RoutineEditor({
           model: model.trim() || null,
         });
       } else {
-        saved = await api<RoutineJob>('/hermes/routines', 'POST', {
+        const createScope = profile ? `?profile=${encodeURIComponent(profile)}` : '';
+        saved = await api<RoutineJob>(`/hermes/routines${createScope}`, 'POST', {
           name: name.trim() || undefined,
           prompt: prompt.trim(),
           schedule: scheduleExpr.trim(),
@@ -99,6 +111,16 @@ export function RoutineEditor({
   return (
     <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="routine-editor-title">
       <div className="routine-editor-card">
+        {routine?.profile && (
+          <p className="routine-owner-notice" role="note">
+            Owner profile: <strong>{routine.profile}</strong>. Delivery and changes stay in this profile.
+          </p>
+        )}
+        {deliver.startsWith('bot-chat') && (
+          <p className="routine-owner-notice" role="note">
+            Bot Chat is machine-local. Hermes will start a separate Bot turn when the scheduler delivers a result.
+          </p>
+        )}
         <div className="routine-editor-header">
           <div className="routine-editor-title-group">
             <Clock3 size={20} className="text-accent" />
@@ -224,7 +246,17 @@ export function RoutineEditor({
                     {t.name} {!t.home_target_set ? '(Not configured)' : ''}
                   </option>
                 ))}
+                {!targets.some((target) => target.id.startsWith('bot-chat')) && (
+                  <option value="bot-chat" disabled>
+                    Bot Chat (not advertised by host)
+                  </option>
+                )}
               </select>
+              {selectedTargetUnavailable && (
+                <small className="form-hint" role="alert">
+                  This destination is not confirmed by the connected Hermes host and cannot be scheduled.
+                </small>
+              )}
             </div>
 
             <div className="form-group flex-1">

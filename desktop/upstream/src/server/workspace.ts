@@ -27,6 +27,8 @@ export class WorkspaceStore {
       },
     ]);
     this.db.exec(`PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;
+      CREATE TABLE IF NOT EXISTS native_bot_bindings(dotId TEXT PRIMARY KEY, connectionId TEXT NOT NULL, installId TEXT NOT NULL, profile TEXT NOT NULL, canonicalSessionId TEXT, verifiedAt INTEGER NOT NULL, UNIQUE(connectionId, installId, profile));
+      CREATE TABLE IF NOT EXISTS native_bot_threads(dotId TEXT PRIMARY KEY, threadId TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS spaces(id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL, createdAt INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS dots(id TEXT PRIMARY KEY, spaceId TEXT NOT NULL, name TEXT NOT NULL, instructions TEXT NOT NULL, researchAllowed INTEGER NOT NULL, memoryAllowed INTEGER NOT NULL, createdAt INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS thread_bindings(id TEXT PRIMARY KEY, dotId TEXT NOT NULL, ownerId TEXT NOT NULL, title TEXT NOT NULL, createdAt INTEGER NOT NULL);
@@ -276,6 +278,24 @@ export class WorkspaceStore {
       .run(spaceId, bindingId);
     return (result as { changes: number }).changes > 0;
   }
+  reconcileNativeBots(connectionId: string, installId: string, profiles: Array<{ name: string; display_name?: string; description?: string; canonical_session?: { id?: string; resolved_id?: string } | null }>): void {
+    const space = this.spaces()[0];
+    if (!space) throw new Error('Create a Studio Space before linking native Bots.');
+    for (const profile of profiles) {
+      if (typeof profile.name !== 'string' || !profile.name) continue;
+      const existing = this.db.prepare('SELECT dotId FROM native_bot_bindings WHERE connectionId=? AND installId=? AND profile=?').get(connectionId,installId,profile.name);
+      const dotId = existing ? String(existing.dotId) : this.createDot(space.id, profile.display_name || profile.name, profile.description || 'Use your native Hermes profile instructions, tools and memory.', false, false).id;
+      this.db.prepare('INSERT OR REPLACE INTO native_bot_bindings VALUES (?,?,?,?,?,?)').run(dotId,connectionId,installId,profile.name,profile.canonical_session?.resolved_id || profile.canonical_session?.id || null,Date.now());
+    }
+  }
+  nativeBotThread(dotId: string): string | undefined {
+    const row = this.db.prepare('SELECT threadId FROM native_bot_threads WHERE dotId=?').get(dotId);
+    return row ? String(row.threadId) : undefined;
+  }
+  bindNativeBotThread(dotId: string, threadId: string): void {
+    this.requireThread(threadId);
+    this.db.prepare('INSERT INTO native_bot_threads VALUES (?,?) ON CONFLICT(dotId) DO UPDATE SET threadId=excluded.threadId').run(dotId,threadId);
+  }
   dots(): Dot[] {
     return this.db
       .prepare('SELECT * FROM dots ORDER BY createdAt')
@@ -288,6 +308,7 @@ export class WorkspaceStore {
           )
           .all(String(row.id))
           .map((grant) => String(grant.spaceId)),
+        nativeBinding: this.db.prepare('SELECT connectionId,installId,profile,canonicalSessionId,verifiedAt FROM native_bot_bindings WHERE dotId=?').get(String(row.id)) ?? undefined,
         researchAllowed: !!row.researchAllowed,
         memoryAllowed: !!row.memoryAllowed,
         skillDeliveryEnabled: !!row.skillDeliveryEnabled,

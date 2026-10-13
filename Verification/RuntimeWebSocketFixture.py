@@ -33,6 +33,8 @@ class Handler(BaseHTTPRequestHandler):
             self.respond(json.dumps({'ok': True, 'auth_required': False}))
         elif route.path == '/fixture/decisions' and self.server.conversations:
             self.respond(json.dumps(self.server.decisions))
+        elif route.path == '/fixture/page':
+            self.respond('''<!doctype html><title>QA browser page</title><h1>Actual native DOM</h1><input id=field aria-label=QA><button id=increment onclick="document.querySelector('#count').textContent=Number(document.querySelector('#count').textContent)+1">Increment</button><span id=count>0</span><script>document.cookie='qa_cookie=1';localStorage.setItem('qa_storage','actual');</script>''','text/html')
         elif route.path == '/':
             self.respond('window.__HERMES_SESSION_TOKEN__=' + json.dumps(TOKEN) + ';', 'text/html')
         elif route.path == '/api/ws' and parse_qs(route.query).get('token') == [TOKEN]:
@@ -49,12 +51,14 @@ class Handler(BaseHTTPRequestHandler):
             self.send_error(404)
 
     def do_POST(self):
-        if not self.server.conversations or urlparse(self.path).path not in ('/fixture/review', '/fixture/approval', '/fixture/cancel'):
+        if not self.server.conversations or urlparse(self.path).path not in ('/fixture/review', '/fixture/approval', '/fixture/cancel', '/fixture/preview'):
             self.send_error(404)
             return
         params = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))))
         state = self.server.sessions[params['session_id']]
-        if urlparse(self.path).path == '/fixture/approval':
+        if urlparse(self.path).path == '/fixture/preview':
+            state['send']({'jsonrpc':'2.0','id':params['id'],'method':params['method'],'params':{**params.get('params',{}),'session_id':params['session_id']}})
+        elif urlparse(self.path).path == '/fixture/approval':
             state['send']({'jsonrpc': '2.0', 'id': params['id'], 'method': 'approval', 'params': {'session_id': params['session_id'], 'request_id': 'queue-' + params['id'], 'choices': ['once', 'deny'], 'command': 'synthetic-read fixture.txt', 'description': 'Synthetic F3 request'}})
         elif urlparse(self.path).path == '/fixture/cancel':
             state['send']({'jsonrpc': '2.0', 'method': 'event', 'params': {'type': 'request.cancel', 'session_id': params['session_id'], 'payload': {'id': params['id'], 'method': 'approval', 'reason': params.get('reason', 'timeout')}}})
@@ -177,6 +181,8 @@ class Handler(BaseHTTPRequestHandler):
                     state['running'] = False
                     state['emit']('message.complete', {'text': 'Synthetic interrupted response', 'status': 'interrupted'})
                     result(request_id, {'interrupted': True})
+                elif method == 'tools.show':
+                    result(request_id, {'sections':[{'name':'desktop_ui','tools':[{'name':'read_preview'},{'name':'drive_preview'},{'name':'desktop_preview'}]}]})
                 elif method == 'client.capabilities':
                     result(request_id, {'server_requests': [], 'declines_not_shown': True})
                 elif method == 'gateway.ping':

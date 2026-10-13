@@ -119,8 +119,9 @@ describe('F6 Spaces Linked to Projects and Folders', () => {
       />,
     );
 
-    expect(html).toContain('No folders linked to this Space yet');
-    expect(html).toContain('Link Your First Folder');
+    expect(html).toContain('Linked Folders (0)');
+    expect(html).toContain('Link Folder');
+    expect(html).toContain('No pages yet');
     expect(html).not.toContain('fictional-file-123.md');
   });
 

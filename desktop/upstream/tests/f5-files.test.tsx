@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync, writeFileSync, symlinkSync, mkdirSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync, symlinkSync, mkdirSync, unlinkSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { expect, it, describe, beforeEach, afterEach } from 'vitest';
@@ -46,6 +46,18 @@ describe('F5 Files & Artifacts Workspace', () => {
     expect(file2.host).toBe('debian-mini-pc');
     expect(file2.content).toBe('Content from debian host');
     expect(file1.revision).not.toBe(file2.revision);
+  });
+
+  it('lists and searches the authorized root without requiring a subdirectory', () => {
+    writeFileSync(join(tempDir1, 'note.md'), 'Synthetic note');
+    expect(service.listFiles('root-1').map((item) => item.name)).toEqual(['note.md']);
+    expect(service.searchFiles('root-1', 'note').map((item) => item.path)).toEqual(['note.md']);
+  });
+
+  it('rejects new file creation through a parent symlink outside the root', () => {
+    symlinkSync(tempDir2, join(tempDir1, 'external'));
+    expect(() => service.writeFile({ rootId: 'root-1', relativePath: 'external/new.md', content: 'Synthetic content' })).toThrow(/outside authorized root/i);
+    expect(service.listFiles('root-2', '.').map((item) => item.name)).not.toContain('new.md');
   });
 
   it('rejects path traversal attempts outside root boundary', () => {
@@ -174,4 +186,15 @@ describe('F5 Files & Artifacts Workspace', () => {
       })
     ).toThrow(/read-only/i);
   });
+});
+
+
+it('preserves a stale draft when the original file was deleted externally', () => {
+  const root=mkdtempSync(join(tmpdir(),'f5-deleted-'));
+  try {
+    const service=new FileWorkspaceService([{id:'deleted',host:'local',name:'QA',path:root}]);
+    const path=join(root,'draft.md');writeFileSync(path,'Original');const original=service.readFile('deleted','draft.md');unlinkSync(path);
+    const result=service.writeFile({rootId:'deleted',relativePath:'draft.md',content:'Stale draft',expectedRevision:original.revision});
+    expect(result.receipt.outcome).toBe('conflict');expect(existsSync(path)).toBe(false);
+  } finally {rmSync(root,{recursive:true,force:true});}
 });

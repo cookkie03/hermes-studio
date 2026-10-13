@@ -2,7 +2,6 @@
 import { useEffect, useState, useRef } from 'react';
 import {
   Folder,
-  Globe,
   Terminal,
   FileText,
   AlertTriangle,
@@ -11,20 +10,13 @@ import {
   Search,
   Save,
   HardDrive,
-  ArrowLeft,
-  ArrowRight,
-  RotateCw,
-  Plus,
-  X,
-  History,
-  Trash2,
   UserCheck,
   Bot,
 } from 'lucide-react';
 import type { Dot } from '../shared/types';
 import type { FileRoot, FileItem, FileReadResult, FileDiffReceipt } from '../shared/file-workspace';
-import type { BrowserStatus } from '../shared/computer-types';
 import { api } from './api';
+import { NativeBrowserWorkspace } from './NativeBrowserWorkspace';
 
 interface Status { connected: boolean; lastError?: string }
 interface Activity { id: string; name: string; result?: unknown; complete: boolean }
@@ -91,32 +83,30 @@ export function ComputerPanel({
   const [conflictError, setConflictError] = useState('');
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState('');
+  const fileRequest = useRef<AbortController | null>(null);
+  const fileEpoch = useRef(0);
+  const editVersion = useRef(0);
+  const activeRootId = useRef(selectedRootId); activeRootId.current = selectedRootId;
+  const initialOpened = useRef<string | undefined>(undefined);
   const [receipts, setReceipts] = useState<FileDiffReceipt[]>([]);
   const [highlightRange, setHighlightRange] = useState<{ start?: number; end?: number } | undefined>(
     initialFileRef ? { start: initialFileRef.lineStart, end: initialFileRef.lineEnd } : undefined
   );
 
-  // Browser state (F12)
-  const [browserStatus, setBrowserStatus] = useState<BrowserStatus | null>(null);
-  const [urlInput, setUrlInput] = useState('https://hermes.local/start');
-  const [browserLoading, setBrowserLoading] = useState(false);
-  const [showHistory, setShowHistory] = useState(false);
-  const [browserHistoryFilter, setBrowserHistoryFilter] = useState('');
-
   // Native Hermes Computer Use receipts (F16-A/B). Browser state above remains F12.
   const [computerTarget, setComputerTarget] = useState<ComputerTargetView | null>(null);
   const [computerCaptures, setComputerCaptures] = useState<CaptureReceiptView[]>([]);
   const [computerActions, setComputerActions] = useState<ComputerActionView[]>([]);
-  const [computerLeaseBusy, setComputerLeaseBusy] = useState(false);
 
-  const loadComputerReceipts = async () => {
+  const loadComputerReceipts = async (signal?: AbortSignal) => {
     try {
       const query = threadId ? `?threadId=${encodeURIComponent(threadId)}` : '';
       const [target, captures, activity] = await Promise.all([
-        api<ComputerTargetView>(`/hermes/computer/target${query}`),
-        api<{ captures: CaptureReceiptView[] }>(`/hermes/computer/captures${query}`),
-        api<{ activity: ComputerActionView[] }>(`/hermes/computer/activity${query}`),
+        api<ComputerTargetView>(`/hermes/computer/target${query}`, 'GET', undefined, signal),
+        api<{ captures: CaptureReceiptView[] }>(`/hermes/computer/captures${query}`, 'GET', undefined, signal),
+        api<{ activity: ComputerActionView[] }>(`/hermes/computer/activity${query}`, 'GET', undefined, signal),
       ]);
+      if(signal?.aborted)return;
       setComputerTarget(target);
       setComputerCaptures(captures.captures);
       setComputerActions(activity.activity);
@@ -126,145 +116,12 @@ export function ComputerPanel({
   };
 
   useEffect(() => {
-    void loadComputerReceipts();
-    const timer = window.setInterval(() => void loadComputerReceipts(), 2000);
-    return () => window.clearInterval(timer);
+    const controller = new AbortController();
+    setComputerTarget(null);setComputerCaptures([]);setComputerActions([]);
+    void loadComputerReceipts(controller.signal);
+    const timer = window.setInterval(() => void loadComputerReceipts(controller.signal), 2000);
+    return () => {controller.abort();window.clearInterval(timer);};
   }, [dot.id, threadId]);
-
-  const setHumanControl = async (humanHasControl: boolean) => {
-    setComputerLeaseBusy(true);
-    try {
-      const lease = await api<{ humanHasControl: boolean }>(
-        '/hermes/computer/lease',
-        'POST',
-        { connectionId: computerTarget?.connectionId ?? 'local', threadId, humanHasControl },
-      );
-      setComputerTarget(previous => previous ? { ...previous, humanHasControl: lease.humanHasControl } : previous);
-      await loadComputerReceipts();
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not change computer control.');
-    } finally {
-      setComputerLeaseBusy(false);
-    }
-  };
-
-  const loadBrowserStatus = async () => {
-    try {
-      const res = await api<BrowserStatus>(`/dots/${encodeURIComponent(dot.id)}/computer`);
-      setBrowserStatus(res);
-      if (res.activeUrl) setUrlInput(res.activeUrl);
-    } catch {
-      // Offline or error
-    }
-  };
-
-  useEffect(() => {
-    void loadBrowserStatus();
-  }, [dot.id]);
-
-  const handleNavigateUrl = async (targetUrl: string) => {
-    if (!targetUrl.trim()) return;
-    setBrowserLoading(true);
-    setError('');
-    try {
-      const res = await api<BrowserStatus>(
-        `/computers/${encodeURIComponent(dot.id)}/navigate`,
-        'POST',
-        { url: targetUrl, actor: 'owner' }
-      );
-      setBrowserStatus(res);
-      if (res.activeUrl) setUrlInput(res.activeUrl);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Navigation failed.');
-    } finally {
-      setBrowserLoading(false);
-    }
-  };
-
-  const handleNavigateSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    void handleNavigateUrl(urlInput);
-  };
-
-  const handleNewTab = async () => {
-    try {
-      const res = await api<BrowserStatus>(
-        `/computers/${encodeURIComponent(dot.id)}/tabs`,
-        'POST',
-        { action: 'create', url: 'https://hermes.local/start', actor: 'owner' }
-      );
-      setBrowserStatus(res);
-      if (res.activeUrl) setUrlInput(res.activeUrl);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to create tab.');
-    }
-  };
-
-  const handleSwitchTab = async (tabId: string) => {
-    try {
-      const res = await api<BrowserStatus>(
-        `/computers/${encodeURIComponent(dot.id)}/tabs`,
-        'POST',
-        { action: 'switch', tabId }
-      );
-      setBrowserStatus(res);
-      if (res.activeUrl) setUrlInput(res.activeUrl);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to switch tab.');
-    }
-  };
-
-  const handleCloseTab = async (tabId: string) => {
-    try {
-      const res = await api<BrowserStatus>(
-        `/computers/${encodeURIComponent(dot.id)}/tabs`,
-        'POST',
-        { action: 'close', tabId, actor: 'owner' }
-      );
-      setBrowserStatus(res);
-      if (res.activeUrl) setUrlInput(res.activeUrl);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to close tab.');
-    }
-  };
-
-  const handleTakeControl = async () => {
-    try {
-      const res = await api<BrowserStatus>(
-        `/dots/${encodeURIComponent(dot.id)}/computer/take`,
-        'POST'
-      );
-      setBrowserStatus(res);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to take over browser.');
-    }
-  };
-
-  const handleReleaseControl = async () => {
-    try {
-      const res = await api<BrowserStatus>(
-        `/dots/${encodeURIComponent(dot.id)}/computer/release`,
-        'POST'
-      );
-      setBrowserStatus(res);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to resume agent.');
-    }
-  };
-
-  const handleClearStorage = async () => {
-    if (!window.confirm('Reset browser profile, cookies and history?')) return;
-    try {
-      const res = await api<BrowserStatus>(
-        `/computers/${encodeURIComponent(dot.id)}/clear`,
-        'POST'
-      );
-      setBrowserStatus(res);
-      if (res.activeUrl) setUrlInput(res.activeUrl);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to clear browser storage.');
-    }
-  };
 
   const editorRef = useRef<HTMLTextAreaElement>(null);
 
@@ -340,12 +197,7 @@ export function ComputerPanel({
           }
         }
       } catch {
-        // Fallback synthetic root if offline/test
-        if (active && roots.length === 0) {
-          const fallback: FileRoot = { id: 'default-workspace', host: 'local', name: 'Workspace', path: '/workspace' };
-          setRoots([fallback]);
-          setSelectedRootId(fallback.id);
-        }
+        if(active)setError('File roots could not be verified. Grant a real folder in Settings.');
       }
     };
 
@@ -382,71 +234,54 @@ export function ComputerPanel({
     };
 
     void loadTree();
+    return () => {active = false;};
   }, [tab, selectedRootId, searchQuery]);
 
-  // Read initial file if specified
-  useEffect(() => {
-    if (tab === 'Files' && initialFileRef?.path && selectedRootId) {
-      void openFile(initialFileRef.path);
-    }
-  }, [tab, initialFileRef?.path, selectedRootId]);
+  useEffect(() => () => {fileEpoch.current++;fileRequest.current?.abort();}, []);
 
-  const openFile = async (relativePath: string) => {
-    if (isDirty) {
-      const confirmDiscard = window.confirm('You have unsaved changes in your current draft. Discard draft and open file?');
-      if (!confirmDiscard) return;
-    }
-
-    try {
-      setConflictError('');
-      setSaveSuccess('');
-      const res = await api<FileReadResult>(
-        `/files/read?rootId=${encodeURIComponent(selectedRootId)}&path=${encodeURIComponent(relativePath)}`
-      );
-      setSelectedFile(res);
-      setDraftContent(res.content);
-      setIsDirty(false);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to read file.');
-    }
+  const changeRoot = (rootId: string) => {
+    if(saving) {setError('Wait for the current file save to finish.');return;}
+    if(isDirty && !window.confirm('Discard the current unsaved draft before switching folders?'))return;
+    fileEpoch.current++;fileRequest.current?.abort();activeRootId.current=rootId;
+    setSelectedRootId(rootId);setSelectedFile(null);setDraftContent('');setIsDirty(false);setFileItems([]);
   };
 
-  const handleSaveDraft = async () => {
-    if (!selectedFile || !selectedRootId || saving) return;
-    setSaving(true);
-    setConflictError('');
-    setSaveSuccess('');
-
+  const openFile = async (relativePath: string) => {
+    if(saving) {setError('Wait for the current file save to finish.');return;}
+    if(isDirty && !window.confirm('You have unsaved changes in your current draft. Discard draft and open file?'))return;
+    const rootId=selectedRootId, version=editVersion.current, epoch=++fileEpoch.current;
+    fileRequest.current?.abort();const controller=new AbortController();fileRequest.current=controller;
     try {
-      const res = await api<{ receipt: FileDiffReceipt; newRevision: string; error?: string }>(
-        '/files/write',
-        'POST',
-        {
-          rootId: selectedRootId,
-          relativePath: selectedFile.path,
-          content: draftContent,
-          expectedRevision: selectedFile.revision,
-          toolName: 'user_editor',
-        }
-      );
+      setConflictError('');setSaveSuccess('');
+      const res=await api<FileReadResult>(`/files/read?rootId=${encodeURIComponent(rootId)}&path=${encodeURIComponent(relativePath)}`, 'GET', undefined, controller.signal);
+      if(controller.signal.aborted || fileEpoch.current!==epoch || activeRootId.current!==rootId || editVersion.current!==version)return;
+      if(res.rootId!==rootId || res.path!==relativePath)throw Error('The file response did not match the requested folder and path.');
+      setSelectedFile(res);setDraftContent(res.content);setIsDirty(false);
+    }catch(cause){if(!controller.signal.aborted && fileEpoch.current===epoch)setError(cause instanceof Error?cause.message:'Failed to read file.');}
+  };
 
-      if (res.error || res.receipt?.outcome === 'conflict') {
-        setConflictError(res.error || 'External conflict: File was modified on disk since opened.');
-      } else {
-        setSelectedFile({
-          ...selectedFile,
-          content: draftContent,
-          revision: res.newRevision,
-        });
-        setIsDirty(false);
-        setSaveSuccess('File saved successfully.');
-        setReceipts((prev) => [res.receipt, ...prev]);
-      }
-    } catch (e) {
-      setConflictError(e instanceof Error ? e.message : 'Save failed due to conflict or error.');
-    } finally {
-      setSaving(false);
-    }
+  // Follow a supplied file reference once, in its actual root. Root switching does not reinterpret it.
+  useEffect(() => {
+    if(tab!=='Files' || !initialFileRef?.path || !selectedRootId || initialFileRef.rootId && initialFileRef.rootId!==selectedRootId)return;
+    const key=JSON.stringify([initialFileRef.rootId??null,initialFileRef.path]);
+    if(initialOpened.current===key)return;initialOpened.current=key;void openFile(initialFileRef.path);
+  }, [tab, initialFileRef?.path, initialFileRef?.rootId, selectedRootId]);
+
+  const handleSaveDraft = async () => {
+    if(!selectedFile || selectedFile.rootId!==selectedRootId || saving)return;
+    const file=selectedFile, content=draftContent, version=editVersion.current;
+    setSaving(true);setConflictError('');setSaveSuccess('');
+    try {
+      const res=await api<{receipt:FileDiffReceipt;newRevision:string;error?:string}>('/files/write','POST',{
+        rootId:file.rootId,relativePath:file.path,content,expectedRevision:file.revision,toolName:'user_editor',
+      });
+      if(res.error || res.receipt?.outcome!=='applied' || typeof res.newRevision!=='string')throw Error(res.error || 'The file write was not confirmed. Your draft is preserved.');
+      setReceipts(previous=>[res.receipt,...previous]);
+      setSelectedFile(current=>current?.rootId===file.rootId && current.path===file.path ? {...current,content,revision:res.newRevision} : current);
+      if(version===editVersion.current){setIsDirty(false);setSaveSuccess('File saved successfully.');}
+      else setSaveSuccess('Previous draft saved. Your newer edits still need saving.');
+    }catch(cause){setConflictError(cause instanceof Error?cause.message:'Save failed. Your draft is preserved.');}
+    finally{setSaving(false);}
   };
 
   const rows = activity.filter((row) =>
@@ -479,7 +314,7 @@ export function ComputerPanel({
             <h3>{computerTarget?.host ?? 'Target unavailable'}</h3>
             <p>
               {computerTarget
-                ? `${computerTarget.app ?? 'Application'} / ${computerTarget.window ?? 'Window'} · ${computerTarget.profile ?? 'default'} profile`
+                ? `${computerTarget.app ?? 'Application not reported'} / ${computerTarget.window ?? 'Window not reported'} · profile ${computerTarget.profile ?? 'not reported'}`
                 : 'Waiting for a verified Hermes target.'}
             </p>
           </div>
@@ -493,8 +328,8 @@ export function ComputerPanel({
           <span>Actions: {computerActions.length}</span>
           <button
             className="lease-btn takeover-btn"
-            disabled={!computerTarget?.botScreenStreamAvailable || computerLeaseBusy}
-            onClick={() => void setHumanControl(!computerTarget?.humanHasControl)}
+            disabled
+            title="Native Bot Screen takeover is not supported by this adapter"
             aria-label={computerTarget?.humanHasControl ? 'Return computer control to Hermes' : 'Take control of computer'}
           >
             {computerTarget?.humanHasControl ? <Bot size={14} /> : <UserCheck size={14} />}
@@ -538,239 +373,7 @@ export function ComputerPanel({
         </div>
       </section>
 
-      {tab === 'Browser' && (
-        <section className="hermes-browser-workspace" role="tabpanel" aria-label="Browser Surface">
-          {/* Top Bar: Tabs Bar */}
-          <div className="browser-tabs-bar" role="tablist" aria-label="Browser Tabs">
-            <div className="browser-tabs-scroll">
-              {(browserStatus?.tabs ?? [
-                {
-                  id: 'tab-default',
-                  url: 'https://hermes.local/start',
-                  title: 'Hermes Start Page',
-                  content: '<h1>Start Page</h1>',
-                  createdAt: Date.now(),
-                },
-              ]).map((t) => (
-                <div
-                  key={t.id}
-                  className={`browser-tab-item ${t.id === (browserStatus?.activeTabId || 'tab-default') ? 'active' : ''}`}
-                  role="tab"
-                  aria-selected={t.id === (browserStatus?.activeTabId || 'tab-default')}
-                  onClick={() => void handleSwitchTab(t.id)}
-                >
-                  <Globe size={13} className="browser-tab-icon" />
-                  <span className="browser-tab-title" title={t.title || t.url}>{t.title || 'New Tab'}</span>
-                  <button
-                    className="browser-tab-close"
-                    aria-label={`Close tab ${t.title || t.url}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      void handleCloseTab(t.id);
-                    }}
-                  >
-                    <X size={12} />
-                  </button>
-                </div>
-              ))}
-            </div>
-            <button
-              className="browser-new-tab-button icon-button"
-              aria-label="Open new browser tab"
-              onClick={() => void handleNewTab()}
-            >
-              <Plus size={14} />
-            </button>
-          </div>
-
-          {/* Navigation & Address Bar */}
-          <div className="browser-nav-bar">
-            <div className="browser-nav-actions">
-              <button
-                className="icon-button"
-                aria-label="Go back"
-                onClick={() => void loadBrowserStatus()}
-                title="Back"
-              >
-                <ArrowLeft size={15} />
-              </button>
-              <button
-                className="icon-button"
-                aria-label="Go forward"
-                title="Forward"
-                disabled
-              >
-                <ArrowRight size={15} />
-              </button>
-              <button
-                className="icon-button"
-                aria-label="Reload current page"
-                onClick={() => void loadBrowserStatus()}
-                title="Reload"
-              >
-                <RotateCw size={15} />
-              </button>
-            </div>
-
-            <form className="browser-address-form" onSubmit={handleNavigateSubmit}>
-              <div className="browser-address-input-wrapper">
-                <Globe size={14} className="address-icon" />
-                <input
-                  type="text"
-                  aria-label="Browser address URL"
-                  className="browser-address-input"
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  placeholder="Enter URL (https://...)"
-                />
-              </div>
-              <button type="submit" className="browser-go-button" disabled={browserLoading}>
-                {browserLoading ? 'Loading…' : 'Go'}
-              </button>
-            </form>
-
-            <div className="browser-bar-actions">
-              <button
-                className={`browser-action-pill ${showHistory ? 'active' : ''}`}
-                onClick={() => setShowHistory(!showHistory)}
-                aria-label="Toggle browsing history"
-                title="History"
-              >
-                <History size={14} />
-                <span>History</span>
-              </button>
-              <button
-                className="browser-action-pill"
-                onClick={() => void handleClearStorage()}
-                aria-label="Reset profile and storage"
-                title="Clear cookies, storage and history"
-              >
-                <Trash2 size={14} />
-                <span>Reset</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Control Lease & Takeover Banner */}
-          <div className={`browser-lease-banner ${browserStatus?.holder === 'human' ? 'human-held' : 'agent-held'}`}>
-            <div className="lease-info">
-              <span className={`status-pill ${browserStatus?.holder === 'human' ? 'pill-human' : 'pill-agent'}`}>
-                {browserStatus?.holder === 'human' ? 'User Control' : 'Agent Control'}
-              </span>
-              <span className="lease-description">
-                {browserStatus?.holder === 'human'
-                  ? 'Human user has taken over. Hermes agent browser tools are suspended until resume.'
-                  : 'Hermes agent controls the browser. Click Take Over to interact manually.'}
-              </span>
-            </div>
-            <div className="lease-actions">
-              {browserStatus?.holder === 'human' ? (
-                <button
-                  className="lease-btn resume-btn"
-                  onClick={() => void handleReleaseControl()}
-                  aria-label="Resume agent control"
-                >
-                  <Bot size={14} />
-                  <span>Resume Agent</span>
-                </button>
-              ) : (
-                <button
-                  className="lease-btn takeover-btn"
-                  onClick={() => void handleTakeControl()}
-                  aria-label="Take over browser control"
-                >
-                  <UserCheck size={14} />
-                  <span>Take Over</span>
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Main View Area: Rendered Page / Content or History drawer */}
-          <div className="browser-viewport-container">
-            {showHistory ? (
-              <div className="browser-history-drawer" role="region" aria-label="Browser History">
-                <div className="history-drawer-header">
-                  <h4>Persistent Browsing History</h4>
-                  <input
-                    type="text"
-                    placeholder="Search history…"
-                    value={browserHistoryFilter}
-                    onChange={(e) => setBrowserHistoryFilter(e.target.value)}
-                    className="history-search-input"
-                    aria-label="Search browsing history"
-                  />
-                </div>
-                <div className="history-list">
-                  {(browserStatus?.history ?? [])
-                    .filter(h => !browserHistoryFilter || h.title.toLowerCase().includes(browserHistoryFilter.toLowerCase()) || h.url.toLowerCase().includes(browserHistoryFilter.toLowerCase()))
-                    .map(item => (
-                      <div
-                        key={item.id}
-                        className="history-item"
-                        onClick={() => {
-                          setUrlInput(item.url);
-                          void handleNavigateUrl(item.url);
-                        }}
-                      >
-                        <div className="history-item-title">{item.title}</div>
-                        <div className="history-item-url">{item.url}</div>
-                        <div className="history-item-time">{new Date(item.visitedAt).toLocaleTimeString()}</div>
-                      </div>
-                    ))}
-                  {(browserStatus?.history ?? []).length === 0 && (
-                    <p className="muted history-empty">No history recorded yet.</p>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className="browser-page-display">
-                <div className="page-meta-header">
-                  <div className="page-title-badge">
-                    <span className="dot-profile-tag">Profile: {dot.name}</span>
-                    <h3 className="page-title">{browserStatus?.activeTitle || 'Start Page'}</h3>
-                  </div>
-                  <div className="page-storage-meta">
-                    <span title="Stored cookies">{browserStatus?.cookiesCount ?? 3} cookies</span>
-                    <span title="Local storage entries">{browserStatus?.localStorageCount ?? 5} keys</span>
-                  </div>
-                </div>
-                <div className="browser-sandboxed-view" role="region" aria-label="Web page content">
-                  <div className="browser-mock-page">
-                    <div className="mock-address-bar">
-                      <span>URL:</span> <code>{browserStatus?.activeUrl || 'https://hermes.local/start'}</code>
-                    </div>
-                    <div
-                      className="mock-dom-body"
-                      dangerouslySetInnerHTML={{
-                        __html: browserStatus?.activeContent || '<p>Page loaded successfully in sandboxed session.</p>'
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Audit trail / Activity footer */}
-          <div className="browser-audit-footer">
-            <div className="audit-header">
-              <span className="audit-title">Browser Activity Log</span>
-              <span className="audit-count">{(browserStatus?.audit ?? []).length} events</span>
-            </div>
-            <div className="audit-stream">
-              {(browserStatus?.audit ?? []).slice(0, 5).map(ev => (
-                <div key={ev.id} className="audit-item">
-                  <span className={`audit-actor ${ev.actor}`}>{ev.actor}</span>
-                  <span className="audit-action">{ev.action}</span>
-                  <span className="audit-details">{ev.details || ''}</span>
-                  <span className="audit-time">{new Date(ev.createdAt).toLocaleTimeString()}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {tab === 'Browser' && <NativeBrowserWorkspace key={`${dot.id}:${threadId ?? 'manual'}`} dotId={dot.id} threadId={threadId} />}
 
       {tab === 'Terminal' && (
         <section className="hermes-computer-placeholder" role="tabpanel" aria-label="Terminal">
@@ -790,12 +393,7 @@ export function ComputerPanel({
               <select
                 aria-label="Select file root"
                 value={selectedRootId}
-                onChange={(e) => {
-                  if (isDirty && !window.confirm('Discard unsaved draft changes?')) return;
-                  setSelectedRootId(e.target.value);
-                  setSelectedFile(null);
-                  setIsDirty(false);
-                }}
+                onChange={(e) => changeRoot(e.target.value)}
               >
                 {roots.map((r) => (
                   <option key={r.id} value={r.id}>
@@ -891,6 +489,7 @@ export function ComputerPanel({
                     value={draftContent}
                     disabled={selectedFile.isBinary}
                     onChange={(e) => {
+                      editVersion.current++;fileEpoch.current++;fileRequest.current?.abort();
                       setDraftContent(e.target.value);
                       setIsDirty(true);
                       setSaveSuccess('');

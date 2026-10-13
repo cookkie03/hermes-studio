@@ -59,7 +59,9 @@ export class RuntimeConnections extends EventEmitter {
           : join(this.dataDir, "hermes-connections", `${connection.id}.json`),
       requireThread: this.requireThread,
       prepareText: this.prepareText,
+      prepareBinding: threadId => this.prepareBinding?.(threadId),
     });
+    bridge.interactionHandler = (frame,threadId) => this.interactionHandler?.(frame,{threadId,connectionId:connection.id});
     const slot = { bridge, state: "disconnected", generation: 0, attempt: 0 };
     this.slots.set(connection.id, slot);
     bridge.on("update", (event) => {

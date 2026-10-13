@@ -400,3 +400,21 @@ test('approval replay keeps card identity, unsupported enum and vanished handler
     assert.equal(gateway.replies.length, 0);
   } finally { bridge.close(); }
 });
+
+test('cold preview redelivery in early queue cannot run snapshot-replayed mutation',async()=>{
+ const gateway=new FixtureGateway(),bridge=new HermesBridge({gateway});let executions=0;
+ const frame={id:'pending-preview',method:'preview.act',params:{session_id:'live-id',action:'click',ref:'native-ref'}};
+ bridge.bindings.set('a',{storedId:'saved-id',profile:'qa'});
+ const request=gateway.request.bind(gateway);
+ gateway.request=async(method,params)=>{
+  if(method==='session.resume'){
+   await new Promise(resolve=>setImmediate(resolve));
+   gateway.emit('request',frame);
+   return {session_id:'live-id',stored_session_id:'saved-id',running:false,info:{profile_name:'qa'},messages:[],open_requests:[frame]};
+  }
+  return request(method,params);
+ };
+ bridge.interactionHandler=async request=>{if(request.replayed)throw Error('Replayed mutation is not repeated.');executions++;return {success:true};};
+ try {await bridge.session('a');await new Promise(resolve=>setImmediate(resolve));assert.equal(executions,0);assert(gateway.replies.length>0);assert(gateway.replies.every(reply=>JSON.parse(reply.result.value).success===false));}
+ finally {bridge.close();}
+});

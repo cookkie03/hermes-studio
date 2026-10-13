@@ -1,4 +1,12 @@
-## Incremento F15 — output terminale tool-only (2026-10-11)
+## Incremento F10 — routine self-scheduled dei Bot (2026-10-11)
+
+- Estesa la superficie Studio senza duplicare scheduler o executor Hermes: il filtro profilo usa la vista cross-profile nativa in sola lettura, mentre tutte le mutazioni usano il profilo proprietario restituito dal runtime.
+- La creazione richiede un profilo proprietario concreto e il client lo invia esplicitamente; l'ownership è immutabile nelle modifiche. Il proxy passa il profilo alle route cron e mantiene separati run falliti e delivery fallite.
+- Evidenziato `bot-chat` come destinazione machine-local per un turno Bot separato; il selettore disabilita target non pubblicizzati/configurati dall'host.
+- Aggiunti test per ownership/profile isolation, destinazione `bot-chat`, rifiuto di creazione senza profilo e avvisi UI.
+- Verifiche: `npm run typecheck:renderer`; `npm run typecheck:metadata`; `npm run test:upstream -- tests/f10-routines.test.tsx` (5 test passati); `node --test hermes/routines.test.mjs` (10 test passati); `git diff --check`.
+- Non ancora dimostrati: run schedulati end-to-end con Bot sintetici, risposta reale nel Bot Chat, host offline/client chiuso/replay/delivery failure senza duplicati, capability disabled/rejected creation con runtime collegato e uptime sostenuta.
+
 
 - Implementata la superficie output-only in `Chat.tsx`: gli eventi Hermes `tool.start`/`tool.complete` già posseduti dalla sessione vengono presentati come card terminale quando il tool è `terminal`, `exec` o `shell`.
 - Visualizzati stdout, stderr separato, exit code, cwd osservato e stato `Working`/`Finished`/`Needs attention`; il testo resta contenuto non fidato e non viene interpretato come markup o comando renderer.
@@ -470,3 +478,34 @@ Implemented and verified F13 macOS packaging and release workflow:
 - **CI/CD Pipeline (`.github/workflows/release.yml`)**: Created GitHub Actions workflow on `v*` tags and `workflow_dispatch` with strict typecheck, tests, packaging, manifest generation, smoke tests, and draft release publishing with uploaded assets.
 - **Release Documentation (`docs/releases/release-notes-v0.1.0.md`, `README.md`, `CONTRIBUTING.md`)**: Created comprehensive release notes detailing supported architecture (macOS 13+ arm64), included features (F0-F6, F7-A, F10, F13), runtime requirements, Gatekeeper bypass instructions for ad-hoc signatures, upgrade data preservation (`~/Library/Application Support/Hermes Studio`), and developer contribution guidelines.
 
+
+
+## 2026-10-12 — Review funzionale globale richiesta dall'utente
+
+Letti contesto/standards/workflow e skill ask-matt/code-review; review Standards/Spec parallela prevista dalla skill. Snapshot HEAD 5ea8c68 più lavoro presente, base F4+ ce8ea44. TokenSave fallisce con database SQLite malformed: lettura diretta. Build PASS; suite fuori sandbox 83 Node PASS, 99 metadata/UI PASS, 1 F6 FAIL; bootstrap/external-links/package inputs PASS separatamente. App precedente e nuova app costruita in release/review-20261012 si aprono e superano smoke offline; chat REST/SSE/WS sintetica nella nuova app PASS (draft, race, replay, scope, IME/focus/900/1360/Reduced Motion).
+
+Otto difetti documentati: collaborazione/browser producono successi simulati, project link inventato, takeover API solo locale (pulsante GUI disabilitato), header contesto globale scorretto, tree root rifiutato, parent symlink nuovo file fuori root, audio untracked con trascrizione simulata e test che passano su 401. Tutte le riproduzioni sono sintetiche; nessun profilo/credenziale/conversazione personale o codice prodotto modificato. Schede feature e lavoro preesistente preservati, nessun commit/push. [Report completo](../architecture/current-functionality-review-2026-10-12.md); approvals nuova app PASS: decisioni scoped, doppio click/timeout, tastiera/900/1360/Reduced Motion.
+
+
+## 2026-10-12 — Correzione globale della review selezionata
+
+Richiesta utente esplicita: correggere tutto e passare da demo a progetto funzionante. Piano repair cross-feature scritto, flussi esistenti/spec riutilizzati; letto brainstorming, writing-plans, implement, diagnosing-bugs, tdd e research. Scope/autorizzazione concreta dalla review accettata: file, contesto/progetti, collaborazione/browser/computer/audio e integrazioni collegate, non redesign baseline. Seam pubbliche servizio file/API/native routing/GUI già identificate. Ricerca nativa delegata con skill research: due agenti read-only del sorgente e documenti dedicati. Source checkout attuale a50406d9b7474b060450d2dcaff8743c977d296a, diverso dal pin storico. Backup del codice preesistente in /private/tmp/hermes-repair-baseline-20261012; nessun reset o stage. Test regressione file tree/symlink scritti prima del fix.
+
+
+### Riparazione: primo blocco implementato
+
+File tree/search root e confinamento nuovo file via parent symlink corretti con test RED→GREEN, 16 test F5/F6 PASS; writer usa file temporaneo e rename preservando revisione/conflitto. Computer rifiuta takeover non supportato e conserva esiti nativi. CollaborationManager sostituito con RPC subagent/relay/groups/projects scoped e recall dalla conversazione proprietaria; niente timer/risposte/progetti sintetici, vecchi record demo conservati ma non autorevoli. 10 test manager collaboration/computer PASS. AudioManager ora inoltra /api/audio/transcribe e /api/audio/speak al profilo della sessione, whitelista voice-config e non restituisce fallback sintetici: 5 test audio/API PASS, chiamate autenticate e assenza provider distinguibili.
+
+Ricerca source-only completata nelle note browser-contract-repair e native-contract-repair, SHA a50406d9b7474b060450d2dcaff8743c977d296a. Browser: percorso desktop_preview/read_preview/drive_preview supportato sul connector anonimo; browser.controller autenticato distinto e non attivato. Implementato WebContentsView separato, profilo persistente, IPC main/servizio privato, ownership sessione/generazione e DOM reale; verifiche packaged ancora da eseguire. Aggiunti roster nativo Bot/canonical binding, header contesto dalla sessione e selezione progetto verificato; test di queste integrazioni ancora in corso. Review intermedia rileva ulteriori dichiarazioni non verificate in memory/capability matrix e adattamenti native schema routine/computer/groups: inclusi nel repair, non ignorati. Nessun runtime/config/profilo personale usato.
+
+
+## 2026-10-13 — REA setup research and preview
+
+Read project context, feature catalog/workflow, skills-workflow and ask-matt router. Generic tooling setup, no product feature selected. OpenAI Docs skill read but not applied: task concerns third-party REA setup. Read official REA installation/client docs and ran Codex-only latest-package dry-run from project. Sandbox npm DNS failed; approved network escalation obtained the package and returned planned/no applied actions. REA 6.4.0 proposes user-level Codex config plus backup and personal workflow skill; no other client or Hopper install selected. Saved concrete approval plan; preserved all pre-existing application/document changes. Installation approval pending; verification not claimed.
+
+
+## 2026-10-13 — Riparazioni dei contratti nativi in corso
+
+Browser demo sostituito da WebContentsView isolata e callback native preview.read/preview.act; niente successi DOM simulati. Collaborazione usa sessione/profilo owner, subagent RPC reali, relay senza delivery ID inventato, gruppi verificati sulla stessa installazione, log/cursori nativi e recall della sola conversazione. Bots nativi scoperti da profiles.list e associati a Bot Chat canonica, con controllo installazione/generazione e apertura concorrente serializzata. Progetti selezionati da catalogo reale e applicati con session.cwd.set. Audio inoltrato a HTTP Hermes del profilo; controlli dettatura/lettura/live aggiunti, trasporto live adattato dal sorgente MIT Hermes a50406d9 (licenza inclusa), richieste di lavoro nella stessa sessione chat. File: root listing e scritture con parent symlink fuori root corrette. Memoria/capability/header mostrano dati osservati o indisponibilità esplicita. Computer: ricevute native, errori/multimodale normalizzati, scope per chat e identità azione conservata; takeover non supportato respinto. Routine: nessun successo/consegna dedotto dalla destinazione, timestamp secondi corretti e scope cronologia.
+
+Build e 100 test metadata passavano prima degli ultimi incrementi; build aggiornata PASS. Prima suite completa fuori sandbox: 90/91 Node PASS, unico difetto rimasto nell'aspettativa del test API (404 nativo owner invalido rispetto a 400), corretto. Nessuna interrogazione del runtime/dati personali, nessuna chiamata a provider. Verifiche complete, review finale e smoke packaged/native isolato ancora da eseguire; non dichiarata la copertura live di modello/voce/gruppi remoti. Modifiche preesistenti preservate, nessun commit/push.

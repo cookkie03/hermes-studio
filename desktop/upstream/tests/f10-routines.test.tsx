@@ -51,6 +51,7 @@ describe('F10 Hermes Routines GUI Components', () => {
       expect(html).toContain('aria-modal="true"');
       expect(html).toContain('New Routine');
       expect(html).toContain('Self-contained Instruction (Prompt)');
+      expect(html).toContain('Bot Chat (not advertised by host)');
       expect(html).toContain('Every 30m');
       expect(html).toContain('Daily 9:00 AM');
       expect(html).toContain('One-shot (in 1h)');
@@ -58,6 +59,18 @@ describe('F10 Hermes Routines GUI Components', () => {
       expect(html).toContain('Create Routine');
     });
 
+    it('renders a machine-local owner notice for Bot Chat delivery', () => {
+      const html = renderToStaticMarkup(
+        <RoutineEditor
+          routine={{ ...syntheticRoutine, deliver: 'bot-chat:bot-a', profile: 'bot-a' }}
+          onSave={() => {}}
+          onClose={() => {}}
+        />,
+      );
+
+      expect(html).toContain('Owner profile:');
+      expect(html).toContain('Bot Chat is machine-local');
+    });
     it('pre-populates existing routine fields when editing', () => {
       const html = renderToStaticMarkup(
         <RoutineEditor

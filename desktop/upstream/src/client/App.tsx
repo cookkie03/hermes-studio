@@ -40,6 +40,7 @@ import { TaskRow } from './TaskPresentation';
 import { TaskActions } from './TaskActions';
 import { RoutinesView } from './RoutinesView';
 import { WorkspaceDialog, type Dialog } from './WorkspaceDialog';
+import { RuntimeContextBadge } from './RuntimeContextBadge';
 import { CollaborationPanel } from './CollaborationPanel';
 
 export function App() {
@@ -113,6 +114,7 @@ export function App() {
   const [taskDetail, setTaskDetail] = useState<Detail>();
   const refresh = useCallback(async () => {
     try {
+      await api('/hermes/bots/sync', 'POST', {}).catch(() => {});
       const [s, w] = await Promise.all([
         api<State>('/state'),
         api<WorkspaceState>('/workspace'),
@@ -191,7 +193,9 @@ export function App() {
   );
   // Hermes conversations are local records; remote capability is checked by Chat on send.
   const configured = !!workspace;
-  const chooseDot = (next: Dot) => {
+  const dotSelection = useRef(0);
+  const chooseDot = async (next: Dot) => {
+    const selection = ++dotSelection.current;
     if (!setView('chat')) return;
     setSelectedDot(next.id);
     setSelectedThread(
@@ -199,6 +203,12 @@ export function App() {
     );
     setMobile(false);
     setPendingPrompt(undefined);
+    if(next.nativeBinding && !workspace?.conversations.some(item=>item.dotId===next.id)) {
+      setBusy(true);setError('');
+      try {const opened=await api<Conversation>('/conversations','POST',{dotId:next.id,title:'Bot Chat'});await refresh();if(selection === dotSelection.current)setSelectedThread(opened.id);}
+      catch(cause) {setError(cause instanceof Error ? cause.message : 'Native Bot Chat could not be opened.');}
+      finally {setBusy(false);}
+    }
   };
   const newConversation = async (text?: string) => {
     if (!dot || !configured || busy) return;
@@ -470,20 +480,7 @@ export function App() {
             </strong>
           </div>
           {view === 'chat' && (
-            <div className="topbar-context-badge" aria-label="Hermes chat context">
-              <span className="context-pill" title="Space">
-                Space: {workspace.spaces.find((s) => s.id === dot.spaceId)?.name ?? 'Senza Space'}
-              </span>
-              <span className="context-pill" title="Host">
-                Host: {workspace.setup.model ? 'This Mac' : 'Disconnected'}
-              </span>
-              <span className="context-pill" title="Model">
-                Model: {workspace.setup.model ? 'Hermes' : 'Not reported'}
-              </span>
-              <span className="context-pill" title="Effort">
-                Effort: {workspace.setup.model ? 'Standard' : 'Not supported'}
-              </span>
-            </div>
+            <RuntimeContextBadge key={selectedThread ?? selectedDot} threadId={selectedThread} />
           )}
           <div className="top-actions">
             <span className="mode-badge">
@@ -801,7 +798,7 @@ export function App() {
         )}
       </div>
       {collaborationOpen && view === 'chat' && thread && (
-        <CollaborationPanel
+        <CollaborationPanel key={selectedThread}
           threadId={thread.id}
           dot={dot}
           allDots={workspace.dots}

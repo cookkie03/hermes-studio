@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
-import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, realpathSync, statSync, writeFileSync } from 'node:fs';
-import { basename, isAbsolute, join, relative, resolve } from 'node:path';
+import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, realpathSync, statSync, writeFileSync, renameSync, unlinkSync } from 'node:fs';
+import { basename, dirname, join, relative, resolve } from 'node:path';
+import { randomUUID } from 'node:crypto';
 import type {
   FileDiffReceipt,
   FileItem,
@@ -52,13 +53,14 @@ export class FileWorkspaceService {
     if (!root) throw new Error(`Root '${rootId}' not found.`);
 
     const targetDir = resolve(join(root.path, subPath));
-    const sec = validatePathSecurity(root.path, subPath);
+    // An empty subpath is the authorized root, not an invalid file name.
+    const sec = validatePathSecurity(root.path, subPath || '.');
     if (!sec.valid) throw new Error(sec.error);
 
     if (!existsSync(targetDir)) return [];
 
     const realTargetDir = realpathSync(targetDir);
-    const secReal = validatePathSecurity(root.path, subPath, realTargetDir);
+    const secReal = validatePathSecurity(root.path, subPath || '.', realTargetDir);
     if (!secReal.valid) throw new Error(secReal.error);
 
     const items: FileItem[] = [];
@@ -194,6 +196,7 @@ export class FileWorkspaceService {
       const existingRead = this.readFile(rootId, relativePath);
       oldContent = existingRead.content;
       currentRevision = existingRead.revision;
+    }
 
       // Check external conflict: if expectedRevision was supplied and differs from disk
       if (expectedRevision && expectedRevision !== currentRevision) {
@@ -213,13 +216,35 @@ export class FileWorkspaceService {
         this.receipts.push(receipt);
         return { receipt, newRevision: currentRevision };
       }
+
+    // Validate the nearest existing parent even when the destination is new.
+    // Continue on its canonical path so an outside symlink cannot become a writer.
+    let ancestor = dirname(fullPath);
+    const missingParents: string[] = [];
+    while (!existsSync(ancestor)) {
+      missingParents.unshift(basename(ancestor));
+      const parent = dirname(ancestor);
+      if (parent === ancestor) throw new Error('Authorized parent directory not found.');
+      ancestor = parent;
     }
-
-    // Perform atomic/direct write
-    const dir = join(fullPath, '..');
-    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-
-    writeFileSync(fullPath, content, 'utf-8');
+    const realAncestor = realpathSync(ancestor);
+    const ancestorSecurity = validatePathSecurity(root.path, relativePath, realAncestor);
+    if (!ancestorSecurity.valid) throw new Error(ancestorSecurity.error);
+    const dir = resolve(realAncestor, ...missingParents);
+    mkdirSync(dir, { recursive: true });
+    const realDir = realpathSync(dir);
+    const parentSecurity = validatePathSecurity(root.path, relativePath, realDir);
+    if (!parentSecurity.valid) throw new Error(parentSecurity.error);
+    const destination = fileExists ? realpathSync(fullPath) : join(realDir, basename(fullPath));
+    const destinationSecurity = validatePathSecurity(root.path, relativePath, destination);
+    if (!destinationSecurity.valid) throw new Error(destinationSecurity.error);
+    const temporary = join(dirname(destination), `.hermes-write-${randomUUID()}`);
+    try {
+      writeFileSync(temporary, content, { encoding: 'utf-8', flag: 'wx', mode: fileExists ? statSync(destination).mode & 0o777 : 0o600 });
+      renameSync(temporary, destination);
+    } finally {
+      if (existsSync(temporary)) unlinkSync(temporary);
+    }
     const newBuffer = Buffer.from(content, 'utf-8');
     const newRevision = this.computeBufferRevision(newBuffer);
 

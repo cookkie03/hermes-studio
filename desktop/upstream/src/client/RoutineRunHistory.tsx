@@ -44,7 +44,7 @@ export function RoutineRunHistory({ routine, onClose }: RoutineRunHistoryProps) 
     setError('');
     try {
       const res = await api<{ runs: RoutineRun[] }>(
-        `/hermes/routines/${encodeURIComponent(routine.id)}/runs?limit=30`
+        `/hermes/routines/${encodeURIComponent(routine.id)}/runs?limit=30&connectionId=${encodeURIComponent(routine.connectionId ?? 'local')}${routine.profile ? `&profile=${encodeURIComponent(routine.profile)}` : ''}`
       );
       setRuns(res.runs ?? []);
       if (res.runs?.length > 0 && !expandedRunId) {
@@ -59,7 +59,7 @@ export function RoutineRunHistory({ routine, onClose }: RoutineRunHistoryProps) 
 
   useEffect(() => {
     void fetchRuns();
-  }, [routine.id]);
+  }, [routine.id, routine.connectionId, routine.profile]);
 
   const renderStatusBadge = (status: RoutineRun['status']) => {
     switch (status) {
@@ -118,6 +118,7 @@ export function RoutineRunHistory({ routine, onClose }: RoutineRunHistoryProps) 
         </span>
       );
     }
+    if (deliveryStatus !== 'delivered') return <span className="delivery-badge">Delivery: {deliveryStatus}</span>;
     return (
       <span className="delivery-badge delivery-success" title={`Delivered to ${deliveryTarget || 'platform'}`}>
         <Send size={11} /> Delivered ({deliveryTarget || 'Platform'})
@@ -237,7 +238,7 @@ export function RoutineRunHistory({ routine, onClose }: RoutineRunHistoryProps) 
 
                         <div className="run-metadata-footer">
                           <span>Connection: <code>{run.connectionId || 'local'}</code></span>
-                          <span>Profile: <code>{run.profile || 'default'}</code></span>
+                          <span>Profile: <code>{run.profile || 'Not reported'}</code></span>
                           {run.completedAt ? (
                             <span>Finished: {formatRunTime(run.completedAt)}</span>
                           ) : null}

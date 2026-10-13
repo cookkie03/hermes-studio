@@ -4354,7 +4354,36 @@ h3 {
   .hermes-file-workspace *, .at-mention-dropdown *, .routines-view-container * { transition: none !important; animation: none !important; }
 }
 
-/* F10 Hermes Routines GUI */
+.routine-profile-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted, #64748b);
+  font-size: 12px;
+}
+.routine-profile-filter select {
+  min-width: 190px;
+}
+.routine-delivery-note {
+  flex-basis: 100%;
+  color: var(--muted, #64748b);
+  font-size: 11px;
+}
+.routine-bot-owner-tag {
+  display: inline-flex;
+  margin-top: 4px;
+  color: var(--accent, #6366f1);
+  font-size: 11px;
+}
+.routine-owner-notice {
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 8px;
+  color: var(--muted, #64748b);
+  font-size: 12px;
+}
+
 .routines-view-container {
   display: flex;
   flex-direction: column;
@@ -6608,3 +6637,9 @@ h3 {
 .spacelink-form label { display:block; font-size:10px; margin-bottom:4px; }
 @media (max-width:900px) { .collab-subagents-split { grid-template-columns:1fr; } .subagent-detail-col { min-height:300px; } .rooms-top-bar { flex-direction:column; align-items:stretch; } .room-selector { min-width:0; } }
 @media (prefers-reduced-motion:reduce) { .collaboration-panel *,.collaboration-panel *::before,.collaboration-panel *::after { transition:none !important; animation:none !important; } }
+
+.native-browser-workspace{min-width:0}.native-browser-frame{height:320px;min-height:220px;border:1px solid var(--border,#dedbd4);border-radius:8px;background:#fff;overflow:hidden}.native-browser-meta{display:flex;gap:8px;flex-wrap:wrap;padding:8px;font-size:12px}.native-browser-workspace .browser-nav-bar{display:flex;gap:4px}.native-browser-workspace .browser-nav-bar input{min-width:0;flex:1}.native-browser-workspace .browser-tabs-bar{display:flex;overflow-x:auto;gap:4px}.native-browser-workspace .browser-lease-banner{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px}.native-browser-workspace button{white-space:normal}.native-browser-workspace p{padding:6px 10px}
+
+.hermes-audio-controls { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; font-size: 12px; }
+.hermes-audio-controls [role="alert"] { color: var(--danger, #a83131); max-width: 220px; }
+.hermes-audio-controls details { max-width: 320px; }

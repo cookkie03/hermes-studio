@@ -13,15 +13,16 @@ import { RuntimeConnections } from './connections.mjs';
 import { DraftStore } from './drafts.mjs';
 import { RoutinesManager } from './routines.mjs';
 import { CapabilitiesManager } from './capabilities.mjs';
-import { HermesBrowserService } from './browser.mjs';
+import { HermesBrowserService, electronBrowserTransport } from './browser.mjs';
 import { ComputerManager } from './computer.mjs';
 import { CollaborationManager } from './collaboration.mjs';
 import { HermesMemoryManager } from './memory.mjs';
 import { buildCapabilityMatrix } from './capability-matrix.mjs';
 import { AudioManager } from './audio.mjs';
+import { NativeBotsManager } from './bots.mjs';
 
 const unavailable = () => { throw new Error('This capability is not connected to Hermes yet.'); };
-export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway, connectorFactory, gatewayFactory } = {}) {
+export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway, connectorFactory, gatewayFactory, browserTransport } = {}) {
   if (!dataDir || !ownerToken || ownerToken.length < 24) throw new Error('A private app data directory and owner token are required.');
   const database = join(dataDir, 'workspace.sqlite');
   const store = new Store(database), workspace = new WorkspaceStore(database, 'hermes-studio-owner');
@@ -35,21 +36,27 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
     return `Studio context selected by the user (does not change your configured tools, profile memory or authorization):\nStudio specialist label: ${dot.name}\nRole guidance: ${dot.instructions}\n${pageContext}\nUser message:\n${text}`;
   } });
   await bridge.initialize();
+  const bots = new NativeBotsManager({ connections: bridge, workspace });
+  bridge.prepareBinding = threadId => bots.ensureBinding(threadId);
+  for (const slot of bridge.slots.values()) slot.bridge.prepareBinding = threadId => bots.ensureBinding(threadId);
   const drafts = new DraftStore(join(dataDir, 'drafts.json')); await drafts.initialize();
   const routines = new RoutinesManager({ connections: bridge });
   const capabilities = new CapabilitiesManager({ connections: bridge });
   const computer = new ComputerManager({ connections: bridge });
   computer.on('changed', event => { bridge.emit('update', event); });
   const memoryManager = new HermesMemoryManager({ connections: bridge });
-  const collaboration = new CollaborationManager({ dataDir, gateway: bridge.gateway });
+  const collaboration = new CollaborationManager({ dataDir, connections: bridge, workspace });
   await collaboration.initialize();
-  const browser = new HermesBrowserService({ dataDir });
+  const browser = new HermesBrowserService({ connections: bridge, workspace, transport: browserTransport ?? electronBrowserTransport(process.parentPort) });
   await browser.initialize();
+  bridge.interactionHandler = (frame,scope) => browser.handleNativeRequest(frame,scope);
+  for(const [connectionId,slot] of bridge.slots) slot.bridge.interactionHandler = (frame,threadId) => browser.handleNativeRequest(frame,{threadId,connectionId});
   routines.on('changed', event => { bridge.emit('update', { type: 'cron.changed', ...event }); });
+  const audio = new AudioManager({ connections: bridge });
   const facade = {
     workspace,
-    setup: () => ({ intelligence: false, model: bridge.list().connections.some(connection => connection.connected), browser: true, voice: false, slack: 'not_configured', missing: [] }),
-    createConversation: async (dotId, title) => { if (!workspace.dot(dotId)) throw new Error('Dot not found.'); return workspace.bindThread(randomUUID(), dotId, title); },
+    setup: () => ({ intelligence: false, model: bridge.list().connections.some(connection => connection.connected), browser: !!browser.transport, voice: false, slack: 'not_configured', missing: [] }),
+    createConversation: (dotId, title) => bots.createConversation(dotId,title),
     handle: () => new Response(JSON.stringify({ error: 'Use the local Hermes connector.' }), { status: 501 }),
     pages: {
       conversation: async (spaceId, pageId, dotId) => {
@@ -70,7 +77,7 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
     },
   };
   const app = new Hono();
-  app.use('/api/*', bodyLimit({ maxSize: 1000000 }));
+  app.use('/api/*', (c,next) => bodyLimit({ maxSize: c.req.path.startsWith('/api/audio/') ? 8*1024*1024 : 1000000 })(c,next));
   app.use('*', async (c, next) => {
     c.header('X-Content-Type-Options', 'nosniff'); c.header('Referrer-Policy', 'no-referrer');
     c.header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; media-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
@@ -83,6 +90,13 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
       if (!['GET', 'HEAD'].includes(c.req.method) && !c.req.header('content-type')?.includes('application/json')) return c.json({ error: 'Use application/json.' }, 415);
     }
     await next();
+  });
+  app.post('/api/hermes/bots/sync', async c => c.json(await bots.sync()));
+  app.get('/api/hermes/context', c => {
+    const threadId = c.req.query('threadId');
+    if (!threadId) return c.json({ connected: false, info: null });
+    const status = bridge.status(threadId), native = bridge.forThread(threadId).sessions.get(threadId);
+    return c.json({ connected: status.connected, host: status.name, connectionId: status.connectionId, info: native?.info ?? null });
   });
   app.get('/api/hermes/status', c => c.json(bridge.status(c.req.query('threadId'))));
   app.get('/api/hermes/connections', c => c.json(bridge.list()));
@@ -103,7 +117,9 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
     const page = workspace.pages.forThread(threadId);
     const space = page && workspace.canAccessSpace(thread.dotId, page.spaceId) ? workspace.spaces().find(item => item.id === page.spaceId) : null;
     return c.json({ ...history, context: { studioSpace: space ? { id: space.id, name: space.name } : null,
-      nativeProjectLink: 'unavailable', nativeBotBinding: 'unavailable' } });
+      nativeProjectLink: history.session?.info?.project?.id ? 'reported' : 'unavailable',
+      nativeBotBinding: workspace.dot(thread.dotId)?.nativeBinding ? 'bound' : 'unavailable',
+      nativeBot: workspace.dot(thread.dotId)?.nativeBinding ?? null } });
   });
   app.post('/api/hermes/sessions', async c => { const data = await c.req.json(); return c.json(await bridge.session(data.threadId, data)); });
   app.post('/api/hermes/sessions/resume', async c => { const data = await c.req.json(); return c.json(await bridge.session(data.threadId, data)); });
@@ -144,11 +160,37 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   });
   // Preserve metadata stores and page routes, but do not run a second tool/agent executor.
   app.all('/api/voice/*', c => c.json({ error: 'Voice and telephone calls are a future capability.' }, 501));
+  // F17 Hermes Voice: Dictation & Spoken Response
+  app.get('/api/audio/config', async c => c.json(await audio.getConfig({threadId:c.req.query('threadId')})));
+  app.get('/api/audio/voice-config', async c => c.json(await audio.getConfig({threadId:c.req.query('threadId')})));
+  app.post('/api/audio/transcribe', async c => {
+    try {
+      const data = await c.req.json().catch(() => ({}));
+      return c.json(await audio.transcribe(data));
+    } catch (err) {
+      return c.json({ error: err.message }, 400);
+    }
+  });
+  app.post('/api/audio/tts', async c => {
+    try {
+      const data = await c.req.json().catch(() => ({}));
+      return c.json(await audio.tts(data));
+    } catch (err) {
+      return c.json({ error: err.message }, 400);
+    }
+  });
+  app.post('/api/audio/voice-live/session', async c => {
+    try { return c.json(await audio.createLiveSession(await c.req.json())); }
+    catch(error) { return c.json({error:error.message},400); }
+  });
+  app.post('/api/browser/surface', async c => c.json(await browser.mount(await c.req.json())));
+  app.post('/api/browser/unmount', async c => { await browser.unmount(await c.req.json());return c.json({unmounted:true}); });
+  app.post('/api/browser/command', async c => {const body=await c.req.json();return c.json(await browser.command(body.dotId,body.action));});
   // F12 Integrated Browser Workspace & Control Lease
-  app.get('/api/dots/:id/computer', c => c.json(browser.getStatus(c.req.param('id'))));
-  app.get('/api/computers/:dotId', c => c.json(browser.getStatus(c.req.param('dotId'))));
-  app.post('/api/dots/:id/computer/start', c => c.json(browser.getStatus(c.req.param('id'))));
-  app.post('/api/dots/:id/computer/stop', c => c.json(browser.getStatus(c.req.param('id'))));
+  app.get('/api/dots/:id/computer', async c => c.json(await browser.getStatus(c.req.param('id'))));
+  app.get('/api/computers/:dotId', async c => c.json(await browser.getStatus(c.req.param('dotId'))));
+  app.post('/api/dots/:id/computer/start', async c => c.json(await browser.getStatus(c.req.param('id'))));
+  app.post('/api/dots/:id/computer/stop', async c => {await browser.unmount();return c.json({configured:false,state:'unmounted'});});
   app.post('/api/dots/:id/computer/take', async c => c.json(await browser.takeControl(c.req.param('id'))));
   app.post('/api/computers/:dotId/take', async c => c.json(await browser.takeControl(c.req.param('dotId'))));
   app.post('/api/dots/:id/computer/release', async c => c.json(await browser.releaseControl(c.req.param('id'))));
@@ -181,17 +223,18 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   app.get('/api/hermes/computer/lease', c => c.json(computer.getLease({ connectionId: c.req.query('connectionId') })));
   app.post('/api/hermes/computer/lease', async c => {
     const data = await c.req.json();
-    return c.json(computer.setHumanControl({ connectionId: data.connectionId, threadId: data.threadId, humanHasControl: data.humanHasControl }));
+    return c.json({ error: 'Native Bot Screen takeover is not connected. No lease or runtime control was changed.' }, 501);
   });
   app.post('/api/hermes/computer/captures', async c => {
     const data = await c.req.json();
-    return c.json(computer.recordCapture({ connectionId: data.connectionId, threadId: data.threadId, capture: data.capture || data }));
+    return c.json({ error: 'Computer receipts are accepted only from the native runtime.' }, 501);
   });
   app.post('/api/hermes/computer/activity', async c => {
     const data = await c.req.json();
-    return c.json(computer.recordAction({ connectionId: data.connectionId, threadId: data.threadId, action: data.action || data }));
+    return c.json({ error: 'Computer receipts are accepted only from the native runtime.' }, 501);
   });
 
+  app.get('/api/hermes/routines', async c => c.json(await routines.listJobs({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.post('/api/hermes/routines', async c => c.json(await routines.createJob(await c.req.json(), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.get('/api/hermes/routines/delivery-targets', async c => c.json(await routines.getDeliveryTargets({ connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.get('/api/hermes/routines/:id', async c => c.json(await routines.getJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
@@ -210,6 +253,8 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   app.delete('/api/hermes/routines/:id', async c => c.json(await routines.deleteJob(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile') })));
   app.get('/api/hermes/routines/:id/runs', async c => c.json(await routines.getRuns(c.req.param('id'), { connectionId: c.req.query('connectionId'), profile: c.req.query('profile'), limit: Number(c.req.query('limit') || 20) })));
   // Collaboration and delegation routes (F14)
+  app.get('/api/hermes/collaboration/projects', async c => c.json(await collaboration.listProjects({threadId:c.req.query('threadId')})));
+  app.post('/api/hermes/collaboration/space-context', async c => c.json(await collaboration.applySpaceProject(await c.req.json())));
   app.get('/api/hermes/collaboration/subagents', async c => c.json(await collaboration.listSubagents(c.req.query('parentId'))));
   app.post('/api/hermes/collaboration/subagents', async c => {
     try {
@@ -221,7 +266,7 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   });
   app.get('/api/hermes/collaboration/subagents/:id/tail', async c => {
     try {
-      return c.json(await collaboration.getSubagentTail(c.req.param('id'), Number(c.req.query('maxBytes') || 16384)));
+      return c.json(await collaboration.getSubagentTail(c.req.param('id'), Number(c.req.query('maxBytes') || 16384), { threadId: c.req.query('threadId') }));
     } catch (e) {
       return c.json({ error: e.message }, 404);
     }
@@ -229,14 +274,15 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   app.post('/api/hermes/collaboration/subagents/:id/steer', async c => {
     try {
       const body = await c.req.json();
-      return c.json(await collaboration.steerSubagent(c.req.param('id'), body.message));
+      return c.json(await collaboration.steerSubagent(c.req.param('id'), body.message, { threadId: body.threadId }));
     } catch (e) {
       return c.json({ error: e.message }, 400);
     }
   });
   app.post('/api/hermes/collaboration/subagents/:id/interrupt', async c => {
     try {
-      return c.json(await collaboration.interruptSubagent(c.req.param('id')));
+      const body = await c.req.json();
+      return c.json(await collaboration.interruptSubagent(c.req.param('id'), { threadId: body.threadId }));
     } catch (e) {
       return c.json({ error: e.message }, 400);
     }
@@ -254,7 +300,7 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
       return c.json({ error: e.message }, 400);
     }
   });
-  app.get('/api/hermes/collaboration/rooms', async c => c.json(await collaboration.listRooms()));
+  app.get('/api/hermes/collaboration/rooms', async c => c.json(await collaboration.listRooms({ threadId: c.req.query('threadId') })));
   app.post('/api/hermes/collaboration/rooms', async c => {
     try {
       const body = await c.req.json();
@@ -266,6 +312,7 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   app.get('/api/hermes/collaboration/rooms/:id/events', async c => {
     try {
       return c.json(await collaboration.getRoomLog(c.req.param('id'), {
+        threadId: c.req.query('threadId'),
         sinceSeq: Number(c.req.query('sinceSeq') || 0),
         limit: Number(c.req.query('limit') || 50),
       }));
@@ -283,17 +330,20 @@ export async function createStudioApp({ dataDir, ownerToken, staticDir, gateway,
   });
   app.post('/api/hermes/collaboration/rooms/:id/events/:eventId/retry', async c => {
     try {
-      return c.json(await collaboration.retryRoomEvent(c.req.param('id'), c.req.param('eventId')));
+      const body = await c.req.json();
+      return c.json(await collaboration.retryRoomEvent(c.req.param('id'), c.req.param('eventId'), { threadId: body.threadId }));
     } catch (e) {
       return c.json({ error: e.message }, 400);
     }
   });
   app.get('/api/hermes/collaboration/recall', async c => c.json(await collaboration.searchRecall({
+    threadId: c.req.query('threadId'),
     query: c.req.query('query') || '',
     profile: c.req.query('profile'),
     limit: Number(c.req.query('limit') || 10),
   })));
   app.get('/api/hermes/collaboration/space-link', async c => c.json(await collaboration.getSpaceLink({
+    threadId: c.req.query('threadId'),
     spaceId: c.req.query('spaceId'),
     profile: c.req.query('profile'),
   })));

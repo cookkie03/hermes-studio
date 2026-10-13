@@ -66,7 +66,7 @@ export const HERMES_CAPABILITY_CATALOG = [
     owningCard: 'F7',
     surface: 'Dots Directory / Persona Editor',
     status: 'supported_connected',
-    nativeContract: 'profile.binding / Bot persona metadata',
+    nativeContract: 'profiles.list / canonical Bot Chat session binding',
     evidence: 'Studio Dot roles and native profile mapping supported; full multi-profile switcher in progress.',
   },
   {
@@ -76,7 +76,7 @@ export const HERMES_CAPABILITY_CATALOG = [
     owningCard: 'F8',
     surface: 'Memory View / Observability Dashboard',
     status: 'verified_studio',
-    nativeContract: 'memory.inspect / tools.list / review.summary',
+    nativeContract: 'HTTP /api/memory / tools.show / review.summary',
     evidence: 'Read-only profile memory inspection, character budget gauges (1,375/2,200), byte-size gap explanation, and capability matrix verified in F8.',
   },
   {
@@ -156,61 +156,28 @@ export const HERMES_CAPABILITY_CATALOG = [
     owningCard: 'F17',
     surface: 'Voice Modal / Audio Composer',
     status: 'supported_connected',
-    nativeContract: 'OmniRoute STT (best-stt) / Text-to-Speech',
+    nativeContract: 'Native HTTP audio transcribe / speak / voice-live session',
     evidence: 'Server-side audio transcription and TTS playback supported with chunking and fallback.',
   },
 ];
 
-export async function buildCapabilityMatrix({ capabilitiesManager, connectionId = 'local', profile = 'default' } = {}) {
-  let discoveredTools = [];
-  let discoveredSkills = [];
-  let discoveredPlugins = [];
-  let hostState = 'connected';
-
-  if (capabilitiesManager) {
-    try {
-      const toolsResult = await capabilitiesManager.showTools({ connectionId, profile }).catch(() => null);
-      if (toolsResult?.tools) {
-        discoveredTools = toolsResult.tools;
-      } else if (Array.isArray(toolsResult)) {
-        discoveredTools = toolsResult;
-      }
-    } catch {
-      // Host might be offline or synthetic fixture without tool handler
-    }
-
-    try {
-      const skillsResult = await capabilitiesManager.listSkills({ connectionId, profile }).catch(() => null);
-      if (skillsResult?.skills) {
-        discoveredSkills = skillsResult.skills;
-      } else if (Array.isArray(skillsResult)) {
-        discoveredSkills = skillsResult;
-      }
-    } catch {
-      // Host might be offline
-    }
-
-    try {
-      const pluginsResult = await capabilitiesManager.listPlugins({ connectionId, profile }).catch(() => null);
-      if (pluginsResult?.plugins) {
-        discoveredPlugins = pluginsResult.plugins;
-      } else if (Array.isArray(pluginsResult)) {
-        discoveredPlugins = pluginsResult;
-      }
-    } catch {
-      // Host might be offline
-    }
+export async function buildCapabilityMatrix({capabilitiesManager,connectionId='local',profile='default'}={}) {
+  let gateway;
+  try{gateway=capabilitiesManager?.resolveGateway(connectionId);}catch{}
+  const hostState=gateway?.connected?'connected':'offline';
+  const errors=[];let discoveredTools=[],discoveredSkills=[],discoveredPlugins=[],catalogResponded=false;
+  if(gateway?.connected && capabilitiesManager) {
+    try{const result=await capabilitiesManager.showTools({connectionId});
+      const tools=result.sections?.flatMap(section=>section.tools??[]) ?? result.tools ?? (Array.isArray(result)?result:[]);
+      discoveredTools=tools.map(tool=>typeof tool==='string'?{name:tool}:tool);catalogResponded=true;
+    }catch(error){errors.push({catalog:'tools',error:error.message});}
+    try{const result=await capabilitiesManager.listSkills({connectionId,profile});discoveredSkills=result.skills??(Array.isArray(result)?result:[]);catalogResponded=true;}catch(error){errors.push({catalog:'skills',error:error.message});}
+    try{const result=await capabilitiesManager.listPlugins({connectionId,profile});discoveredPlugins=result.plugins??(Array.isArray(result)?result:[]);catalogResponded=true;}catch(error){errors.push({catalog:'plugins',error:error.message});}
   }
-
-  return {
-    connectionId,
-    profile,
-    gatewayVersion: '0.21.5',
-    hostState,
-    timestamp: Date.now(),
-    items: HERMES_CAPABILITY_CATALOG,
-    discoveredTools,
-    discoveredSkills,
-    discoveredPlugins,
-  };
+  const localCards=new Set(['F4','F5','F6','F9']);
+  return {connectionId,profile,gatewayVersion:gateway?.version,hostState,timestamp:Date.now(),
+    items:HERMES_CAPABILITY_CATALOG.map(item=>({...item,
+      status:localCards.has(item.owningCard)?'verified_studio':item.owningCard==='F11' && catalogResponded?'supported_connected':hostState==='offline'?'unavailable_gap':'pending_owner',
+      evidence:localCards.has(item.owningCard)?'Local Studio surface; native runtime execution and remote filesystem support are separate gates.':item.owningCard==='F11' && catalogResponded?'Read-only native catalog responded; installation/mutation capabilities require their own confirmed contract.':'Native availability is not established by this static catalog. Verify the connected contract and outcome in its owning surface.'})),
+    discoveredTools,discoveredSkills,discoveredPlugins,discoveryErrors:errors};
 }

@@ -35,19 +35,31 @@ export function RoutinesView({ spaces = [], dots = [] }: RoutinesViewProps) {
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [schedulerActive, setSchedulerActive] = useState(true);
+  // A blank scope preserves the native cross-profile read-only view. Mutations
+  // always use the job's returned profile, so a same-named job cannot collide.
+  const [ownerProfile, setOwnerProfile] = useState('');
+  const [ownerProfileOptions, setOwnerProfileOptions] = useState<string[]>([]);
   const [editingRoutine, setEditingRoutine] = useState<RoutineJob | null | 'new'>(null);
   const [viewingRunsRoutine, setViewingRunsRoutine] = useState<RoutineJob | null>(null);
   const [triggeringJobId, setTriggeringJobId] = useState<string | null>(null);
   const [actionBusyJobId, setActionBusyJobId] = useState<string | null>(null);
 
+  const routineScope = (job?: RoutineJob) =>
+    job?.profile ? `?profile=${encodeURIComponent(job.profile)}` : '';
+
   const fetchRoutines = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
+      const scope = ownerProfile ? `?profile=${encodeURIComponent(ownerProfile)}` : '';
       const res = await api<{ jobs: RoutineJob[]; schedulerActive?: boolean }>(
-        '/hermes/routines'
+        `/hermes/routines${scope}`
       );
       setRoutines(res.jobs ?? []);
+      setOwnerProfileOptions((previous) => [...new Set([
+        ...previous,
+        ...(res.jobs ?? []).map((job) => job.profile).filter((profile): profile is string => Boolean(profile)),
+      ])].sort());
       setSchedulerActive(res.schedulerActive !== false);
     } catch (err: any) {
       setError(err?.message || 'Failed to load Hermes routines.');
@@ -55,7 +67,7 @@ export function RoutinesView({ spaces = [], dots = [] }: RoutinesViewProps) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [ownerProfile]);
 
   useEffect(() => {
     void fetchRoutines();
@@ -69,7 +81,10 @@ export function RoutinesView({ spaces = [], dots = [] }: RoutinesViewProps) {
     setActionBusyJobId(job.id);
     try {
       const action = job.enabled ? 'pause' : 'resume';
-      await api(`/hermes/routines/${encodeURIComponent(job.id)}/${action}`, 'POST');
+      await api(
+        `/hermes/routines/${encodeURIComponent(job.id)}/${action}${routineScope(job)}`,
+        'POST',
+      );
       await fetchRoutines();
     } catch (err: any) {
       setError(err?.message || `Failed to ${job.enabled ? 'pause' : 'resume'} routine.`);
@@ -81,7 +96,10 @@ export function RoutinesView({ spaces = [], dots = [] }: RoutinesViewProps) {
   const handleTrigger = async (job: RoutineJob) => {
     setTriggeringJobId(job.id);
     try {
-      await api(`/hermes/routines/${encodeURIComponent(job.id)}/trigger`, 'POST');
+      await api(
+        `/hermes/routines/${encodeURIComponent(job.id)}/trigger${routineScope(job)}`,
+        'POST',
+      );
       await fetchRoutines();
     } catch (err: any) {
       setError(err?.message || 'Failed to trigger routine execution.');
@@ -96,7 +114,10 @@ export function RoutinesView({ spaces = [], dots = [] }: RoutinesViewProps) {
     }
     setActionBusyJobId(job.id);
     try {
-      await api(`/hermes/routines/${encodeURIComponent(job.id)}`, 'DELETE');
+      await api(
+        `/hermes/routines/${encodeURIComponent(job.id)}${routineScope(job)}`,
+        'DELETE',
+      );
       await fetchRoutines();
     } catch (err: any) {
       setError(err?.message || 'Failed to delete routine.');
@@ -170,6 +191,20 @@ export function RoutinesView({ spaces = [], dots = [] }: RoutinesViewProps) {
       )}
 
       <div className="routines-controls-bar">
+        <label className="routine-profile-filter">
+          <span>Owner profile</span>
+          <select
+            aria-label="Filter routines by owner profile"
+            value={ownerProfile}
+            onChange={(event) => setOwnerProfile(event.target.value)}
+            disabled={loading}
+          >
+            <option value="">All profiles (read-only view)</option>
+            {ownerProfileOptions.map((profile) => (
+              <option key={profile} value={profile}>{profile}</option>
+            ))}
+          </select>
+        </label>
         <label className="search-box">
           <Search size={16} />
           <input
@@ -240,6 +275,11 @@ export function RoutinesView({ spaces = [], dots = [] }: RoutinesViewProps) {
                         </span>
                       </div>
                       <span className="routine-id-tag">ID: {job.id}</span>
+                      {job.deliver?.startsWith('bot-chat') && (
+                        <span className="routine-bot-owner-tag" title="Bot Chat target is machine-local">
+                          Bot Chat: {job.profile || 'own profile'}
+                        </span>
+                      )}
                     </div>
 
                     <div className="routine-card-actions">
@@ -283,8 +323,13 @@ export function RoutinesView({ spaces = [], dots = [] }: RoutinesViewProps) {
                       <Clock3 size={12} /> {scheduleText}
                     </span>
                     {job.deliver && (
-                      <span className="meta-pill deliver-pill" title="Delivery Destination">
+                      <span className={`meta-pill deliver-pill ${job.deliver.startsWith('bot-chat') ? 'bot-chat-pill' : ''}`} title="Delivery Destination">
                         <Send size={12} /> {job.deliver}
+                      </span>
+                    )}
+                    {job.deliver?.startsWith('bot-chat') && (
+                      <span className="routine-delivery-note">
+                        Bot Chat delivery starts a separate turn in the owning profile.
                       </span>
                     )}
                     {job.model && (
@@ -352,11 +397,13 @@ export function RoutinesView({ spaces = [], dots = [] }: RoutinesViewProps) {
       {editingRoutine && (
         <RoutineEditor
           routine={editingRoutine === 'new' ? null : editingRoutine}
+          profile={editingRoutine === 'new' ? (ownerProfile || undefined) : undefined}
           spaces={spaces}
           dots={dots}
-          onSave={() => {
+          onSave={(saved) => {
             setEditingRoutine(null);
             void fetchRoutines();
+            setOwnerProfileOptions((previous) => [...new Set([...previous, saved.profile].filter((profile): profile is string => Boolean(profile)))].sort());
           }}
           onClose={() => setEditingRoutine(null)}
         />
