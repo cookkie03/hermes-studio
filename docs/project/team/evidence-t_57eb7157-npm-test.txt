@@ -1,0 +1,144 @@
+
+> hermes-studio-desktop@0.1.0 test
+> npm run typecheck && node --test hermes/*.test.mjs && npm run test:metadata && npm run test:bootstrap && npm run test:external-links
+
+
+> hermes-studio-desktop@0.1.0 typecheck
+> npm run typecheck:renderer && npm run typecheck:metadata
+
+
+> hermes-studio-desktop@0.1.0 typecheck:renderer
+> tsc --noEmit -p tsconfig.renderer.json
+
+
+> hermes-studio-desktop@0.1.0 typecheck:metadata
+> tsc --noEmit -p tsconfig.metadata.json
+
+✔ authenticated audio handlers report unavailable runtime and reject fake transcripts (638.664182ms)
+✔ audio configuration is a secret-free projection of native profile routes (3.248507ms)
+✔ transcription and TTS route to the actual native profile with real payloads (1.056191ms)
+✔ missing provider and malformed payload cannot produce synthetic success (1.557215ms)
+✔ offline audio is unavailable and does not call another host (0.418797ms)
+✔ realtime voice preserves the native nested SDP contract and owner (1.184836ms)
+✔ native relay fallback with disabled STT or missing credentials does not advertise ready audio (0.53573ms)
+✔ disabling client-direct voice preserves working native server relay (0.818488ms)
+✔ concurrent Bot selection uses one local and native canonical chat (5.137233ms)
+✔ new canonical Bot Chat title is applied using the selected native profile (0.691227ms)
+✔ reconnect during canonical lookup cannot persist stale binding (1.283565ms)
+✔ saved binding verifies the live installation before reuse (3.253145ms)
+✔ a delayed admission cannot regress working or change the next turn (20.297572ms)
+✔ connect is attach-only, never creates a session or sends a prompt (2.3156ms)
+✔ concurrent user submits reserve the turn before session creation; duplicates reuse local identity (6.252767ms)
+✔ acknowledgement is not completion; runtime events and full tool payloads remain authoritative (6.974651ms)
+✔ unowned sessions and unknown global events cannot leak to renderer or mutate history (6.332259ms)
+✔ approval replies use RPC identity; stale, duplicate and invented choices are rejected (7.353303ms)
+✔ stored identity survives relaunch and refresh reconciles real runtime running phase (49.432855ms)
+✔ drafts survive origin changes/relaunch and concurrent writes do not lose other threads (46.855899ms)
+✔ discovery and endpoint validation reject remote/private imports before network activity (64.300147ms)
+✔ cold resume accepts documented session_key, restores requests and never invents an idle phase (2.532232ms)
+✔ cold send cannot bypass a resumed active or uncertain runtime turn (3.968136ms)
+✔ cold send dispatches once after the owned resume explicitly confirms idle (6.392183ms)
+✔ prepared persona/context is projected only by exact owned prompt hash on resumed history (6.943672ms)
+✔ approval handler leases update capabilities on the same connection and stale cleanup cannot disable another view (0.946994ms)
+✔ owned tool provenance survives relaunch without importing unrelated session tools (22.516067ms)
+✔ disconnect during binding write cannot resurrect a stale live session or approval (5.579365ms)
+✔ stale HTTP handshake cannot disconnect or overwrite a newer gateway connection (9.013664ms)
+✔ late native review notes are scoped, durable offline and replayed once without restarting work (13.558569ms)
+✔ native review replay uses the owned session and epoch, tolerates gaps and deduplicates live overlap (22.644491ms)
+✔ an idle resume cannot erase live work arriving during delayed review replay (10.842517ms)
+✔ oversized background reviews leave a durable scoped archive warning (27.137278ms)
+✔ cold send keeps its reservation while native review replay is pending (11.957952ms)
+✔ a failed review archive write keeps its text and exposes the failure in conversation history (8.032807ms)
+✔ an old approval card cannot answer a reused RPC identity after reconnect (11.731983ms)
+✔ approval replay keeps card identity, unsupported enum and vanished handler cannot dispatch (6.381031ms)
+✔ cold preview redelivery in early queue cannot run snapshot-replayed mutation (1.1344ms)
+✔ browser does not invent running state before a real desktop transport mounts (3.668866ms)
+✔ native DOM read/action results come from the transport, not manufactured strings (2.702436ms)
+✔ replayed mutations and foreign conversation callbacks never execute (0.96091ms)
+✔ browser mount validates Dot/thread identity and navigation protocols (0.857864ms)
+✔ warm sessions without native preview tools keep manual browsing and cannot grant agent control (1.305366ms)
+✔ CapabilitiesManager uses only native scoped catalog calls (38.579387ms)
+✔ CapabilitiesManager keeps standalone profile catalogs separate from session catalogs (1.897243ms)
+✔ CapabilitiesManager reports unavailable hosts rather than fabricating a catalog (3.148385ms)
+✔ collaboration API validates owner, native children and truthful relay receipts (646.37233ms)
+✔ native subagent operations use the owning gateway/session, without invented execution (6.954654ms)
+✔ unsupported direct spawn cannot create a fake working child (0.972452ms)
+✔ relay returns only native receipt and validates profile against actual roster (4.455565ms)
+✔ project links require a real native id and runtime verification (1.079245ms)
+✔ recall is sourced from owned conversation messages, not local generated demos (0.554376ms)
+✔ offline runtime cannot produce successful actions (2.167227ms)
+✔ ComputerManager rejects unsupported takeover and preserves native completed outcomes (4.367246ms)
+✔ stale snapshots are detected by age and target window changes (0.293519ms)
+✔ payloads over 64 KiB are summarized for the archive (4.253831ms)
+✔ runtime computer tool events become activity and capture receipts (1.157054ms)
+✔ native receipts retain action identity, recognize failure, and isolate conversations (2.543734ms)
+✔ two hosts with equal runtime IDs keep conversations, events and approvals scoped (49.250137ms)
+✔ relaunch preserves host assignment and ignores saved credential fields (22.396189ms)
+✔ disconnect during discovery cancels a stale connection and cannot revive autoConnect (7.168862ms)
+✔ transport loss reconnects its host without replaying a prompt (106.094936ms)
+✔ challenge is scoped, one-shot and cancelled with the volatile password (2.798809ms)
+✔ failed binding persistence blocks concurrent session creation on the tentative host (25.897487ms)
+✔ disconnect commits autoConnect before teardown; failure preserves connection and successful teardown clears approvals (22.751828ms)
+▶ F8 — Hermes Native Capabilities & Memory Observability
+  ✔ formats profile memory status with correct budgets and character limits (2.134745ms)
+  ✔ calculates memory usage percentages accurately from text content (0.657261ms)
+  ✔ builds capability matrix mapping all Hermes cards and surfaces (0.847464ms)
+  ✔ extracts pending review proposals requiring /memory pending native resolution (0.369483ms)
+✔ F8 — Hermes Native Capabilities & Memory Observability (8.196308ms)
+✔ native memory metadata does not invent empty content or known character budgets (0.465937ms)
+✔ unsupported memory endpoint remains unavailable rather than fresh empty memory (0.689012ms)
+✔ actual synthetic WebSocket preserves out-of-order RPC, streaming, timeout recovery and disconnect failures (950.206593ms)
+✔ HTTP redirects are rejected before forwarding a synthetic process token (20.867779ms)
+✔ explicit local attach never bootstraps or changes the runtime (2.654384ms)
+✔ remote bootstrap and tunnel reuse Hermes without exposing an arbitrary command interface (11.448571ms)
+✔ host-side adapter preserves gated runtime and registers only native commands in owned service files (461.193013ms)
+﹣ owned native-command service survives client closure and restarts a crashed backend (1.379347ms) # SKIP
+✔ normalizeSchedule parses intervals, one-shot, and cron expressions (3.756073ms)
+✔ RoutinesManager: lifecycle (create, list, update, pause, resume, trigger, delete) (4.253901ms)
+✔ RoutinesManager: identical jobId across distinct profiles does not collide (1.002439ms)
+✔ RoutinesManager: failed delivery is distinct from failed run execution (0.402737ms)
+✔ RoutinesManager: trigger timeout does not retry automatically (1.180077ms)
+✔ RoutinesManager: reports clear error when host is offline or scheduler unreachable (0.485946ms)
+✔ RoutinesManager: update cannot change the owning profile (0.552432ms)
+✔ RoutinesManager: bot-chat delivery target is passed through without fan-out (0.427575ms)
+✔ RoutinesManager: creation without a concrete profile is rejected (0.695795ms)
+✔ RoutinesManager: historical runs survive client close and relaunch (1.193182ms)
+✔ native output history keeps unknown success, second-based times, output and delivery evidence (0.380725ms)
+✔ metadata API preserves revisions, failures and local records across a service restart without runtime activity (676.380425ms)
+✔ local metadata/pages/drafts work with no provider keys; unsafe API calls and unsupported capabilities fail explicitly (307.017084ms)
+✔ chat context distinguishes a page Space from native profile/project and never injects shared memories (327.144925ms)
+✔ real OpenSSH key auth, identity challenge, fixed bootstrap and loopback forwarding (516.67115ms)
+✔ real OpenSSH password auth, identity challenge, fixed bootstrap and loopback forwarding (854.077266ms)
+✔ wrong SSH password produces a sanitized state without persisting credentials (310.405056ms)
+✔ changed known host key is rejected without trusting or executing on the host (320.614307ms)
+ℹ tests 95
+ℹ suites 1
+ℹ pass 94
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 2797.095558
+
+> hermes-studio-desktop@0.1.0 test:metadata
+> vitest run --root upstream tests/pages.test.ts tests/page-routes.test.ts tests/workspace.test.ts tests/store.test.ts tests/autosave.test.ts tests/app.test.ts tests/voice.test.ts tests/page-snapshots.test.ts tests/f4-shell.test.tsx tests/f5-files.test.tsx tests/f6-spaces.test.tsx tests/f8-observability.test.tsx tests/f9-memory.test.tsx tests/f10-routines.test.tsx tests/f11-capabilities.test.tsx tests/f12-browser.test.tsx tests/f16-computer.test.tsx tests/f15-terminal.test.ts src/client/hermes-display.test.ts src/client/manual-space-review.test.ts src/client/conversation-submission.test.ts tests/runtime-context-badge.test.tsx src/client/voice-live.test.ts tests/file-panel-races.test.tsx
+
+
+ RUN  v4.1.11 /home/luca/projects/hermes-studio/.worktrees/t_57eb7157/desktop/upstream
+
+
+ Test Files  24 passed (24)
+      Tests  110 passed (110)
+   Start at  01:20:20
+   Duration  13.89s (transform 12.45s, setup 0ms, import 53.81s, tests 20.56s, environment 8ms)
+
+
+> hermes-studio-desktop@0.1.0 test:bootstrap
+> node scripts/test-bootstrap.cjs
+
+PASS: ready-port validation, credential isolation, owned-service timeout and early-exit handling
+
+> hermes-studio-desktop@0.1.0 test:external-links
+> node scripts/test-external-links.cjs
+
+PASS: source URL http(s) allowlist; credential, scheme, private-service and malformed URL rejection
