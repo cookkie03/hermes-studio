@@ -3,6 +3,7 @@
 ## 1. Role, Assignment & Defect Selection
 - **Role**: Software Engineer (`software-engineer`)
 - **Task**: `t_ae6456a1` — "Software: implement a tested release-verification improvement"
+- **Commit SHA**: `bdbfd2e` (integrated into main in `acf177e`) / `e4a5fcc` (wt/t_ae6456a1)
 - **Assignment Scope**: Inspect `desktop/scripts/verify-package.cjs` and packaging metadata paths; select ONE concrete demonstrable release integrity/validation defect supported by docs; write failing regression test, minimal fix, execute relevant test suites, typechecks, and package verification. Respect exclusive code ownership of `desktop/scripts/verify-package*` and new focused test under `desktop/scripts` only. Do not touch workflows, `electron-builder.config.cjs`, `package.json/lock`, protected F0–F3, runtime, or app UI.
 - **Defect Identified**:
   - `desktop/electron-builder.config.cjs` declares packaged production files including `electron/**` and `README.md`.
