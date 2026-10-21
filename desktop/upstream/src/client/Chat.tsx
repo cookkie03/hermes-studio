@@ -64,6 +64,7 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   const [uncertain, setUncertain] = useState(false);
   const [error, setError] = useState('');
   const [tools, setTools] = useState<ToolActivity[]>([]);
+  const [expandedTools, setExpandedTools] = useState<Record<string, boolean>>({});
   const [approvals, setApprovals] = useState<Approval[]>([]);
   const [decisionPending, setDecisionPending] = useState(false);
   const decisionLock = useRef(false);
@@ -82,6 +83,13 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
   const [mentionSuggestions, setMentionSuggestions] = useState<FileReference[]>([]);
   const [mentionMatch, setMentionMatch] = useState<{ start: number; query: string } | null>(null);
   const [selectedMentionIndex, setSelectedMentionIndex] = useState(0);
+  const resizeComposer = useCallback(() => {
+    const element = textareaRef.current;
+    if (!element) return;
+    element.style.height = 'auto';
+    element.style.height = `${Math.min(element.scrollHeight, 150)}px`;
+    element.style.overflowY = element.scrollHeight > 150 ? 'auto' : 'hidden';
+  }, []);
 
   const checkMentions = useCallback((text: string) => {
     const atIndex = text.lastIndexOf('@');
@@ -103,7 +111,12 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
     draftChanged.current = true; setDraft(value);
     try { localStorage.setItem(draftKey, value); } catch { setDraftError('Local draft storage is unavailable.'); }
     checkMentions(value);
-  }, [draftKey, checkMentions]);
+    requestAnimationFrame(resizeComposer);
+  }, [draftKey, checkMentions, resizeComposer]);
+
+  useEffect(() => {
+    resizeComposer();
+  }, [draft, resizeComposer]);
 
   // Load roots & items on initial mount if empty
   useEffect(() => {
@@ -388,14 +401,14 @@ export function Chat({ thread, dot, initialPrompt, onConsumed, paused, onCompute
         const stderr = typeof result.stderr === 'string' ? result.stderr : '';
         const failed = exitCode !== undefined && exitCode !== 0;
         const state = failed ? 'Needs attention' : tool.complete ? 'Finished' : running ? 'Working' : 'Last activity';
-        return <section className={`inline-computer hermes-tool ${terminal ? 'hermes-terminal-output' : ''}`} key={tool.id} aria-label={terminal ? `Terminal output from ${tool.name}` : `Tool output from ${tool.name}`}>
-          <header><strong>{terminal ? 'Terminal output' : tool.name}</strong><span className={`tool-state ${failed ? 'failed' : ''}`}>{state}</span></header>
+        return <details className={`inline-computer hermes-tool hermes-tool-disclosure ${terminal ? 'hermes-terminal-output' : ''}`} key={tool.id} aria-label={terminal ? `Terminal output from ${tool.name}` : `Tool output from ${tool.name}`} open={expandedTools[tool.id] ?? (failed || !tool.complete)} onToggle={(event) => { const open = event.currentTarget.open; setExpandedTools((previous) => ({ ...previous, [tool.id]: open })); }}>
+          <summary><strong>{terminal ? 'Terminal output' : tool.name}</strong><span className={`tool-state ${failed ? 'failed' : ''}`}>{state}</span></summary>
           {terminal && <div className="hermes-terminal-meta"><span>Tool: {tool.name}</span>{exitCode !== undefined && <span>Exit code: {exitCode}</span>}{typeof result.cwd === 'string' && <span>CWD: {result.cwd}</span>}</div>}
           {tool.args != null && <details><summary>Inputs</summary><pre>{JSON.stringify(tool.args, null, 2)?.slice(0, 8000)}</pre></details>}
           {terminal && output && <pre aria-label="Terminal stdout">{output.slice(0, 12000)}</pre>}
           {terminal && stderr && <pre className="hermes-terminal-stderr" aria-label="Terminal stderr">{stderr.slice(0, 8000)}</pre>}
           {!terminal && tool.result != null && <pre>{(typeof tool.result === 'string' ? tool.result : JSON.stringify(tool.result, null, 2))?.slice(0, 12000)}</pre>}
-        </section>;
+        </details>;
       })}
       {reviewContent !== undefined && <SaveToSpaceReview threadId={thread.id} dot={dot} initialContent={reviewContent} initialTitle={thread.title || 'Research draft'} onSaved={onSaved} onClose={() => setReviewContent(undefined)} />}
       {approvals.map(approval => <section className="hermes-approval" key={approval.decisionId} aria-label="Hermes approval">

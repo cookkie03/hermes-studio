@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hermes Studio — Direzione B: Graphite Precision Workstation</title>
+  <style>
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Segoe UI", Roboto, sans-serif;
+      --font-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+      /* Codex + Humla Graphite design tokens */
+      --color-canvas: #ffffff;
+      --color-sidebar: #f6f6f8;
+      --color-sidebar-border: #e5e5e9;
+      --color-surface: #ffffff;
+      --color-surface-hover: #efeff2;
+      --color-surface-sunken: #f1f1f4;
+      --color-border: #e2e2e7;
+      --color-border-subtle: #ebebef;
+
+      --color-text: #18181b;
+      --color-text-muted: #71717a;
+      --color-text-faint: #a1a1aa;
+
+      /* Precision High-Contrast Accents */
+      --color-accent: #09090b; /* Ink dark */
+      --color-accent-blue: #2563eb; /* Codex / System Blue */
+      --color-accent-blue-bg: #eff6ff;
+      --color-success: #16a34a;
+      --color-success-bg: #f0fdf4;
+      --color-error: #dc2626;
+      --color-error-bg: #fef2f2;
+
+      --radius-sm: 4px;
+      --radius-md: 7px;
+      --radius-lg: 10px;
+      --radius-pill: 999px;
+
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-canvas);
+      color: var(--color-text);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top banner state switcher for mockup exploration */
+    .mockup-controls-bar {
+      background: #09090b;
+      color: #fafafa;
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      z-index: 100;
+      flex-shrink: 0;
+      border-bottom: 1px solid #27272a;
+    }
+    .mockup-controls-bar .badge {
+      background: #2563eb;
+      color: #ffffff;
+      padding: 2px 7px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      margin-right: 8px;
+    }
+    .mockup-btn-group {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .mockup-btn {
+      background: #18181b;
+      color: #f4f4f5;
+      border: 1px solid #3f3f46;
+      padding: 3px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 11px;
+      font-family: var(--font-sans);
+      transition: all 0.15s ease;
+    }
+    .mockup-btn:hover { background: #27272a; }
+    .mockup-btn.active { background: #2563eb; color: #ffffff; border-color: #2563eb; font-weight: 600; }
+
+    /* macOS Window Shell */
+    .app-shell {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 35px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Codex Navigation: Narrow Icon Rail + Sidebar */
+    .nav-rail {
+      width: 48px;
+      background: #f1f1f4;
+      border-right: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .rail-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--color-text-muted);
+      font-size: 15px;
+      transition: background 0.12s;
+    }
+    .rail-btn:hover { background: #e4e4e7; color: var(--color-text); }
+    .rail-btn.active { background: #ffffff; color: #09090b; box-shadow: var(--shadow-sm); }
+
+    /* Sidebar (Projects + Dots list) */
+    .sidebar {
+      width: 240px;
+      background: var(--color-sidebar);
+      border-right: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .sidebar-header {
+      padding: 12px 14px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    .window-traffic-lights {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+    .traffic-light {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .traffic-close { background: #ff5f56; border: 1px solid #e0443e; }
+    .traffic-min { background: #ffbd2e; border: 1px solid #dea123; }
+    .traffic-max { background: #27c93f; border: 1px solid #1aab29; }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-title {
+      font-weight: 600;
+      font-size: 13.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: -0.2px;
+    }
+    .brand-badge {
+      background: #09090b;
+      color: #ffffff;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      padding: 1px 5px;
+      border-radius: var(--radius-sm);
+    }
+
+    .sidebar-search input {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 5px 10px;
+      font-size: 12px;
+      color: var(--color-text);
+      outline: none;
+      font-family: inherit;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .nav-section-title {
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--color-text-muted);
+      padding: 0 6px 3px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      color: var(--color-text);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .nav-item:hover { background: var(--color-surface-hover); }
+    .nav-item.active {
+      background: #e4e4e7;
+      color: #09090b;
+      font-weight: 600;
+    }
+    .nav-counter {
+      font-size: 10.5px;
+      font-family: var(--font-mono);
+      color: var(--color-text-muted);
+    }
+
+    .sidebar-footer {
+      padding: 8px 12px;
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      background: var(--color-sidebar);
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+    }
+    .status-badge.online { background: var(--color-success-bg); color: var(--color-success); }
+    .status-badge.offline { background: var(--color-error-bg); color: var(--color-error); }
+    .status-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* Center Main Workspace */
+    .main-workspace {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-canvas);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Workspace Header (Compact, 40px) */
+    .workspace-header {
+      height: 40px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--color-border);
+      background: #ffffff;
+      flex-shrink: 0;
+    }
+    .header-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+    }
+    .header-tag {
+      background: #f4f4f5;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--color-text-muted);
+      border: 1px solid var(--color-border);
+    }
+    .header-title {
+      font-weight: 600;
+      color: var(--color-text);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .compact-btn {
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 3px 8px;
+      font-size: 11.5px;
+      color: var(--color-text);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .compact-btn:hover { background: #f4f4f5; }
+    .compact-btn.active { background: #09090b; color: #ffffff; border-color: #09090b; }
+
+    /* Offline Alert */
+    .offline-banner {
+      background: #fef2f2;
+      border-bottom: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 6px 16px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Chat Scroll Area */
+    .chat-scroll-pane {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Empty State View */
+    .empty-state-view {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 16px;
+      max-width: 540px;
+      margin: auto;
+    }
+    .empty-symbol {
+      font-size: 28px;
+      margin-bottom: 14px;
+    }
+    .empty-title {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+    }
+    .empty-desc {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .empty-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+    }
+    .empty-card {
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      text-align: left;
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color 0.12s;
+    }
+    .empty-card:hover { border-color: #a1a1aa; background: #fafafa; }
+    .empty-card-title { font-weight: 600; margin-bottom: 2px; }
+    .empty-card-sub { font-size: 11px; color: var(--color-text-muted); }
+
+    /* Conversation Rows */
+    .message-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 100%;
+    }
+    .message-row.user { align-items: flex-end; }
+    .message-row.agent { align-items: flex-start; }
+
+    .user-bubble {
+      background: #f4f4f5;
+      color: #09090b;
+      border: 1px solid var(--color-border);
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      max-width: 85%;
+      line-height: 1.45;
+    }
+
+    /* Codex Tool Trace Card */
+    .codex-tool-card {
+      width: 100%;
+      background: #fafafa;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      font-size: 12px;
+    }
+    .codex-tool-header {
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f1f4;
+      border-bottom: 1px solid var(--color-border);
+      cursor: pointer;
+      font-family: var(--font-mono);
+    }
+    .codex-tool-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .status-pill {
+      background: #e4e4e7;
+      color: #18181b;
+      font-size: 10.5px;
+      padding: 1px 5px;
+      border-radius: var(--radius-sm);
+    }
+    .status-pill.success { background: #dcfce7; color: #15803d; font-weight: 600; }
+
+    .codex-tool-content {
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      line-height: 1.6;
+      background: #ffffff;
+    }
+
+    /* Agent Message Box */
+    .agent-box {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+    .agent-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      margin-bottom: 8px;
+    }
+    .agent-box table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 12.5px;
+    }
+    .agent-box th, .agent-box td {
+      border: 1px solid var(--color-border);
+      padding: 6px 10px;
+      text-align: left;
+    }
+    .agent-box th {
+      background: #f4f4f5;
+      font-weight: 600;
+    }
+
+    /* Fixed Bottom Composer Area (Codex style with effort & model bar) */
+    .composer-area {
+      padding: 10px 16px 14px;
+      display: flex;
+      justify-content: center;
+      background: #ffffff;
+      border-top: 1px solid var(--color-border-subtle);
+      flex-shrink: 0;
+    }
+    .composer-box {
+      width: 100%;
+      max-width: 800px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: #ffffff;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+    }
+    .composer-box:focus-within {
+      border-color: #09090b;
+    }
+    .composer-input {
+      border: none;
+      outline: none;
+      padding: 10px 12px 6px;
+      font-family: inherit;
+      font-size: 13.5px;
+      color: var(--color-text);
+      resize: none;
+      height: 42px;
+      line-height: 1.4;
+    }
+    .composer-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 10px 6px;
+      background: #fafafa;
+      border-top: 1px solid var(--color-border-subtle);
+      font-size: 11.5px;
+    }
+    .composer-badges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .composer-badge-item {
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 2px 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-text-muted);
+      cursor: pointer;
+    }
+    .composer-badge-item.active {
+      color: #09090b;
+      font-weight: 600;
+      border-color: #a1a1aa;
+    }
+    .send-btn-codex {
+      background: #09090b;
+      color: #ffffff;
+      border: none;
+      padding: 3px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .send-btn-codex.disabled {
+      background: #e4e4e7;
+      color: #a1a1aa;
+      cursor: not-allowed;
+    }
+
+    /* Codex Side Inspector Panel */
+    .codex-inspector {
+      width: 320px;
+      background: #fafafa;
+      border-left: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .inspector-top-tabs {
+      height: 38px;
+      display: flex;
+      border-bottom: 1px solid var(--color-border);
+      background: #f4f4f5;
+    }
+    .tab-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      border-right: 1px solid var(--color-border);
+    }
+    .tab-item.active {
+      background: #fafafa;
+      color: #09090b;
+      font-weight: 600;
+      border-bottom: 1px solid transparent;
+    }
+    .tab-item:last-child { border-right: none; }
+
+    .inspector-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 12px;
+    }
+    .inspector-card {
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .card-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--color-text-muted);
+    }
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      font-family: var(--font-mono);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .codex-inspector { display: none; }
+      .sidebar { width: 200px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mockup Controls -->
+  <div class="mockup-controls-bar">
+    <div style="display: flex; align-items: center;">
+      <span class="badge">DIREZIONE B</span>
+      <span>Graphite Precision Workstation (Codex + Humla Graphite)</span>
+    </div>
+    <div class="mockup-btn-group">
+      <span>Stato:</span>
+      <button class="mockup-btn active" onclick="showState('active')">Attiva + Inspector</button>
+      <button class="mockup-btn" onclick="showState('empty')">Chat Vuota</button>
+      <button class="mockup-btn" onclick="showState('offline')">Offline / Errore</button>
+    </div>
+  </div>
+
+  <div class="app-shell">
+
+    <!-- Codex Navigation Rail -->
+    <div class="nav-rail">
+      <div class="rail-btn active" title="Chat">💬</div>
+      <div class="rail-btn" title="Progetti / Spaces">📁</div>
+      <div class="rail-btn" title="Agenti / Dots">🤖</div>
+      <div class="rail-btn" title="Memoria">🧠</div>
+      <div style="margin-top: auto;" class="rail-btn" title="Impostazioni">⚙️</div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="window-traffic-lights">
+          <div class="traffic-light traffic-close"></div>
+          <div class="traffic-light traffic-min"></div>
+          <div class="traffic-light traffic-max"></div>
+        </div>
+        <div class="brand-row">
+          <div class="brand-title">
+            <span>Hermes Studio</span>
+            <span class="brand-badge">IDE</span>
+          </div>
+          <span style="font-size: 12px; cursor: pointer; color: var(--color-text-muted);">＋</span>
+        </div>
+        <div class="sidebar-search">
+          <input type="text" placeholder="Filtra progetti e chat...">
+        </div>
+      </div>
+
+      <div class="sidebar-nav">
+        <!-- Spaces -->
+        <div>
+          <div class="nav-section-title">
+            <span>Spaces</span>
+            <span class="nav-counter">2</span>
+          </div>
+          <ul class="nav-list">
+            <li class="nav-item active">
+              <span>📁 Finanza & Analisi</span>
+              <span class="nav-counter">5</span>
+            </li>
+            <li class="nav-item">
+              <span>📁 Tesi & Studio AI</span>
+              <span class="nav-counter">3</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Dots -->
+        <div>
+          <div class="nav-section-title">
+            <span>Dots Attivi</span>
+          </div>
+          <ul class="nav-list">
+            <li class="nav-item active">
+              <span>● Hermes Master</span>
+              <span class="nav-counter">0.9.4</span>
+            </li>
+            <li class="nav-item">
+              <span>○ Researcher Bot</span>
+              <span class="nav-counter">idle</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Threads -->
+        <div>
+          <div class="nav-section-title">
+            <span>Thread Recenti</span>
+          </div>
+          <ul class="nav-list">
+            <li class="nav-item active">
+              <span>Analisi bilancio Q3</span>
+            </li>
+            <li class="nav-item">
+              <span>Test STT Whisper</span>
+            </li>
+            <li class="nav-item">
+              <span>Script monitoraggio Debian</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div>Host: <strong>Mac (locale)</strong></div>
+        <div class="status-badge online" id="statusBadgeB">
+          <span class="status-dot"></span>
+          <span>Online</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-workspace">
+
+      <!-- Header -->
+      <header class="workspace-header">
+        <div class="header-breadcrumb">
+          <span class="header-tag">Host: locale</span>
+          <span style="color:var(--color-text-faint);">/</span>
+          <span class="header-title">Analisi bilancio Q3 e script automazione</span>
+        </div>
+        <div class="header-actions">
+          <button class="compact-btn">
+            <span>Model:</span>
+            <strong>my-combo</strong>
+          </button>
+          <button class="compact-btn active" onclick="toggleInspectorB()">
+            <span>Inspector</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Offline Banner -->
+      <div class="offline-banner" id="offlineBannerB" style="display: none;">
+        <span><strong>Host disconnesso:</strong> Debian Mini PC (100.74.207.0) non risponde. Azioni bloccate.</span>
+        <button class="compact-btn" style="background:transparent; border-color:#991b1b; color:#991b1b;" onclick="alert('Riconnessione...')">Riprova</button>
+      </div>
+
+      <!-- Active Chat -->
+      <div class="chat-scroll-pane" id="activeChatB">
+        <div class="chat-container">
+
+          <!-- User Row -->
+          <div class="message-row user">
+            <div class="user-bubble">
+              Esegui lo script di verifica del bilancio Q3 e controlla lo stato dei file nel workspace prima di procedere.
+            </div>
+            <div style="font-size: 10.5px; color: var(--color-text-muted); font-family: var(--font-mono);">14:22</div>
+          </div>
+
+          <!-- Tool Trace (Codex style) -->
+          <div class="codex-tool-card">
+            <div class="codex-tool-header" onclick="toggleToolB()">
+              <div class="codex-tool-header-left">
+                <span class="status-pill success">EXEC DONE</span>
+                <span>terminal: git status --short</span>
+                <span style="color:var(--color-text-muted);">(42ms)</span>
+              </div>
+              <div>▼ Output</div>
+            </div>
+            <div class="codex-tool-content" id="toolContentB">
+              $ git status --short<br>
+              M data/financial/q3_summary.csv<br>
+              ✓ Process completed with code 0
+            </div>
+          </div>
+
+          <!-- Agent Response -->
+          <div class="message-row agent">
+            <div class="agent-box">
+              <div class="agent-meta">
+                <span>🤖 Hermes Master</span>
+                <span style="font-family:var(--font-mono); font-size:10.5px; color:var(--color-text-faint);">14:22:06</span>
+              </div>
+              <h4 style="font-size: 14px; margin-bottom: 8px;">Riepilogo verifica e metriche Q3</h4>
+              <p>Ho completato l'estrazione dai prospetti contabili. I dati consolidati mostrano una tenuta dei margini operativi con una riduzione dei costi infrastrutturali locali.</p>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th>Voce di costo</th>
+                    <th>Q2 Reale</th>
+                    <th>Q3 Consolidato</th>
+                    <th>Variazione</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Infrastruttura Cloud / API</td>
+                    <td>€ 1.240</td>
+                    <td>€ 890</td>
+                    <td style="color:var(--color-success); font-weight:600;">-28.2%</td>
+                  </tr>
+                  <tr>
+                    <td>Hardware locale Mini PC</td>
+                    <td>€ 450</td>
+                    <td>€ 0</td>
+                    <td>N/A</td>
+                  </tr>
+                  <tr>
+                    <td>Licenze e tool esterni</td>
+                    <td>€ 320</td>
+                    <td>€ 310</td>
+                    <td>-3.1%</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <p>Il file <code>q3_summary.csv</code> è aggiornato e sincronizzato nello Space corrente. Vuoi che proceda con l'esportazione PDF o con l'invio del report via Telegram?</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Empty Chat -->
+      <div class="chat-scroll-pane" id="emptyChatB" style="display: none;">
+        <div class="empty-state-view">
+          <div class="empty-symbol">⚡</div>
+          <h3 class="empty-title">Hermes Precision Workstation</h3>
+          <p class="empty-desc">Pronto per l'esecuzione comandi, gestione task e sintesi di ricerca.</p>
+          <div class="empty-grid">
+            <div class="empty-card">
+              <div class="empty-card-title">Sintesi Bilancio Q3</div>
+              <div class="empty-card-sub">Estrai metriche dai file locali</div>
+            </div>
+            <div class="empty-card">
+              <div class="empty-card-title">Test Fallback STT</div>
+              <div class="empty-card-sub">Verifica Groq vs Faster-Whisper</div>
+            </div>
+            <div class="empty-card">
+              <div class="empty-card-title">Master Note Studio</div>
+              <div class="empty-card-sub">Genera appunti da slide e lezioni</div>
+            </div>
+            <div class="empty-card">
+              <div class="empty-card-title">Controllo Git Repository</div>
+              <div class="empty-card-sub">Audit commit, branch e clean state</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Composer Bar (Codex Style) -->
+      <div class="composer-area">
+        <div class="composer-box">
+          <textarea class="composer-input" id="composerInputB" placeholder="Digita un'istruzione o / per richiamare skill e tool..."></textarea>
+          <div class="composer-footer">
+            <div class="composer-badges">
+              <div class="composer-badge-item active">Effort: Medium</div>
+              <div class="composer-badge-item">Tools: 3 attivi</div>
+              <div class="composer-badge-item">Space: Finanza</div>
+            </div>
+            <button class="send-btn-codex" id="sendBtnB">Invia (⌘↵)</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Right Inspector Panel (Codex Tools / Inspector) -->
+    <aside class="codex-inspector" id="inspectorB">
+      <div class="inspector-top-tabs">
+        <div class="tab-item active">Tools & Traces</div>
+        <div class="tab-item">File Space</div>
+        <div class="tab-item">Settings</div>
+      </div>
+      <div class="inspector-body">
+
+        <div class="inspector-card">
+          <div class="card-label">Ultima Esecuzione Tool</div>
+          <div class="spec-row">
+            <span>Comando</span>
+            <code>git status --short</code>
+          </div>
+          <div class="spec-row">
+            <span>Latenza</span>
+            <span>42ms</span>
+          </div>
+          <div class="spec-row">
+            <span>Exit Code</span>
+            <span style="color:var(--color-success); font-weight:600;">0 (SUCCESS)</span>
+          </div>
+        </div>
+
+        <div class="inspector-card">
+          <div class="card-label">Runtime Specs</div>
+          <div class="spec-row">
+            <span>Backend</span>
+            <span>Hermes Agent 0.9.4</span>
+          </div>
+          <div class="spec-row">
+            <span>Provider</span>
+            <span>Custom Combo</span>
+          </div>
+          <div class="spec-row">
+            <span>Context Window</span>
+            <span>128k (utilizzati: 4.2k)</span>
+          </div>
+        </div>
+
+        <div class="inspector-card">
+          <div class="card-label">Permessi Roster</div>
+          <div class="spec-row">
+            <span>Terminal Execution</span>
+            <span style="color:var(--color-success);">Allowed</span>
+          </div>
+          <div class="spec-row">
+            <span>FS Write</span>
+            <span style="color:var(--color-success);">Allowed (Safe)</span>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <script>
+    function showState(state) {
+      const activeChat = document.getElementById('activeChatB');
+      const emptyChat = document.getElementById('emptyChatB');
+      const offlineBanner = document.getElementById('offlineBannerB');
+      const composerInput = document.getElementById('composerInputB');
+      const sendBtn = document.getElementById('sendBtnB');
+      const statusBadge = document.getElementById('statusBadgeB');
+
+      document.querySelectorAll('.mockup-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (state === 'empty') {
+        activeChat.style.display = 'none';
+        emptyChat.style.display = 'flex';
+        offlineBanner.style.display = 'none';
+        composerInput.value = '';
+        composerInput.disabled = false;
+        sendBtn.classList.add('disabled');
+        statusBadge.className = 'status-badge online';
+        statusBadge.innerHTML = '<span class="status-dot"></span><span>Online</span>';
+      } else if (state === 'active') {
+        activeChat.style.display = 'flex';
+        emptyChat.style.display = 'none';
+        offlineBanner.style.display = 'none';
+        composerInput.disabled = false;
+        sendBtn.classList.remove('disabled');
+        statusBadge.className = 'status-badge online';
+        statusBadge.innerHTML = '<span class="status-dot"></span><span>Online</span>';
+      } else if (state === 'offline') {
+        activeChat.style.display = 'flex';
+        emptyChat.style.display = 'none';
+        offlineBanner.style.display = 'flex';
+        composerInput.disabled = true;
+        sendBtn.classList.add('disabled');
+        statusBadge.className = 'status-badge offline';
+        statusBadge.innerHTML = '<span class="status-dot"></span><span>Offline</span>';
+      }
+    }
+
+    function toggleToolB() {
+      const el = document.getElementById('toolContentB');
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleInspectorB() {
+      const panel = document.getElementById('inspectorB');
+      panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+    }
+  </script>
+</body>
+</html>

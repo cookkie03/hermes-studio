@@ -79,11 +79,11 @@ const fs = require('node:fs/promises'); const path = require('node:path');
   await page.getByRole('menuitem',{name:'Markdown source',exact:true}).click();
   if((await page.getByRole('textbox',{name:'Page Markdown',exact:true}).inputValue())!=='Saved by a synthetic second writer') throw Error('Restart did not restore saved revision');
   await page.emulateMedia({reducedMotion:'reduce'});
-  const moving = await page.evaluate(() => [...document.querySelectorAll('*')].some(element => {
+  const moving = await page.evaluate(() => [...document.querySelectorAll('*')].map(element => {
     const style = getComputedStyle(element);
-    return style.animationName !== 'none' || style.transitionDuration.split(',').some(value => parseFloat(value) > 0);
-  }));
-  if(moving) throw Error('Reduced motion leaves an animation or transition active');
+    return { tag: element.tagName, className: typeof element.className === 'string' ? element.className : '', animationName: style.animationName, animationDuration: style.animationDuration, transitionDuration: style.transitionDuration };
+  }).find(({ animationName, animationDuration, transitionDuration }) => animationName !== 'none' || parseFloat(animationDuration) > 0.01 || transitionDuration.split(',').some(value => parseFloat(value) > 0.01)));
+  if(moving) throw Error(`Reduced motion leaves animation or transition active: ${moving.tag}.${moving.className} animation=${moving.animationName}/${moving.animationDuration} transition=${moving.transitionDuration}`);
   await app.evaluate(({BrowserWindow}) => BrowserWindow.getAllWindows()[0].setSize(900,700));
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
   if(overflow) throw Error('900 px window overflows horizontally');

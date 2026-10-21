@@ -1,3 +1,21 @@
+## Valutazione piano Effect — 2026-10-19
+
+[Review](effect-typescript-migration-review-2026-10-19.md) completata: piano da correggere prima dell'esecuzione; nessuna migrazione avviata. 14 test mirati PASS; typecheck upstream già FAIL senza Effect. Grafo prodotto/template, packaging, compatibilità errori e regole boundary da risolvere. Piano originale e codice prodotto preservati; nessuna nuova acceptance live.
+
+## Direction C implementation increment — 2026-10-19
+
+First product increment landed in the existing React client: warm C surface tokens, semantic inspector/focus handling, bounded autosize composer, and native tool disclosures. Typecheck, production build, full `npm run test` (95 Node tests, 24 Vitest files/110 tests), bootstrap/external-links/package verification, packaged UI smoke, packaged synthetic conversation fixture, and diff check pass. The synthetic fixture is not live Hermes integration; live runtime, screenshot/contrast and WCAG acceptance remain incomplete; see `docs/design/redesign-proposals/implementation-review.md`.
+
+Direzione C approvata esplicitamente da Luca con migliorie successive. Preparato [prompt 04](prompts/04-implement-direction-c.md) per implementazione prodotto da parte dell'altro agente. Task DES-05 esistente aggiornato su Todoist con scelta C e incarico; nessuna duplicazione. Report esecutore ricevuto; gate dichiarati non certificati dalla coordinazione, limiti di sorgente annotati nel summary e nel report. Stato: direzione approvata/incarico pronto, codice prodotto e build non modificati in questo blocco.
+
+## Revisione delle proposte — 2026-10-19
+
+HTML A/B e raccomandazione ricevuti dall'altro agente, letti come sorgenti; nessuna nuova prova UI live in questo blocco. Luca seleziona base ibrida A/B ma ritiene insufficiente la qualità premium/macOS. [Esito e preferenze](../design/redesign-proposals/recommendation-summary.md), [prompt affinamento](prompts/03-design-refinement.md). Prossimo gate: prototipo C con comportamenti verificabili e review, prima dell'implementazione prodotto. Documenti aggiornati; backend e stack invariati.
+
+## Redesign e modularità — 2026-10-18
+
+Ricerca skill effettuata, dossier REA locale e precedenti estrazioni Unsloth riletti; prima osservazione AX Humla 0.69.1 limitata a Settings. Creati 13 sottotask Todoist, incluse reference OpenClaw browser/voce, modularità provider, Rust/TS, PWA Docker/Tailscale e DMG CI. [Roadmap con prove/limiti](redesign-roadmap-2026-10-18.md). Prompt design e architettura pronti per l'agente scelto da Luca; nessuna esecuzione inoltrata automaticamente. Codice prodotto, baseline e runtime personali preservati; build/test prodotto non rieseguiti perché questo blocco è documentale. Design, refactor provider, pipeline/deploy e acceptance restano da eseguire. Gli stati storici seguenti non attestano nuove verifiche.
+
 ## Riparazione integrazioni native — 2026-10-12
 
 Utente richiede correggere tutti i difetti della review e rendere il progetto funzionante. Scope selezionato: otto findings e relative integrazioni native, con runtime/profili personali preservati. [Piano](native-integration-repair-plan-2026-10-12.md). In corso: file 16 PASS, collaboration/computer 10 PASS, audio/API 5 PASS. Browser reale/Bots/header/progetti implementati ma non ancora certificati in .app; memory/matrix e ulteriori adapter schema native da correggere. Nessuna completezza dichiarata prima dell'acceptance.

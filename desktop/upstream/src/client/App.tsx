@@ -106,8 +106,10 @@ export function App() {
   const [mobile, setMobile] = useState(false);
   const [navCollapsed, setNavCollapsed] = useState(false);
   const [pane, setPane] = useState(true);
+  const paneToggleRef = useRef<HTMLButtonElement>(null);
   const [capture, setCapture] = useState<Result>();
   const [prompt, setPrompt] = useState('');
+  const starterTextareaRef = useRef<HTMLTextAreaElement>(null);
   const [pendingPrompt, setPendingPrompt] = useState<string>();
   const [busy, setBusy] = useState(false);
   const [search, setSearch] = useState('');
@@ -136,6 +138,14 @@ export function App() {
     const timer = setInterval(() => void refresh(), 3000);
     return () => clearInterval(timer);
   }, [refresh]);
+  useEffect(() => {
+    const element = starterTextareaRef.current;
+    if (!element) return;
+    element.style.height = 'auto';
+    element.style.height = `${Math.min(element.scrollHeight, 150)}px`;
+    element.style.overflowY = element.scrollHeight > 150 ? 'auto' : 'hidden';
+  }, [prompt]);
+
   useEffect(() => {
     setCapture(undefined);
     if (!selectedThread) return;
@@ -177,6 +187,11 @@ export function App() {
         }
         if (mobile) {
           setMobile(false);
+          return;
+        }
+        if (pane) {
+          setPane(false);
+          paneToggleRef.current?.focus();
           return;
         }
       }
@@ -501,9 +516,11 @@ export function App() {
               <span>{state.settings.paused ? 'Resume' : 'Pause'}</span>
             </button>
             <button
+              ref={paneToggleRef}
               className="icon-button"
               aria-label={pane ? 'Hide computer' : 'Show computer'}
               aria-expanded={pane}
+              aria-controls="hermes-inspector"
               onClick={() => setPane(!pane)}
             >
               <Monitor size={18} />
@@ -636,6 +653,7 @@ export function App() {
                     }}
                   >
                     <textarea
+                      ref={starterTextareaRef}
                       aria-label="Start a conversation"
                       placeholder={
                         configured
@@ -695,6 +713,7 @@ export function App() {
             {pane && (
               <ResultPane
                 key={dot.id}
+                id="hermes-inspector"
                 threadId={thread?.id}
                 dots={workspace.dots}
                 defaultDotId={dot.id}
@@ -782,6 +801,7 @@ export function App() {
         {pane && view !== 'chat' && (
           <div className="computer-overlay">
             <ResultPane
+              id="hermes-inspector"
               key={view === 'space' ? spaceId : dot.id}
               dots={workspace.dots}
               defaultDotId={

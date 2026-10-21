@@ -19,7 +19,9 @@ export function ResultPane({
   dots,
   defaultDotId,
   threadId,
+  id,
 }: {
+  id?: string;
   dots: Dot[];
   defaultDotId: string;
   threadId?: string;
@@ -35,7 +37,7 @@ export function ResultPane({
     dots.find((dot) => dot.id === defaultDotId) ??
     dots[0];
   return (
-    <aside className="result-pane">
+    <aside id={id} className="result-pane">
       <div className="pane-header">
         <div className="pane-tabs">
           <button

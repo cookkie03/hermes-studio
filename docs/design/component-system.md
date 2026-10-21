@@ -1,5 +1,9 @@
 # Sistema dei componenti Hermes Studio
 
+> C approvata 2026-10-19 come riferimento visivo del prossimo incremento: [prototipo](redesign-proposals/direction-c-refined-studio.html), [incarico prodotto](../project/prompts/04-implement-direction-c.md). Le regole funzionali/accessibilità restano da rispettare e verificare; il mockup non certifica capacità backend.
+
+> Aggiornamento 2026-10-18: [nuovo brief design e modularità](../project/redesign-roadmap-2026-10-18.md). Le anatomie e i gate seguenti restano riferimento della baseline; token/layout del redesign sono da scegliere e verificare.
+
 2026-10-04. Struttura OpenDots; componenti e microinterazioni ispirati a Unsloth e Codex. Specifica per F4/F2/F6, non implementazione completata.
 
 ## Evidenze

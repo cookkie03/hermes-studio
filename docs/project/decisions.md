@@ -41,6 +41,23 @@ Consolidato 2026-10-04. Questo file registra le decisioni utente; [MEMORY](MEMOR
 
 | D38 | Space comune in Studio associato ai progetti Hermes dei diversi profili; scelta specialista + Space con risoluzione del progetto corretto, collegamento mancante proposto esplicitamente | F6/F7/F2/F14; file unici, SOUL/MEMORY/USER per profilo, Bot Chat/cambio contesto e accessi da verificare; nessun nuovo backend |
 
+## Richieste confermate 2026-10-18
+
+| ID | Decisione conservata | Applicazione corrente |
+|---|---|---|
+| D39 | Redesign completo con reference Humla, Unsloth Studio e Codex; OpenClaw reference funzionale browser/voce | Supera fedeltà rigida OpenDots come direzione futura; layout concreto da scegliere, capacità e baseline preservate. [Brief](redesign-roadmap-2026-10-18.md) |
+| D40 | Modularità funzionale come paradigma e backend futuro aggiungibile con adapter delimitato | Hermes unico provider attuale; nuova struttura da proporre/verificare, nessun altro agente implementato né migrazione Rust approvata |
+| D41 | Chat corrente per coordinamento/review, Luca trasferisce prompt/goal a un altro agente sulla stessa cartella | Prompt delimitati; niente esecuzione o inoltro automatico, nessun goal globale sul backlog |
+| D42 | Roadmap su Todoist, release automatiche DMG, PWA Debian/Docker/Tailscale/discovery | Task padre esistente e figli preservati; trigger release e topologia rete da verificare. Autorizzazione Todoist esplicita, nessuna pubblicazione/esposizione eseguita |
+
+### D43 — revisione mockup 2026-10-19
+
+Luca sceglie colori/forme e pannello sinistro A; pannello destro e feature textbox prompt B; tool compattati A. Qualità UX premium ancora insufficiente rispetto a Unsloth, ChatGPT/Codex e Humla. Richiesto affinamento prima del design finale; SwiftUI è riferimento percettivo, stack non modificato. [Prompt 03](prompts/03-design-refinement.md).
+
+### D44 — direzione C approvata, 2026-10-19
+
+Luca sceglie C per procedere con migliorie successive. Direzione visuale autorizzata per il prossimo incremento F4/presentazione selezionata; esecuzione a cura dell'altro agente tramite [prompt 04](prompts/04-implement-direction-c.md). La selezione non attesta i test del mockup né aggiunge OpenClaw, altri backend o migrazioni stack. Logica e schede F0–F3 preservate.
+
 ## Decisioni storiche superate
 
 | ID | Direzione iniziale | Superata o delimitata da |

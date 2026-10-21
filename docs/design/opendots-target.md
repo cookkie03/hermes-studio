@@ -1,5 +1,7 @@
 # OpenDots — riferimento visivo autorevole
 
+> Aggiornamento 2026-10-18, D39: Luca richiede un redesign completo con Humla, Unsloth Studio e Codex. Questo documento conserva il riferimento della baseline; per la nuova direzione seguire il [brief](../project/redesign-roadmap-2026-10-18.md). Il nuovo layout non è ancora scelto o implementato.
+
 2026-10-04. Luca richiede questa stessa esperienza e disposizione, non un redesign ispirato. Immagine originale copiata dalla cache allegati al progetto, integrità SHA256 verificata.
 
 ![Riferimento utente](references/opendots-user-reference-2026-10-04.png)

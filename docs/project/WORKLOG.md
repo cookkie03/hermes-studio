@@ -1,3 +1,38 @@
+## 2026-10-19 — Valutazione piano Effect
+
+- Letti piano, contesto progetto/catalogo/workflow, ADR0006, ownership, router ask-matt e skill codebase-design; ramo applicato: valutazione architetturale documentale, senza delega o implementazione.
+- Verificati manifest/lock/config, bootstrap JS, grafo metadata e allowlist, chiamanti ApiError/409 e fonti ufficiali Effect. Salvata review con sette criticità e proposta di pilota delimitato.
+- Tre file / 14 test submission/autosave/snapshot PASS; full upstream typecheck FAIL pre-migrazione (dot-agent e firma page-routes fra le diagnostiche); diff check iniziale PASS. Nessuna installazione o nuova verifica build/package/live.
+- Aggiunti review e aggiornamenti incrementali a MEMORY/STATUS/WORKLOG; piano originale e modifiche prodotto preesistenti preservati. Nessun commit/push; nessuna migrazione selezionata.
+
+## 2026-10-19 — Direction C implementation increment
+
+- Implemented the first product increment in `desktop/upstream/src/client`: warm Direction C tokens/surface, semantic inspector association and Escape focus return, bounded adaptive composer textareas, and keyboard-friendly native tool disclosures. Existing Hermes transport, draft, streaming, interrupt, approval and runtime-derived state paths remain in place.
+- Verification: renderer typecheck PASS; production build PASS; full `npm run test` PASS (95 Node tests, 24 Vitest files / 110 tests, bootstrap and external-links gates); package verification PASS; `git diff --check` PASS. Added the local F4 ticket and `docs/design/redesign-proposals/implementation-review.md` coverage matrix.
+- Acceptance update: packaged UI smoke now PASS, covering fresh offline startup, memory/Space/document persistence, write failure, cancelled navigation, revision conflict, restart, reduced motion, 900px overflow and keyboard focus. Packaged synthetic conversation fixture now PASS, covering draft during dispatch, streaming/tool/review events, navigation isolation, IME/Shift+Enter, restart and 900/1360 width assertions. It is not live Hermes integration.
+
+- Luca seleziona direction-c-refined-studio.html per procedere con migliorie successive; report finale dell'agente acquisito come dichiarazione, non prova ripetuta.
+- Letti C/refinement-review/summary, stato Git e riferimenti F4; writing-for-agents applicata al prompt, senza avviare implementazione. Ispezione: nessuna regola @media/prefers-reduced-motion o gestione keydown/scrollHeight; span cliccabile inspector, chip div. Report sovrastima alcuni gate: correzioni/validazioni assegnate al prodotto.
+- Prompt 04 creato per shell/sidebar/inspector e presentazione composer/tool; baseline F0–F3 e capacità runtime preservate, OpenClaw/provider futuri separati. Aggiornati documenti di stato, decisioni, summary/report e roadmap; DES-05 aggiornato su Todoist, updateCount 1/failureCount 0, senza duplicati.
+- Nessun codice prodotto, runtime personale, rete o artefatto distribuito modificato. Nessun agente/goal o test prodotto avviato; review documentale e diff check previsti.
+
+## 2026-10-19 — feedback A/B e incarico di affinamento
+
+- Ricevuti A/B e recommendation-summary dall'altro agente; ispezione HTML/CSS e diff, non nuova verifica del rendering/interazioni. Le due proposte condividono ampia struttura e differiscono soprattutto per styling.
+- Registrate le cinque preferenze esplicite di Luca e l'insufficienza della qualità UX premium rispetto ai riferimenti. Nessuna scelta di riscrittura SwiftUI dedotta.
+- Preparato prompt 03 con writing-for-agents (già letto), focalizzato su composizione ibrida coerente e prototipo interattivo verificabile. Proposte tecniche di affinamento etichettate come tali; baseline e A/B preservati.
+- Aggiornati summary, roadmap, decisioni, MEMORY/STATUS/WORKLOG. Nessun task duplicato, agente avviato, codice prodotto modificato o test prodotto richiesto per questo blocco documentale.
+
+## 2026-10-18 — roadmap design, modularità e incarichi esterni
+
+- Correzioni utente: Flux = Todoist; Angela/Angular = Unsloth Studio; Science Skills = Find Skills; OpenClone = OpenClaw `ai.openclaw.mac`.
+- Letti documenti iniziali, workflow/tracker, F4/F13, confini/ADR0005–0006; skill find-skills, ask-matt, brainstorming, frontend-design (valutata, nessuna implementazione), ux-extract, reverse-engineer-anything e writing-for-agents. Fonti skill/README pubbliche consultate; nessuna installazione.
+- Todoist: task Hermès Studio identificato, sei figli preesistenti letti; aggiunti 13 task con dipendenze/risultati, mantenendo annidamento REA/PWA e dati esistenti. Nuova autorizzazione esterna limitata alla roadmap.
+- Riletti codex-rea/evidence-ledger.md e focused-analysis-overview.md. REA MCP query summary su Evidence storica: zero record nella sessione corrente; nessuna nuova decompilazione. File locali sono evidenza storica statica parziale, non UX live o affidabilità certificata.
+- Humla 0.69.1: osservazione AX Settings/Appearance; Warm/Graphite e System/Light/Dark. Nessuna preferenza o nota modificata. Accesso UI lento; nessuna estrazione esaustiva completata. Unsloth/Codex UI: riusate prove precedenti senza dichiararle correnti.
+- .github/workflows/release.yml già presente e letto: tag v*/manuale, DMG/manifest/checksum/smoke/draft. Nessuna esecuzione CI, firma/notarizzazione o pubblicazione verificata. Workflow upstream Hermes individuato, policy/periodicità ancora task aperto.
+- [Brief/roadmap](redesign-roadmap-2026-10-18.md), prompt design e modularità salvati; decisioni nuove conservate. Questa chat prepara e valuta, Luca esegue i goal su un altro agente. Nessun agente, goal, refactor, build prodotto, release o rete attivati.
+
 ## Incremento F10 — routine self-scheduled dei Bot (2026-10-11)
 
 - Estesa la superficie Studio senza duplicare scheduler o executor Hermes: il filtro profilo usa la vista cross-profile nativa in sola lettura, mentre tutte le mutazioni usano il profilo proprietario restituito dal runtime.

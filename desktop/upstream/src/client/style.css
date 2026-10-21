@@ -1914,7 +1914,11 @@ h3 {
   *:before,
   *:after {
     animation: none !important;
+    animation-name: none !important;
+    animation-duration: 0s !important;
     transition: none !important;
+    transition-property: none !important;
+    transition-duration: 0s !important;
     scroll-behavior: auto !important;
   }
 }
@@ -4216,7 +4220,57 @@ h3 {
   .hermes-client.template-app .chat-workspace.split > .result-pane { width: 320px; flex-basis: 320px; }
 }
 
-/* Runtime connections reuse OpenDots surfaces and actions. */
+/* Direction C — warm studio surface, semantic disclosures, and bounded responsive inspector. */
+.hermes-client {
+  --hermes-canvas: #faf8f2;
+  --hermes-surface: #fffef9;
+  --hermes-sidebar-surface: #f1ece1;
+  --hermes-border: #e9e3d4;
+  --hermes-text: #211e17;
+  --hermes-muted: #6d695e;
+  --hermes-accent: #d97706;
+  --hermes-sidebar: clamp(240px, 19vw, 320px);
+  background: var(--hermes-canvas);
+  color: var(--hermes-text);
+}
+.hermes-client.template-app.app .sidebar,
+.hermes-client.template-app.app .workspace,
+.hermes-client .chat-persona,
+.hermes-client .new-conversation,
+.hermes-client .result-pane { background: var(--hermes-canvas); }
+.hermes-client.template-app.app .sidebar { background: var(--hermes-sidebar-surface); border-right-color: var(--hermes-border); }
+.hermes-client .hermes-sidebar-search { background: var(--hermes-surface); border: 1px solid var(--hermes-border); color: var(--hermes-muted); }
+.hermes-client .dot-nav.active, .hermes-client .nav-item.active { background: #ebe5d6; color: var(--hermes-text); }
+.hermes-client .dot-nav:hover, .hermes-client .nav-item:hover { background: #f7f1e5; }
+.hermes-client .chat-persona, .hermes-client .conversation-context { border-color: var(--hermes-border); }
+.hermes-client .hermes-chat .composer { background: var(--hermes-surface); border-color: var(--hermes-border); box-shadow: 0 4px 12px rgb(33 30 23 / 7%); }
+.hermes-client .hermes-chat .composer textarea { max-height: 150px; overflow-y: hidden; }
+.hermes-client .send-button { background: var(--hermes-accent); }
+.hermes-client .send-button:hover:not(:disabled) { background: #b45309; }
+.hermes-client .result-pane { border-left-color: var(--hermes-border); }
+.hermes-client .pane-header { border-bottom-color: var(--hermes-border); background: var(--hermes-surface); }
+.hermes-tool-disclosure { padding: 0; overflow: hidden; }
+.hermes-tool-disclosure > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; list-style: none; padding: 14px 16px; }
+.hermes-tool-disclosure > summary::-webkit-details-marker { display: none; }
+.hermes-tool-disclosure > summary::before { content: '›'; color: var(--hermes-muted); transform: rotate(0deg); transition: transform .15s ease; }
+.hermes-tool-disclosure[open] > summary::before { transform: rotate(90deg); }
+.hermes-tool-disclosure > summary:focus-visible { outline: 2px solid var(--hermes-accent); outline-offset: -3px; }
+.hermes-tool-disclosure > :not(summary) { margin-left: 16px; margin-right: 16px; }
+.hermes-tool-disclosure > pre { margin-bottom: 16px; }
+.hermes-tool-disclosure > details { margin-bottom: 12px; }
+.hermes-client button:focus-visible, .hermes-client input:focus-visible, .hermes-client textarea:focus-visible { outline-color: var(--hermes-accent); }
+@media (max-width: 900px) {
+  .hermes-client { --hermes-sidebar: 232px; }
+  .hermes-client .chat-workspace.split > .result-pane { width: min(420px, 92vw); flex-basis: min(420px, 92vw); }
+}
+@media (max-width: 700px) {
+  .hermes-client .chat-workspace.split > .result-pane { position: fixed; inset: 0 0 0 auto; width: min(420px, 100vw); z-index: 15; }
+  .hermes-client .hermes-chat .composer { margin-left: 12px; margin-right: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hermes-client *, .hermes-client *::before, .hermes-client *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; animation-name: none !important; scroll-behavior: auto !important; transition-duration: .01ms !important; transition-property: none !important; }
+}
+
 .runtime-connections { margin: 24px 0; }
 .runtime-connections > p, .runtime-connection-control > p { font-size: 13px; line-height: 1.5; }
 .runtime-connection { border: 1px solid var(--border, #dde5e2); border-radius: 12px; padding: 16px; margin: 12px 0; }
@@ -6636,7 +6690,23 @@ h3 {
 .spacelink-form { border-top:1px solid var(--border,#e5e7eb); padding-top:12px; margin-top:12px; }
 .spacelink-form label { display:block; font-size:10px; margin-bottom:4px; }
 @media (max-width:900px) { .collab-subagents-split { grid-template-columns:1fr; } .subagent-detail-col { min-height:300px; } .rooms-top-bar { flex-direction:column; align-items:stretch; } .room-selector { min-width:0; } }
-@media (prefers-reduced-motion:reduce) { .collaboration-panel *,.collaboration-panel *::before,.collaboration-panel *::after { transition:none !important; animation:none !important; } }
+@media (prefers-reduced-motion: reduce) { .collaboration-panel *,.collaboration-panel *::before,.collaboration-panel *::after { transition:none !important; animation:none !important; } }
+
+/* Reduced motion is a product-wide contract, including legacy surfaces. */
+@media (prefers-reduced-motion: reduce) {
+  .hermes-client *, .hermes-client *::before, .hermes-client *::after,
+  html *, html *::before, html *::after {
+    animation: none !important;
+    animation-name: none !important;
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    transition: none !important;
+    transition-property: none !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
 
 .native-browser-workspace{min-width:0}.native-browser-frame{height:320px;min-height:220px;border:1px solid var(--border,#dedbd4);border-radius:8px;background:#fff;overflow:hidden}.native-browser-meta{display:flex;gap:8px;flex-wrap:wrap;padding:8px;font-size:12px}.native-browser-workspace .browser-nav-bar{display:flex;gap:4px}.native-browser-workspace .browser-nav-bar input{min-width:0;flex:1}.native-browser-workspace .browser-tabs-bar{display:flex;overflow-x:auto;gap:4px}.native-browser-workspace .browser-lease-banner{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px}.native-browser-workspace button{white-space:normal}.native-browser-workspace p{padding:6px 10px}
 

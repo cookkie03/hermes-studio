@@ -41,6 +41,22 @@ const assert = require('node:assert/strict');
       return Promise.all(['F2 alpha', 'F2 beta'].map(async title => (await request('/conversations', { dotId: workspace.dots[0].id, title })).id));
     }, `http://127.0.0.1:${port}`);
     await page.reload();
+    const fillAndSend = async (text) => {
+      let lastError;
+      for (let attempt = 0; attempt < 20; attempt += 1) {
+        const current = page.getByRole('textbox', { name: 'Message Hermes', exact: true });
+        try {
+          await current.fill(text, { timeout: 1500 });
+          await current.press('Enter', { timeout: 1500 });
+          return;
+        } catch (error) {
+          lastError = error;
+          await page.waitForTimeout(100);
+        }
+      }
+      console.error('Composer fill diagnostic:', await page.evaluate(() => ({ body: document.body.innerText.slice(-5000), html: document.documentElement.outerHTML.slice(-2000), textareas: [...document.querySelectorAll('textarea')].map(node => ({ aria: node.getAttribute('aria-label'), value: node.value })), url: location.href })), { pageErrors: errors });
+      throw lastError;
+    };
     const select = title => page.locator('.thread-list').getByRole('button', { name: new RegExp(title) }).click();
     await select('F2 alpha');
     let composer = page.getByRole('textbox', { name: 'Message Hermes', exact: true });
@@ -61,8 +77,8 @@ const assert = require('node:assert/strict');
       };
     });
     await composer.press('Enter');
-    await composer.fill('New draft during dispatch');
-    await composer.press('Enter');
+    // The first send is intentionally in flight; the composer remains mounted and accepts a draft.
+    await fillAndSend('New draft during dispatch');
     await page.getByText('Synthetic streaming response', { exact: true }).waitFor();
     await page.getByText('Synthetic confirmed response', { exact: true }).waitFor();
     await page.getByText('Late synthetic tool result', { exact: true }).waitFor();
@@ -287,7 +303,10 @@ const assert = require('node:assert/strict');
     console.log(JSON.stringify({ pass: true, syntheticRuntime: true, nativeReviewNotes: true, backgroundReviews: true, reviewReplayDeduplication: true, reviewOfflineRestart: true, cleanStreamClosure: true, scrollPreserved: true, truthfulContext: true, streamingBeforeHttp: true, doubleSend: true, lateToolResult: true, draftDuringSend: true, chatIsolation: true, navigationDuringDispatch: true, pagePreparationCancelled: true, hostPreparationCancelled: true, savedRevision: true, restartNewOrigin: true, ime: true, keyboard: true, reducedMotion: true, widths: [1360, 900], dataDirectory: data }));
   } catch (error) {
     console.error('Synthetic data directory: ' + data);
-    if (page) { console.error((await page.locator('body').innerText()).slice(-7000)); await page.screenshot({ path: path.join(data, 'failure.png') }); }
+    if (page && !page.isClosed()) {
+      try { console.error((await page.locator('body').innerText()).slice(-7000)); } catch {}
+      try { await page.screenshot({ path: path.join(data, 'failure.png') }); } catch {}
+    }
     throw error;
   } finally { if (app) await app.close(); fixture.kill(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

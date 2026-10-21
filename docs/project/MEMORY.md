@@ -1,5 +1,27 @@
 # Memoria operativa di Hermes Studio
 
+## Valutazione piano Effect — 2026-10-19
+
+Sola valutazione richiesta; nessuna migrazione selezionata. [Review](effect-typescript-migration-review-2026-10-19.md): direzione utile per I/O/lifecycle ma piano non pronto. Criticità: grafo legacy, bootstrap JS/TS, manifest/allowlist packaging, compatibilità ApiError/FiberFailure, boundary contraddittorie, gate upstream già rosso e conversioni pure senza beneficio. Submission/autosave/snapshot 14 test PASS; typecheck upstream FAIL pre-migrazione. Piano e prodotto preservati; pilota proposto, non autorizzato.
+
+## Direction C implementation increment — 2026-10-19
+
+The first product increment is implemented in the existing React client: Direction C warm surface tokens, semantic inspector association with Escape focus restoration, bounded adaptive composer textareas, and keyboard-friendly native tool disclosures. Hermes transport, drafts, streaming, interruption, approvals, runtime-derived state and existing navigation remain unchanged.
+
+Verification: renderer typecheck PASS; production build PASS; full `npm run test` PASS (95 Node tests, 24 Vitest files / 110 tests, bootstrap and external-links gates); package verification PASS; packaged UI smoke PASS; packaged synthetic conversation fixture PASS; `git diff --check` PASS. The synthetic fixture is not live Hermes integration; isolated live runtime conversation, Electron screenshots at 900/1360px, and contrast measurement were not available; visual/WCAG acceptance remains incomplete.
+
+Luca approva direction-c-refined-studio.html per procedere, con migliorie successive. [Prompt 04 implementazione](prompts/04-implement-direction-c.md) preparato per trasferimento manuale all'altro agente; niente nuovo mockup o ulteriore selezione A/B/C. Scope: F4 e sola presentazione composer/tool/inspector selezionata, logica e schede F0–F3 preservate. Report C ricevuto; ispezione sorgente rileva gate responsive/semantica/focus/Reduced Motion/autosize e contrasto ancora da provare nel prodotto. OpenClaw e provider futuri non sono prerequisiti. Nessun codice prodotto cambiato o esecuzione inoltrata da questa chat.
+
+## Revisione design — 2026-10-19
+
+Preferenze confermate sui mockup: colori/forme e sidebar sinistra A; inspector destro e feature del composer B; compattazione tool A. Qualità premium/macOS percepita ancora insufficiente rispetto a Unsloth, ChatGPT/Codex e Humla. Composizione ibrida da affinare prima dell'implementazione; riferimento SwiftUI non implica migrazione dello stack. [Prompt 03](prompts/03-design-refinement.md) pronto per trasferimento manuale all'altro agente. A/B preservati; nessun codice prodotto modificato.
+
+## Direzione 2026-10-18 — redesign e modularità
+
+Luca seleziona una nuova direzione di design: Humla, Unsloth Studio e Codex; OpenClaw (`ai.openclaw.mac`) come reference funzionale browser/voce. Modularità funzionale come paradigma, backend futuri aggiungibili tramite confini/adattatori espliciti; Hermes resta unico backend attuale. Rust/Tauri è valutazione, non migrazione decisa. Nuova direzione supera fedeltà rigida OpenDots per il futuro redesign, senza modificare baseline F0–F3. [Brief, prove e board](redesign-roadmap-2026-10-18.md).
+
+Questa chat coordina e revisiona; Luca trasferisce prompt/goal a un altro agente sulla stessa cartella per contenere i costi. Nessun agente/goal avviato automaticamente. Prompt [design](prompts/01-design-evidence.md) e [modularità](prompts/02-functional-modularity.md). Todoist autorizzato esplicitamente per roadmap sotto il task Hermès Studio; 13 nuovi sottotask, senza eliminare quelli preesistenti. PWA Debian esistente estesa con Docker/Tailscale/discovery; release DMG da completare partendo dalla pipeline già presente. Stato: ricerca e preparazione incarichi, nessun redesign/refactor/deploy completato.
+
 ## Riparazione integrazioni native — 2026-10-12
 
 Utente richiede correggere tutti i difetti della review e rendere il progetto funzionante. Scope selezionato: otto findings e relative integrazioni native, con runtime/profili personali preservati. [Piano](native-integration-repair-plan-2026-10-12.md). In corso: file F5/F6 16 test PASS, collaboration/computer 10 PASS, audio/API 5 PASS. Browser reale/Bots/header/progetti implementati, integrazione e acceptance in corso. Ulteriori simulazioni memory/matrix e schema routine/computer incluse. La review precedente resta evidenza storica, non esito post-fix.
