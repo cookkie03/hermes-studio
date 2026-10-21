@@ -10,7 +10,7 @@
     "package:dmg": "npm run build && npm run verify:package && electron-builder --mac dmg --arm64 --config electron-builder.config.cjs",
     "typecheck": "npm run typecheck:renderer && npm run typecheck:metadata",
     "test:upstream": "vitest run --root upstream",
-    "test": "npm run typecheck && node --test hermes/*.test.mjs && npm run test:metadata && npm run test:bootstrap && npm run test:external-links",
+    "test": "npm run build:metadata && npm run typecheck && node --test hermes/*.test.mjs && npm run test:metadata && npm run test:bootstrap && npm run test:external-links",
     "test:metadata": "vitest run --root upstream tests/pages.test.ts tests/page-routes.test.ts tests/workspace.test.ts tests/store.test.ts tests/autosave.test.ts tests/app.test.ts tests/voice.test.ts tests/page-snapshots.test.ts tests/f4-shell.test.tsx tests/f5-files.test.tsx tests/f6-spaces.test.tsx tests/f8-observability.test.tsx tests/f9-memory.test.tsx tests/f10-routines.test.tsx tests/f11-capabilities.test.tsx tests/f12-browser.test.tsx tests/f16-computer.test.tsx tests/f15-terminal.test.ts src/client/hermes-display.test.ts src/client/manual-space-review.test.ts src/client/conversation-submission.test.ts tests/runtime-context-badge.test.tsx src/client/voice-live.test.ts tests/file-panel-races.test.tsx",
     "verify:package": "node scripts/verify-package.cjs",
     "test:bootstrap": "node scripts/test-bootstrap.cjs",
