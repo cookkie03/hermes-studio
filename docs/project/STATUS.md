@@ -2,6 +2,12 @@
 
 Team authorized; eight roles confirmed reachable. Initial track: F13 test/release workflow and a docs-to-code acceptance map, not a claim that the full catalog is implemented. Dedicated local Kanban board: `hermes-studio`. Baseline HEAD `f3f1bf3`: typecheck, npm test, build and verify:package exit 0 on Debian; GitHub repository accessible, no release listed. macOS installation, Intel support, signing/notarization and live integration remain to verify. [Ownership and scope](team-kickoff.md).
 
+## F13 release engineering integration — 2026-10-22
+
+Eight-role findings integrated and verified on `main` (commit `beaa53b`). Debian test/build/packaging gates pass: Node suite (94 pass, 1 skip), Vitest (110 pass), bootstrap & external links pass, artifact verification (5 pass), test-verify-package (3 pass), production build and package verification pass. Local issue `.scratch/hermes-desktop/issues/F13-release-engineering.md` created.
+Status: Local baseline fully green. GitHub push blocked on GitHub OAuth token missing `workflow` scope.
+
+
 ## Valutazione piano Effect — 2026-10-19
 
 [Review](effect-typescript-migration-review-2026-10-19.md) completata: piano da correggere prima dell'esecuzione; nessuna migrazione avviata. 14 test mirati PASS; typecheck upstream già FAIL senza Effect. Grafo prodotto/template, packaging, compatibilità errori e regole boundary da risolvere. Piano originale e codice prodotto preservati; nessuna nuova acceptance live.

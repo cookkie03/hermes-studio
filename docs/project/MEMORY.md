@@ -2,6 +2,18 @@
 
 Luca now authorizes Engineering Director and eight named teammates to implement accepted documentation autonomously, with material decisions escalated. Target: verified GitHub DMG release; start with F13 release engineering and requirements traceability. Historical manual relay/no-delegation policy is superseded; protected F0–F3 and runtime/data safety remain. Roles, boundaries and observed baseline: [team kickoff](team-kickoff.md). All local baseline gates passed on Debian; macOS/signing/live acceptance remains unverified.
 
+## F13 release engineering integration — 2026-10-22
+
+Engineering Director integrated findings from all 8 roles (PM backlog, Architecture review, Compatibility research, QA baseline/matrix, DevOps CI/scripts, Software packaging tests, Security audit, Design review) into `main` (commit `beaa53b`).
+Full verification executed:
+- `npm test` (95 pass, 1 skip)
+- `node --test ../docs/releases/verify-artifacts.test.cjs` (5 pass)
+- `node --test scripts/test-verify-package.cjs` (3 pass)
+- `npm run build` & `npm run verify:package` exit 0.
+Local product issue `F13-release-engineering.md` created.
+Blocker: GitHub push rejected because existing GitHub OAuth token (`gho_...`) lacks the `workflow` scope required to update `.github/workflows/ci.yml`. Manual OAuth scope refresh (`gh auth refresh -h github.com -s workflow`) or a GitHub PAT with `workflow` scope is required from user.
+
+
 # Memoria operativa di Hermes Studio
 
 ## Valutazione piano Effect — 2026-10-19

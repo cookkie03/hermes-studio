@@ -5,6 +5,26 @@
 - Observed clean main at f3f1bf3, authenticated GitHub cookkie03, existing repository and release workflow but no listed release. Ran typecheck, npm test, build, verify:package: all exit 0 on Debian. No macOS, live runtime or signing acceptance inferred.
 - Created dedicated local hermes-studio execution board; no external issue tracker, Hermes source change, plugin repair, or release publication performed.
 
+## 2026-10-22 — Integration of eight-role findings and release engineering
+
+- Integrated all parent task artifacts into main (commits `bdbfd2e` through `beaa53b`):
+  - Product Manager (`t_16892583`): requirements traceability and backlog (`docs/project/team/product-backlog.md`, `requirements.csv`).
+  - Architecture (`t_57eb7157`): boundary verification and F13 isolation review (`docs/project/team/architecture-review.md`).
+  - Research (`t_5bbf9831`): macOS arm64/Intel runtime compatibility and distribution notes (`docs/project/team/compatibility-research.md`).
+  - QA (`t_2980f926`): independent baseline verification and release acceptance matrix (`docs/project/team/qa-baseline.md`, `docs/project/team/release-acceptance.md`).
+  - DevOps (`t_d9e617fe`): hardened release CI workflow, verification scripts, and runbook (`.github/workflows/ci.yml`, `release.yml`, `docs/releases/verify-artifacts.cjs`, `verify-artifacts.test.cjs`).
+  - Software Engineer (`t_ae6456a1`): test-verify-package regression tests and runtime helper/README packaging verification (`desktop/scripts/verify-package.cjs`, `test-verify-package.cjs`).
+  - Security (`t_2578797a`): supply chain audit, token scope review, and Studio trust boundaries (`docs/project/team/security-review.md`).
+  - UI/UX Design (`t_99450d54`): Direction C shell audit and accessibility gaps (`docs/project/team/design-review.md`).
+- Executed full test and packaging verification suite:
+  - `npm test`: strict typecheck (renderer + metadata), Node hermes test suite (94 passed, 1 skipped), test:metadata (110 passed across 24 files), test:bootstrap (passed), test:external-links (passed).
+  - Artifact verification test (`verify-artifacts.test.cjs`): 5/5 passed.
+  - Packaging verification test (`test-verify-package.cjs`): 3/3 passed.
+  - `npm run build` and `npm run verify:package`: exit 0 without errors.
+- Created local issue `.scratch/hermes-desktop/issues/F13-release-engineering.md`.
+- Identified push blocker: GitHub rejected git push of workflow files due to OAuth app token missing `workflow` scope.
+
+
 ## 2026-10-19 — Valutazione piano Effect
 
 - Letti piano, contesto progetto/catalogo/workflow, ADR0006, ownership, router ask-matt e skill codebase-design; ramo applicato: valutazione architetturale documentale, senza delega o implementazione.
