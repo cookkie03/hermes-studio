@@ -1,112 +1,125 @@
-name: Release macOS DMG
+name: macOS DMG
 
 on:
+  workflow_call:
   push:
-    tags:
-      - 'v*'
+    tags: ['v*']
   workflow_dispatch:
     inputs:
-      draft:
-        description: 'Create as draft release'
-        required: true
+      create_draft:
+        description: 'Create a draft release (select an existing version tag)'
         type: boolean
-        default: true
+        default: false
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: macos-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build-and-verify:
-    name: Build & Verify macOS DMG
+    name: macOS arm64 package validation
     runs-on: macos-14
+    timeout-minutes: 35
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      HERMES_STUDIO_DISABLE_AUTOCONNECT: '1'
+    defaults:
+      run:
+        working-directory: desktop
+        shell: bash
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          fetch-depth: 0
-
-      - name: Setup Node.js 24
-        uses: actions/setup-node@v4
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 24
-          cache: 'npm'
-          cache-dependency-path: 'desktop/package-lock.json'
-
-      - name: Install dependencies
-        working-directory: desktop
-        run: npm ci
-
-      - name: Strict TypeScript typecheck
-        working-directory: desktop
-        run: npm run typecheck
-
-      - name: Run test suite
-        working-directory: desktop
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - name: Check architecture and release selection
+        env:
+          CREATE_DRAFT: ${{ inputs.create_draft || false }}
         run: |
-          node --test hermes/*.test.mjs
-          npm run test:metadata
-          npm run test:bootstrap
-          npm run test:external-links
-
-      - name: Package DMG (macOS arm64)
-        working-directory: desktop
-        run: npm run package:dmg
-
-      - name: Generate release manifest & checksums
-        working-directory: desktop
-        run: npm run release:manifest
-
-      - name: Verify packaged UI & connections smoke
-        working-directory: desktop
+          test "$(uname -m)" = arm64
+          VERSION=$(node -p "require('./package.json').version")
+          if [[ "$GITHUB_REF_TYPE" == tag ]]; then
+            test "$GITHUB_REF_NAME" = "v$VERSION"
+            test -s "../docs/releases/release-notes-v$VERSION.md"
+          elif [[ "$CREATE_DRAFT" == true ]]; then
+            echo 'Draft creation requires selecting an existing version tag.' >&2
+            exit 1
+          fi
+      - run: npm ci
+      - run: npm test
+      - name: Release integrity regression tests
+        run: node --test ../docs/releases/verify-artifacts.test.cjs
+      - name: Build and verify package inputs, then create ad-hoc DMG
+        run: npm run package:dmg -- --publish never
+      - name: Verify bundle signature and DMG container
+        run: |
+          codesign --verify --deep --strict 'release/mac-arm64/Hermes Studio.app'
+          shopt -s nullglob
+          dmgs=(release/*.dmg)
+          test "${#dmgs[@]}" -eq 1
+          hdiutil verify "${dmgs[0]}"
+      - name: Synthetic packaged-app tests (no personal runtime)
         run: |
           npm run test:packaged-ui
           npm run test:packaged-connections
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+          npm run test:packaged-conversations
+      - name: Generate and independently verify release evidence
+        run: |
+          npm run release:manifest
+          mkdir release-evidence
+          cp release/*.dmg release/*.dmg.sha256 release/release-manifest.json release-evidence/
+          node ../docs/releases/verify-artifacts.cjs release-evidence "$GITHUB_SHA" "$(node -p "require('./package.json').version")"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: macos-release-artifacts
-          path: |
-            desktop/release/*.dmg
-            desktop/release/*.dmg.sha256
-            desktop/release/release-manifest.json
-          retention-days: 7
+          name: macos-arm64-${{ github.sha }}
+          path: desktop/release-evidence/*
+          if-no-files-found: error
+          retention-days: 14
 
-  publish-release:
-    name: Publish Release Draft
+  publish-release-draft:
+    name: Create ad-hoc development draft only
+    if: github.event_name == 'workflow_dispatch' && inputs.create_draft && github.ref_type == 'tag'
     needs: build-and-verify
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: macos-release
     permissions:
       contents: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          name: macos-release-artifacts
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: macos-arm64-${{ github.sha }}
           path: release-artifacts
-
-      - name: Publish draft release
+      - name: Recheck downloaded bytes and source binding
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./desktop/package.json').version")
+          test "$GITHUB_REF_NAME" = "v$VERSION"
+          node docs/releases/verify-artifacts.cjs release-artifacts "$GITHUB_SHA" "$VERSION"
+      - name: Create draft for the existing exact-source tag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
         run: |
-          TAG="${GITHUB_REF_NAME:-v0.1.0}"
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && -z "${GITHUB_REF_NAME}" ]]; then
-            TAG="v0.1.0"
-          fi
-          
-          NOTES_FILE="docs/releases/release-notes-v0.1.0.md"
-          EXTRA_ARGS=""
-          if [[ "${{ inputs.draft }}" != "false" ]]; then
-            EXTRA_ARGS="--draft"
-          fi
-
-          gh release create "$TAG" \
+          # Refuse moved tags and never implicitly create a tag or overwrite a release.
+          test "$(git ls-remote origin "refs/tags/$GITHUB_REF_NAME" "refs/tags/$GITHUB_REF_NAME^{}" | cut -f1 | sort -u | grep -Fx "$GITHUB_SHA")" = "$GITHUB_SHA"
+          gh release create "$GITHUB_REF_NAME" \
             release-artifacts/*.dmg \
             release-artifacts/*.dmg.sha256 \
             release-artifacts/release-manifest.json \
-            --title "Hermes Studio $TAG" \
-            --notes-file "$NOTES_FILE" \
-            $EXTRA_ARGS
+            --verify-tag --draft --prerelease \
+            --title "Hermes Studio $GITHUB_REF_NAME — ad-hoc development" \
+            --notes-file "docs/releases/release-notes-$GITHUB_REF_NAME.md"
