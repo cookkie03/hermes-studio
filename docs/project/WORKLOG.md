@@ -1,3 +1,10 @@
+## Autonomous team kickoff and baseline verification
+
+- Read AGENTS, project memory/status, glossary, catalog, feature workflow, tracker, architecture boundaries/principles and F4/F13 context. Loaded ask-matt and Axiom SwiftUI/design/accessibility routers; orchestration, TDD and GitHub workflows.
+- User explicitly authorized autonomous eight-role collaboration and a verified installable GitHub DMG release. Recorded ownership and boundaries in team-kickoff.md.
+- Observed clean main at f3f1bf3, authenticated GitHub cookkie03, existing repository and release workflow but no listed release. Ran typecheck, npm test, build, verify:package: all exit 0 on Debian. No macOS, live runtime or signing acceptance inferred.
+- Created dedicated local hermes-studio execution board; no external issue tracker, Hermes source change, plugin repair, or release publication performed.
+
 ## 2026-10-19 — Valutazione piano Effect
 
 - Letti piano, contesto progetto/catalogo/workflow, ADR0006, ownership, router ask-matt e skill codebase-design; ramo applicato: valutazione architetturale documentale, senza delega o implementazione.

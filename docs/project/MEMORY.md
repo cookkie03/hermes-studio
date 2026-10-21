@@ -1,3 +1,7 @@
+## Autonomous team kickoff
+
+Luca now authorizes Engineering Director and eight named teammates to implement accepted documentation autonomously, with material decisions escalated. Target: verified GitHub DMG release; start with F13 release engineering and requirements traceability. Historical manual relay/no-delegation policy is superseded; protected F0–F3 and runtime/data safety remain. Roles, boundaries and observed baseline: [team kickoff](team-kickoff.md). All local baseline gates passed on Debian; macOS/signing/live acceptance remains unverified.
+
 # Memoria operativa di Hermes Studio
 
 ## Valutazione piano Effect — 2026-10-19

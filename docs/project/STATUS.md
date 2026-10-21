@@ -1,3 +1,7 @@
+## Autonomous team kickoff
+
+Team authorized; eight roles confirmed reachable. Initial track: F13 test/release workflow and a docs-to-code acceptance map, not a claim that the full catalog is implemented. Dedicated local Kanban board: `hermes-studio`. Baseline HEAD `f3f1bf3`: typecheck, npm test, build and verify:package exit 0 on Debian; GitHub repository accessible, no release listed. macOS installation, Intel support, signing/notarization and live integration remain to verify. [Ownership and scope](team-kickoff.md).
+
 ## Valutazione piano Effect — 2026-10-19
 
 [Review](effect-typescript-migration-review-2026-10-19.md) completata: piano da correggere prima dell'esecuzione; nessuna migrazione avviata. 14 test mirati PASS; typecheck upstream già FAIL senza Effect. Grafo prodotto/template, packaging, compatibilità errori e regole boundary da risolvere. Piano originale e codice prodotto preservati; nessuna nuova acceptance live.
