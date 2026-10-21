@@ -2,6 +2,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
@@ -10,7 +12,7 @@ test(
   "owned native-command service survives client closure and restarts a crashed backend",
   { skip: process.platform !== "darwin", timeout: 30000 },
   async () => {
-    const directory = await mkdtemp("/private/tmp/hs-service-fixture-");
+    const directory = await mkdtemp(join(tmpdir(), "hs-service-fixture-"));
     const label = `com.hermes-studio.fixture.${directory.split("-").at(-1).toLowerCase()}`;
     const source = fileURLToPath(
       new URL("./host-bootstrap.py", import.meta.url),

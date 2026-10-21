@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, writeFile, rm } from "node:fs/promises";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { HostConnection, bootstrapProgram } from "./host-backend.mjs";
@@ -44,7 +46,7 @@ test("remote bootstrap and tunnel reuse Hermes without exposing an arbitrary com
   assert.deepEqual(calls, ["open", 5678, "close"]);
 });
 test("host-side adapter preserves gated runtime and registers only native commands in owned service files", async () => {
-  const directory = await mkdtemp("/private/tmp/hs-bootstrap-test-");
+  const directory = await mkdtemp(join(tmpdir(), "hs-bootstrap-test-"));
   try {
     const source = fileURLToPath(
       new URL("./host-bootstrap.py", import.meta.url),

@@ -2,6 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { generateKeyPairSync } from "node:crypto";
 import { mkdtemp, writeFile, readFile, readdir, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { createServer as httpServer } from "node:http";
 import { connect as tcpConnect } from "node:net";
 import ssh2 from "ssh2";
@@ -20,7 +22,7 @@ const listen = (server) =>
     server.listen(0, "127.0.0.1", resolve);
   });
 async function fixture(auth) {
-  const directory = await mkdtemp("/private/tmp/hs-ssh-fixture-");
+  const directory = await mkdtemp(join(tmpdir(), "hs-ssh-fixture-"));
   const clientKey = key(),
     parsed = utils.parseKey(clientKey),
     clients = new Set(),

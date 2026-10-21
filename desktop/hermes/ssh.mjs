@@ -3,6 +3,7 @@ import { spawn } from "node:child_process";
 import { createServer as httpServer } from "node:http";
 import { createServer as tcpServer } from "node:net";
 import { mkdtemp, chmod, writeFile, stat, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { connectionInput } from "./connection-input.mjs";
 
@@ -50,7 +51,7 @@ export class SshConnection extends EventEmitter {
   async open({ password, onChallenge, signal } = {}) {
     if (this.closed) throw new Error("SSH connection cancelled.");
     this.password = password;
-    this.directory = await mkdtemp("/private/tmp/hs-ssh-");
+    this.directory = await mkdtemp(join(tmpdir(), "hs-ssh-"));
     await chmod(this.directory, 0o700);
     this.controlPath = join(this.directory, "master");
     const socketPath = join(this.directory, "ask"),
