@@ -53,6 +53,7 @@ jobs:
             exit 1
           fi
       - run: npm ci
+      - run: npm run build:metadata
       - run: npm test
       - name: Release integrity regression tests
         run: node --test ../docs/releases/verify-artifacts.test.cjs

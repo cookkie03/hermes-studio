@@ -13,4 +13,5 @@ Integrated verification (2026-10-22):
 - Artifact verification: `docs/releases/verify-artifacts.test.cjs` passes (5/5).
 - Typecheck & Production build: exit 0 without errors.
 - Supply chain audit: security review completed (`docs/project/team/security-review.md`), token scopes audited.
+- Fresh checkout CI remediation: sequenced `build:metadata` before test executions in `desktop/package.json` and workflow files; added `desktop/scripts/test-clean-checkout-lifecycle.test.cjs`.
 - Blocker: pushing `.github/workflows/ci.yml` and `release.yml` to GitHub rejected by remote OAuth App scope (`workflow` scope required on GitHub OAuth token or push via PAT with workflow scope).
