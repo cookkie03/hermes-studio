@@ -31,6 +31,7 @@ jobs:
           cache: npm
           cache-dependency-path: desktop/package-lock.json
       - run: npm ci
+      - run: npm run build:metadata
       - run: npm test
       - run: node --test ../docs/releases/verify-artifacts.test.cjs
       - run: npm run build

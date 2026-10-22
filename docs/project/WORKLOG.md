@@ -25,6 +25,15 @@
 - Identified push blocker: GitHub rejected git push of workflow files due to OAuth app token missing `workflow` scope.
 
 
+## 2026-10-22 — F13 CI fresh checkout remediation
+
+- Resolved failed macOS CI run root cause on clean checkout: `npm test` attempted to run `hermes/*.test.mjs` before `desktop/upstream/dist/server/server/store.js` existed.
+- Added `npm run build:metadata` into `desktop/package.json` `test` script preceding `node --test hermes/*.test.mjs`.
+- Added explicit `npm run build:metadata` step in `.github/workflows/ci.yml` and `.github/workflows/release.yml`.
+- Added automated regression test `desktop/scripts/test-clean-checkout-lifecycle.test.cjs` ensuring lifecycle ordering is preserved.
+- Updated `docs/releases/ci-release-runbook.md`, `docs/project/MEMORY.md`, `docs/project/STATUS.md`, and local issue tracker.
+- Ran full test suite in `desktop`: 95 Node tests pass (1 skipped), regression test passes, Vitest 110 tests pass across 24 suites, bootstrap and external-links pass.
+
 ## 2026-10-19 — Valutazione piano Effect
 
 - Letti piano, contesto progetto/catalogo/workflow, ADR0006, ownership, router ask-matt e skill codebase-design; ramo applicato: valutazione architetturale documentale, senza delega o implementazione.

@@ -14,6 +14,17 @@ Local product issue `F13-release-engineering.md` created.
 Blocker: GitHub push rejected because existing GitHub OAuth token (`gho_...`) lacks the `workflow` scope required to update `.github/workflows/ci.yml`. Manual OAuth scope refresh (`gh auth refresh -h github.com -s workflow`) or a GitHub PAT with `workflow` scope is required from user.
 
 
+## F13 CI fresh checkout remediation — 2026-10-22
+
+DevOps remediation for failed macOS CI run (3d3a939) where fresh GitHub checkout lacked generated metadata (`desktop/upstream/dist/server/server/store.js`), failing 3 Node test suites importing `server.mjs`.
+- Root cause: `npm test` executed `node --test hermes/*.test.mjs` immediately after typecheck, but `hermes/server.mjs` imports TypeScript-compiled artifacts from `upstream/dist/server/server/store.js`. On a fresh checkout, `dist/` is git-ignored and absent until `build:metadata` runs.
+- Remediation implemented:
+  1. Updated `desktop/package.json` `test` script lifecycle: `npm run typecheck && npm run build:metadata && node --test hermes/*.test.mjs && node --test scripts/test-clean-checkout-lifecycle.test.cjs && ...`.
+  2. Updated `.github/workflows/ci.yml` and `.github/workflows/release.yml` to explicitly run `npm run build:metadata` before `npm test`.
+  3. Added regression test `desktop/scripts/test-clean-checkout-lifecycle.test.cjs` verifying `build:metadata` is sequenced before tests importing `dist/server`.
+  4. Updated `docs/releases/ci-release-runbook.md` detailing the fresh-checkout lifecycle requirement.
+- Verification: full `npm test` in `desktop/` succeeds (95 Node tests pass, regression test passes, Vitest 110 tests pass across 24 files, test:bootstrap and test:external-links pass).
+
 # Memoria operativa di Hermes Studio
 
 ## Valutazione piano Effect — 2026-10-19
