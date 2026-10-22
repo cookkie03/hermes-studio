@@ -8,6 +8,14 @@ Eight-role findings integrated and verified on `main` (commit `beaa53b`). Debian
 Status: Local baseline fully green. GitHub push blocked on GitHub OAuth token missing `workflow` scope.
 
 
+## F13 CI fresh checkout remediation — 2026-10-22
+
+- Identified CI failure root cause: clean checkout lacks `desktop/upstream/dist/server/server/store.js` which is git-ignored and only compiled during `npm run build:metadata`.
+- Sequenced `build:metadata` before `hermes/*.test.mjs` in `desktop/package.json` `test` script and explicitly in `.github/workflows/ci.yml` and `release.yml`.
+- Added regression test `desktop/scripts/test-clean-checkout-lifecycle.test.cjs`.
+- Updated release runbook `docs/releases/ci-release-runbook.md`.
+- All tests passing locally: Node tests (95 pass, 1 skip), regression test (1 pass), Vitest (110 pass), bootstrap & external links pass.
+
 ## Valutazione piano Effect — 2026-10-19
 
 [Review](effect-typescript-migration-review-2026-10-19.md) completata: piano da correggere prima dell'esecuzione; nessuna migrazione avviata. 14 test mirati PASS; typecheck upstream già FAIL senza Effect. Grafo prodotto/template, packaging, compatibilità errori e regole boundary da risolvere. Piano originale e codice prodotto preservati; nessuna nuova acceptance live.
